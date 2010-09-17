@@ -1,8 +1,3 @@
-// ----------------------------------------------------------------------
-// $Id: FileInPath.cc,v 1.25 2008/11/18 02:04:26 wmtan Exp $
-//
-// ----------------------------------------------------------------------
-
 // TODO: This file needs some clean-up, especially regarding the
 // handling of environment variables. We can do better with
 // translating them only once --- after we have settled down on how
@@ -20,21 +15,20 @@
 
 namespace bf = boost::filesystem;
 
-namespace 
-{
+namespace {
   /// These are the names of the environment variables which control
 /// the behavior  of the FileInPath  class.  They are local to  this
 /// class; other code should not even know about them!
-    
+
   const std::string PathVariableName("FW_SEARCH_PATH");
-  // Environment variables for local and release areas: 
+  // Environment variables for local and release areas:
   const std::string LOCALTOP("FW_BASE");
   const std::string RELEASETOP("FW_RELEASE_BASE");
   const std::string DATATOP("FW_DATA_PATH");
 
 #if 1
   // Needed for backward compatibility prior to CMSSW_1_5_0_pre3.
-  // String to serve as placeholder for release top. 
+  // String to serve as placeholder for release top.
   // Do not change this value.
   const std::string BASE("BASE");
 #endif
@@ -44,7 +38,7 @@ namespace
   // true if it is found. If it is found, put the translation of the
   // environment variable into 'result'.
   bool envstring(std::string const& name,
-		 std::string& result)
+                 std::string& result)
   {
     const char* val = getenv(name.c_str());
     if (val == 0) {
@@ -60,9 +54,9 @@ namespace
   // Return true if a file (not directory or symbolic link) is found
   // Return false is *nothing* is found
   // Throw an exception if either a directory or symbolic link is found.
-  // If true is returned, then put the 
+  // If true is returned, then put the
   bool locateFile(bf::path  p,
-		  std::string const& relative)
+                  std::string const& relative)
   {
     p /= relative;
 
@@ -70,23 +64,23 @@ namespace
 
     if (bf::is_directory(p))
       throw edm::Exception(edm::errors::FileInPathError)
-	<< "Path " 
-	<< p.native_directory_string()
-	<< " is a directory, not a file\n";
+        << "Path "
+        << p.native_directory_string()
+        << " is a directory, not a file\n";
 
     if (bf::symbolic_link_exists(p))
       throw edm::Exception(edm::errors::FileInPathError)
-	<< "Path " 
-	<< p.native_file_string()
-	<< " is a symbolic link, not a file\n";
+        << "Path "
+        << p.native_file_string()
+        << " is a symbolic link, not a file\n";
 
-    return true;    
+    return true;
   }
 
-}
+}  // namespace
 
-namespace edm
-{
+
+namespace edm {
 
   FileInPath::FileInPath() :
     relativePath_(),
@@ -107,14 +101,14 @@ namespace edm
 
   FileInPath::FileInPath(const char* r) :
     relativePath_(r ?
-		  r :
-		  ((throw edm::Exception(edm::errors::FileInPathError)
-		    << "Relative path must not be null\n"), r)),
+                  r :
+                  ((throw edm::Exception(edm::errors::FileInPathError)
+                    << "Relative path must not be null\n"), r)),
     canonicalFilename_(),
     location_(Unknown)
   {
     getEnvironment();
-    initialize_();    
+    initialize_();
   }
 
   FileInPath::FileInPath(FileInPath const& other) :
@@ -182,55 +176,55 @@ namespace edm
     } else if (location_ == Local) {
       // Guarantee a site independent value by stripping $LOCALTOP.
       if (localTop_.empty()) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Environment Variable " 
-	  << LOCALTOP
-	  << " is not set.\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Environment Variable "
+          << LOCALTOP
+          << " is not set.\n";
       }
       std::string::size_type pos = canonicalFilename_.find(localTop_);
       if (pos != 0) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Path " 
-	  << canonicalFilename_
-	  << " is not in the local release area "
-	  << localTop_
-	  << "\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Path "
+          << canonicalFilename_
+          << " is not in the local release area "
+          << localTop_
+          << "\n";
       }
       os << version << ' ' << relativePath_ << ' ' << location_ << ' ' << canonicalFilename_.substr(localTop_.size());
     } else if (location_ == Release) {
       // Guarantee a site independent value by stripping $RELEASETOP.
       if (releaseTop_.empty()) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Environment Variable " 
-	  << RELEASETOP
-	  << " is not set.\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Environment Variable "
+          << RELEASETOP
+          << " is not set.\n";
       }
       std::string::size_type pos = canonicalFilename_.find(releaseTop_);
       if (pos != 0) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Path " 
-	  << canonicalFilename_
-	  << " is not in the base release area "
-	  << releaseTop_
-	  << "\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Path "
+          << canonicalFilename_
+          << " is not in the base release area "
+          << releaseTop_
+          << "\n";
       }
       os << version << ' ' << relativePath_ << ' ' << location_ << ' ' << canonicalFilename_.substr(releaseTop_.size());
     } else if (location_ == Data) {
       // Guarantee a site independent value by stripping $DATATOP.
       if (dataTop_.empty()) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Environment Variable " 
-	  << DATATOP
-	  << " is not set.\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Environment Variable "
+          << DATATOP
+          << " is not set.\n";
       }
       std::string::size_type pos = canonicalFilename_.find(dataTop_);
       if (pos != 0) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Path " 
-	  << canonicalFilename_
-	  << " is not in the data area "
-	  << dataTop_
-	  << "\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Path "
+          << canonicalFilename_
+          << " is not in the data area "
+          << dataTop_
+          << "\n";
       }
       os << version << ' ' << relativePath_ << ' ' << location_ << ' ' << canonicalFilename_.substr(dataTop_.size());
     }
@@ -269,10 +263,10 @@ namespace edm
     relativePath_ = relname;
     if (location_ == Local) {
       if (localTop_.empty()) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Environment Variable " 
-	  << LOCALTOP
-	  << " is not set.\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Environment Variable "
+          << LOCALTOP
+          << " is not set.\n";
       }
 #if 1
       // This #if needed for backward compatibility
@@ -284,10 +278,10 @@ namespace edm
       canonicalFilename_ = localTop_ + canFilename;
     } else if (location_ == Release) {
       if (releaseTop_.empty()) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Environment Variable " 
-	  << RELEASETOP
-	  << " is not set.\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Environment Variable "
+          << RELEASETOP
+          << " is not set.\n";
       }
 #if 1
       // This #if needed for backward compatibility
@@ -306,10 +300,10 @@ namespace edm
       canonicalFilename_ = releaseTop_ + canFilename;
     } else if (location_ == Data) {
       if (dataTop_.empty()) {
-	throw edm::Exception(edm::errors::FileInPathError)
-	  << "Environment Variable " 
-	  << DATATOP
-	  << " is not set.\n";
+        throw edm::Exception(edm::errors::FileInPathError)
+          << "Environment Variable "
+          << DATATOP
+          << " is not set.\n";
       }
       canonicalFilename_ = dataTop_ + canFilename;
     }
@@ -318,14 +312,14 @@ namespace edm
   //------------------------------------------------------------
 
 
-  void 
+  void
   FileInPath::getEnvironment() {
     if (!envstring(RELEASETOP, releaseTop_)) {
       releaseTop_.clear();
     }
     if (releaseTop_.empty()) {
       // RELEASETOP was not set.  This means that the environment is set
-      // for the base release itself.  So LOCALTOP actually contains the 
+      // for the base release itself.  So LOCALTOP actually contains the
       // location of the base release.
       if (!envstring(LOCALTOP, releaseTop_)) {
         releaseTop_.clear();
@@ -340,17 +334,17 @@ namespace edm
     }
     if (!envstring(PathVariableName, searchPath_)) {
       throw edm::Exception(edm::errors::FileInPathError)
-	<< PathVariableName
-	<< " must be defined\n";
+        << PathVariableName
+        << " must be defined\n";
     }
   }
 
-  void 
+  void
   FileInPath::initialize_()
   {
     if (relativePath_.empty())
       throw edm::Exception(edm::errors::FileInPathError)
-	<< "Relative path must not be empty\n";
+        << "Relative path must not be empty\n";
 
     // Find the file, based on the value of path variable.
     typedef std::vector<std::string> stringvec_t;
@@ -365,62 +359,62 @@ namespace edm
       // Does the a file exist? locateFile throws is it finds
       // something goofy.
       if (locateFile(pathPrefix, relativePath_)) {
-	// Convert relative path to canonical form, and save it.
-	relativePath_ = bf::path(relativePath_, bf::no_check).normalize().string();
-	  
-	// Save the absolute path.
-	canonicalFilename_ = bf::complete(relativePath_, 
-					  pathPrefix).string();
-	if (canonicalFilename_.empty())
-	  throw edm::Exception(edm::errors::FileInPathError)
-	    << "fullPath is empty"
-	    << "\nrelativePath() is: " << relativePath_
-	    << "\npath prefix is: " << pathPrefix.string()
-	    << '\n';
+        // Convert relative path to canonical form, and save it.
+        relativePath_ = bf::path(relativePath_, bf::no_check).normalize().string();
 
-	// From the current path element, find the branch path (basically the path minus the
-	// last directory, e.g. /src or /share):
-	for (bf::path br = pathPrefix.branch_path(); !br.normalize().string().empty(); br = br.branch_path()) {
+        // Save the absolute path.
+        canonicalFilename_ = bf::complete(relativePath_,
+                                          pathPrefix).string();
+        if (canonicalFilename_.empty())
+          throw edm::Exception(edm::errors::FileInPathError)
+            << "fullPath is empty"
+            << "\nrelativePath() is: " << relativePath_
+            << "\npath prefix is: " << pathPrefix.string()
+            << '\n';
 
-	  if (!localTop_.empty()) {
-	    // Create a path object for our local path LOCALTOP:
-	    bf::path local_(localTop_, bf::no_check);
-	    // If the branch path matches the local path, the file was found locally:
-	    if (br == local_) {
-	      location_ = Local;
-	      return;
-	    }
-	  }
+        // From the current path element, find the branch path (basically the path minus the
+        // last directory, e.g. /src or /share):
+        for (bf::path br = pathPrefix.branch_path(); !br.normalize().string().empty(); br = br.branch_path()) {
 
-	  if (!releaseTop_.empty()) {
-	    // Create a path object for our release path RELEASETOP:
-	    bf::path release_(releaseTop_, bf::no_check);
-	    // If the branch path matches the release path, the file was found in the release:
-	    if (br == release_) {
-	      location_ = Release;
-	      return;
-	    }
-	  }
+          if (!localTop_.empty()) {
+            // Create a path object for our local path LOCALTOP:
+            bf::path local_(localTop_, bf::no_check);
+            // If the branch path matches the local path, the file was found locally:
+            if (br == local_) {
+              location_ = Local;
+              return;
+            }
+          }
 
-	  if (!dataTop_.empty()) {
-	    // Create a path object for our data path DATATOP:
-	    bf::path data_(dataTop_, bf::no_check);
-	    // If the branch path matches the data path, the file was found in the data area:
-	    if (br == data_) {
-	      location_ = Data;
-	      return;
-	    }
-	  }
-	}
-	    
-	// This is really gross --- this organization of if/else
-	// inside the while-loop should be changed so that
-	// this break isn't needed.
+          if (!releaseTop_.empty()) {
+            // Create a path object for our release path RELEASETOP:
+            bf::path release_(releaseTop_, bf::no_check);
+            // If the branch path matches the release path, the file was found in the release:
+            if (br == release_) {
+              location_ = Release;
+              return;
+            }
+          }
+
+          if (!dataTop_.empty()) {
+            // Create a path object for our data path DATATOP:
+            bf::path data_(dataTop_, bf::no_check);
+            // If the branch path matches the data path, the file was found in the data area:
+            if (br == data_) {
+              location_ = Data;
+              return;
+            }
+          }
+        }
+
+        // This is really gross --- this organization of if/else
+        // inside the while-loop should be changed so that
+        // this break isn't needed.
       }
       // Keep trying
       ++it;
     }
-    
+
     // If we got here, we ran out of path elements without finding
     // what we're looking found.
     throw edm::Exception(edm::errors::FileInPathError)
@@ -435,11 +429,7 @@ namespace edm
       << getenv(PathVariableName.c_str())
       << "\nCurrent directory is: "
       << bf::initial_path().string()
-      << "\n";    
+      << "\n";
   }
-    
-  
-}
 
-
-
+}  // namespace edm
