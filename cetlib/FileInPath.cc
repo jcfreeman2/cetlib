@@ -4,21 +4,25 @@
 // long the search path is allowed to be, and whether our only choices
 // for the "official" directory is FW_RELEASE_BASE or FW_DATA_PATH.
 
-#include <cstdlib>
-#include <vector>
-#include "boost/filesystem/path.hpp"
-#include "boost/filesystem/operations.hpp"
 
-#include "FWCore/ParameterSet/interface/FileInPath.h"
+#include "cetlib/FileInPath.h"
+
 #include "FWCore/Utilities/interface/EDMException.h"
 #include "FWCore/Utilities/interface/Parse.h"
+
+#include "boost/filesystem/operations.hpp"
+#include "boost/filesystem/path.hpp"
+
+#include <cstdlib>
+#include <vector>
+
 
 namespace bf = boost::filesystem;
 
 namespace {
   /// These are the names of the environment variables which control
-/// the behavior  of the FileInPath  class.  They are local to  this
-/// class; other code should not even know about them!
+  /// the behavior  of the FileInPath  class.  They are local to  this
+  /// class; other code should not even know about them!
 
   const std::string PathVariableName("FW_SEARCH_PATH");
   // Environment variables for local and release areas:
