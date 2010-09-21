@@ -4,7 +4,8 @@
 //
 // ======================================================================
 
-#include "nybbler.h"
+
+#include "cetlib/nybbler.h"
 
 using cet::nybbler;
 

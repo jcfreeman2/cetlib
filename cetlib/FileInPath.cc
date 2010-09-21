@@ -21,7 +21,7 @@ namespace bf = boost::filesystem;
 
 namespace {
   /// These are the names of the environment variables which control
-  /// the behavior  of the FileInPath  class.  They are local to  this
+  /// the behavior of the FileInPath class.  They are local to this
   /// class; other code should not even know about them!
 
   const std::string PathVariableName("FW_SEARCH_PATH");
