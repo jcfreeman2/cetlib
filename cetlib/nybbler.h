@@ -25,9 +25,8 @@ class cet::nybbler
 public:
   // use compiler's d'tor, copy c'tor, copy assignment
 
-    nybbler( string const & s )
-  : s_(s)
-  { }
+  nybbler(                  ) : s_( "" )  { }
+  nybbler( string const & s ) : s_( s  )  { }
 
   string  as_hex ( ) const;
   string  as_char( ) const;

@@ -41,7 +41,7 @@ string
   for( string::iterator t = r.begin()
                       , e = r.end()   ; t != e; ++t ) {
     *t = to_nyb(*f++) << 4;
-    *t &= to_nyb(*f++);
+    *t |= to_nyb(*f++);
   }
 
   return r;
@@ -51,14 +51,14 @@ string
 uchar
   nybbler::msn( char ch )
 {
-  return lsn(ch >> 4);
+  return (uchar(ch) >> 4) & 0xF;
 }
 
 
 uchar
   nybbler::lsn( char ch )
 {
-  return ch & 0xF;
+  return uchar(ch) & 0xF;
 }
 
 
@@ -66,11 +66,13 @@ char
   nybbler::to_hex( uchar nyb )
 {
   switch( nyb )  {
-    case 0: case 1: case 2: case 3: case 4:
-    case 5: case 6: case 7: case 8: case 9:
+    case 0u: case 1u: case 2u: case 3u: case 4u:
+    case 5u: case 6u: case 7u: case 8u: case 9u:
       return '0' + nyb;
-    case 10: case 11: case 12: case 13: case 14: case 15:
-      return 'A' + nyb;
+    case 10u: case 11u: case 12u: case 13u: case 14u: case 15u:
+      return 'A' + nyb - 10u;
+    default:
+      return '?';
   }
 }
 
@@ -85,7 +87,9 @@ uchar
     case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
       return hex - 'a';
     case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-      return hex - 'A';
+      return hex - 'A' + 10u;
+    default:
+      return '?';
   }
 }
 
