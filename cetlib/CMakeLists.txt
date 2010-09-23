@@ -11,15 +11,21 @@
 set( LIB_NAME ${PROJECT_NAME} )
 
 # ----------------------------------------------------------------------
-# Name all files that comprise this library:
+# Name, by category, all files that comprise this library:
 
 set( LIB_HEADERS
   bit_manipulation.h
   nybbler.h
+  polarssl_config.h
+  polarssl_sha1.h
   registry.h
   sha1.h
 )
-set( LIB_SOURCES nybbler.cc sha1.cc )
+set( LIB_SOURCES
+  nybbler.cc
+  polarssl_sha1.cc
+)
+
 
 # ----------------------------------------------------------------------
 # Compile/link this library from the above-named sources:

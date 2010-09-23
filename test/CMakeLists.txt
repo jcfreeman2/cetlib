@@ -20,5 +20,13 @@ add_executable( nybbler_test nybbler_test.cc )
 target_link_libraries( nybbler_test cetlib )
 add_test( nybbler_test ${EXECUTABLE_OUTPUT_PATH}/nybbler_test )
 
+
+# ----------------------------------------------------------------------
+# Test sha1 component:
+
+add_executable( sha1_test sha1_test.cc )
+target_link_libraries( sha1_test cetlib )
+add_test( sha1_test ${EXECUTABLE_OUTPUT_PATH}/sha1_test )
+
 #
 # ======================================================================
