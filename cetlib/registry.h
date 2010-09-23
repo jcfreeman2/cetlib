@@ -1,5 +1,5 @@
-#ifndef CETLIB_REGISTRY_H
-#define CETLIB_REGISTRY_H
+#ifndef CETLIB__REGISTRY_H
+#define CETLIB__REGISTRY_H
 
 // ======================================================================
 //
@@ -76,4 +76,4 @@ private:
 // ======================================================================
 
 
-#endif  // CETLIB_REGISTRY_H
+#endif  // CETLIB__REGISTRY_H

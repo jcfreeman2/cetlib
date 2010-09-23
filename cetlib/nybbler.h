@@ -1,5 +1,5 @@
-#ifndef CETLIB_NYBBLER_H
-#define CETLIB_NYBBLER_H
+#ifndef CETLIB__NYBBLER_H
+#define CETLIB__NYBBLER_H
 
 // ======================================================================
 //
@@ -47,4 +47,4 @@ private:
 
 // ======================================================================
 
-#endif  // CETLIB_NYBBLER_H
+#endif  // CETLIB__NYBBLER_H

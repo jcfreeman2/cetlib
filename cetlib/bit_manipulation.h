@@ -1,5 +1,5 @@
-#ifndef CETLIB_BIT_MANIPULATION_H
-#define CETLIB_BIT_MANIPULATION_H
+#ifndef CETLIB__BIT_MANIPULATION_H
+#define CETLIB__BIT_MANIPULATION_H
 
 // ======================================================================
 //
@@ -139,4 +139,4 @@ namespace cet {
 // ======================================================================
 
 
-#endif  // CETLIB_BIT_MANIPULATION_H
+#endif  // CETLIB__BIT_MANIPULATION_H
