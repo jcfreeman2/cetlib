@@ -14,6 +14,14 @@ add_test( bit_test ${EXECUTABLE_OUTPUT_PATH}/bit_test )
 
 
 # ----------------------------------------------------------------------
+# Test container_algorithms component:
+
+add_executable( container_algs_test container_algs_test.cc )
+target_link_libraries( container_algs_test cetlib )
+add_test( container_algs_test ${EXECUTABLE_OUTPUT_PATH}/container_algs_test )
+
+
+# ----------------------------------------------------------------------
 # Test nybbler component:
 
 add_executable( nybbler_test nybbler_test.cc )
