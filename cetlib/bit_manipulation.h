@@ -121,6 +121,7 @@ namespace cet {
 namespace cet {
 
   template< class U >
+    inline
     typename boost::enable_if_c< boost::is_unsigned<U>::value
                                , U
                                >::type
