@@ -28,8 +28,9 @@ public:
   typedef  unsigned char           uchar;
   typedef  boost::array<uchar,20>  digest_t;
 
-  sha1() { reset(); }
+  sha1( ) { reset(); }
   sha1( std::string const & mesg ) { reset(); operator<<(mesg); }
+  sha1( char const mesg ) { reset(); operator<<(mesg); }
 
   void  reset( ) { sha1_starts( & context ); }
 
@@ -39,6 +40,16 @@ public:
                , (uchar const *)( & mesg[0] )
                , mesg.size()
                );
+    return *this;
+  }
+
+  sha1 &  operator << ( char const mesg )
+  {
+    sha1_update( & context
+               , (uchar const *)( & mesg )
+               , 1u
+               );
+    return *this;
   }
 
   digest_t  digest( )
