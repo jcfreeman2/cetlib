@@ -1,5 +1,5 @@
-#ifndef CETLIB_SHA1_H
-#define CETLIB_SHA1_H
+#ifndef CETLIB__SHA1_H
+#define CETLIB__SHA1_H
 
 // ======================================================================
 //
@@ -69,4 +69,4 @@ private:
 // ======================================================================
 
 
-#endif  // CETLIB_SHA1_H
+#endif  // CETLIB__SHA1_H
