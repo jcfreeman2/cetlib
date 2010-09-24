@@ -16,6 +16,7 @@ set( LIB_NAME ${PROJECT_NAME} )
 set( LIB_HEADERS
   bit_manipulation.h
   container_algorithms.h
+  exempt_ptr.h
   nybbler.h
   polarssl_config.h
   polarssl_sha1.h

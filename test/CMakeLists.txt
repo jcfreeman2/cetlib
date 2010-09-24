@@ -22,6 +22,14 @@ add_test( container_algs_test ${EXECUTABLE_OUTPUT_PATH}/container_algs_test )
 
 
 # ----------------------------------------------------------------------
+# Test exempt_ptr component:
+
+add_executable( exempt_ptr_test exempt_ptr_test.cc )
+target_link_libraries( exempt_ptr_test cetlib )
+add_test( exempt_ptr_test ${EXECUTABLE_OUTPUT_PATH}/exempt_ptr_test )
+
+
+# ----------------------------------------------------------------------
 # Test nybbler component:
 
 add_executable( nybbler_test nybbler_test.cc )
