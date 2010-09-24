@@ -8,10 +8,7 @@
 // ======================================================================
 
 
-
-#include "boost/type_traits/is_unsigned.hpp"
-#include "boost/utility/enable_if.hpp"
-
+#include "cpp0x/type_traits.h"
 #include <limits>
 
 
@@ -21,7 +18,7 @@
 namespace cet {
 
   template< class U
-          , bool = boost::is_unsigned<U>::value
+          , bool = std::is_unsigned<U>::value
           >
     struct bit_size;
 
@@ -65,7 +62,7 @@ namespace cet {
 namespace cet {
 
   template< class U, size_t n
-          , bool = boost::is_unsigned<U>::value
+          , bool = std::is_unsigned<U>::value
           , bool = n+1 < bit_size<U>::value
           >
     struct right_bits;
@@ -91,7 +88,7 @@ namespace cet {
 namespace cet {
 
   template< class U, size_t n
-          , bool = boost::is_unsigned<U>::value
+          , bool = std::is_unsigned<U>::value
           , bool = n <= bit_size<U>::value
           >
     struct left_bits;
@@ -122,9 +119,9 @@ namespace cet {
 
   template< class U >
     inline
-    typename boost::enable_if_c< boost::is_unsigned<U>::value
-                               , U
-                               >::type
+    typename std::enable_if< std::is_unsigned<U>::value
+                           , U
+                           >::type
     circ_lshift( U X, U n )
   {
     static  size_t const  nbits = bit_size<U>::value;

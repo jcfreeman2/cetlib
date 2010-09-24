@@ -44,6 +44,14 @@ endif()
 include_directories( "${PROJECT_SOURCE_DIR}" ) # project's headers
 include_directories( $ENV{BOOST_INC} )         # boost's headers
 
+set( CPP0X_VERSION $ENV{CPP0X_VERSION} )
+if( NOT CPP0X_VERSION )
+  message( FATAL_ERROR
+           "Can't locate CPP0X_VERSION, needed to build/test ${PROJECT_NAME}"
+         )
+endif()
+include_directories( $ENV{CPP0X_INC} )         # cpp0x's headers
+
 # ----------------------------------------------------------------------
 # Describe source tree substructure:
 

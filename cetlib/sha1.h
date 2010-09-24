@@ -8,8 +8,8 @@
 // ======================================================================
 
 
-#include "boost/array.hpp"
 #include "cetlib/polarssl_sha1.h"
+#include "cpp0x/array.h"
 #include <cstring>
 #include <string>
 
@@ -25,8 +25,8 @@ namespace cet {
 class cet::sha1
 {
 public:
-  typedef  unsigned char           uchar;
-  typedef  boost::array<uchar,20>  digest_t;
+  typedef  unsigned char         uchar;
+  typedef  std::array<uchar,20>  digest_t;
 
   sha1( ) { reset(); }
   sha1( std::string const & mesg ) { reset(); operator<<(mesg); }
