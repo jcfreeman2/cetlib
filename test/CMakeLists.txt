@@ -44,5 +44,13 @@ add_executable( sha1_test sha1_test.cc )
 target_link_libraries( sha1_test cetlib )
 add_test( sha1_test ${EXECUTABLE_OUTPUT_PATH}/sha1_test )
 
+
+# ----------------------------------------------------------------------
+# Test value_ptr component:
+
+add_executable( value_ptr_test value_ptr_test.cc )
+target_link_libraries( value_ptr_test cetlib )
+add_test( value_ptr_test ${EXECUTABLE_OUTPUT_PATH}/value_ptr_test )
+
 #
 # ======================================================================

@@ -14,14 +14,15 @@ set( LIB_NAME ${PROJECT_NAME} )
 # Name, by category, all files that comprise this library:
 
 set( LIB_HEADERS
+  _polarssl_config.h
+  _polarssl_sha1.h
   bit_manipulation.h
   container_algorithms.h
   exempt_ptr.h
   nybbler.h
-  _polarssl_config.h
-  _polarssl_sha1.h
   registry.h
   sha1.h
+  value_ptr.h
 )
 set( LIB_SOURCES
   nybbler.cc
