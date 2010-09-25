@@ -18,14 +18,14 @@ set( LIB_HEADERS
   container_algorithms.h
   exempt_ptr.h
   nybbler.h
-  polarssl_config.h
-  polarssl_sha1.h
+  _polarssl_config.h
+  _polarssl_sha1.h
   registry.h
   sha1.h
 )
 set( LIB_SOURCES
   nybbler.cc
-  polarssl_sha1.cc
+  _polarssl_sha1.cc
 )
 
 

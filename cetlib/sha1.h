@@ -8,7 +8,7 @@
 // ======================================================================
 
 
-#include "cetlib/polarssl_sha1.h"
+#include "cetlib/_polarssl_sha1.h"
 #include "cpp0x/array.h"
 #include <cstring>
 #include <string>
