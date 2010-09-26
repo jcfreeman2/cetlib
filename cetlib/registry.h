@@ -15,6 +15,7 @@ namespace cet {
   template< class K, class V >  class registry;
 }
 
+
 // ======================================================================
 
 
@@ -28,12 +29,12 @@ public:
   static
   bool
     empty( )
-  {return the_registry_().empty(); }
+  { return the_registry_().empty(); }
 
   static
   typename reg_t::size_type
     size( )
-  {return the_registry_().size(); }
+  { return the_registry_().size(); }
 
   static
   void
@@ -72,6 +73,7 @@ private:
   }
 
 };  // registry<>
+
 
 // ======================================================================
 

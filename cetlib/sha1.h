@@ -29,12 +29,15 @@ public:
   typedef  std::array<uchar,20>  digest_t;
 
   sha1( ) { reset(); }
-  sha1( std::string const & mesg ) { reset(); operator<<(mesg); }
-  sha1( char const mesg ) { reset(); operator<<(mesg); }
+  explicit
+    sha1( std::string const & mesg ) { reset(); operator<<(mesg); }
+  explicit
+    sha1( char const mesg ) { reset(); operator<<(mesg); }
 
   void  reset( ) { sha1_starts( & context ); }
 
-  sha1 &  operator << ( std::string const & mesg )
+  sha1 &
+    operator << ( std::string const & mesg )
   {
     sha1_update( & context
                , (uchar const *)( & mesg[0] )
@@ -43,7 +46,8 @@ public:
     return *this;
   }
 
-  sha1 &  operator << ( char const mesg )
+  sha1 &
+    operator << ( char const mesg )
   {
     sha1_update( & context
                , (uchar const *)( & mesg )
@@ -52,7 +56,8 @@ public:
     return *this;
   }
 
-  digest_t  digest( )
+  digest_t
+    digest( )
   {
     digest_t result;
     sha1_finish( & context, & result[0] );
