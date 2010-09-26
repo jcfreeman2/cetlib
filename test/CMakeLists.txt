@@ -22,6 +22,15 @@ add_test( container_algs_test ${EXECUTABLE_OUTPUT_PATH}/container_algs_test )
 
 
 # ----------------------------------------------------------------------
+# Test exception_collector component:
+
+add_executable( exception_collector_test exception_collector_test.cc )
+target_link_libraries( exception_collector_test cetlib )
+add_test( exception_collector_test
+${EXECUTABLE_OUTPUT_PATH}/exception_collector_test )
+
+
+# ----------------------------------------------------------------------
 # Test exception component:
 
 add_executable( exception_test exception_test.cc )
