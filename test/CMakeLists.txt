@@ -22,6 +22,14 @@ add_test( container_algs_test ${EXECUTABLE_OUTPUT_PATH}/container_algs_test )
 
 
 # ----------------------------------------------------------------------
+# Test exception component:
+
+add_executable( exception_test exception_test.cc )
+target_link_libraries( exception_test cetlib )
+add_test( exception_test ${EXECUTABLE_OUTPUT_PATH}/exception_test )
+
+
+# ----------------------------------------------------------------------
 # Test exempt_ptr component:
 
 add_executable( exempt_ptr_test exempt_ptr_test.cc )

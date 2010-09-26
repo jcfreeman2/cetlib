@@ -18,6 +18,7 @@ set( LIB_HEADERS
   _polarssl_sha1.h
   bit_manipulation.h
   container_algorithms.h
+  exception.h
   exempt_ptr.h
   nybbler.h
   registry.h
@@ -25,8 +26,9 @@ set( LIB_HEADERS
   value_ptr.h
 )
 set( LIB_SOURCES
-  nybbler.cc
   _polarssl_sha1.cc
+  exception.cc
+  nybbler.cc
 )
 
 
