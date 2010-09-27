@@ -1,7 +1,8 @@
 #include "cetlib/exception_collector.h"
-  using cet::exception_collector;
-
 #include <iostream>
+
+
+using cet::exception_collector;
 
 
 void

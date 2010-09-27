@@ -6,9 +6,9 @@
 
 
 #include "cetlib/exception.h"
-  using cet::exception;
-
 #include <cctype>
+
+using cet::exception;
 
 typedef  exception::Category      Category;
 typedef  exception::CategoryList  CategoryList;

@@ -1,8 +1,8 @@
 #include "cetlib/sha1.h"
-  using cet::sha1;
-
 #include <string>
 
+
+using cet::sha1;
 
 
 void

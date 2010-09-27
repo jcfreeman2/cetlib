@@ -53,12 +53,15 @@
 // ======================================================================
 
 
-#include "cpp0x/type_traits.h"
+#include "cpp0x/type_traits"
 #include <exception>
 #include <iosfwd>
 #include <list>
 #include <sstream>
 #include <string>
+
+
+// ======================================================================
 
 
 namespace cet {
@@ -140,5 +143,6 @@ namespace cet {
 
 
 // ======================================================================
+
 
 #endif  // CETLIB__EXCEPTION_H

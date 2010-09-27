@@ -58,10 +58,10 @@
 // ======================================================================
 
 
-#include "cpp0x/memory.h"      // default_delete
-#include "cpp0x/type_traits.h" // add/remove_ptr, enable_if, is_convertible, ...
-#include <exception>           // exception
-#include <utility>             // move, swap
+#include "cpp0x/memory"      // default_delete
+#include "cpp0x/type_traits" // add/remove_ptr, enable_if, is_convertible, ...
+#include <exception>         // exception
+#include <utility>           // move, swap
 
 
 // ======================================================================

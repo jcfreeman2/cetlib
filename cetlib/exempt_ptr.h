@@ -46,9 +46,9 @@
 // ======================================================================
 
 
-#include "cpp0x/type_traits.h"  // add_pointer, is_convertible
-#include <exception>            // exception
-#include <utility>              // swap
+#include "cpp0x/type_traits"  // add_pointer, is_convertible
+#include <exception>          // exception
+#include <utility>            // swap
 
 
 // ======================================================================

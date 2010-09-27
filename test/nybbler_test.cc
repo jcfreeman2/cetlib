@@ -1,8 +1,9 @@
 #include "cetlib/nybbler.h"
-  using cet::nybbler;
-
 #include <cstdlib>
 #include <string>
+
+
+using cet::nybbler;
 
 
 void

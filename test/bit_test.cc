@@ -1,9 +1,10 @@
 #include "cetlib/bit_manipulation.h"
-  using cet::bit_size;
-  using cet::bit_number;
-  using cet::right_bits;
-  using cet::left_bits;
-  using cet::circ_lshift;
+
+using cet::bit_size;
+using cet::bit_number;
+using cet::right_bits;
+using cet::left_bits;
+using cet::circ_lshift;
 
 
 void

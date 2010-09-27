@@ -24,7 +24,7 @@
 
 
 #include "cetlib/exception.h"
-#include "cpp0x/functional.h"
+#include "cpp0x/functional"
 #include <exception>
 
 
