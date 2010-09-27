@@ -1,4 +1,5 @@
 #include "cetlib/value_ptr.h"
+#include <cstdlib>
 
 
 using cet::value_ptr;

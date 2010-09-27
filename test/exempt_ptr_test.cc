@@ -1,4 +1,5 @@
 #include "cetlib/exempt_ptr.h"
+#include <cstdlib>
 
 
 using cet::exempt_ptr;

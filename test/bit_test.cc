@@ -1,4 +1,5 @@
 #include "cetlib/bit_manipulation.h"
+#include <cstdlib>
 
 using cet::bit_size;
 using cet::bit_number;
