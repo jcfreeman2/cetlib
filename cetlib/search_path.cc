@@ -41,17 +41,6 @@ std::string
 
 
 static
-std::string
-  terminate_with_slash( std::string const & s )
-{
-  std::string::size_type sz = s.size();
-
-  return s[sz-1] == '/' ?  s
-                        :  s + '/';
-}
-
-
-static
 bool
   file_exists( std::string const & filename )
 {
@@ -71,10 +60,6 @@ search_path::search_path( std::string const & path )
                 , dirs.begin()
                 , resolve_env_variable
                 );
-  std::transform( dirs.begin(), dirs.end()
-                , dirs.begin()
-                , terminate_with_slash
-                );
 }
 
 
@@ -87,7 +72,11 @@ std::string
   for( std::vector<std::string>::const_iterator b = dirs.begin()
                                               , e = dirs.end()
      ; b != e; ++b ) {
-    std::string fullpath = *b + filename;
+    std::string fullpath = *b + '/' + filename;
+    for( int k = fullpath.find("//")
+       ; k != std::string::npos
+       ; k = fullpath.find("//") )
+      fullpath.erase(k,1);
     if( file_exists(fullpath) )
       return fullpath;
   }

@@ -24,9 +24,8 @@ int
     ensure( 1, sp.size() == 3 );
     std::string const & s = sp[0];
     ensure( 2, s[0] == '/' );
-    ensure( 3, s[s.size()-1] == '/' );
-    ensure( 4, sp[1] == s );
-    ensure( 5, sp[2] == s );
+    ensure( 3, sp[1] == s );
+    ensure( 4, sp[2] == s );
   }
 
   {
@@ -42,6 +41,12 @@ int
   {
     search_path sp( "" );
     ensure( 21, sp.empty() );
+  }
+
+  {
+    search_path sp( "/tmp" );
+    std::string const & s = sp.find_file("");
+    ensure( 31, s == "/tmp/" );
   }
 
   return 0;
