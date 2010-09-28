@@ -60,28 +60,33 @@
 #include <sstream>
 #include <string>
 
+namespace cet {
+  class exception;
+}
+
+
+// ======================================================================
+
+
+namespace cet { namespace detail {
+
+    template< class D
+            , bool = std::is_base_of<cet::exception,D>::value
+            >
+      struct enable_if_an_exception
+    { typedef  D const &  type; };
+
+    template< class D >
+      struct enable_if_an_exception<D,false>
+    { };
+
+} }
+
 
 // ======================================================================
 
 
 namespace cet {
-
-  #if NO_LONGER_USED
-  namespace detail {
-
-    template< class D, class T
-            , bool = std::is_base_of<cet::exception,D>::value
-            >
-      struct enable_if_an_exception
-    { typedef  T  type };
-
-    template< class D, class T >
-      struct enable_if_an_exception<D,T,false>
-    { };
-
-  }  // namespace detail
-  #endif  // NO_LONGER_USED
-
 
   class exception
     : public std::exception
@@ -113,22 +118,22 @@ namespace cet {
 
     // --- mutators:
 
-    void  append( exception const & another );
-    void  append( std::string const & more_information );
-    void  append( char const more_information[] );
+    void  append( exception const & another ) const;
 
-    // --- output:
+    void  append( std::string const & more_information ) const;
+    void  append( char        const more_information[] ) const;
 
-    exception &  operator << ( char const stuff[] );
-    template< typename T >
-      exception &  operator << ( T const & stuff )
-    { ost_ << stuff; return *this; }
-    exception &  operator << ( std::ostream& f(std::ostream&) );
-    exception &  operator << ( std::ios_base& f(std::ios_base& ) );
+    void  append( std::ostream& f(std::ostream&) ) const;
+    void  append( std::ios_base& f(std::ios_base&) ) const;
+
+    template< class T >
+      void
+      append( T const & more_information ) const
+    { ost_ << more_information; }
 
   private:
-    std::ostringstream   ost_;
-    CategoryList         category_;
+    mutable  std::ostringstream   ost_;
+    CategoryList                  category_;
 
     virtual  std::exception *  clone() const;
     virtual  void  rethrow();
@@ -138,6 +143,31 @@ namespace cet {
 
   std::ostream &
     operator << ( std::ostream & os, exception const & e );
+
+  template< class E >
+    typename detail::enable_if_an_exception<E>::type
+    operator << ( E const & e, std::string const & t )
+  { e.append(t); return e; }
+
+  template< class E >
+    typename detail::enable_if_an_exception<E>::type
+    operator << ( E const & e, char const t[] )
+  { e.append(t); return e; }
+
+  template< class E >
+    typename detail::enable_if_an_exception<E>::type
+    operator << ( E const & e, std::ostream& f(std::ostream&) )
+  { e.append(f); return e; }
+
+  template< class E >
+    typename detail::enable_if_an_exception<E>::type
+    operator << ( E const & e, std::ios_base& f(std::ios_base&) )
+  { e.append(f); return e; }
+
+  template< class E, class T >
+    typename detail::enable_if_an_exception<E>::type
+    operator << ( E const & e, T const & t )
+  { e.append(t); return e; }
 
 }  // namespace cet
 

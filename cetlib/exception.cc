@@ -150,51 +150,41 @@ std::string
 // mutators:
 
 void
-  exception::append( exception const & another )
+  exception::append( exception const & another ) const
 {
   ost_ << another.explain_self();
 }
 
 
 void
-  exception::append( std::string const & more_information )
+  exception::append( std::string const & more_information ) const
 {
   ost_ << more_information;
 }
 
 
 void
-  exception::append( char const more_information[] )
+  exception::append( char const more_information[] ) const
 {
   ost_ << more_information;
 }
 
 
+void
+  exception::append( std::ostream& f(std::ostream&) ) const
+{
+  f(ost_);
+}
+
+
+void
+  exception::append( std::ios_base& f(std::ios_base&) ) const
+{
+  f(ost_);
+}
+
+
 // ======================================================================
-// output:
-
-exception &
-  exception::operator << ( char const stuff[] )
-{
-  ost_ << stuff;
-  return *this;
-}
-
-
-exception &
-  exception::operator << ( std::ostream & f(std::ostream & ) )
-{
-  f(ost_);
-  return *this;
-}
-
-
-exception &
-  exception::operator << ( std::ios_base & f(std::ios_base & ) )
-{
-  f(ost_);
-  return *this;
-}
 
 
 std::ostream &
@@ -204,4 +194,4 @@ std::ostream &
 }
 
 
-// ======================================================================
+
