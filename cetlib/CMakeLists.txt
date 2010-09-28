@@ -23,7 +23,9 @@ set( LIB_HEADERS
   exempt_ptr.h
   nybbler.h
   registry.h
+  search_path.h
   sha1.h
+  split.h
   value_ptr.h
 )
 set( LIB_SOURCES
@@ -31,6 +33,7 @@ set( LIB_SOURCES
   exception.cc
   exception_collector.cc
   nybbler.cc
+  search_path.cc
 )
 
 

@@ -55,11 +55,27 @@ add_test( nybbler_test ${EXECUTABLE_OUTPUT_PATH}/nybbler_test )
 
 
 # ----------------------------------------------------------------------
+# Test search_path component:
+
+add_executable( search_path_test search_path_test.cc )
+target_link_libraries( search_path_test cetlib )
+add_test( search_path_test ${EXECUTABLE_OUTPUT_PATH}/search_path_test )
+
+
+# ----------------------------------------------------------------------
 # Test sha1 component:
 
 add_executable( sha1_test sha1_test.cc )
 target_link_libraries( sha1_test cetlib )
 add_test( sha1_test ${EXECUTABLE_OUTPUT_PATH}/sha1_test )
+
+
+# ----------------------------------------------------------------------
+# Test split component:
+
+add_executable( split_test split_test.cc )
+target_link_libraries( split_test cetlib )
+add_test( split_test ${EXECUTABLE_OUTPUT_PATH}/split_test )
 
 
 # ----------------------------------------------------------------------
