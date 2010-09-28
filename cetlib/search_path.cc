@@ -81,7 +81,7 @@ search_path::search_path( std::string const & path )
 std::string
   search_path::find_file( std::string filename )
 {
-  while( filename[0] == '/' )
+  while( ! filename.empty()  &&  filename[0] == '/' )
     filename.erase(0, 1);
 
   for( std::vector<std::string>::const_iterator b = dirs.begin()
