@@ -1,21 +1,18 @@
 # ======================================================================
+#  cetlib main build file
 #
-# Main script to drive product's build/test/install
-#
-# ----------------------------------------------------------------------
-#
-#   cd /path/to/build_dir
-#   cmake [-DCMAKE_INSTALL_PREFIX=/path/to/install_dir] /path/to/this_dir
-#   make
-#   make test
-#   make install
+#  cd .../path/to/build/directory
+#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path] .../path/to/cetlib
+#  make
+#  make test
+#  make install
 # ======================================================================
 
 
 # ----------------------------------------------------------------------
 # Describe build tool requirements:
 
-cmake_minimum_required(VERSION 2.6)
+cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 
 # ----------------------------------------------------------------------
 # Describe product:
@@ -32,17 +29,28 @@ set(CMAKE_SKIP_RPATH) # don't embed path in shared lib's or executables
 enable_testing()
 
 # ----------------------------------------------------------------------
-# Describe build requirements:
+# Describe build prerequisites:
 
 set( GCC_VERSION $ENV{GCC_VERSION} )  # compiler
 if( NOT GCC_VERSION )
   message( FATAL_ERROR
-           "Can't locate GCC_VERSION, needed to build/test ${PROJECT_NAME}"
+           "Can't locate GCC_VERSION, required to test ${PROJECT_NAME}"
          )
 endif()
 
-include_directories( "${PROJECT_SOURCE_DIR}" ) # project's headers
-include_directories( $ENV{BOOST_INC} )         # boost's headers
+set( BOOST_VERS $ENV{BOOST_VERSION} )  # boost
+if( NOT BOOST_VERS )
+  message( FATAL_ERROR
+           "Can't locate BOOST_VERSION, required to test ${PROJECT_NAME}"
+         )
+endif()
+set( BOOST_STRING $ENV{SETUP_BOOST} )
+string( REGEX REPLACE ".*(-q.*)" "\\1" BOOST_QUAL "${BOOST_STRING}" )
+set( BOOST_ROOT $ENV{BOOST_DIR} )
+set( BOOST_INCLUDEDIR $ENV{BOOST_INC} )
+set( BOOST_LIBRARYDIR $ENV{BOOST_LIB} )
+set( Boost_USE_MULTITHREADED ON )
+find_package( Boost 1.42 )  # minimum version required
 
 set( CPP0X_VERSION $ENV{CPP0X_VERSION} )
 if( NOT CPP0X_VERSION )
@@ -50,14 +58,28 @@ if( NOT CPP0X_VERSION )
            "Can't locate CPP0X_VERSION, needed to build/test ${PROJECT_NAME}"
          )
 endif()
+set( CPP0X_STRING $ENV{SETUP_CPP0X} )
+string( REGEX REPLACE ".*(-q.*)" "\\1" CPP0X_QUAL "${CPP0X_STRING}" )
+
+# ----------------------------------------------------------------------
+# Describe include path:
+
+include_directories( "${PROJECT_SOURCE_DIR}" ) # project's headers
+include_directories( $ENV{BOOST_INC} )         # boost's headers
 include_directories( $ENV{CPP0X_INC} )         # cpp0x's headers
 
 # ----------------------------------------------------------------------
-# Describe source tree substructure:
+# Describe source tree layout:
 
 add_subdirectory( ${PROJECT_NAME} ) # source code
 add_subdirectory( test )            # test code
 add_subdirectory( ups )             # ups files
+
+# ----------------------------------------------------------------------
+# Describe build tree layout:
+
+set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
+set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 
 #
 # ======================================================================
