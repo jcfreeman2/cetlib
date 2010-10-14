@@ -47,37 +47,37 @@ void
 // ======================================================================
 // c'tors, d'tors:
 
-exception::exception( Category const & category )
+exception::exception( Category const & c )
   : std::exception( )
   , ost_          ( )
-  , category_     ( 1, category )
+  , category_     ( 1, c )
 { }
 
 
-exception::exception( Category    const & category
-                    , std::string const & message )
+exception::exception( Category    const & c
+                    , std::string const & m )
   : std::exception( )
   , ost_          ( )
-  , category_     ( 1, category )
+  , category_     ( 1, c )
 {
-  ost_ << message;
-  if( ! ends_with_whitespace(message) )
+  ost_ << m;
+  if( ! ends_with_whitespace(m) )
     ost_ << ' ';
 }
 
 
-exception::exception( Category    const & category
-                    , std::string const & message
-                    , exception   const & another )
+exception::exception( Category    const & c
+                    , std::string const & m
+                    , exception   const & e )
   : std::exception( )
   , ost_          ( )
-  , category_     ( 1, category )
+  , category_     ( 1, c )
 {
-  ost_ << message;
-  if( ! ends_with_whitespace(message) )
+  ost_ << m;
+  if( ! ends_with_whitespace(m) )
     ost_ << ' ';
-  category_.push_back( another.category() );
-  append( another );
+  category_.push_back( e.category() );
+  append( e );
 }
 
 
@@ -150,9 +150,9 @@ std::string
 // mutators:
 
 void
-  exception::append( exception const & another ) const
+  exception::append( exception const & e ) const
 {
-  ost_ << another.explain_self();
+  ost_ << e.explain_self();
 }
 
 

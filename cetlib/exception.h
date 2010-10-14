@@ -31,17 +31,18 @@
 //
 // ----------------------------------------------------------------------
 //
-// Derived types are expected to adjust the category, either by
-//   1) passing a string literal to the base class constructor, or
-//   2) ensuring the developer gives a category name.
+// Derived types are expected to adjust the category, either
+//   1) by passing a string literal to the base class constructor, or
+//   2) by ensuring the developer gives a category name.
 // Example:
-// class infinite_loop
-//   : public exception
-// {
-//   infinite_loop( std::string const & mesg )
-//     : exception( "infinite_loop", mesg )
-//   { }
-// };
+//
+//  class infinite_loop
+//    : public cet::exception
+//  {
+//    infinite_loop( std::string const & mesg )
+//      : exception( "infinite_loop", mesg )
+//    { }
+//  };
 //
 // ----------------------------------------------------------------------
 //
@@ -59,6 +60,7 @@
 #include <list>
 #include <sstream>
 #include <string>
+
 
 namespace cet {
   class exception;
@@ -98,11 +100,13 @@ namespace cet {
     // --- c'tors, d'tors:
     explicit
       exception( Category const & category );
-    exception( Category const & category
+
+    exception( Category    const & category
              , std::string const & message );
-    exception( Category const & category
+    exception( Category    const & category
              , std::string const & message
-             , exception const & another );
+             , exception   const & another );
+
     exception( exception const & other );
 
     virtual

@@ -37,6 +37,7 @@ if( NOT GCC_VERSION )
            "Can't locate GCC_VERSION, required to test ${PROJECT_NAME}"
          )
 endif()
+message( STATUS "Using gcc ${GCC_VERSION}" )
 
 set( BOOST_VERS $ENV{BOOST_VERSION} )  # boost
 if( NOT BOOST_VERS )
@@ -51,8 +52,9 @@ set( BOOST_INCLUDEDIR $ENV{BOOST_INC} )
 set( BOOST_LIBRARYDIR $ENV{BOOST_LIB} )
 set( Boost_USE_MULTITHREADED ON )
 find_package( Boost 1.42 )  # minimum version required
+message( STATUS "Using boost ${BOOST_VERS} ${BOOST_QUAL}" )
 
-set( CPP0X_VERSION $ENV{CPP0X_VERSION} )
+set( CPP0X_VERSION $ENV{CPP0X_VERSION} )  # cpp0x
 if( NOT CPP0X_VERSION )
   message( FATAL_ERROR
            "Can't locate CPP0X_VERSION, needed to build/test ${PROJECT_NAME}"
@@ -60,20 +62,21 @@ if( NOT CPP0X_VERSION )
 endif()
 set( CPP0X_STRING $ENV{SETUP_CPP0X} )
 string( REGEX REPLACE ".*(-q.*)" "\\1" CPP0X_QUAL "${CPP0X_STRING}" )
+message( STATUS "Using cpp0x ${CPP0X_VERSION} ${CPP0X_QUAL}" )
 
 # ----------------------------------------------------------------------
 # Describe include path:
 
-include_directories( "${PROJECT_SOURCE_DIR}" ) # project's headers
-include_directories( $ENV{BOOST_INC} )         # boost's headers
-include_directories( $ENV{CPP0X_INC} )         # cpp0x's headers
+include_directories( "${PROJECT_SOURCE_DIR}" )  # project's headers
+include_directories( $ENV{BOOST_INC} )          # boost's headers
+include_directories( $ENV{CPP0X_INC} )          # cpp0x's headers
 
 # ----------------------------------------------------------------------
 # Describe source tree layout:
 
-add_subdirectory( ${PROJECT_NAME} ) # source code
-add_subdirectory( test )            # test code
-add_subdirectory( ups )             # ups files
+add_subdirectory( ${PROJECT_NAME} )  # source code
+add_subdirectory( test )             # test code
+add_subdirectory( ups )              # ups files
 
 # ----------------------------------------------------------------------
 # Describe build tree layout:
