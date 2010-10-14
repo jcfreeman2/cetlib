@@ -14,11 +14,27 @@ add_test( bit_test ${EXECUTABLE_OUTPUT_PATH}/bit_test )
 
 
 # ----------------------------------------------------------------------
+# Test coded_exception component:
+
+add_executable( coded_exception_test coded_exception_test.cc )
+target_link_libraries( coded_exception_test cetlib )
+add_test( coded_exception_test ${EXECUTABLE_OUTPUT_PATH}/coded_exception_test )
+
+
+# ----------------------------------------------------------------------
 # Test container_algorithms component:
 
 add_executable( container_algs_test container_algs_test.cc )
 target_link_libraries( container_algs_test cetlib )
 add_test( container_algs_test ${EXECUTABLE_OUTPUT_PATH}/container_algs_test )
+
+
+# ----------------------------------------------------------------------
+# Test exception component:
+
+add_executable( exception_test exception_test.cc )
+target_link_libraries( exception_test cetlib )
+add_test( exception_test ${EXECUTABLE_OUTPUT_PATH}/exception_test )
 
 
 # ----------------------------------------------------------------------
@@ -28,14 +44,6 @@ add_executable( exception_collector_test exception_collector_test.cc )
 target_link_libraries( exception_collector_test cetlib )
 add_test( exception_collector_test
 ${EXECUTABLE_OUTPUT_PATH}/exception_collector_test )
-
-
-# ----------------------------------------------------------------------
-# Test exception component:
-
-add_executable( exception_test exception_test.cc )
-target_link_libraries( exception_test cetlib )
-add_test( exception_test ${EXECUTABLE_OUTPUT_PATH}/exception_test )
 
 
 # ----------------------------------------------------------------------

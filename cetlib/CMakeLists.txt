@@ -17,6 +17,7 @@ set( LIB_HEADERS
   _polarssl_config.h
   _polarssl_sha1.h
   bit_manipulation.h
+  coded_exception.h
   container_algorithms.h
   exception.h
   exception_collector.h
