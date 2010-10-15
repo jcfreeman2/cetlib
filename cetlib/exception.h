@@ -97,7 +97,8 @@ namespace cet {
     typedef  std::string          Category;
     typedef  std::list<Category>  CategoryList;
 
-    // --- c'tors, d'tors:
+    // --- c'tors, d'tor:
+
     explicit
       exception( Category const & category );
 

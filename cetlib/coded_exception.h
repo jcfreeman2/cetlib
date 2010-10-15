@@ -32,6 +32,8 @@ template< typename Code
   : public cet::exception
 {
 public:
+  // --- c'tors, d'tor:
+
   explicit
     coded_exception( Code c )
   : exception( to_string(c) )
@@ -43,7 +45,7 @@ public:
   , category_( c )
   { }
 
-    coded_exception(Code c, std::string const & m, exception const & e )
+    coded_exception( Code c, std::string const & m, exception const & e )
   : exception( to_string(c), m, e )
   , category_( c )
   { }
@@ -51,6 +53,8 @@ public:
   virtual
     ~coded_exception() throw()
   { }
+
+  // --- inspectors:
 
   Code
     categoryCode() const
@@ -70,7 +74,7 @@ private:
              iterator;
 
     iterator  it = translate().find(c);
-    return it == translate().end()  ?  std::string("UnknownCode")
+    return it == translate().end()  ?  std::string("Unknown code")
                                     :  it->second;
   }
 
