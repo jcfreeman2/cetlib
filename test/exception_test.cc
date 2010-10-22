@@ -42,8 +42,9 @@ int
       throw exception("Bye") << "Nice meeting you" << std::endl;
     }
     catch( exception const & e ) {
+      ensure( 3, e.category() == "Bye" );
       std::string s = e.explain_self();
-      ensure( 3, s.find("Nice meeting you") != std::string::npos );
+      ensure( 4, s.find("Nice meeting you") != std::string::npos );
     }
   }
 

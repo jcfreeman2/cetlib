@@ -85,10 +85,6 @@ add_executable( sha1_test sha1_test.cc )
 target_link_libraries( sha1_test cetlib )
 add_test( sha1_test ${EXECUTABLE_OUTPUT_PATH}/sha1_test )
 
-
-# ----------------------------------------------------------------------
-# Test_2 sha1 component:
-
 add_executable( sha1_test_2 sha1_test_2.cc sha1.cpp )
 target_link_libraries( sha1_test_2 cetlib )
 add_test( sha1_test_2 ${EXECUTABLE_OUTPUT_PATH}/sha1_test_2 )
@@ -99,8 +95,8 @@ add_test( sha1_test_2 ${EXECUTABLE_OUTPUT_PATH}/sha1_test_2 )
 
 add_executable( sha1_test_performance sha1_test_performance.cc sha1.cpp )
 target_link_libraries( sha1_test_performance cetlib )
-add_test( sha1_test_performance
-          ${EXECUTABLE_OUTPUT_PATH}/sha1_test_performance )
+#add_test( sha1_test_performance
+#          ${EXECUTABLE_OUTPUT_PATH}/sha1_test_performance )
 
 
 # ----------------------------------------------------------------------

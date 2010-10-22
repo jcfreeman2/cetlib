@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 # Describe product:
 
 project(cetlib)
-set(version v0_0_0)
+set(version v0_1_0)
 
 set(qualifier a1)
 set(flavorqual sl5.x86_64.${qualifier})
@@ -51,7 +51,7 @@ set( BOOST_ROOT $ENV{BOOST_DIR} )
 set( BOOST_INCLUDEDIR $ENV{BOOST_INC} )
 set( BOOST_LIBRARYDIR $ENV{BOOST_LIB} )
 set( Boost_USE_MULTITHREADED ON )
-find_package( Boost 1.42 )  # minimum version required
+find_package( Boost 1.42 COMPONENTS filesystem )
 message( STATUS "Using boost ${BOOST_VERS} ${BOOST_QUAL}" )
 
 set( CPP0X_VERSION $ENV{CPP0X_VERSION} )  # cpp0x

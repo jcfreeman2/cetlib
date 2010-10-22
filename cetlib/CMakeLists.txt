@@ -42,9 +42,7 @@ set( LIB_SOURCES
 # Compile/link this library from the above-named sources:
 
 add_library( ${LIB_NAME} SHARED ${LIB_SOURCES} )
-#link_libraries( ${Boost_FILESYSTEM_LIBRARY}
-#                ${REFLEX}
-#                dl )
+link_libraries( ${Boost_FILESYSTEM_LIBRARY} )
 
 # ----------------------------------------------------------------------
 # Install the above-named headers and the above-built library:
