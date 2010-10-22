@@ -63,6 +63,14 @@ add_test( nybbler_test ${EXECUTABLE_OUTPUT_PATH}/nybbler_test )
 
 
 # ----------------------------------------------------------------------
+# Test registry component:
+
+add_executable( registry_test registry_test.cc )
+target_link_libraries( registry_test cetlib )
+add_test( registry_test ${EXECUTABLE_OUTPUT_PATH}/registry_test )
+
+
+# ----------------------------------------------------------------------
 # Test search_path component:
 
 add_executable( search_path_test search_path_test.cc )
