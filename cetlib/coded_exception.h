@@ -9,13 +9,12 @@
 
 
 #include "cetlib/exception.h"
-#include <map>
 #include <string>
 
 
 namespace cet {
   template< typename Code
-          , std::map<Code,std::string> const & f()
+          , std::string translate( Code )
           >
     class coded_exception;
 }
@@ -26,7 +25,7 @@ namespace cet {
 // ======================================================================
 
 template< typename Code
-        , std::map<Code,std::string> const & translate()
+        , std::string  translate( Code )
         >
   class cet::coded_exception
   : public cet::exception
@@ -36,17 +35,17 @@ public:
 
   explicit
     coded_exception( Code c )
-  : exception( to_string(c) )
+  : exception( translate(c) )
   , category_( c )
   { }
 
     coded_exception( Code c, std::string const & m )
-  : exception( to_string(c), m )
+  : exception( translate(c), m )
   , category_( c )
   { }
 
     coded_exception( Code c, std::string const & m, exception const & e )
-  : exception( to_string(c), m, e )
+  : exception( translate(c), m, e )
   , category_( c )
   { }
 
@@ -66,17 +65,6 @@ public:
 
 private:
   Code category_;
-
-  static std::string
-    to_string( Code c )
-  {
-    typedef  typename std::map<Code,std::string>::const_iterator
-             iterator;
-
-    iterator  it = translate().find(c);
-    return it == translate().end()  ?  std::string("Unknown code")
-                                    :  it->second;
-  }
 
 };  // coded_exception<>
 

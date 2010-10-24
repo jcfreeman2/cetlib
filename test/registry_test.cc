@@ -48,7 +48,7 @@ int
   catch( cet::exception e ) {
     ensure( 22, e.category() == "cet::registry" );
     std::string s = e.explain_self();
-    ensure( 23, s.find("Not found") != std::string::npos );
+    ensure( 23, s.find("No such key") != std::string::npos );
   }
   catch( ... ) {
     ensure( 24, false );

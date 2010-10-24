@@ -50,19 +50,12 @@ public:
     get( K const & key, V & value ) throw();
 
 private:
-  // encapsulated singletons:
+  // encapsulated singleton:
   static  reg_t &
     the_registry_( )
   {
     static  reg_t  the_registry;
     return the_registry;
-  }
-
-  static  void
-    throw_nonesuch_( )
-  {
-    static  cet::exception  nonesuch("cet::registry", "Not found");
-    throw nonesuch;
   }
 
 };  // registry<>
@@ -82,17 +75,21 @@ V const &
 {
   iter_t it = the_registry_().find(key);
   if( it == the_registry_().end() )
-    throw_nonesuch_();
+    throw cet::exception("cet::registry", "No such key found in registry");
   return it->second;
 }
 
 template< class K, class V >
 bool
   cet::registry<K,V>::get( K const & key, V & value ) throw()
+try
 {
-  iter_t it = the_registry_().find(key);
-  return it == the_registry_().end() ?  (                   false)
-                                     :  (value = it->second, true);
+  value = get(key);
+  return true;
+}
+catch( cet::exception const & )
+{
+  return false;
 }
 
 

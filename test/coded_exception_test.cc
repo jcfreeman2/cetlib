@@ -18,16 +18,15 @@ void
 enum E { E1 = 1, E2, E3, E4 };
 typedef  std::map<E,std::string> Emap;
 
-Emap const &
-  mapper()
+std::string
+  mapper( E code )
 {
-  static  Emap  m;
-  if( m.empty() ) m[E1] = "E1"
-                , m[E2] = "E2"
-                , m[E3] = "E3"
-                ;
-
-  return m;
+  switch( code ) {
+  case E1: return "E1";
+  case E2: return "E2";
+  case E3: return "E3";
+  default: return "Unknown";
+  }
 }
 
 
@@ -46,7 +45,7 @@ int
     coded_exception<E,mapper> e(E4);
     ensure( 11, e.categoryCode() == E4 );
     ensure( 12, e.returnCode() == int(E4) );
-    ensure( 13, e.category() == "Unknown code" );
+    ensure( 13, e.category() == "Unknown" );
   }
 
   return 0;
