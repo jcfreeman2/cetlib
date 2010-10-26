@@ -61,6 +61,7 @@
 #include "cpp0x/memory"      // default_delete
 #include "cpp0x/type_traits" // add/remove_ptr, enable_if, is_convertible, ...
 #include <exception>         // exception
+#include <memory>            // auto_ptr
 #include <utility>           // move, swap
 
 
@@ -185,6 +186,13 @@ namespace cet {
     value_ptr &
       operator = ( pointer const other )
     { reset( other ); return *this; }
+
+    // --- copy from auto_ptr<>:
+    value_ptr( std::auto_ptr<Element> & other ) :
+      p( other.release() )
+    { }
+    value_ptr &  operator = ( std::auto_ptr<Element> & other )
+    { reset( other.release() ); return *this; }
 
     // --- d'tor:
       ~value_ptr( void ) noexcept

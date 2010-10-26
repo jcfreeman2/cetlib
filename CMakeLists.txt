@@ -18,7 +18,7 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 # Describe product:
 
 project(cetlib)
-set(version v0_1_1)
+set(version v0_1_2)
 
 set(qualifier a1)
 set(flavorqual sl5.x86_64.${qualifier})

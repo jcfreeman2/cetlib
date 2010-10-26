@@ -114,5 +114,9 @@ add_executable( value_ptr_test value_ptr_test.cc )
 target_link_libraries( value_ptr_test cetlib )
 add_test( value_ptr_test ${EXECUTABLE_OUTPUT_PATH}/value_ptr_test )
 
+add_executable( value_ptr_test_2 value_ptr_test_2.cc )
+target_link_libraries( value_ptr_test_2 cetlib )
+add_test( value_ptr_test_2 ${EXECUTABLE_OUTPUT_PATH}/value_ptr_test_2 )
+
 #
 # ======================================================================
