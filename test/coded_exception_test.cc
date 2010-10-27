@@ -48,6 +48,14 @@ int
     ensure( 13, e.category() == "Unknown" );
   }
 
+  {
+    typedef  coded_exception<E,mapper>  CE;
+    ensure( 21, CE::codeToString(E1) == mapper(E1) );
+    ensure( 22, CE::codeToString(E2) == mapper(E2) );
+    ensure( 23, CE::codeToString(E3) == mapper(E3) );
+    ensure( 24, CE::codeToString(E4) == mapper(E4) );
+  }
+
   return 0;
 
 }  // main()

@@ -25,7 +25,7 @@ namespace cet {
 // ======================================================================
 
 template< typename Code
-        , std::string  translate( Code )
+        , std::string translate( Code )
         >
   class cet::coded_exception
   : public cet::exception
@@ -35,17 +35,17 @@ public:
 
   explicit
     coded_exception( Code c )
-  : exception( translate(c) )
+  : exception( codeToString(c) )
   , category_( c )
   { }
 
     coded_exception( Code c, std::string const & m )
-  : exception( translate(c), m )
+  : exception( codeToString(c), m )
   , category_( c )
   { }
 
     coded_exception( Code c, std::string const & m, exception const & e )
-  : exception( translate(c), m, e )
+  : exception( codeToString(c), m, e )
   , category_( c )
   { }
 
@@ -62,6 +62,10 @@ public:
   int
     returnCode() const
   { return static_cast<int>(category_); }
+
+  static  std::string
+    codeToString( Code code )
+  { return translate(code); }
 
 private:
   Code category_;
