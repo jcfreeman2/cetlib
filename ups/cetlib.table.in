@@ -72,9 +72,9 @@ Common:
     endif ( sh -c 'for dd in ${${UPS_PROD_NAME_UC}_FQ}/bin bin;do [ -d ${UPS_PROD_DIR}/$dd ] && exit;done;exit 1' )
 
     # uncomment or add to this list as relevant
-    setupRequired(gcc   @GCC_VERSION@   @GCC_QUAL@)
+    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_QUAL@ -j)
     setupRequired(boost @BOOST_VERS@    @BOOST_QUAL@)
-    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_QUAL@)
+    setupRequired(gcc   @GCC_VERSION@   @GCC_QUAL@)
 
 End:
 # End Group definition

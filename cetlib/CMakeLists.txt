@@ -48,7 +48,7 @@ link_libraries( ${Boost_FILESYSTEM_LIBRARY} )
 # Install the above-named headers and the above-built library:
 
 install( FILES ${LIB_HEADERS}
-         DESTINATION ${version}/include/${LIB_NAME} )
+         DESTINATION ${product}/${version}/include/${LIB_NAME} )
 install( TARGETS ${LIB_NAME}
          DESTINATION ${flavorqual_dir}/lib )
 
