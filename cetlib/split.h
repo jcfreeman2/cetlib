@@ -3,8 +3,15 @@
 
 // ======================================================================
 //
-// split: obtain substrings at a string's specified boundaries (adjacent
-//        boundaries are collapsed/treated as a single boundary)
+// split: obtain substrings at a string's specified boundaries.
+//
+// Examples of splitting with ':' as the separator:
+//    input     result
+//     ""       [ ]
+//     "a"      ["a"]
+//     "a:"     ["a",""]
+//     ":boo"   ["","boo"]
+//     "a:b"    ["a","b"]
 //
 // ======================================================================
 
