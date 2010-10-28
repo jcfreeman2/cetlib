@@ -53,7 +53,6 @@
 //
 // ======================================================================
 
-
 #include "cpp0x/type_traits"
 #include <exception>
 #include <iosfwd>
@@ -61,16 +60,17 @@
 #include <sstream>
 #include <string>
 
-
 namespace cet {
   class exception;
-}
 
+  std::ostream &
+    operator << ( std::ostream & os, exception const & e );
+}
 
 // ======================================================================
 
-
-namespace cet { namespace detail {
+namespace cet {
+  namespace detail {
 
     template< class D
             , bool = std::is_base_of<cet::exception,D>::value
@@ -82,11 +82,10 @@ namespace cet { namespace detail {
       struct enable_if_an_exception<D,false>
     { };
 
-} }
-
+  }  // detail
+}  // cet
 
 // ======================================================================
-
 
 namespace cet {
 
@@ -125,10 +124,10 @@ namespace cet {
 
     void  append( exception const & another ) const;
 
-    void  append( std::string const & more_information ) const;
-    void  append( char        const more_information[] ) const;
+    void  append( std::string const & more_information   ) const;
+    void  append( char        const   more_information[] ) const;
 
-    void  append( std::ostream& f(std::ostream&) ) const;
+    void  append( std::ostream & f(std::ostream &) ) const;
     void  append( std::ios_base& f(std::ios_base&) ) const;
 
     template< class T >
@@ -144,10 +143,6 @@ namespace cet {
     virtual  void  rethrow();
 
   };  // exception
-
-
-  std::ostream &
-    operator << ( std::ostream & os, exception const & e );
 
   template< class E >
     typename detail::enable_if_an_exception<E>::type
@@ -176,8 +171,6 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
-
 
 #endif  // CETLIB__EXCEPTION_H

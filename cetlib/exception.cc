@@ -4,7 +4,6 @@
 //
 // ======================================================================
 
-
 #include "cetlib/exception.h"
 #include <cctype>
 
@@ -13,22 +12,20 @@ using cet::exception;
 typedef  exception::Category      Category;
 typedef  exception::CategoryList  CategoryList;
 
-
 // ======================================================================
 // helpers:
 
-bool
+static  bool
   ends_with_whitespace( std::string const & s )
 {
   return s.empty() || std::isspace( *(s.end()-1) );
 }
 
-bool
+static  bool
   ends_with_newline( std::string const & s )
 {
   return s.empty() || *(s.end()-1) == '\n';
 }
-
 
 std::exception *
   exception::clone() const
@@ -36,13 +33,11 @@ std::exception *
   return new exception(*this);
 }
 
-
 void
   exception::rethrow()
 {
   throw *this;
 }
-
 
 // ======================================================================
 // c'tors, d'tors:
@@ -52,7 +47,6 @@ exception::exception( Category const & c )
   , ost_          ( )
   , category_     ( 1, c )
 { }
-
 
 exception::exception( Category    const & c
                     , std::string const & m )
@@ -64,7 +58,6 @@ exception::exception( Category    const & c
   if( ! ends_with_whitespace(m) )
     ost_ << ' ';
 }
-
 
 exception::exception( Category    const & c
                     , std::string const & m
@@ -80,10 +73,8 @@ exception::exception( Category    const & c
   append( e );
 }
 
-
 exception::~exception( ) throw()
 { }
-
 
 // ======================================================================
 // copy c'tor:
@@ -96,7 +87,6 @@ exception::exception( exception const & other )
   ost_ << other.ost_.str();
 }
 
-
 // ======================================================================
 // inspectors:
 
@@ -105,7 +95,6 @@ char const *
 {
   return explain_self().c_str();
 }
-
 
 std::string
   exception::explain_self( ) const
@@ -124,13 +113,11 @@ std::string
   return ost.str();
 }
 
-
 std::string
   exception::category( ) const
 {
   return category_.front();
 }
-
 
 CategoryList const &
   exception::history( ) const
@@ -138,13 +125,11 @@ CategoryList const &
   return category_;
 }
 
-
 std::string
   exception::root_cause( ) const
 {
   return category_.back();
 }
-
 
 // ======================================================================
 // mutators:
@@ -155,13 +140,11 @@ void
   ost_ << e.explain_self();
 }
 
-
 void
   exception::append( std::string const & more_information ) const
 {
   ost_ << more_information;
 }
-
 
 void
   exception::append( char const more_information[] ) const
@@ -169,13 +152,11 @@ void
   ost_ << more_information;
 }
 
-
 void
   exception::append( std::ostream& f(std::ostream&) ) const
 {
   f(ost_);
 }
-
 
 void
   exception::append( std::ios_base& f(std::ios_base&) ) const
@@ -183,9 +164,7 @@ void
   f(ost_);
 }
 
-
 // ======================================================================
-
 
 std::ostream &
   cet::operator << ( std::ostream & os, exception const & e )
@@ -193,5 +172,4 @@ std::ostream &
   return os << e.explain_self();
 }
 
-
-
+// ======================================================================

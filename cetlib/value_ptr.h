@@ -24,7 +24,7 @@
 //   Herb Sutter:  _More Exceptional C++_, Addison-Wesley, 2002.
 //   ISBN 0-201-70434-X
 // and its predecessor
-//   Herb Sutter:  Smart Pointer Members.  GotW #62,  undated.
+//   Herb Sutter:  Smart Pointer Members.  GotW #62, undated.
 //   http://www.gotw.ca/gotw/062.htm
 // and independently by
 //   Alan Griffiths:  "Ending with the grin," 1999.
@@ -58,10 +58,9 @@
 // ======================================================================
 
 
-#include "cpp0x/memory"      // default_delete
+#include "cpp0x/memory"      // auto_ptr, default_delete
 #include "cpp0x/type_traits" // add/remove_ptr, enable_if, is_convertible, ...
 #include <exception>         // exception
-#include <memory>            // auto_ptr
 #include <utility>           // move, swap
 
 

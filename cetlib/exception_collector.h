@@ -35,14 +35,17 @@ namespace cet {
 
   class exception_collector {
   public:
-      exception_collector()
-    : exception_( std::string() )
-    , has_thrown_( false )
-    { }
-    ~exception_collector() {}
+    // compiler generates copy c'tor, copy assignment
 
-    bool  has_thrown() const { return has_thrown_; }
-    void  rethrow() const;
+    // default c'tor, d'tor:
+    exception_collector( );
+    ~exception_collector( );
+
+    // observer:
+    bool  has_thrown() const;
+
+    // mutators:
+    void  rethrow();
     void  call( std::function<void(void)> );
 
   private:

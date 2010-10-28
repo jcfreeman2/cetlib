@@ -23,12 +23,26 @@ int
   main( )
 {
   exception_collector ec;
+  ensure( 1, ! ec.has_thrown() );
+  ensure( 2, calls_left == 2 );
 
-  ensure( 1, calls_left == 2 );
-  ec.call( f );
-  ensure( 2, calls_left == 1 );
-  ec.call( g );
-  ensure( 3, calls_left == 0 );
+  try {
+    ec.call( f );
+    ensure( 11, calls_left == 1 );
+    ensure( 12, ec.has_thrown() );
+
+    ec.call( g );
+    ensure( 13, calls_left == 0 );
+    ensure( 14, ec.has_thrown() );
+
+    ec.rethrow();
+    ensure( 15, false );
+  }
+  catch( ... )
+  {
+    ensure( 16, true );
+    ensure( 17, ! ec.has_thrown() );
+  }
 
   return 0;
 
