@@ -4,14 +4,13 @@
 #
 # ======================================================================
 
-
 # ----------------------------------------------------------------------
 # Identify this library's name:
 
 set( LIB_NAME ${PROJECT_NAME} )
 
 # ----------------------------------------------------------------------
-# Name, by category, all files that comprise this library:
+# Identify, by category, all files that comprise this library:
 
 set( LIB_HEADERS
   _polarssl_config.h
@@ -19,6 +18,7 @@ set( LIB_HEADERS
   bit_manipulation.h
   coded_exception.h
   container_algorithms.h
+  cpu_timer.h
   exception.h
   exception_collector.h
   exempt_ptr.h
@@ -31,12 +31,12 @@ set( LIB_HEADERS
 )
 set( LIB_SOURCES
   _polarssl_sha1.cc
+  cpu_timer.cc
   exception.cc
   exception_collector.cc
   nybbler.cc
   search_path.cc
 )
-
 
 # ----------------------------------------------------------------------
 # Compile/link this library from the above-named sources:

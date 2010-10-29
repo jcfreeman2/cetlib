@@ -24,6 +24,7 @@ set( TEST_LIST
 )
 
 set( ALSO_BUILD
+  cpu_timer_test
 )
 
 set( ALSO_RUN
