@@ -27,6 +27,7 @@ set( LIB_HEADERS
   search_path.h
   sha1.h
   split.h
+  split_path.h
   value_ptr.h
 )
 set( LIB_SOURCES
@@ -36,6 +37,7 @@ set( LIB_SOURCES
   exception_collector.cc
   nybbler.cc
   search_path.cc
+  split_path.cc
 )
 
 # ----------------------------------------------------------------------

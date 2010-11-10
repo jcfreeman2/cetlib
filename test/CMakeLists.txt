@@ -18,6 +18,7 @@ set( TEST_LIST
   registry_test
   search_path_test
   sha1_test
+  split_path_test
   split_test
   value_ptr_test
   value_ptr_test_2
