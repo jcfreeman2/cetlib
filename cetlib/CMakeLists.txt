@@ -36,13 +36,14 @@ set( LIB_SOURCES
   exception_collector.cc
   nybbler.cc
   search_path.cc
+  find_matching_files.cc
 )
 
 # ----------------------------------------------------------------------
 # Compile/link this library from the above-named sources:
 
+link_libraries( ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} )
 add_library( ${LIB_NAME} SHARED ${LIB_SOURCES} )
-link_libraries( ${Boost_FILESYSTEM_LIBRARY} )
 
 # ----------------------------------------------------------------------
 # Install the above-named headers and the above-built library:

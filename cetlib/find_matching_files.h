@@ -18,23 +18,20 @@
 namespace cet 
 {
 
-namespace detail
-{
-size_t find_matching_internal(std::string const& pat,std::string const& dir,
-	std::vector<std::string>& out);
-}
+  size_t find_matching_files(std::string const& pat
+				,std::string const& dir
+				,std::vector<std::string>& out);
 
-template <class OutIter>
-size_t find_matching_files(std::string const& pattern
-	,std::string const& directory
-	,OutIter dest)
-{
-	std::vector<std::string> files_out;
-	size_t num=detail::find_matching_internal(pattern,directory,files_out);
-	std::copy(files.out.begin(),files.out.end(),dest); 
-	return num;
-}
-
+  template <class OutIter>
+  size_t find_matching_files(std::string const& pattern
+			     ,std::string const& directory
+			     ,OutIter dest)
+  {
+    std::vector<std::string> files_out;
+    size_t num=find_matching_files(pattern,directory,files_out);
+    std::copy(files_out.begin(),files_out.end(),dest); 
+    return num;
+  }
 }
 
 #endif

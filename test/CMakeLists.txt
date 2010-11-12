@@ -25,10 +25,12 @@ set( TEST_LIST
 
 set( ALSO_BUILD
   cpu_timer_test
+  find_matching_files_test
 )
 
 set( ALSO_RUN
   sha1_test_2
+  find_matching_files_test.sh
 )
 
 # ----------------------------------------------------------------------
@@ -47,6 +49,9 @@ target_link_libraries( sha1_test_performance cetlib )
 
 add_executable( sha1_test_2 sha1_test_2.cc sha1.cpp )
 target_link_libraries( sha1_test_2 cetlib )
+
+# install( FILES find_matching_files_test.sh DESTINATION test  )
+# add_test( pigface find_matching_files_test.sh )
 
 # ----------------------------------------------------------------------
 # Run tests:
