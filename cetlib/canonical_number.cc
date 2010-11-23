@@ -3,7 +3,7 @@
 // canonical_number - transform a number string into a canonical form
 //
 // "Number string" is defined by the following regular expression:
-//   ^[-+]?[0-9]*\.?[0-9]+([eE][-+]?[0-9]+)?$
+//      ^[-+]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][-+]?[0-9]+)?$
 //
 // ======================================================================
 
@@ -12,7 +12,7 @@
 #include "boost/lexical_cast.hpp"
 #include <cctype>   // isdigit
 #include <cstddef>  // size_t
-#include <cstdlib>  // abs, atoi
+#include <cstdlib>  // atoi
 
 using namespace boost;
 using namespace std;
@@ -22,43 +22,44 @@ bool
   cet::canonical_number( std::string const & value
                        , std::string       & result
                        )
+try
 {
-  std::string::const_iterator       it = value.begin();
-  std::string::const_iterator const e  = value.end();
+  std::string::const_iterator       it  = value.begin();
+  std::string::const_iterator const end = value.end();
 
-  // optional sign
+  // extract sign, if any
   std::string sign( *it == '-' ?  "-" : "" );
   if( *it == '+'  || *it == '-' )
     ++it;
 
-  // whole part
+  // extract optional whole part
   std::string whole;
-  for( ; it != e  &&  std::isdigit(*it); ++it )
+  for( ; it != end  &&  std::isdigit(*it); ++it )
     whole.append( 1, *it );
 
-  // fraction part
+  // extract fraction part
   std::string fraction;
-  if( it != e  &&  *it == '.' ) {
-    while( ++it != e  &&  std::isdigit(*it) )
+  if( it != end  &&  *it == '.' ) {
+    while( ++it != end  &&  std::isdigit(*it) )
       fraction.append( 1, *it );
   }
 
   // exponent part
   std::string exponent;
-  if( it != e  &&  (*it == 'E' || *it == 'e') ) {
-    if( ++it == e )
+  if( it != end  &&  (*it == 'E' || *it == 'e') ) {
+    if( ++it == end )
       return false;
     if( *it == '+' || *it == '-') {
       exponent = *it;
-      if( ++it == e )
+      if( ++it == end )
         return false;
     }
-    for( ; it != e  &&  std::isdigit(*it); ++it )
+    for( ; it != end  &&  std::isdigit(*it); ++it )
       exponent.append( 1, *it );
   }
 
   // consumed everything?
-  if( it != e )
+  if( it != end )
     return false;
 
   // require at least one digit
@@ -78,8 +79,12 @@ bool
     digits.erase( 0, 1 );
 
   // produce result
+  if( digits == "0" ) {
+    result.append( digits );
+    return true;
+  }
   result.append(sign);
-  if( ndig <= 6  &&  ndig <= exp  &&  exp <= 6 ) { // < 1e6?
+  if( ndig <= exp  &&  exp <= 6 ) { // < 1e6?
     result.append( digits )
           .append( exp-ndig, '0' );
   }
@@ -88,13 +93,15 @@ bool
     result.append(digits);
     if( exp != 0 ) {
       result.append( 1, 'e' )
-            .append( 1, exp < 0 ? '-' : '+' )
-            .append( lexical_cast<std::string>(std::abs(exp)) );
+            .append( lexical_cast<std::string>(exp) );
     }
   }
 
   return true;
-
+}
+catch( ... )
+{
+  return false;
 }  // canonical_number()
 
 // ======================================================================
