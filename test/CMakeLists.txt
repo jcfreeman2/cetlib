@@ -31,9 +31,15 @@ set( ALSO_BUILD
   find_matching_files_test
 )
 
-set( ALSO_RUN
+set( MANUALLY_BUILT_TESTS
   sha1_test_2
-  find_matching_files_test.sh
+)
+
+set ( ALSO_RUN
+)
+
+set( MANUALLY_RUN_TESTS
+     find_matching_files_test.sh
 )
 
 # ----------------------------------------------------------------------
@@ -53,14 +59,29 @@ target_link_libraries( sha1_test_performance cetlib )
 add_executable( sha1_test_2 sha1_test_2.cc sha1.cpp )
 target_link_libraries( sha1_test_2 cetlib )
 
-# install( FILES find_matching_files_test.sh DESTINATION test  )
-# add_test( pigface find_matching_files_test.sh )
+# ----------------------------------------------------------------------
+# Install non-built tests
+foreach ( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
+  add_custom_target ( ${script} ALL
+                      COMMAND ${CMAKE_COMMAND} -E 
+                        copy ${CMAKE_CURRENT_SOURCE_DIR}/${script}
+                             ${EXECUTABLE_OUTPUT_PATH}/
+                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${script}
+                    )
+endforeach ( script ${TEST_SCRIPTS} )
 
 # ----------------------------------------------------------------------
 # Run tests:
 
-foreach( test ${TEST_LIST} ${ALSO_RUN} )
+foreach( test ${TEST_LIST} ${MANUALLY_BUILT_TESTS} )
   add_test( ${test} ${EXECUTABLE_OUTPUT_PATH}/${test} )
 endforeach( test ${TEST_LIST} )
+
+# Custom tests:
+add_test ( find_matching_files_test.sh
+           ${EXECUTABLE_OUTPUT_PATH}/find_matching_files_test.sh
+           ${EXECUTABLE_OUTPUT_PATH}
+         )
+
 
 # ======================================================================

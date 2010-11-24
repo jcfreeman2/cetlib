@@ -68,17 +68,17 @@ find_ups_product( cpp0x v0_0_0 )
 include_directories( "${PROJECT_SOURCE_DIR}" )  # project's headers
 
 # ----------------------------------------------------------------------
+# Describe build tree layout:
+
+set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
+set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
+
+# ----------------------------------------------------------------------
 # Describe source tree layout:
 
 add_subdirectory( ${PROJECT_NAME} )  # source code
 add_subdirectory( test )             # test code
 add_subdirectory( ups )              # ups files
-
-# ----------------------------------------------------------------------
-# Describe build tree layout:
-
-set( LIBRARY_OUTPUT_PATH    ${PROJECT_BINARY_DIR}/lib )
-set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 
 # ----------------------------------------------------------------------
 # packaging utility
