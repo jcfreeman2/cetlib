@@ -1,5 +1,5 @@
-#ifndef CETLIB_SPLIT_PATH_h
-#define CETLIB_SPLIT_PATH_h
+#ifndef CETLIB_SPLIT_PATH_H
+#define CETLIB_SPLIT_PATH_H
 
 #include <string>
 #include <vector>
@@ -8,10 +8,13 @@ namespace cet
 {
   // Split the string 'path' into components delimited by a single
   // colon. Adjacent colons result in an empty string.
-  void split_path(std::string const& path, std::vector<std::string>& components);
+  void
+    split_path( std::string const & path
+              , std::vector<std::string> & components
+              );
 }
 
-#endif //  CETLIB_SPLIT_PATH_h
+#endif  // CETLIB_SPLIT_PATH_H
 
 // Local Variables:
 // mode: c++

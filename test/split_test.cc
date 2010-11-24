@@ -3,7 +3,6 @@
 #include <iterator>
 #include <string>
 #include <vector>
-#include <cassert>
 
 
 using cet::split;

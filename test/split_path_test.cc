@@ -9,7 +9,7 @@ void test_empty_path()
 {
   vector<string> results;
   split_path("", results);
-  assert(results.empty());  
+  assert(results.empty());
 }
 
 void test_single_entry_path()
@@ -63,7 +63,7 @@ void test_typical_use()
   path_elements.push_back("/p/cppunit/v1_12_1/slf5.x86_64.a1/lib");
   string path = path_elements[0];
   for (size_t i = 1; i < path_elements.size(); ++i)
-    { 
+    {
       path += ":";
       path += path_elements[i];
     }

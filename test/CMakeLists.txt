@@ -5,7 +5,7 @@
 # ======================================================================
 
 # ----------------------------------------------------------------------
-# Identify tests:
+# Identify, by category, all tests:
 
 set( TEST_LIST
   bit_test
@@ -39,7 +39,7 @@ set ( ALSO_RUN
 )
 
 set( MANUALLY_RUN_TESTS
-     find_matching_files_test.sh
+  find_matching_files_test.sh
 )
 
 # ----------------------------------------------------------------------
@@ -61,13 +61,14 @@ target_link_libraries( sha1_test_2 cetlib )
 
 # ----------------------------------------------------------------------
 # Install non-built tests
-foreach ( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
-  add_custom_target ( ${script} ALL
-                      COMMAND ${CMAKE_COMMAND} -E 
-                        copy ${CMAKE_CURRENT_SOURCE_DIR}/${script}
-                             ${EXECUTABLE_OUTPUT_PATH}/
-                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${script}
-                    )
+
+foreach( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
+  add_custom_target( ${script} ALL
+                     COMMAND ${CMAKE_COMMAND} -E
+                       copy ${CMAKE_CURRENT_SOURCE_DIR}/${script}
+                            ${EXECUTABLE_OUTPUT_PATH}/
+                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${script}
+                   )
 endforeach ( script ${TEST_SCRIPTS} )
 
 # ----------------------------------------------------------------------

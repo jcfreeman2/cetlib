@@ -23,10 +23,10 @@ configure_file( ${cetlib_SOURCE_DIR}/ups/cetlib.version.in
 # ----------------------------------------------------------------------
 # Install generated files:
 
-install(FILES ${cetlib_BINARY_DIR}/ups/cetlib.table
-        DESTINATION ${product}/${version}/ups)
-install(FILES ${cetlib_BINARY_DIR}/ups/${version}.version
-        DESTINATION ${product} )
+install( FILES ${cetlib_BINARY_DIR}/ups/cetlib.table
+         DESTINATION ${product}/${version}/ups )
+install( FILES ${cetlib_BINARY_DIR}/ups/${version}.version
+         DESTINATION ${product} )
 
 #
 # ======================================================================

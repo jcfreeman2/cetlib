@@ -16,9 +16,9 @@
 // ======================================================================
 
 
+#include "cpp0x/functional"
 #include <algorithm>
 #include <string>
-#include "cpp0x/functional"
 
 
 namespace cet  {
@@ -61,7 +61,7 @@ namespace cet { namespace detail {
     F f;
   };  // negate
 
-} }
+} }  // cet::detail
 
 
 template< class Pred, class OutIter >

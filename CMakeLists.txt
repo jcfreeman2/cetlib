@@ -19,29 +19,29 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 # ----------------------------------------------------------------------
 # Describe product:
 
-project(cetlib)
-set(product cetlib)
-set(version v0_1_6)
-set(qualifier a1)
+project( cetlib )
+set( product cetlib )
+set( version v0_1_6 )
+set( qualifier a1 )
 
 # cetbuildtools contains our cmake modules
-SET ( CETBUILDTOOLS_VERSION $ENV{CETBUILDTOOLS_VERSION} )
-IF (NOT CETBUILDTOOLS_VERSION)
-    MESSAGE (FATAL_ERROR "ERROR: setup cetbuildtools to get the cmake modules")
-ENDIF()
-set(CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules")
-set(CMAKE_MODULE_PATH $ENV{CETBUILDTOOLS_DIR}/Modules ${CMAKE_MODULE_PATH})
-message(STATUS "module path is ${CMAKE_MODULE_PATH}" )
+set( CETBUILDTOOLS_VERSION $ENV{CETBUILDTOOLS_VERSION} )
+if( NOT CETBUILDTOOLS_VERSION )
+  message( FATAL_ERROR "ERROR: setup cetbuildtools to get the cmake modules" )
+endif()
+set( CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" )
+set( CMAKE_MODULE_PATH $ENV{CETBUILDTOOLS_DIR}/Modules ${CMAKE_MODULE_PATH} )
+message( STATUS "module path is ${CMAKE_MODULE_PATH}" )
 
-set(CMAKE_SKIP_RPATH) # don't embed path in shared lib's or executables
+set( CMAKE_SKIP_RPATH ) # don't embed path in shared lib's or executables
 
 enable_testing()
 
 # define some necessary modules
-include(FindUpsPackage)
-include(FindUpsBoost)
-include(SetFlavorQual)
-include(ParseUpsVersion)
+include( FindUpsPackage )
+include( FindUpsBoost )
+include( SetFlavorQual )
+include( ParseUpsVersion )
 
 #set package version from ups version
 set_version_from_ups( ${version} )
@@ -82,7 +82,8 @@ add_subdirectory( ups )              # ups files
 
 # ----------------------------------------------------------------------
 # packaging utility
-include(UseCPack)
+
+include( UseCPack )
 
 #
 # ======================================================================
