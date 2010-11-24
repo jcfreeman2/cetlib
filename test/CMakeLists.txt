@@ -10,6 +10,7 @@
 set( TEST_LIST
   bit_test
   canonical_number_test
+  canonical_string_test
   coded_exception_test
   container_algs_test
   exception_test

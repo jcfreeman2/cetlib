@@ -17,6 +17,7 @@ set( LIB_HEADERS
   _polarssl_sha1.h
   bit_manipulation.h
   canonical_number.h
+  canonical_string.h
   coded_exception.h
   container_algorithms.h
   cpu_timer.h
@@ -34,6 +35,7 @@ set( LIB_HEADERS
 set( LIB_SOURCES
   _polarssl_sha1.cc
   canonical_number.cc
+  canonical_string.cc
   cpu_timer.cc
   exception.cc
   exception_collector.cc
