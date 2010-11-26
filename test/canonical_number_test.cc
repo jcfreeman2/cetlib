@@ -54,12 +54,14 @@ int
   ensure( 15,   becomes( "12E4", "120000" ) );
   ensure( 16,   becomes( "12E5", "1.2e6" ) );
   ensure( 17,   becomes( "12.000E5", "1.2e6" ) );
-  ensure( 18,   becomes( "-0.0e-0", "0" ) );
-  ensure( 19,   becomes( "+0.0E0", "0" ) );
 
-  ensure( 21, ! becomes( "1.2.3", "" ) );
-  ensure( 22, ! becomes( "1.2,3", "" ) );
-  ensure( 23, ! becomes( "1.2X3", "" ) );
+  ensure( 21,   becomes( "-0.0e-0", "0" ) );
+  ensure( 22,   becomes( "+0.0E0", "0" ) );
+  ensure( 22,   becomes( "-0e99", "0" ) );
+
+  ensure( 31, ! becomes( "1.2.3", "" ) );
+  ensure( 32, ! becomes( "1.2,3", "" ) );
+  ensure( 33, ! becomes( "1.2X3", "" ) );
 
   return 0;
 
