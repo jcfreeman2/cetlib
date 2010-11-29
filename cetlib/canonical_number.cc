@@ -68,7 +68,7 @@ try
     return false;
   std::size_t ndig = digits.size();
 
-  // calculate exponent as if radix point were at left
+  // calculate exponent as if decimal point were at left
   long exp = std::atoi(exponent.c_str()) + whole.size();
 
   // discard trailing zeroes
@@ -96,7 +96,6 @@ try
             .append( lexical_cast<std::string>(exp) );
     }
   }
-
   return true;
 }
 catch( ... )

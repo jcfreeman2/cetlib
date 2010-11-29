@@ -58,6 +58,7 @@ int
   ensure( 21,   becomes( "-0.0e-0", "0" ) );
   ensure( 22,   becomes( "+0.0E0", "0" ) );
   ensure( 22,   becomes( "-0e99", "0" ) );
+  ensure( 23,   becomes( "-.00", "0" ) );
 
   ensure( 31, ! becomes( "1.2.3", "" ) );
   ensure( 32, ! becomes( "1.2,3", "" ) );
