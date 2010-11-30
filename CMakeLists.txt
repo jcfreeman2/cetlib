@@ -40,8 +40,10 @@ enable_testing()
 # define some necessary modules
 include( FindUpsPackage )
 include( FindUpsBoost )
+include( FindUpsRoot )
 include( SetFlavorQual )
 include( ParseUpsVersion )
+include( BuildDictionary )
 
 #set package version from ups version
 set_version_from_ups( ${version} )
@@ -61,6 +63,7 @@ message( STATUS "Using gcc ${GCC_VERSION}" )
 
 find_ups_boost( v1_42_0 filesystem regex )
 find_ups_product( cpp0x v0_0_0 )
+find_ups_root( v5_26_00 )
 
 # ----------------------------------------------------------------------
 # Describe include path:
