@@ -36,10 +36,17 @@ template< class K, class V >
   typedef  typename reg_t::const_iterator  iter_t;
 
 public:
+  typedef iter_t const_iterator;
+
   static  bool
     empty( )  { return the_registry_().empty(); }
   static  typename reg_t::size_type
     size( )  { return the_registry_().size(); }
+
+  static const_iterator
+     begin() { return the_registry_().begin(); }
+  static const_iterator
+     end() { return the_registry_().end(); }
 
   static  void
     put( K const & key, V const & value );
