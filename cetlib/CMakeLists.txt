@@ -51,8 +51,6 @@ set( LIB_SOURCES
 link_libraries( ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} )
 add_library( ${LIB_NAME} SHARED ${LIB_SOURCES} )
 
-build_dictionary ( cetlib )
-
 # ----------------------------------------------------------------------
 # Install the above-named headers and the above-built library:
 
