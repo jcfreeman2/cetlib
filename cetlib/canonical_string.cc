@@ -13,8 +13,8 @@ using std::string;
 
 // ----------------------------------------------------------------------
 
-static  string
-  escape( string const & str )
+string
+  cet::escape( string const & str )
 {
   string result;
   for( string::const_iterator it = str.begin()
@@ -32,8 +32,10 @@ static  string
   return result;
 }  // escape()
 
-static  string
-  unescape( string const & str )
+// ----------------------------------------------------------------------
+
+string
+  cet::unescape( string const & str )
 {
   string result;
   for( string::const_iterator it = str.begin()
@@ -67,14 +69,14 @@ try
 
   string value;
   if( s[0] == '"' && s.end()[-1] == '"' )
-    value = unescape( s.substr(1, s.size()-2) );
+    value = cet::unescape( s.substr(1, s.size()-2) );
   else if( s[0] == '\'' && s.end()[-1] == '\'' )
     value = s.substr(1, s.size()-2);
   else
     value = s;
 
   result.append( 1, '"' )
-        .append( escape(value) )
+        .append( cet::escape(value) )
         .append( 1, '"' )
         ;
   return true;
