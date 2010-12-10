@@ -73,7 +73,7 @@ foreach( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
 endforeach( script ${TEST_SCRIPTS} )
 
 # ----------------------------------------------------------------------
-# Run automated tests:
+# Run the automated tests:
 
 foreach( test ${TEST_LIST} ${MANUALLY_BUILT_TESTS} )
   add_test( ${test} ${EXECUTABLE_OUTPUT_PATH}/${test} )
