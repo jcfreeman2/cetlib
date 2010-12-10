@@ -24,6 +24,7 @@ set( LIB_HEADERS
   exception.h
   exception_collector.h
   exempt_ptr.h
+  include.h
   nybbler.h
   registry.h
   search_path.h
@@ -40,6 +41,7 @@ set( LIB_SOURCES
   exception.cc
   exception_collector.cc
   find_matching_files.cc
+  include.cc
   nybbler.cc
   search_path.cc
   split_path.cc
