@@ -24,6 +24,7 @@ set( LIB_HEADERS
   exception.h
   exception_collector.h
   exempt_ptr.h
+  find_matching_files.h
   include.h
   nybbler.h
   registry.h
