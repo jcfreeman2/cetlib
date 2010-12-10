@@ -16,6 +16,7 @@ set( TEST_LIST
   exception_test
   exception_collector_test
   exempt_ptr_test
+  include_test
   nybbler_test
   registry_test
   search_path_test
@@ -60,7 +61,7 @@ add_executable( sha1_test_2 sha1_test_2.cc sha1.cpp )
 target_link_libraries( sha1_test_2 cetlib )
 
 # ----------------------------------------------------------------------
-# Install non-built tests
+# Install non-built tests:
 
 foreach( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
   add_custom_target( ${script} ALL
@@ -69,20 +70,21 @@ foreach( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
                             ${EXECUTABLE_OUTPUT_PATH}/
                       DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${script}
                    )
-endforeach ( script ${TEST_SCRIPTS} )
+endforeach( script ${TEST_SCRIPTS} )
 
 # ----------------------------------------------------------------------
-# Run tests:
+# Run automated tests:
 
 foreach( test ${TEST_LIST} ${MANUALLY_BUILT_TESTS} )
   add_test( ${test} ${EXECUTABLE_OUTPUT_PATH}/${test} )
 endforeach( test ${TEST_LIST} )
 
-# Custom tests:
-add_test ( find_matching_files_test.sh
-           ${EXECUTABLE_OUTPUT_PATH}/find_matching_files_test.sh
-           ${EXECUTABLE_OUTPUT_PATH}
-         )
+# ----------------------------------------------------------------------
+# Run the MANUALLY_RUN_TESTS:
 
+add_test( find_matching_files_test.sh
+          ${EXECUTABLE_OUTPUT_PATH}/find_matching_files_test.sh
+          ${EXECUTABLE_OUTPUT_PATH}
+        )
 
 # ======================================================================

@@ -4,6 +4,9 @@
 //
 // ======================================================================
 
+#include <fstream>
+#include <string>
+
 namespace cet {
 
   bool
