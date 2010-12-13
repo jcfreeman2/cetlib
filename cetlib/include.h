@@ -10,8 +10,8 @@
 namespace cet {
 
   bool
-    include( std::ifstream & in
-           , std::string   & result
+    include( std::istream & in
+           , std::string  & result
            );
 
 }

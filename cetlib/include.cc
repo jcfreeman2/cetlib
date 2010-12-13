@@ -9,8 +9,8 @@
 // ----------------------------------------------------------------------
 
 bool
-  cet::include( std::ifstream & in
-              , std::string   & result
+  cet::include( std::istream & in
+              , std::string  & result
               )
 {
   static std::string const include_lit("#include \"");
