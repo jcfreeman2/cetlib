@@ -13,8 +13,6 @@ set( LIB_NAME ${PROJECT_NAME} )
 # Identify, by category, all files that comprise this library:
 
 set( LIB_HEADERS
-  _polarssl_config.h
-  _polarssl_sha1.h
   bit_manipulation.h
   canonical_number.h
   canonical_string.h
@@ -35,7 +33,7 @@ set( LIB_HEADERS
   value_ptr.h
 )
 set( LIB_SOURCES
-  _polarssl_sha1.cc
+  detail/polarssl_sha1.cc
   canonical_number.cc
   canonical_string.cc
   cpu_timer.cc
@@ -59,6 +57,9 @@ add_library( ${LIB_NAME} SHARED ${LIB_SOURCES} )
 
 install( FILES ${LIB_HEADERS}
          DESTINATION ${product}/${version}/include/${LIB_NAME} )
+install( FILES detail/polarssl_config.h
+               detail/polarssl_sha1.h
+        DESTINATION ${product}/${version}/include/${LIB_NAME}/detail )
 install( TARGETS ${LIB_NAME}
          DESTINATION ${flavorqual_dir}/lib )
 

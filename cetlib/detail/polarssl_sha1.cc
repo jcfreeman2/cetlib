@@ -28,11 +28,11 @@
  *  http://www.itl.nist.gov/fipspubs/fip180-1.htm
  */
 
-#include "cetlib/_polarssl_config.h"
+#include "cetlib/detail/polarssl_config.h"
 
 #if defined(POLARSSL_SHA1_C)
 
-#include "cetlib/_polarssl_sha1.h"
+#include "cetlib/detail/polarssl_sha1.h"
 
 #include <string.h>
 #include <stdio.h>
