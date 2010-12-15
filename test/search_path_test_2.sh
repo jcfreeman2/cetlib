@@ -18,10 +18,10 @@ done
 
 echo `pwd`
 
-${EXEC_DIR}/find_matching_files_test "lib.*one.so" ${TMP_DIR}; test $? -eq 2 || exit 1
-${EXEC_DIR}/find_matching_files_test "lib.*two.so" ${TMP_DIR}; test $? -eq 2 || exit 2
-${EXEC_DIR}/find_matching_files_test "lib.*three.so" ${TMP_DIR}; test $? -eq 1 || exit 3
-${EXEC_DIR}/find_matching_files_test "lib.*four.so" ${TMP_DIR}; test $? -eq 0 || exit 4
+${EXEC_DIR}/search_path_test_2 "lib.*one.so" ${TMP_DIR}; test $? -eq 2 || exit 1
+${EXEC_DIR}/search_path_test_2 "lib.*two.so" ${TMP_DIR}; test $? -eq 2 || exit 2
+${EXEC_DIR}/search_path_test_2 "lib.*three.so" ${TMP_DIR}; test $? -eq 1 || exit 3
+${EXEC_DIR}/search_path_test_2 "lib.*four.so" ${TMP_DIR}; test $? -eq 0 || exit 4
 
 rm -rf $TMP_DIR
 exit 0

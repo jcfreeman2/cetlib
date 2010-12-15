@@ -1,12 +1,17 @@
-#include "cetlib/find_matching_files.h"
+// ======================================================================
+//
+// test search_path
+//
+// ======================================================================
 
 #include "cetlib/search_path.h"
+
 #include <iostream>
 #include <iterator>  // back_inserter, ostream_iterator
 #include <string>
 #include <vector>
 
-using cet::find_matching_files;
+using cet::search_path;
 
 typedef std::vector<std::string> strings_t;
 
@@ -27,13 +32,13 @@ int
   }
 
   strings_t results;
-  std::size_t count = find_matching_files( argv[1]
-                                         , argv[2]
-                                         , std::back_inserter(results)
-                                         );
+  std::size_t count
+    = search_path(argv[2]).find_files( argv[1]
+                                     , std::back_inserter(results)
+                                     );
 
   std::copy( results.begin(), results.end()
-           , std::ostream_iterator<std::string>(std::cout,"\n")
+           , std::ostream_iterator<std::string>(std::cout, "\n")
            );
 
   return count;

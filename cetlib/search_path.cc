@@ -4,86 +4,106 @@
 //
 // ======================================================================
 
-
 #include "cetlib/search_path.h"
 
 #include "cetlib/exception.h"
-#include <algorithm>   // transform
-#include <cstdlib>     // getenv
+#include "cetlib/filesystem.h"
+#include "cpp0x/regex"
+#include <dirent.h>
 #include <iterator>    // back_inserter
 #include <sys/stat.h>  // stat
 
 using cet::search_path;
 
+std::string exception_category("search_path");
 
-// ======================================================================
-
-
-static
-std::string
-  resolve_env_variable( std::string s )
-{
-  if( s[0] != '$' ) return s;
-
-  std::string::size_type k = 1
-                       , n = s.size() - 1;
-  if     ( s[1] == '{'  && s[n] == '}' ) ++k, n -= 2;
-  else if( s[1] == '('  && s[n] == ')' ) ++k, n -= 2;
-
-  char const * p = std::getenv( s.substr(k,n).c_str() );
-  if( p == 0 )
-    throw cet::exception("SEARCH_PATH")
-      << "Environment variable \"" << s
-      << "\" was requested but not found.";
-
-  return p;
-}
-
-
-static
-bool
-  file_exists( std::string const & filename )
-{
-  struct stat file_info;
-  return 0 == stat( filename.c_str(), & file_info );
-}
-
-
-// ======================================================================
-
+// ----------------------------------------------------------------------
 
 search_path::search_path( std::string const & path )
 : dirs( )
+, end ( )
 {
-  split( path, ':', std::back_inserter(dirs) );
-  std::transform( dirs.begin(), dirs.end()
-                , dirs.begin()
-                , resolve_env_variable
-                );
+  split(path, ':', std::back_inserter(dirs));
+  dirs.erase( std::remove( dirs.begin(), dirs.end()
+                         , std::string()
+                         )
+            , dirs.end()
+            );
+  if( dirs.empty() )
+    throw cet::exception(exception_category) << "Path is empty.";
+  end = dirs.end();
 }
 
+// ----------------------------------------------------------------------
 
 std::string
-  search_path::find_file( std::string filename )
+  search_path::find_file( std::string const & filename ) const
 {
-  while( ! filename.empty()  &&  filename[0] == '/' )
-    filename.erase(0, 1);
+  std::string result;
+  if( find_file(filename, result) )
+    return result;
+  else
+    throw cet::exception(exception_category)
+      << "Can't find file \"" << filename << '\"';
+}  // find_file()
 
-  for( std::vector<std::string>::const_iterator b = dirs.begin()
-                                              , e = dirs.end()
-     ; b != e; ++b ) {
-    std::string fullpath = *b + '/' + filename;
-    for( int k = fullpath.find("//")
-       ; k != std::string::npos
-       ; k = fullpath.find("//") )
+bool
+  search_path::find_file( std::string   filename
+                        , std::string & result
+                        ) const
+{
+  if( filename.empty() )
+    return false;
+
+  for( std::vector<std::string>::const_iterator it = dirs.begin()
+     ; it != end; ++it ) {
+    std::string fullpath = *it + '/' + filename;
+    for( int k = fullpath.find("//"); k != std::string::npos
+                                    ; k = fullpath.find("//") )
       fullpath.erase(k,1);
-    if( file_exists(fullpath) )
-      return fullpath;
+    if( cet::file_exists(fullpath) )  {
+      result = fullpath;
+      return true;
+    }
   }
 
-  return "";
-}
+  return false;
+}  // find_file()
 
+// ----------------------------------------------------------------------
 
+std::size_t
+  search_path::find_files( std::string const        & pat
+                         , std::vector<std::string> & out
+                         ) const
+{
+  std::regex e(pat);
+
+  std::size_t     count = 0u;
+  std::size_t     err = 0u;
+  struct dirent   entry;
+  struct dirent * result = 0;
+
+  for( std::vector<std::string>::const_iterator it = dirs.begin()
+     ; it != end; ++it ) {
+    DIR * dd = opendir(it->c_str());
+    if( dd == 0 )
+      throw cet::exception(exception_category)
+        << "Can't open \"" << *it << "\" as a directory.";
+
+    while( ! (err = readdir_r(dd, &entry, &result))
+           && result != 0 ) {
+      if( std::regex_match(entry.d_name,e) )
+        out.push_back(entry.d_name), ++count;
+    }
+
+    closedir(dd);
+    if( result != 0 )
+      throw cet::exception(exception_category)
+        << "Failed to read directory \"" << *it << "\"; error num = " << err;
+  }  // for
+
+  return count;
+}  // find_files()
 
 // ======================================================================
