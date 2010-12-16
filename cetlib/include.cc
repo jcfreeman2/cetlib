@@ -19,9 +19,12 @@ bool
   std::size_t include_sz = include_lit.size();
 
   for( std::string line; std::getline(in, line);  ) {
-    if( line.find(include_lit) == 0 ) {
-      if( line.end()[-1] != '\"' )
-        return false;
+    if( line.find(include_lit) != 0 )  // ordinary line
+      result.append(line)
+            .append(1, '\n');
+    else if( line.end()[-1] != '\"' )  // #include is missing trailing quote
+      return false;
+    else {
       std::ifstream f( line.substr( include_sz
                                   , line.size() - include_sz - 1
                                   ).c_str()
@@ -29,11 +32,6 @@ bool
                      );
       if( ! f || ! include(f, result) )
         return false;
-    }
-    else {
-      result.append(line)
-            .append(1, '\n');
-      continue;
     }
   }  // for
 
@@ -52,15 +50,14 @@ bool
   static std::string const include_lit("#include \"");
   std::size_t include_sz = include_lit.size();
 
-  cet::search_path paths(search_path_arg);
-
   for( std::string line; std::getline(in, line);  ) {
     if( line.find(include_lit) != 0 )  // ordinary line
       result.append(line)
             .append(1, '\n');
-    else if( line.end()[-1] != '\"' )  // #include missing trailing quote
+    else if( line.end()[-1] != '\"' )  // #include is missing trailing quote
       return false;
     else {
+      cet::search_path paths(search_path_arg);
       std::string fname( line.substr( include_sz
                                     , line.size() - include_sz - 1
                        )            );
