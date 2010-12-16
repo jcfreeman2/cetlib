@@ -97,15 +97,12 @@ std::size_t
      ; it != end; ++it ) {
     DIR * dd = opendir(it->c_str());
     if( dd == 0 )
-      throw cet::exception(exception_category)
-        << "Can't open \"" << *it << "\" as a directory.";
-
+      continue;
     while( ! (err = readdir_r(dd, &entry, &result))
            && result != 0 ) {
       if( std::regex_match(entry.d_name,e) )
         out.push_back(entry.d_name), ++count;
     }
-
     closedir(dd);
     if( result != 0 )
       throw cet::exception(exception_category)
