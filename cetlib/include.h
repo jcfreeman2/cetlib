@@ -14,6 +14,12 @@ namespace cet {
            , std::string  & result
            );
 
+  bool
+    include( std::istream      & in
+           , std::string const & search_path_arg
+           , std::string       & result
+           );
+
 }
 
 // ======================================================================
