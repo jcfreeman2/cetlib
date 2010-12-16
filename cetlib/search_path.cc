@@ -86,7 +86,7 @@ std::size_t
                          , std::vector<std::string> & out
                          ) const
 {
-  std::regex e(pat);
+  std::regex re(pat);
 
   std::size_t     count = 0u;
   std::size_t     err = 0u;
@@ -100,8 +100,8 @@ std::size_t
       continue;
     while( ! (err = readdir_r(dd, &entry, &result))
            && result != 0 ) {
-      if( std::regex_match(entry.d_name,e) )
-        out.push_back(entry.d_name), ++count;
+      if( std::regex_match(entry.d_name, re) )
+        out.push_back(*it + '/' + entry.d_name), ++count;
     }
     closedir(dd);
     if( result != 0 )
