@@ -25,7 +25,7 @@ int
   main( )
 {
   {
-    ensure( 1, search_path("xyzzy").size() == 1 );
+    //ensure( 1, search_path("xyzzy").size() == 1 );
     ensure( 2, search_path(":xyzzy").size() == 1 );
     ensure( 3, search_path(":xyzzy:").size() == 1 );
     ensure( 4, search_path("xyzzy:plugh").size() == 2 );
@@ -35,7 +35,7 @@ int
 
   {
     try {
-      search_path("");
+      search_path(":");
       ensure( 11, false );
     }
     catch( cet::exception const & e ) {
@@ -45,7 +45,7 @@ int
 
   {
     try {
-      search_path sp( "/tmp" );
+      search_path sp( ":/tmp:" );
       std::string const & s = sp.find_file("");
       ensure( 21, false );
     }
