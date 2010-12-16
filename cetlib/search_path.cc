@@ -8,6 +8,7 @@
 
 #include "cetlib/exception.h"
 #include "cetlib/filesystem.h"
+#include "cetlib/getenv.h"
 #include "cpp0x/regex"
 #include <dirent.h>
 #include <iterator>    // back_inserter
@@ -18,12 +19,19 @@ using cet::search_path;
 std::string exception_category("search_path");
 
 // ----------------------------------------------------------------------
+// c'tor:
 
-search_path::search_path( std::string const & path )
+search_path::search_path( std::string const & arg )
 : dirs( )
 , end ( )
 {
-  split(path, ':', std::back_inserter(dirs));
+  split( arg.find(':') == std::string::npos
+         ?  cet::getenv(arg)  // arg is an env var
+         :  arg               // arg is a path
+       , ':'
+       , std::back_inserter(dirs)
+       );
+
   dirs.erase( std::remove( dirs.begin(), dirs.end()
                          , std::string()
                          )
@@ -35,6 +43,7 @@ search_path::search_path( std::string const & path )
 }
 
 // ----------------------------------------------------------------------
+// find_file() overloads:
 
 std::string
   search_path::find_file( std::string const & filename ) const

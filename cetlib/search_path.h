@@ -22,15 +22,13 @@ namespace cet {
 class cet::search_path
 {
 public:
-  typedef  std::string::size_type  size_type;
-
   //c'tor:
-  search_path( std::string const & path );
+  search_path( std::string const & name_or_path );
 
   // observers:
   bool
     empty( ) const  { return dirs.empty(); }
-  size_type
+  std::size_t
     size( ) const  { return dirs.size(); }
   std::string const &
     operator [] ( int k ) const  { return dirs.at(k); }
