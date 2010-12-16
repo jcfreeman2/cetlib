@@ -7,20 +7,16 @@
 //
 // ======================================================================
 
-
 #include "cetlib/exception.h"
 #include <map>
 #include <stdexcept>
 #include <utility>
 
-
 namespace cet {
   template< class K, class V >  class registry;
 }
 
-
 // ======================================================================
-
 
 template< class K, class V >
   class cet::registry
@@ -44,9 +40,9 @@ public:
     size( )  { return the_registry_().size(); }
 
   static  const_iterator
-     begin()  { return the_registry_().begin(); }
+     begin( )  { return the_registry_().begin(); }
   static  const_iterator
-     end()  { return the_registry_().end(); }
+     end( )  { return the_registry_().end(); }
 
   static  void
     put( K const & key, V const & value );
@@ -67,9 +63,7 @@ private:
 
 };  // registry<>
 
-
 // ----------------------------------------------------------------------
-// out-of-line code
 
 template< class K, class V >
 void
@@ -82,7 +76,8 @@ V const &
 {
   iter_t it = the_registry_().find(key);
   if( it == the_registry_().end() )
-    throw cet::exception("cet::registry", "No such key found in registry");
+    throw cet::exception("cet::registry")
+      << "Key \"" << key << "\" not found in registry";
   return it->second;
 }
 
@@ -99,8 +94,6 @@ catch( cet::exception const & )
   return false;
 }
 
-
 // ======================================================================
-
 
 #endif  // CETLIB__REGISTRY_H

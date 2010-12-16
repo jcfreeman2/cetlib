@@ -27,6 +27,7 @@ set( LIB_HEADERS
   include.h
   nybbler.h
   registry.h
+  registry_via_id.h
   search_path.h
   sha1.h
   split.h

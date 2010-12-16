@@ -1,6 +1,11 @@
+// ======================================================================
+//
+// test registry
+//
+// ======================================================================
+
 #include "cetlib/registry.h"
 #include <cstdlib>
-
 
 using cet::registry;
 
@@ -45,10 +50,10 @@ int
     reg::get("ten");
     ensure( 21, false );
   }
-  catch( cet::exception e ) {
+  catch( cet::exception const & e ) {
     ensure( 22, e.category() == "cet::registry" );
     std::string s = e.explain_self();
-    ensure( 23, s.find("No such key") != std::string::npos );
+    ensure( 23, s.find("not found in registry") != std::string::npos );
   }
   catch( ... ) {
     ensure( 24, false );

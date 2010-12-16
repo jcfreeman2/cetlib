@@ -21,6 +21,7 @@ set( TEST_LIST
   include_test
   nybbler_test
   registry_test
+  registry_via_id_test
   search_path_test
   sha1_test
   split_path_test
