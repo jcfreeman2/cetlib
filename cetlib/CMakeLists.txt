@@ -23,7 +23,6 @@ set( LIB_HEADERS
   exception_collector.h
   exempt_ptr.h
   filesystem.h
-  find_matching_files.h
   getenv.h
   include.h
   nybbler.h
@@ -42,7 +41,6 @@ set( LIB_SOURCES
   exception.cc
   exception_collector.cc
   filesystem.cc
-  find_matching_files.cc
   getenv.cc
   include.cc
   nybbler.cc

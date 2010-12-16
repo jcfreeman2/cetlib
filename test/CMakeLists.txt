@@ -31,7 +31,6 @@ set( TEST_LIST
 
 set( ALSO_BUILD
   cpu_timer_test
-  find_matching_files_test
   search_path_test_2
 )
 
@@ -43,7 +42,6 @@ set ( ALSO_RUN
 )
 
 set( MANUALLY_RUN_TESTS
-  find_matching_files_test.sh
   search_path_test_2.sh
 )
 
@@ -85,11 +83,6 @@ endforeach( test ${TEST_LIST} )
 
 # ----------------------------------------------------------------------
 # Run the MANUALLY_RUN_TESTS:
-
-add_test( find_matching_files_test.sh
-          ${EXECUTABLE_OUTPUT_PATH}/find_matching_files_test.sh
-          ${EXECUTABLE_OUTPUT_PATH}
-        )
 
 add_test( search_path_test_2.sh
           ${EXECUTABLE_OUTPUT_PATH}/search_path_test_2.sh
