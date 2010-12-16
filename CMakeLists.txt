@@ -21,7 +21,7 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 
 project( cetlib )
 set( product cetlib )
-set( version v0_1_10 )
+set( version v0_2_0 )
 set( qualifier a1 )
 
 # cetbuildtools contains our cmake modules
@@ -59,8 +59,8 @@ if( NOT GCC_VERSION )
 endif()
 message( STATUS "Using gcc ${GCC_VERSION}" )
 
-find_ups_boost( v1_42_0 filesystem regex )
-find_ups_product( cpp0x v0_0_2 )
+find_ups_boost( v1_45_0 filesystem regex )
+find_ups_product( cpp0x v1_0_1 )
 
 # ----------------------------------------------------------------------
 # Describe include path:
