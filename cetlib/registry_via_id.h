@@ -11,12 +11,19 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
+#include <cassert>
 #include <map>
 #include <stdexcept>
 #include <utility>
 
 namespace cet {
-  template< class K, class V >  class registry_via_id;
+  template< class K, class V >
+    class registry_via_id;
+
+  namespace detail {
+    template< class K, class V, K (V::*)() const = &V::id >
+      struct must_have_id  { typedef  K  type; };
+  }
 }
 
 // ======================================================================
@@ -42,19 +49,23 @@ public:
   typedef  size_t   size_type;
   typedef  iter_t   const_iterator;
 
+  // observers:
   static  bool
     empty( )  { return the_registry_().empty(); }
   static  size_t
     size( )  { return the_registry_().size(); }
 
+  // iterators:
   static  const_iterator
      begin( )  { return the_registry_().begin(); }
   static  const_iterator
      end( )  { return the_registry_().end(); }
 
-  static  K
+  // mutators:
+  static  typename detail::must_have_id<K,V>::type
     put( V const & value );
 
+  // accessors:
   static  V const &
     get( K const & key );
   static  bool
@@ -74,7 +85,7 @@ private:
 // ----------------------------------------------------------------------
 
 template< class K, class V >
-K
+typename cet::detail::must_have_id<K,V>::type
   cet::registry_via_id<K,V>::put( V const & value )
 {
   the_registry_().insert( std::make_pair(value.id(), value) );

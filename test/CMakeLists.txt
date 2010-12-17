@@ -32,6 +32,7 @@ set( TEST_LIST
 
 set( ALSO_BUILD
   cpu_timer_test
+  registry_via_id_test_2 # for now -- see test's source
   search_path_test_2
 )
 
