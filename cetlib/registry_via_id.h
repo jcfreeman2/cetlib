@@ -32,14 +32,19 @@ template< class K, class V >
 
   // shorthand:
   typedef  std::map<K const, V>            reg_t;
+  typedef  typename reg_t::size_type       size_t;
   typedef  typename reg_t::const_iterator  iter_t;
 
 public:
-  typedef  iter_t  const_iterator;
+  typedef  K        key_type;
+  typedef  V        value_type;
+  typedef  reg_t    collection_type;
+  typedef  size_t   size_type;
+  typedef  iter_t   const_iterator;
 
   static  bool
     empty( )  { return the_registry_().empty(); }
-  static  typename reg_t::size_type
+  static  size_t
     size( )  { return the_registry_().size(); }
 
   static  const_iterator
