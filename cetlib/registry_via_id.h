@@ -54,7 +54,7 @@ public:
   // observers:
   static  bool
     empty( )  { return the_registry_().empty(); }
-  static  size_t
+  static  size_type
     size( )  { return the_registry_().size(); }
 
   // iterators:
@@ -73,17 +73,19 @@ public:
     put( collection_type c );
 
   // accessors:
+  static  collection_type const &
+    get( ) noexcept  { return the_registry_(); }
   static  V const &
     get( K const & key );
   static  bool
-    get( K const & key, V & value ) throw();
+    get( K const & key, V & value ) noexcept;
 
 private:
   // encapsulated singleton:
-  static  reg_t &
+  static  collection_type &
     the_registry_( )
   {
-    static  reg_t  the_registry;
+    static  collection_type  the_registry;
     return the_registry;
   }
 
@@ -95,8 +97,9 @@ template< class K, class V >
 typename cet::detail::must_have_id<K,V>::type
   cet::registry_via_id<K,V>::put( V const & value )
 {
-  the_registry_().insert( std::make_pair(value.id(), value) );
-  return value.id();
+  K id = value.id();
+  the_registry_().insert( std::make_pair(id, value) );
+  return id;
 }
 
 template< class K, class V >
@@ -110,7 +113,7 @@ void
                , "Iterator is inconsistent with registry's value_type!"
                );
   for( ; b != e; ++b )
-    put(*b);
+    (void)put(*b);
 }
 
 
@@ -120,7 +123,7 @@ void
 {
   for( const_iterator b = c.begin()
                     , e = c.end(); b != e; ++b )
-    put(b->second);
+    (void)put(b->second);
 }
 
 // ----------------------------------------------------------------------
@@ -129,7 +132,7 @@ template< class K, class V >
 V const &
   cet::registry_via_id<K,V>::get( K const & key )
 {
-  iter_t it = the_registry_().find(key);
+  const_iterator it = the_registry_().find(key);
   if( it == the_registry_().end() )
     throw cet::exception("cet::registry_via_id")
       << "Key \"" << key << "\" not found in registry";
@@ -138,7 +141,7 @@ V const &
 
 template< class K, class V >
 bool
-  cet::registry_via_id<K,V>::get( K const & key, V & value ) throw()
+  cet::registry_via_id<K,V>::get( K const & key, V & value ) noexcept
 try
 {
   value = get(key);

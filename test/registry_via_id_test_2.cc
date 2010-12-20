@@ -9,19 +9,17 @@
 
 #include "cetlib/registry_via_id.h"
 
-#define SUCCEED
+typedef  int     success_t;
+typedef  char *  fail_t;  // anything other than success_t
 
 struct val
 {
-#ifdef SUCCEED
-  int
-#else  // FAIL
-  char *
-#endif  // SUCCEED or FAIL
+  success_t
+  //fail_t
     id() const { return 0; }
 };
 
-typedef  cet::registry_via_id<int,val>  reg;
+typedef  cet::registry_via_id<success_t,val>  reg;
 
 int
   main( )
