@@ -52,8 +52,8 @@ int
   ensure( 12, reg::size() == 10 );
   ensure( 13, reg::get(7.0F) == 7 );
   ensure( 14, reg::get(5.0F) == 5 );
-  ensure( 15, ! reg::get(3.14F, i) );
-  ensure( 16, reg::get(2.0F, i) && i == 2 );
+  ensure( 15, reg::get(2.0F, i) && i == 2 );
+  ensure( 16, ! reg::get(3.14F, i) && i == 2 );
 
   try {
     reg::get(10.0F);

@@ -11,10 +11,12 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
+#include "cpp0x/type_traits"  // is_same
 #include <cassert>
+#include <iterator>  // iterator_traits
 #include <map>
 #include <stdexcept>
-#include <utility>
+#include <utility>   // make_pair
 
 namespace cet {
   template< class K, class V >
@@ -64,6 +66,11 @@ public:
   // mutators:
   static  typename detail::must_have_id<K,V>::type
     put( V const & value );
+  template< class FwdIt >
+  static  void
+    put( FwdIt begin, FwdIt end );
+  static  void
+    put( collection_type c );
 
   // accessors:
   static  V const &
@@ -91,6 +98,32 @@ typename cet::detail::must_have_id<K,V>::type
   the_registry_().insert( std::make_pair(value.id(), value) );
   return value.id();
 }
+
+template< class K, class V >
+template< class FwdIt >
+void
+  cet::registry_via_id<K,V>::put( FwdIt b, FwdIt e )
+{
+  STATIC_ASSERT( (std::is_same< V
+                              , typename std::iterator_traits<FwdIt>::value_type
+                              >::value)
+               , "Iterator is inconsistent with registry's value_type!"
+               );
+  for( ; b != e; ++b )
+    put(*b);
+}
+
+
+template< class K, class V >
+void
+  cet::registry_via_id<K,V>::put( collection_type c )
+{
+  for( const_iterator b = c.begin()
+                    , e = c.end(); b != e; ++b )
+    put(b->second);
+}
+
+// ----------------------------------------------------------------------
 
 template< class K, class V >
 V const &
