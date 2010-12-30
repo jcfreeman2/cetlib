@@ -1,5 +1,5 @@
-#ifndef CETLIB__REGISTRY_VIA_ID_H
-#define CETLIB__REGISTRY_VIA_ID_H
+#ifndef CETLIB_REGISTRY_VIA_ID_H
+#define CETLIB_REGISTRY_VIA_ID_H
 
 // ======================================================================
 //
@@ -11,12 +11,12 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include "cpp0x/type_traits"  // is_same
+#include "cpp0x/type_traits"
 #include <cassert>
-#include <iterator>  // iterator_traits
+#include <iterator>
 #include <map>
 #include <stdexcept>
-#include <utility>   // make_pair
+#include <utility>
 
 namespace cet {
   template< class K, class V >
@@ -154,4 +154,4 @@ catch( cet::exception const & )
 
 // ======================================================================
 
-#endif  // CETLIB__REGISTRY_VIA_ID_H
+#endif

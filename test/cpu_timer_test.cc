@@ -1,7 +1,7 @@
 #include "cetlib/cpu_timer.h"
 
 #include <cstdlib>
-#include <unistd.h>  // sleep
+#include <unistd.h>
 
 //#include "cppunit/extensions/HelperMacros.h"
 //#include <cassert>

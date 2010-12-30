@@ -1,5 +1,5 @@
-#ifndef CETLIB__CPU_TIMER_H
-#define CETLIB__CPU_TIMER_H
+#ifndef CETLIB_CPU_TIMER_H
+#define CETLIB_CPU_TIMER_H
 
 // ======================================================================
 //
@@ -62,4 +62,4 @@ inline  bool
 
 // ======================================================================
 
-#endif  // CETLIB__CPU_TIMER_H
+#endif

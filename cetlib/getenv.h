@@ -1,3 +1,6 @@
+#ifndef CETLIB_GETENV_H
+#define CETLIB_GETENV_H
+
 // ======================================================================
 //
 // getenv - obtain value of environment variable; throw if none such
@@ -14,3 +17,5 @@ namespace cet {
 }
 
 // ======================================================================
+
+#endif

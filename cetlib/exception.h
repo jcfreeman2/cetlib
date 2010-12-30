@@ -1,5 +1,5 @@
-#ifndef CETLIB__EXCEPTION_H
-#define CETLIB__EXCEPTION_H
+#ifndef CETLIB_EXCEPTION_H
+#define CETLIB_EXCEPTION_H
 
 // ======================================================================
 //
@@ -173,4 +173,4 @@ namespace cet {
 
 // ======================================================================
 
-#endif  // CETLIB__EXCEPTION_H
+#endif

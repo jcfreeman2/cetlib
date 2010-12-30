@@ -7,7 +7,7 @@
 #include "cetlib/getenv.h"
 
 #include "cetlib/exception.h"
-#include <cstdlib>     // getenv
+#include <cstdlib>
 
 // ======================================================================
 

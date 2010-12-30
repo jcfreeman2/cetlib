@@ -1,3 +1,6 @@
+#ifndef CETLIB_INCLUDE_H
+#define CETLIB_INCLUDE_H
+
 // ======================================================================
 //
 // include - file ->string, interpolating #include'd files along the way
@@ -23,3 +26,5 @@ namespace cet {
 }
 
 // ======================================================================
+
+#endif

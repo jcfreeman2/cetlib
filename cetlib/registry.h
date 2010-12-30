@@ -1,5 +1,5 @@
-#ifndef CETLIB__REGISTRY_H
-#define CETLIB__REGISTRY_H
+#ifndef CETLIB_REGISTRY_H
+#define CETLIB_REGISTRY_H
 
 // ======================================================================
 //
@@ -96,4 +96,4 @@ catch( cet::exception const & )
 
 // ======================================================================
 
-#endif  // CETLIB__REGISTRY_H
+#endif

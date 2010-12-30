@@ -1,5 +1,5 @@
-#ifndef CETLIB__SPLIT_H
-#define CETLIB__SPLIT_H
+#ifndef CETLIB_SPLIT_H
+#define CETLIB_SPLIT_H
 
 // ======================================================================
 //
@@ -15,11 +15,9 @@
 //
 // ======================================================================
 
-
 #include "cpp0x/functional"
 #include <algorithm>
 #include <string>
-
 
 namespace cet  {
   template< class OutIter >
@@ -31,9 +29,7 @@ namespace cet  {
     split_if( std::string s, Pred is_sep, OutIter dest );
 }
 
-
 // ======================================================================
-
 
 template< class OutIter >
 void
@@ -45,9 +41,7 @@ void
   split_if( s, std::bind(eq,_1,c), dest );
 }
 
-
 // ======================================================================
-
 
 namespace cet { namespace detail {
 
@@ -89,8 +83,6 @@ void
 
 }  // split<>()
 
-
 // ======================================================================
 
-
-#endif  // CETLIB__SPLIT_H
+#endif

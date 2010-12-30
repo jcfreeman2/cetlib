@@ -1,5 +1,5 @@
-#ifndef CETLIB__CODED_EXCEPTION_H
-#define CETLIB__CODED_EXCEPTION_H
+#ifndef CETLIB_CODED_EXCEPTION_H
+#define CETLIB_CODED_EXCEPTION_H
 
 // ======================================================================
 //
@@ -94,4 +94,4 @@ std::string
 
 // ======================================================================
 
-#endif  // CETLIB__CODED_EXCEPTION_H
+#endif

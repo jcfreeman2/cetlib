@@ -7,7 +7,7 @@
 #include "cetlib/search_path.h"
 
 #include <iostream>
-#include <iterator>  // back_inserter, ostream_iterator
+#include <iterator>
 #include <string>
 #include <vector>
 

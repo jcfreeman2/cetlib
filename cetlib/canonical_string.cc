@@ -7,7 +7,7 @@
 #include "cetlib/canonical_string.h"
 
 #include "cetlib/exception.h"
-#include <cctype>   // isprint
+#include <cctype>
 
 using std::string;
 

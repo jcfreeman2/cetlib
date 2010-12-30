@@ -157,4 +157,4 @@ namespace edm {
 
 }  // namespace edm
 
-#endif  // FWCore_ParameterSet_FileInPath_h
+#endif

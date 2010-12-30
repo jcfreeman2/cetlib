@@ -1,3 +1,6 @@
+#ifndef CETLIB_FILE_EXISTS_H
+#define CETLIB_FILE_EXISTS_H
+
 // ======================================================================
 //
 // filesystem - file-level utilities
@@ -14,3 +17,5 @@ namespace cet {
 }
 
 // ======================================================================
+
+#endif

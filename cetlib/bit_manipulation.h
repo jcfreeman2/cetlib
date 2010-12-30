@@ -1,5 +1,5 @@
-#ifndef CETLIB__BIT_MANIPULATION_H
-#define CETLIB__BIT_MANIPULATION_H
+#ifndef CETLIB_BIT_MANIPULATION_H
+#define CETLIB_BIT_MANIPULATION_H
 
 // ======================================================================
 //
@@ -7,13 +7,10 @@
 //
 // ======================================================================
 
-
 #include "cpp0x/type_traits"
 #include <limits>
 
-
 // ======================================================================
-
 
 namespace cet {
 
@@ -30,9 +27,7 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
-
 
 namespace cet {
 
@@ -55,9 +50,7 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
-
 
 namespace cet {
 
@@ -81,9 +74,7 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
-
 
 namespace cet {
 
@@ -111,9 +102,7 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
-
 
 namespace cet {
 
@@ -132,8 +121,6 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
 
-
-#endif  // CETLIB__BIT_MANIPULATION_H
+#endif

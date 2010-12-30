@@ -6,7 +6,7 @@
 
 #include "cetlib/filesystem.h"
 
-#include <sys/stat.h>  // stat
+#include <sys/stat.h>
 
 // ----------------------------------------------------------------------
 

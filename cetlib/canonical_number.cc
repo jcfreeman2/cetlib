@@ -10,9 +10,9 @@
 #include "cetlib/canonical_number.h"
 
 #include "boost/lexical_cast.hpp"
-#include <cctype>   // isdigit
-#include <cstddef>  // size_t
-#include <cstdlib>  // atoi
+#include <cctype>
+#include <cstddef>
+#include <cstdlib>
 
 using namespace boost;
 using namespace std;

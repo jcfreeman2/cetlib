@@ -1,5 +1,5 @@
-#ifndef CETLIB__CANONICAL_NUMBER_H
-#define CETLIB__CANONICAL_NUMBER_H
+#ifndef CETLIB_CANONICAL_NUMBER_H
+#define CETLIB_CANONICAL_NUMBER_H
 
 // ======================================================================
 //
@@ -18,4 +18,6 @@ namespace cet {
 
 }
 
-#endif  // CETLIB__CANONICAL_NUMBER_H
+// ======================================================================
+
+#endif

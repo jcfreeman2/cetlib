@@ -8,7 +8,7 @@
 
 #include "cetlib/exception.h"
 #include <cerrno>
-#include <sys/resource.h>  // rusage, ...
+#include <sys/resource.h>
 
 using namespace cet;
 

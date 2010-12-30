@@ -1,5 +1,5 @@
-#ifndef CETLIB__EXCEPTION_COLLECTOR_H
-#define CETLIB__EXCEPTION_COLLECTOR_H
+#ifndef CETLIB_EXCEPTION_COLLECTOR_H
+#define CETLIB_EXCEPTION_COLLECTOR_H
 
 // ======================================================================
 //
@@ -22,14 +22,11 @@
 //
 // ======================================================================
 
-
 #include "cetlib/exception.h"
 #include "cpp0x/functional"
 #include <exception>
 
-
 // ======================================================================
-
 
 namespace cet {
 
@@ -55,8 +52,6 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
 
-
-#endif  // CETLIB__EXCEPTION_COLLECTOR_H
+#endif

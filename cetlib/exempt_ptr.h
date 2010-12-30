@@ -45,153 +45,159 @@
 //
 // ======================================================================
 
-
-#include "cpp0x/type_traits"  // add_pointer, is_convertible
-#include <exception>          // exception
-#include <utility>            // swap
-
-
-// ======================================================================
-
+#include "cpp0x/type_traits"
+#include <exception>
+#include <utility>
 
 namespace cet {
+  template< class Element >
+    class exempt_ptr;
 
   template< class Element >
-    class exempt_ptr
-  {
-  public:
-    // --- publish our type parameter and variations thereof:
-    typedef  Element
-             element_type;
-    typedef  typename std::remove_reference<element_type>::type
-             pointee;
-    typedef  typename std::add_pointer<pointee>::type
-             pointer;
-    typedef  typename std::add_lvalue_reference<pointee>::type
-             reference;
-
-  private:
-    template< class P
-            , class Q = typename exempt_ptr<P>::pointer
-            >
-      struct is_compatible
-    : public std::is_convertible< Q, pointer >
-    { };
-
-  public:
-    // --- default c'tor:
-    CONSTEXPR_FCTN
-      exempt_ptr( ) noexcept
-    : p( pointer() )
-    { }
-
-    // --- use compiler-generated copy c'tor, copy assignment, d'tor
-
-    // --- copy from native pointer, possibly nullptr:
-    explicit
-      exempt_ptr( pointer p ) noexcept
-    : p( p )
-    { }
-    exempt_ptr &
-      operator = ( pointer p ) noexcept
-    { reset(p); return *this; }
-
-    // --- pointer behaviors:
-    reference
-      operator *  ( ) const noexcept  { return *get(); }
-    pointer
-      operator -> ( ) const noexcept  { return  get(); }
-    reference
-      at          ( ) const
-    { return empty() ? throw std::exception() : *get(); }
-
-    // --- conversions:
-    EXPLICIT_CONV_OP
-      operator bool    ( ) const noexcept  { return get(); }
-    EXPLICIT_CONV_OP
-      operator pointer ( ) const noexcept  { return get(); }
-
-    // --- smart pointer observing behaviors:
-    bool
-      empty( ) const noexcept  { return get() == pointer(); }
-    pointer
-      get( ) const noexcept  { return p; }
-
-    // --- smart pointer mutating behaviors:
-    pointer
-      release( ) noexcept { pointer old = get(); reset(); return old; }
-    void
-      reset( pointer t = pointer() ) noexcept  { p = t; }
-    void
-      swap( exempt_ptr & other ) noexcept  { std::swap(p, other.p); }
-
-    // --- copying from other exempt_ptr<>s:
-    template< class P >
-      exempt_ptr( exempt_ptr<P> const & other
-                , typename std::enable_if<is_compatible<P>::value>::type * = 0
-                ) noexcept
-    : p( other.get() )
-    { }
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , exempt_ptr &
-                             >::type
-      operator = ( exempt_ptr<P> const & other ) noexcept
-    { reset( other.get() ); return *this; }
-
-    // --- comparisons:
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , bool
-                             >::type
-      operator == ( exempt_ptr<P> const & other ) noexcept
-    { return get() == other.get(); }
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , bool
-                             >::type
-      operator != ( exempt_ptr<P> const & other ) noexcept
-    { return ! operator == (other); }
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , bool
-                             >::type
-      operator < ( exempt_ptr<P> const & other ) noexcept
-    { return get() < other.get(); }
-
-    // --- additional interoperation with nullptr_t:
-    bool
-      operator == ( nullptr_t ) noexcept  { return empty(); }
-    bool
-      operator != ( nullptr_t ) noexcept  { return ! empty(); }
-
-  private:
-    pointer  p;
-
-  };  // exempt_ptr<>
-
-
-  // --- provide commutative (in)equality with nullptr_t:
+  bool
+    operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept;
   template< class Element >
-    bool
-    operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
-  { return other.empty(); }
+  bool
+    operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept;
   template< class Element >
-    bool
-    operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
-  { return ! other.empty(); }
-
-
-  // --- non-member swap:
-  template< class Element >
-    void
-    swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept
-  { x.swap(y); }
-
-}  // namespace cet
-
+  void
+    swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept;
+}
 
 // ======================================================================
 
+template< class Element >
+  class cet::exempt_ptr
+{
+public:
+  // --- publish our type parameter and variations thereof:
+  typedef  Element
+           element_type;
+  typedef  typename std::remove_reference<element_type>::type
+           pointee;
+  typedef  typename std::add_pointer<pointee>::type
+           pointer;
+  typedef  typename std::add_lvalue_reference<pointee>::type
+           reference;
 
-#endif  // CETLIB_EXEMPT_PTR_H
+private:
+  template< class P
+          , class Q = typename exempt_ptr<P>::pointer
+          >
+    struct is_compatible
+  : public std::is_convertible< Q, pointer >
+  { };
+
+public:
+  // --- default c'tor:
+  CONSTEXPR_FCTN
+    exempt_ptr( ) noexcept
+  : p( pointer() )
+  { }
+
+  // --- use compiler-generated copy c'tor, copy assignment, d'tor
+
+  // --- copy from native pointer, possibly nullptr:
+  explicit
+    exempt_ptr( pointer p ) noexcept
+  : p( p )
+  { }
+  exempt_ptr &
+    operator = ( pointer p ) noexcept
+  { reset(p); return *this; }
+
+  // --- pointer behaviors:
+  reference
+    operator *  ( ) const noexcept  { return *get(); }
+  pointer
+    operator -> ( ) const noexcept  { return  get(); }
+  reference
+    at          ( ) const
+  { return empty() ? throw std::exception() : *get(); }
+
+  // --- conversions:
+  EXPLICIT_CONV_OP
+    operator bool    ( ) const noexcept  { return get(); }
+  EXPLICIT_CONV_OP
+    operator pointer ( ) const noexcept  { return get(); }
+
+  // --- smart pointer observing behaviors:
+  bool
+    empty( ) const noexcept  { return get() == pointer(); }
+  pointer
+    get( ) const noexcept  { return p; }
+
+  // --- smart pointer mutating behaviors:
+  pointer
+    release( ) noexcept { pointer old = get(); reset(); return old; }
+  void
+    reset( pointer t = pointer() ) noexcept  { p = t; }
+  void
+    swap( exempt_ptr & other ) noexcept  { std::swap(p, other.p); }
+
+  // --- copying from other exempt_ptr<>s:
+  template< class P >
+    exempt_ptr( exempt_ptr<P> const & other
+              , typename std::enable_if<is_compatible<P>::value>::type * = 0
+              ) noexcept
+  : p( other.get() )
+  { }
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , exempt_ptr &
+                           >::type
+    operator = ( exempt_ptr<P> const & other ) noexcept
+  { reset( other.get() ); return *this; }
+
+  // --- comparisons:
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , bool
+                           >::type
+    operator == ( exempt_ptr<P> const & other ) noexcept
+  { return get() == other.get(); }
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , bool
+                           >::type
+    operator != ( exempt_ptr<P> const & other ) noexcept
+  { return ! operator == (other); }
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , bool
+                           >::type
+    operator < ( exempt_ptr<P> const & other ) noexcept
+  { return get() < other.get(); }
+
+  // --- additional interoperation with nullptr_t:
+  bool
+    operator == ( nullptr_t ) noexcept  { return empty(); }
+  bool
+    operator != ( nullptr_t ) noexcept  { return ! empty(); }
+
+private:
+  pointer  p;
+
+};  // exempt_ptr<>
+
+// ----------------------------------------------------------------------
+
+// --- provide commutative (in)equality with nullptr_t:
+template< class Element >
+bool
+  cet::operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
+{ return other.empty(); }
+template< class Element >
+bool
+  cet::operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
+{ return ! other.empty(); }
+
+// --- non-member swap:
+template< class Element >
+void
+  cet::swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept
+{ x.swap(y); }
+
+// ======================================================================
+
+#endif

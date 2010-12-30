@@ -1,5 +1,5 @@
-#ifndef CETLIB__CONTAINER_ALGORITHMS_H
-#define CETLIB__CONTAINER_ALGORITHMS_H
+#ifndef CETLIB_CONTAINER_ALGORITHMS_H
+#define CETLIB_CONTAINER_ALGORITHMS_H
 
 // ======================================================================
 //
@@ -9,13 +9,9 @@
 //
 // ======================================================================
 
-
 #include <algorithm>
 
-
-// ======================================================================
-
-
+// ----------------------------------------------------------------------
 // wrapper for std::for_each
 namespace cet {
   template< class FwdCont, class Func >
@@ -24,8 +20,8 @@ namespace cet {
   { return std::for_each(s.begin(), s.end(), f); }
 }
 
-
-// wrappers for copy
+// ----------------------------------------------------------------------
+// wrappers for std::copy
 namespace cet {
   template< class FwdCont, class FwdIter >
   inline FwdIter
@@ -33,7 +29,7 @@ namespace cet {
   { return std::copy(s.begin(), s.end(), it); }
 }
 
-
+// ----------------------------------------------------------------------
 // wrappers for std::find
 namespace cet {
   template< class FwdCont, class Datum >
@@ -52,7 +48,7 @@ namespace cet {
   { return std::find(s.begin(), s.end(), d) != s.end(); }
 }
 
-
+// ----------------------------------------------------------------------
 // wrapper for std::binary_search
 namespace cet {
   template< class FwdCont, class Datum >
@@ -61,7 +57,7 @@ namespace cet {
   { return std::binary_search(s.begin(), s.end(), d); }
 }
 
-
+// ----------------------------------------------------------------------
 // wrappers for std::lower_bound
 namespace cet {
   template< class FwdCont, class Datum >
@@ -85,7 +81,7 @@ namespace cet {
   { return std::lower_bound(s.begin(), s.end(), d, p); }
 }
 
-
+// ----------------------------------------------------------------------
 // wrappers for std::sort
 namespace cet {
   template< class RandCont >
@@ -99,7 +95,7 @@ namespace cet {
   { std::sort(s.begin(), s.end(), p); }
 }
 
-
+// ----------------------------------------------------------------------
 // wrappers for std::stable_sort
 namespace cet {
   template< class RandCont >
@@ -113,8 +109,6 @@ namespace cet {
   { std::stable_sort(s.begin(), s.end(), p); }
 }
 
-
 // ======================================================================
 
-
-#endif  // CETLIB__CONTAINER_ALGORITHMS_H
+#endif

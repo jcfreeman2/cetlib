@@ -11,8 +11,8 @@
 #include "cetlib/getenv.h"
 #include "cpp0x/regex"
 #include <dirent.h>
-#include <iterator>    // back_inserter
-#include <sys/stat.h>  // stat
+#include <iterator>
+#include <sys/stat.h>
 
 using cet::search_path;
 

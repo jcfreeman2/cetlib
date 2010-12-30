@@ -1,5 +1,5 @@
-#ifndef CETLIB__SHA1_H
-#define CETLIB__SHA1_H
+#ifndef CETLIB_SHA1_H
+#define CETLIB_SHA1_H
 
 // ======================================================================
 //
@@ -7,20 +7,16 @@
 //
 // ======================================================================
 
-
 #include "cetlib/detail/polarssl_sha1.h"
 #include "cpp0x/array"
 #include <cstring>
 #include <string>
 
-
 namespace cet {
   class sha1;
 }
 
-
 // ======================================================================
-
 
 class cet::sha1
 {
@@ -70,8 +66,6 @@ private:
 
 };  // sha1
 
-
 // ======================================================================
 
-
-#endif  // CETLIB__SHA1_H
+#endif

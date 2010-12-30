@@ -1,6 +1,12 @@
 #ifndef CETLIB_SPLIT_PATH_H
 #define CETLIB_SPLIT_PATH_H
 
+// ======================================================================
+//
+// split_path
+//
+// ======================================================================
+
 #include <string>
 #include <vector>
 
@@ -14,8 +20,6 @@ namespace cet
               );
 }
 
-#endif  // CETLIB_SPLIT_PATH_H
+// ======================================================================
 
-// Local Variables:
-// mode: c++
-// End:
+#endif

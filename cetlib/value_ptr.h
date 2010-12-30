@@ -57,15 +57,12 @@
 //
 // ======================================================================
 
-
-#include "cpp0x/memory"      // auto_ptr, default_delete
-#include "cpp0x/type_traits" // add/remove_ptr, enable_if, is_convertible, ...
-#include <exception>         // exception
-#include <utility>           // move, swap
-
+#include "cpp0x/memory"
+#include "cpp0x/type_traits"
+#include <exception>
+#include <utility>
 
 // ======================================================================
-
 
 namespace cet {
 
@@ -88,7 +85,6 @@ namespace cet {
     };  // has_clone<>
 
   }  // namespace detail
-
 
   template< class Element
           , class Pointee = typename std::remove_reference<Element>::type
@@ -121,9 +117,7 @@ namespace cet {
 
   };  // default_clone<>
 
-
   // ======================================================================
-
 
   template< class Element
           , class Cloner = default_clone<Element>
@@ -165,7 +159,7 @@ namespace cet {
     value_ptr( value_ptr && other ) noexcept
       : p( other.release() )
     { }
-  #endif  // CPP0X_HAS_RVALUE_REFERENCES
+  #endif
 
     // --- copy/move assignments:
     value_ptr &
@@ -175,7 +169,7 @@ namespace cet {
     value_ptr &
       operator = ( value_ptr && other ) noexcept
     { reset( other.release() ); return *this; }
-  #endif  // CPP0X_HAS_RVALUE_REFERENCES
+  #endif
 
     // --- copy from native pointer, possibly nullptr:
     explicit
@@ -249,7 +243,7 @@ namespace cet {
                )
     : p( other.release() )
     { }
-  #endif  // CPP0X_HAS_RVALUE_REFERENCES
+  #endif
     template< class P >
       typename std::enable_if< is_compatible<P>::value
                              , value_ptr &
@@ -265,7 +259,7 @@ namespace cet {
       value_ptr &
       operator = ( value_ptr<P> && other )
     { reset( other.release() ); return *this; }
-  #endif  // CPP0X_HAS_RVALUE_REFERENCES
+  #endif
 
     // --- comparisons:
     template< class P >
@@ -328,8 +322,6 @@ namespace cet {
 
 }  // namespace cet
 
-
 // ======================================================================
 
-
-#endif  // VALUE_PTR_H
+#endif

@@ -1,5 +1,5 @@
-#ifndef CETLIB__SEARCH_PATH_H
-#define CETLIB__SEARCH_PATH_H
+#ifndef CETLIB_SEARCH_PATH_H
+#define CETLIB_SEARCH_PATH_H
 
 // ======================================================================
 //
@@ -8,8 +8,8 @@
 // ======================================================================
 
 #include "cetlib/split.h"
-#include <algorithm>  // copy
-#include <cstdlib>    // size_t
+#include <algorithm>
+#include <cstdlib>
 #include <string>
 #include <vector>
 
@@ -72,4 +72,4 @@ std::size_t
 
 // ======================================================================
 
-#endif  // CETLIB__SEARCH_PATH_H
+#endif
