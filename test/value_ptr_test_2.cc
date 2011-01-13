@@ -6,34 +6,40 @@
 class simple
 {
   int i;
- public:
-  static int count;
-  static int count1;
-  simple() : i(0) { ++count; ++count1; }
-  explicit simple(int j) : i(j) { ++count; ++count1; }
-  simple(simple const& s) : i(s.i) { ++count; ++count1; }
-  ~simple() { --count; }
+
+public:
+  static int n_alive;
+  static int n_born;
+
+  simple() : i(0) { ++n_alive; ++n_born; }
+  explicit simple(int j) : i(j) { ++n_alive; ++n_born; }
+
+  simple(simple const& s) : i(s.i) { ++n_alive; ++n_born; }
+
+  ~simple() { --n_alive; }
+
   bool operator==(simple const& o) const { return i == o.i; }
   bool isSame(simple const& o) const {return &o == this; }
-};
 
-int simple::count = 0;
-int simple::count1 = 0;
+};  // simple
+
+int simple::n_alive = 0;
+int simple::n_born = 0;
 
 
 int main()
 {
-  assert(simple::count == 0);
+  assert(simple::n_alive == 0);
   {
     cet::value_ptr<simple> a(new simple(10));
-    assert(simple::count == 1);
+    assert(simple::n_alive == 1);
     cet::value_ptr<simple> b(a);
-    assert(simple::count == 2);
+    assert(simple::n_alive == 2);
 
     assert(*a==*b);
     assert(a->isSame(*b) == false);
   } // a and b destroyed
-  assert(simple::count == 0);
+  assert(simple::n_alive == 0);
 
   {
     std::auto_ptr<simple> c(new simple(11));
@@ -64,9 +70,9 @@ int main()
       assert(0);
     }
 
-    assert(simple::count == 2);
-    assert(simple::count1 == 4);
+    assert(simple::n_alive == 2);
+    assert(simple::n_born == 4);
   }
-  assert(simple::count == 0);
-  assert(simple::count1 == 4);
+  assert(simple::n_alive == 0);
+  assert(simple::n_born == 4);
 }

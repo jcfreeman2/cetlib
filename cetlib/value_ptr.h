@@ -164,7 +164,7 @@ namespace cet {
     // --- copy/move assignments:
     value_ptr &
       operator = ( value_ptr const & other ) noexcept
-    { reset( other.get() ); return *this; }
+    { value_ptr tmp(other); swap(tmp); return *this; }
   #ifdef CPP0X_HAS_RVALUE_REFERENCES
     value_ptr &
       operator = ( value_ptr && other ) noexcept
@@ -185,7 +185,7 @@ namespace cet {
       p( other.release() )
     { }
     value_ptr &  operator = ( std::auto_ptr<Element> & other )
-    { reset( other.release() ); return *this; }
+    { value_ptr tmp(other); swap(tmp); return *this; }
 
     // --- d'tor:
       ~value_ptr( void ) noexcept
