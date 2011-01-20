@@ -14,8 +14,8 @@
 #include <cstddef>
 #include <cstdlib>
 
-using namespace boost;
-using namespace std;
+using boost::lexical_cast;
+using std::abs;
 
 
 bool
@@ -84,12 +84,14 @@ try
     return true;
   }
   result.append(sign);
-  if( ndig <= exp  &&  exp <= 6 ) { // < 1e6?
+  if( long(ndig) <= exp  &&  exp <= 6L ) { // non-neg exp < e6?
     result.append( digits )
           .append( exp-ndig, '0' );
   }
   else {
-    digits.insert(digits.begin()+1, '.'); --exp;
+    if( ndig > 1 )
+      digits.insert(digits.begin()+1, '.');
+    --exp;
     result.append(digits);
     if( exp != 0 ) {
       result.append( 1, 'e' )
