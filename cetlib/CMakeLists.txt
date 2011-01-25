@@ -66,6 +66,13 @@ install( FILES detail/polarssl_config.h
 install( TARGETS ${LIB_NAME}
          DESTINATION ${flavorqual_dir}/lib )
 
+# ----------------------------------------------------------------------
+# Build and install executables:
+
+add_executable( inc-expand inc-expand.cc )
+target_link_libraries( inc-expand ${LIB_NAME} )
+install( TARGETS inc-expand
+         DESTINATION ${flavorqual_dir}/bin )
 
 #
 # ======================================================================

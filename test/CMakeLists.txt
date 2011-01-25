@@ -41,6 +41,7 @@ set( MANUALLY_BUILT_TESTS
 )
 
 set ( ALSO_RUN
+  inc-expand_test.sh
 )
 
 set( MANUALLY_RUN_TESTS
@@ -79,7 +80,7 @@ endforeach( script ${TEST_SCRIPTS} )
 # ----------------------------------------------------------------------
 # Run the automated tests:
 
-foreach( test ${TEST_LIST} ${MANUALLY_BUILT_TESTS} )
+foreach( test ${TEST_LIST} ${MANUALLY_BUILT_TESTS} ${ALSO_RUN} )
   add_test( ${test} ${EXECUTABLE_OUTPUT_PATH}/${test} )
 endforeach( test ${TEST_LIST} )
 
