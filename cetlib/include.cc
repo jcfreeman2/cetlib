@@ -16,7 +16,10 @@ bool
               )
 {
   static std::string const include_lit("#include \"");
-  std::size_t include_sz = include_lit.size();
+  static std::size_t const include_sz = include_lit.size();
+
+  if( ! in )
+    return false;
 
   for( std::string line; std::getline(in, line);  ) {
     if( line.find(include_lit) != 0 )  // ordinary line
