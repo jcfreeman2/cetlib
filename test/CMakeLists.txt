@@ -1,20 +1,30 @@
 # ======================================================================
 #
-# Testing script
+# Testing
 #
 # ======================================================================
 
-# ----------------------------------------------------------------------
-# Identify, by category, all tests:
+# ======================================================================
+# Part 1: Categorize each source or data file
+# ======================================================================
 
-set( TEST_LIST
+# ----------------------------------------------------------------------
+# Identify libraries to be linked:
+
+link_libraries( cetlib )
+
+# ----------------------------------------------------------------------
+# Identify each test's build requirements:
+
+set( BUILD              # compile
   bit_test
   canonical_number_test
   canonical_string_test
   coded_exception_test
   container_algs_test
-  exception_test
+  cpu_timer_test
   exception_collector_test
+  exception_test
   exempt_ptr_test
   filesystem_test
   getenv_test
@@ -22,7 +32,9 @@ set( TEST_LIST
   nybbler_test
   registry_test
   registry_via_id_test
+  registry_via_id_test_2 # for now -- see test's source
   search_path_test
+  search_path_test_2
   sha1_test
   split_path_test
   split_test
@@ -30,34 +42,64 @@ set( TEST_LIST
   value_ptr_test_2
 )
 
-set( ALSO_BUILD
-  cpu_timer_test
-  registry_via_id_test_2 # for now -- see test's source
-  search_path_test_2
+set( BUILD_BOOST        # compile and link with BOOST_TEST library
 )
 
-set( MANUALLY_BUILT_TESTS
+set( HANDBUILT          # use target-specific build rules, found below
   sha1_test_2
 )
 
-set ( ALSO_RUN
+set( PREBUILT           # no build required
   inc-expand_test.sh
-)
-
-set( MANUALLY_RUN_TESTS
   search_path_test_2.sh
 )
 
 # ----------------------------------------------------------------------
-# Build most tests:
+# Identify data files needed to run the above tests:
 
-foreach( test ${TEST_LIST} ${ALSO_BUILD} )
-  add_executable( ${test} ${test}.cc )
-  target_link_libraries( ${test} cetlib )
-endforeach( test ${TEST_LIST} ${ALSO_BUILD} )
+set( DATAFILE           # install only
+)
 
 # ----------------------------------------------------------------------
-# Build tests with special requirements:
+# Identify tests not to be run automatically:
+
+set( HANDRUN            # use target-specific run rules, found below
+  cpu_timer_test
+  inc-expand_test
+  inc-expand_test.sh
+  registry_via_id_test_2 # for now -- see test's source
+  search_path_test_2
+  search_path_test_2.sh
+)
+
+# ======================================================================
+# Part 2: Provide build instructions
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# BUILD:
+
+foreach( test ${BUILD} )
+  add_executable( ${test} ${test}.cc )
+endforeach( test )
+
+# ----------------------------------------------------------------------
+# BUILD_BOOST:
+
+foreach( test ${BUILD_BOOST} )
+  add_executable( ${test} ${test}.cc )
+  set_target_properties ( ${test} PROPERTIES
+    COMPILE_DEFINITIONS BOOST_TEST_MAIN
+    COMPILE_DEFINITIONS BOOST_TEST_DYN_LINK
+  )
+  target_link_libraries( ${test} ${Boost_UNIT_TEST_FRAMEWORK_LIBRARY} )
+endforeach( test )
+
+# ----------------------------------------------------------------------
+# HANDBUILT:
+
+# add_executable( ... )
+# target_link_libraries( ... )
 
 add_executable( sha1_test_performance sha1_test_performance.cc sha1.cpp )
 target_link_libraries( sha1_test_performance cetlib )
@@ -66,30 +108,53 @@ add_executable( sha1_test_2 sha1_test_2.cc sha1.cpp )
 target_link_libraries( sha1_test_2 cetlib )
 
 # ----------------------------------------------------------------------
-# Install non-built tests:
+# PREBUILT:
 
-foreach( script ${ALSO_RUN} ${MANUALLY_RUN_TESTS} )
-  add_custom_target( ${script} ALL
-                     COMMAND ${CMAKE_COMMAND} -E
-                       copy ${CMAKE_CURRENT_SOURCE_DIR}/${script}
-                            ${EXECUTABLE_OUTPUT_PATH}/
-                      DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${script}
-                   )
-endforeach( script ${TEST_SCRIPTS} )
+foreach( test ${PREBUILT} )
+  add_custom_target( ${test}_copy ALL
+    COMMAND ${CMAKE_COMMAND} -E
+      copy ${CMAKE_CURRENT_SOURCE_DIR}/${test}
+           ${EXECUTABLE_OUTPUT_PATH}/
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${test}
+  )
+endforeach( test )
 
 # ----------------------------------------------------------------------
-# Run the automated tests:
+# DATAFILE:
 
-foreach( test ${TEST_LIST} ${MANUALLY_BUILT_TESTS} ${ALSO_RUN} )
+foreach( input ${DATAFILE} )
+  add_custom_target( ${input}_copy ALL
+    COMMAND ${CMAKE_COMMAND} -E
+      copy ${CMAKE_CURRENT_SOURCE_DIR}/${input}
+           ${CMAKE_CURRENT_BINARY_DIR}/
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/${input}
+  )
+endforeach( input )
+
+# ======================================================================
+# Part 3: Run tests
+# ======================================================================
+
+# ----------------------------------------------------------------------
+# Run each test not excepted in Part 1:
+
+set( TESTS_TO_RUN ${BUILD} ${BUILD_BOOST} ${HANDBUILT} ${PREBUILT} )
+list( REMOVE_ITEM TESTS_TO_RUN ${HANDRUN} )
+foreach( test ${TESTS_TO_RUN} )
   add_test( ${test} ${EXECUTABLE_OUTPUT_PATH}/${test} )
-endforeach( test ${TEST_LIST} )
+endforeach( test )
 
 # ----------------------------------------------------------------------
-# Run the MANUALLY_RUN_TESTS:
+# HANDRUN:
 
 add_test( search_path_test_2.sh
           ${EXECUTABLE_OUTPUT_PATH}/search_path_test_2.sh
           ${EXECUTABLE_OUTPUT_PATH}
-        )
+)
+
+add_test( inc-expand_test.sh
+          ${EXECUTABLE_OUTPUT_PATH}/inc-expand_test.sh
+          ${EXECUTABLE_OUTPUT_PATH}
+)
 
 # ======================================================================
