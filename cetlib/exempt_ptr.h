@@ -53,12 +53,14 @@ namespace cet {
   template< class Element >
     class exempt_ptr;
 
+#if defined CPP0X_HAS_NULLPTR_T
   template< class Element >
   bool
     operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept;
   template< class Element >
   bool
     operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept;
+#endif
   template< class Element >
   void
     swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept;
@@ -183,6 +185,7 @@ private:
 // ----------------------------------------------------------------------
 
 // --- provide commutative (in)equality with nullptr_t:
+#if defined CPP0X_HAS_NULLPTR_T
 template< class Element >
 bool
   cet::operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
@@ -191,6 +194,7 @@ template< class Element >
 bool
   cet::operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
 { return ! other.empty(); }
+#endif
 
 // --- non-member swap:
 template< class Element >
