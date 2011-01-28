@@ -97,8 +97,13 @@ void
       std::ifstream f( paths.find_file(fname).c_str()
                      , std::ios_base::in
                      );
-      if( ! f )
-        throw include_exception(cant_open) << line;
+      if( ! f ) {
+        std::string printed_paths = paths[0];
+        for( int k = 1; k != paths.size(); ++k )
+          printed_paths += ':' + paths[k];
+        throw include_exception(cant_open) << fname
+          << "\nusing path: " << printed_paths;
+      }
       include(f, result);
     }
   }  // for
