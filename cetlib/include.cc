@@ -7,6 +7,7 @@
 #include "cetlib/include.h"
 
 #include "cetlib/coded_exception.h"
+#include "cetlib/filesystem.h"
 #include "cetlib/search_path.h"
 
 // ----------------------------------------------------------------------
@@ -84,25 +85,35 @@ void
     throw include_exception(cant_read);
 
   for( std::string line; std::getline(in, line);  ) {
-    if( line.find(include_lit) != 0 )  // ordinary line
+    if( line.find(include_lit) != 0 ) {  // ordinary line
       result.append(line)
             .append(1, '\n');
-    else if( line.end()[-1] != '\"' )  // #include is missing trailing quote
+      continue;
+    }
+
+    if( line.end()[-1] != '\"' )  // #include is missing its trailing quote
       throw include_exception(malformed) << line;
+
+    std::string fname( line.substr( include_sz
+                                  , line.size() - include_sz - 1
+                     )            );
+
+    if( is_absolute_filepath(fname) ) {
+      std::ifstream f( fname.c_str()
+                     , std::ios_base::in
+                     );
+      if( ! f )
+        throw include_exception(cant_open) << fname;
+      include(f, result);
+    }
     else {
       cet::search_path paths(search_path_arg);
-      std::string fname( line.substr( include_sz
-                                    , line.size() - include_sz - 1
-                       )            );
       std::ifstream f( paths.find_file(fname).c_str()
                      , std::ios_base::in
                      );
       if( ! f ) {
-        std::string printed_paths = paths[0];
-        for( int k = 1; k != paths.size(); ++k )
-          printed_paths += ':' + paths[k];
         throw include_exception(cant_open) << fname
-          << "\nusing path: " << printed_paths;
+          << "\nusing path: " << search_path_arg;
       }
       include(f, result);
     }
