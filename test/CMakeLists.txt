@@ -43,6 +43,7 @@ set( BUILD              # compile
 )
 
 set( BUILD_BOOST        # compile and link with BOOST_TEST library
+  is_absolute_filepath_t
 )
 
 set( HANDBUILT          # use target-specific build rules, found below

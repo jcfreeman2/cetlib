@@ -59,7 +59,7 @@ if( NOT GCC_VERSION )
 endif()
 message( STATUS "Using gcc ${GCC_VERSION}" )
 
-find_ups_boost( v1_45_0 filesystem regex )
+find_ups_boost( v1_45_0 filesystem regex unit_test_framework )
 find_ups_product( cpp0x v1_0_1 )
 
 # ----------------------------------------------------------------------
