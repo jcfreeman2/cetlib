@@ -19,4 +19,18 @@ bool
                   );
 }
 
+// ----------------------------------------------------------------------
+
+bool
+  cet::is_absolute_filepath( std::string const & qualified_filename )
+{
+  return qualified_filename[0] == '/';
+}
+
+bool
+  cet::is_relative_filepath( std::string const & qualified_filename )
+{
+  return ! is_absolute_filepath(qualified_filename);
+}
+
 // ======================================================================
