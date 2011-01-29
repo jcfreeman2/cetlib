@@ -63,14 +63,22 @@ test -n "$thisdir" && setenv CETLIB_BUILD $thisdir
 test -d "$thisdir/lib" || mkdir -p $thisdir/lib
 echo The workng build directory is $thisdir
 
-tnotnull CETLIB_BUILD && setenv LD_LIBRARY_PATH `echo :${LD_LIBRARY_PATH}: | sed -e "s|:${CETLIB_BUILD}/lib:|:|" -e 's|^:||;s|:$||'`; setenv LD_LIBRARY_PATH ${CETLIB_BUILD}/lib:${LD_LIBRARY_PATH}
+tnotnull CETLIB_BUILD && setenv LD_LIBRARY_PATH `echo :${LD_LIBRARY_PATH}: | sed -e "s|:${CETLIB_BUILD}/lib:|:|" -e 's|^:||;s|:$||'`
+tnotnull CETLIB_BUILD && setenv LD_LIBRARY_PATH ${CETLIB_BUILD}/lib:${LD_LIBRARY_PATH}
+setenv LD_LIBRARY_PATH `dropit -D "$LD_LIBRARY_PATH"`
+
+tnotnull CETLIB_BUILD && setenv PATH `echo :${PATH}: | sed -e "s|:${CETLIB_BUILD}/bin:|:|" -e 's|^:||;s|:$||'`
+tnotnull CETLIB_BUILD && setenv PATH ${CETLIB_BUILD}/bin:${PATH}
+setenv PATH `dropit -D`
 
 echo
 echo CETLIB_SOURCE=$CETLIB_SOURCE
 echo CETLIB_BUILD=$CETLIB_BUILD
 echo $thisdir/lib has been added to LD_LIBRARY_PATH
+echo $thisdir/bin has been added to PATH
 echo
 echo LD_LIBRARY_PATH is now ${LD_LIBRARY_PATH}
+echo PATH is now ${PATH}
 
 # cleanup before exiting
 test "$ss" = csh && unalias tnotnull nullout set_ vecho_
