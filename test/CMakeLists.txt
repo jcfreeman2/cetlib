@@ -68,7 +68,6 @@ set( DATAFILE           # install only
 set( HANDRUN            # use target-specific run rules, found below
   cpu_timer_test
   inc-expand_test
-  inc-expand_test.sh
   registry_via_id_test_2 # for now -- see test's source
   search_path_test_2
 )
@@ -147,10 +146,5 @@ endforeach( test )
 
 # ----------------------------------------------------------------------
 # HANDRUN:
-
-add_test( inc-expand_test.sh
-          ${EXECUTABLE_OUTPUT_PATH}/inc-expand_test.sh
-          ${EXECUTABLE_OUTPUT_PATH}
-)
 
 # ======================================================================
