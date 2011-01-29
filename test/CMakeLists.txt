@@ -71,7 +71,6 @@ set( HANDRUN            # use target-specific run rules, found below
   inc-expand_test.sh
   registry_via_id_test_2 # for now -- see test's source
   search_path_test_2
-  search_path_test_2.sh
 )
 
 # ======================================================================
@@ -148,11 +147,6 @@ endforeach( test )
 
 # ----------------------------------------------------------------------
 # HANDRUN:
-
-add_test( search_path_test_2.sh
-          ${EXECUTABLE_OUTPUT_PATH}/search_path_test_2.sh
-          ${EXECUTABLE_OUTPUT_PATH}
-)
 
 add_test( inc-expand_test.sh
           ${EXECUTABLE_OUTPUT_PATH}/inc-expand_test.sh
