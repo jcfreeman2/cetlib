@@ -25,9 +25,7 @@ search_path::search_path( std::string const & arg )
 : dirs( )
 , end ( )
 {
-  split( arg.find(':') == std::string::npos
-         ?  cet::getenv(arg)  // arg is an env var
-         :  arg               // arg is a path
+  split( cet::getenv(arg)
        , ':'
        , std::back_inserter(dirs)
        );
