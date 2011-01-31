@@ -23,8 +23,8 @@ namespace cet { namespace detail {
     translate( error code )
   {
     switch( code ) {
-      case cant_open  : return "Can't locate or can't open specified file";
-      case cant_read  : return "Can't read from supplied input stream";
+      case cant_open  : return "Can't locate or can't open specified file:";
+      case cant_read  : return "Can't read from supplied input stream:";
       case malformed  : return "Malformed #include directive:";
       default         : return "Unknown code";
     }
@@ -51,21 +51,23 @@ void
     throw include_exception(cant_read);
 
   for( std::string line; std::getline(in, line);  ) {
-    if( line.find(include_lit) != 0 )  // ordinary line
+    if( line.find(include_lit) != 0 ) {  // ordinary line
       result.append(line)
             .append(1, '\n');
-    else if( line.end()[-1] != '\"' )  // #include is missing trailing quote
-      throw include_exception(malformed) << line;
-    else {
-      std::ifstream f( line.substr( include_sz
-                                  , line.size() - include_sz - 1
-                                  ).c_str()
-                     , std::ios_base::in
-                     );
-      if( ! f )
-        throw include_exception(cant_open) << line;
-      include(f, result);
+      continue;
     }
+
+    if( line.end()[-1] != '\"' )  // #include is missing trailing quote
+      throw include_exception(malformed) << line;
+
+    std::string fname( line.substr( include_sz
+                                  , line.size() - include_sz - 1
+                     )            );
+
+    std::ifstream f(fname.c_str(), std::ios_base::in);
+    if( ! f )
+      throw include_exception(cant_open) << fname;
+    include(f, result);
   }  // for
 
 }  // include()
