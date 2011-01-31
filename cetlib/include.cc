@@ -81,6 +81,12 @@ void
   static std::string const include_lit("#include \"");
   std::size_t include_sz = include_lit.size();
 
+  cet::search_path paths(search_path_arg);
+  std::string      printable_paths = paths[0];
+  for( int k = 1; k != paths.size(); ++k )
+    printable_paths.append(1, ':')
+                   .append(paths[k]);
+
   if( ! in )
     throw include_exception(cant_read);
 
@@ -107,13 +113,12 @@ void
       include(f, result);
     }
     else {
-      cet::search_path paths(search_path_arg);
       std::ifstream f( paths.find_file(fname).c_str()
                      , std::ios_base::in
                      );
       if( ! f ) {
         throw include_exception(cant_open) << fname
-          << "\nusing path: " << search_path_arg;
+          << "\nusing path: " << printable_paths;
       }
       include(f, result);
     }
