@@ -6,6 +6,7 @@
 
 #include "cetlib/search_path.h"
 
+#include <algorithm>
 #include <iostream>
 #include <iterator>
 #include <string>
