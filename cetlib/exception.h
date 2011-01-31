@@ -138,6 +138,7 @@ namespace cet {
   private:
     mutable  std::ostringstream   ost_;
     CategoryList                  category_;
+    mutable std::string           what_;
 
     virtual  std::exception *  clone() const;
     virtual  void  rethrow();

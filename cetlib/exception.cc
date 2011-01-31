@@ -46,6 +46,7 @@ exception::exception( Category const & c )
   : std::exception( )
   , ost_          ( )
   , category_     ( 1, c )
+  , what_         ( )
 { }
 
 exception::exception( Category    const & c
@@ -53,6 +54,7 @@ exception::exception( Category    const & c
   : std::exception( )
   , ost_          ( )
   , category_     ( 1, c )
+  , what_         ( )
 {
   ost_ << m;
   if( ! ends_with_whitespace(m) )
@@ -65,6 +67,7 @@ exception::exception( Category    const & c
   : std::exception( )
   , ost_          ( )
   , category_     ( 1, c )
+  , what_         ( )
 {
   ost_ << m;
   if( ! ends_with_whitespace(m) )
@@ -83,6 +86,7 @@ exception::exception( exception const & other )
   : std::exception( )
   , ost_          ( )
   , category_     ( other.category_ )
+  , what_         ( other.what_ )
 {
   ost_ << other.ost_.str();
 }
@@ -93,7 +97,8 @@ exception::exception( exception const & other )
 char const *
   exception::what( ) const throw()
 {
-  return explain_self().c_str();
+  what_ = explain_self();
+  return what_.c_str();
 }
 
 std::string
