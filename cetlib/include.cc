@@ -112,7 +112,7 @@ void
                      );
       if( ! f )
         throw include_exception(cant_open) << fname;
-      include(f, result);
+      include(f, search_path_arg, result);
     }
     else {
       std::ifstream f( paths.find_file(fname).c_str()
@@ -122,7 +122,7 @@ void
         throw include_exception(cant_open) << fname
           << "\nusing path: " << printable_paths;
       }
-      include(f, result);
+      include(f, search_path_arg, result);
     }
   }  // for
 
