@@ -39,17 +39,13 @@ template< class K, class V >
   registry_via_id( registry_via_id const & );
   void  operator = ( registry_via_id const & );
 
-  // shorthand:
-  typedef  std::map<K const, V>            reg_t;
-  typedef  typename reg_t::size_type       size_t;
-  typedef  typename reg_t::const_iterator  iter_t;
-
 public:
-  typedef  K        key_type;
-  typedef  V        value_type;
-  typedef  reg_t    collection_type;
-  typedef  size_t   size_type;
-  typedef  iter_t   const_iterator;
+  typedef  std::map<K const, V>                      collection_type;
+  typedef  typename collection_type::key_type        key_type;
+  typedef  typename collection_type::mapped_type     mapped_type;
+  typedef  typename collection_type::value_type      value_type;
+  typedef  typename collection_type::size_type       size_type;
+  typedef  typename collection_type::const_iterator  const_iterator;
 
   // observers:
   static  bool
