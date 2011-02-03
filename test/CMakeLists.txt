@@ -33,6 +33,7 @@ set( BUILD              # compile
   registry_test
   registry_via_id_test
   registry_via_id_test_2 # for now -- see test's source
+  search_path_test
   search_path_test_2
   sha1_test
   split_path_test
