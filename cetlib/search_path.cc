@@ -40,6 +40,18 @@ search_path::search_path( std::string const & arg )
   if( dirs.empty() )
     throw cet::exception(exception_category) << "Path is empty.";
   end = dirs.end();
+}  // c'tor
+
+// ----------------------------------------------------------------------
+
+std::string
+  search_path::to_string( ) const
+{
+  std::string printable_path = dirs[0];
+  for( int k = 1; k != dirs.size(); ++k )
+    printable_path.append(1, ':')
+                  .append(dirs[k]);
+  return printable_path;
 }
 
 // ----------------------------------------------------------------------

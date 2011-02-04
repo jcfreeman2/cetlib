@@ -32,6 +32,8 @@ public:
     size( ) const  { return dirs.size(); }
   std::string const &
     operator [] ( int k ) const  { return dirs.at(k); }
+  std::string
+    to_string( ) const;
 
   // workers:
   std::string

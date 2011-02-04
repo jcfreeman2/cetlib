@@ -84,10 +84,6 @@ void
   std::size_t include_sz = include_lit.size();
 
   cet::search_path paths(search_path_arg);
-  std::string      printable_paths = paths[0];
-  for( int k = 1; k != paths.size(); ++k )
-    printable_paths.append(1, ':')
-                   .append(paths[k]);
 
   if( ! in )
     throw include_exception(cant_read);
@@ -120,7 +116,7 @@ void
                      );
       if( ! f ) {
         throw include_exception(cant_open) << fname
-          << "\nusing path: " << printable_paths;
+          << "\nusing path: " << paths.to_string();
       }
       include(f, search_path_arg, result);
     }
