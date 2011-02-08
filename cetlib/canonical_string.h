@@ -1,6 +1,9 @@
+#ifndef CETLIB_CANONICAL_STRING_H
+#define CETLIB_CANONICAL_STRING_H
+
 // ======================================================================
 //
-// canonical_string
+// canonical_string: transform a string into a canonical form
 //
 // ======================================================================
 
@@ -22,3 +25,5 @@ namespace cet {
 }
 
 // ======================================================================
+
+#endif

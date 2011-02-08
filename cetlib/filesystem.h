@@ -1,9 +1,9 @@
-#ifndef CETLIB_FILE_EXISTS_H
-#define CETLIB_FILE_EXISTS_H
+#ifndef CETLIB_FILESYSTEM_H
+#define CETLIB_FILESYSTEM_H
 
 // ======================================================================
 //
-// filesystem - file-level utilities
+// filesystem: file-level utilities
 //
 // ======================================================================
 

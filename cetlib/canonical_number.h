@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// canonical_number - transform a number string into a canonical form
+// canonical_number: transform a number string into a canonical form
 //
 // ======================================================================
 

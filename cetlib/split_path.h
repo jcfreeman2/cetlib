@@ -3,7 +3,8 @@
 
 // ======================================================================
 //
-// split_path
+// split_path: split the string 'path' into components delimited by a
+//             single colon. Adjacent colons result in an empty string.
 //
 // ======================================================================
 
@@ -12,8 +13,6 @@
 
 namespace cet
 {
-  // Split the string 'path' into components delimited by a single
-  // colon. Adjacent colons result in an empty string.
   void
     split_path( std::string const & path
               , std::vector<std::string> & components
