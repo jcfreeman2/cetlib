@@ -6,25 +6,29 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include "cetlib/include.h"
-#include <fstream>
+#include "cetlib/filepath_maker.h"
+#include "cetlib/includer.h"
+#include <algorithm>
 #include <iostream>
+#include <iterator>
 #include <string>
 
-// ----------------------------------------------------------------------
-
-bool
-  is_single_dash( char const * s ) { return s[0] == '-' && s[1] == '\0'; }
+cet::filepath_maker identity_filepath;
 
 // ----------------------------------------------------------------------
 
 int
-  do_including( std::istream & from, std::ostream & to )
+  do_including( std::string const & from, std::ostream & to )
 try
 {
-  std::string result;
-  cet::include(from, result);
-  to << result;
+  cet::includer inc(from, identity_filepath);
+
+  cet::includer::const_iterator it = inc.begin();
+  cet::includer::const_iterator end = inc.end();
+
+  std::ostream_iterator<char> out(to);
+  std::copy(it, end, out);
+
   return 0;
 }
 catch( cet::exception const & e )
@@ -39,18 +43,8 @@ int
 {
   int nfailures = 0;
 
-  if( argc == 1 )
-    nfailures += do_including(std::cin, std::cout);
-  else {
-    for( int k = 1; k != argc; ++k ) {
-      if( is_single_dash(argv[k]) )
-        nfailures += do_including(std::cin, std::cout);
-      else {
-        std::ifstream from(argv[k], std::ios_base::in);
-        nfailures += do_including(from, std::cout);
-      }
-    }
-  }
+  for( int k = 1; k != argc; ++k )
+    nfailures += do_including(argv[k], std::cout);
 
   return nfailures;
 
