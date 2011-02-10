@@ -1,6 +1,7 @@
 #!/bin/bash
 
-WORKDIR=`mktemp -d ${TMPDIR:-/tmp}/inc-expand_test.XXXXXXXXXX`
+TEST_PGM=inc-expand
+WORKDIR=`mktemp -d ${TMPDIR:-/tmp}/${TEST_PGM}.XXXXXXXXXX`
 [[ -n "$WORKDIR" ]] && [[ -d "$WORKDIR" ]] || [[ -w "$WORKDIR" ]] || exit 1
 
 # Clean up if we're not debugging.
@@ -9,7 +10,7 @@ WORKDIR=`mktemp -d ${TMPDIR:-/tmp}/inc-expand_test.XXXXXXXXXX`
 OUTPUT_FILE=${WORKDIR}/out.txt
 
 rm -rf ${OUTPUT_FILE}
-inc-expand > ${OUTPUT_FILE} <<EOF
+${TEST_PGM} > ${OUTPUT_FILE} <<EOF
 EOF
 STATUS=$?
 [[ ${STATUS}           ]] || exit ${STATUS}
@@ -17,7 +18,7 @@ STATUS=$?
 [[ ! -s ${OUTPUT_FILE} ]] || exit 12
 
 rm -rf ${OUTPUT_FILE}
-inc-expand - > ${OUTPUT_FILE} <<EOF
+${TEST_PGM} - > ${OUTPUT_FILE} <<EOF
 hello
 EOF
 STATUS=$?
@@ -26,7 +27,7 @@ STATUS=$?
 [[ -s ${OUTPUT_FILE} ]] || exit 22
 
 rm -rf ${OUTPUT_FILE}
-inc-expand a b c > ${OUTPUT_FILE}
+${TEST_PGM} a b c > ${OUTPUT_FILE}
 STATUS=$?
 [[ ${STATUS} == 3 ]] || exit ${STATUS}
 
@@ -53,7 +54,7 @@ there
 moo
 oink
 EOF
-inc-expand ${F3} > ${OUTPUT_FILE}
+${TEST_PGM} ${F3} > ${OUTPUT_FILE}
 STATUS=$?
 [[ ${STATUS}          ]] || exit ${STATUS}
 cmp ${FEXPECTED} ${OUTPUT_FILE} || exit 31
