@@ -22,9 +22,11 @@ set( LIB_HEADERS
   exception.h
   exception_collector.h
   exempt_ptr.h
+  filepath_maker.h
   filesystem.h
   getenv.h
   include.h
+  includer.h
   nybbler.h
   registry.h
   registry_via_id.h
@@ -41,9 +43,11 @@ set( LIB_SOURCES
   cpu_timer.cc
   exception.cc
   exception_collector.cc
+  filepath_maker.cc
   filesystem.cc
   getenv.cc
   include.cc
+  includer.cc
   nybbler.cc
   search_path.cc
   split_path.cc
