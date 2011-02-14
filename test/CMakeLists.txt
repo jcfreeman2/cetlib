@@ -44,6 +44,7 @@ set( BUILD              # compile
 
 set( BUILD_BOOST        # compile and link with BOOST_TEST library
   is_absolute_filepath_t
+  rpad_test
   search_path_test_3
 )
 
