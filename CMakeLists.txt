@@ -21,7 +21,7 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 
 project( cetlib )
 set( product cetlib )
-set( version v0_4_7 )
+set( version v0_4_8 )
 set( qualifier a1 )
 
 # cetbuildtools contains our cmake modules
@@ -60,7 +60,7 @@ endif()
 message( STATUS "Using gcc ${GCC_VERSION}" )
 
 find_ups_boost( v1_45_0 filesystem regex unit_test_framework )
-find_ups_product( cetbuildtools v1_7_3 )
+find_ups_product( cetbuildtools v1_7_4 )
 find_ups_product( cpp0x v1_0_1 )
 
 # ----------------------------------------------------------------------
