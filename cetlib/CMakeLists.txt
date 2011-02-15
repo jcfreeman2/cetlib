@@ -13,6 +13,7 @@ set( LIB_NAME ${PROJECT_NAME} )
 # Identify, by category, all files that comprise this library:
 
 set( LIB_HEADERS
+  rpad.h
   bit_manipulation.h
   canonical_number.h
   canonical_string.h
@@ -37,6 +38,7 @@ set( LIB_HEADERS
   value_ptr.h
 )
 set( LIB_SOURCES
+  rpad.cc
   detail/polarssl_sha1.cc
   canonical_number.cc
   canonical_string.cc

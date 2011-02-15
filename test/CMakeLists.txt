@@ -26,6 +26,7 @@ cet_test(nybbler_test)
 cet_test(registry_test)
 cet_test(registry_via_id_test)
 cet_test(registry_via_id_test_2 NO_AUTO) # for now -- see test's source
+cet_test(rpad_test USE_BOOST_UNIT)
 cet_test(search_path_test)
 cet_test(search_path_test_2 NO_AUTO)
 cet_test(search_path_test_2.sh PREBUILT
