@@ -8,7 +8,7 @@
 
 #include "cetlib/coded_exception.h"
 #include <algorithm>
-//#include <cassert>
+#include <cctype>
 #include <fstream>
 #include <iostream>
 #include <sstream>
@@ -146,8 +146,10 @@ void
     new_frame.starting_textpos = text.size();
     frames.push_back(new_frame);
 
-    // validate the rest of the #include's syntax:
-    if( line.end()[-1] != '\"' )  // #include is missing its trailing quote
+    // validate the rest of the #include line's syntax:
+    while( std::isspace(line.end()[-1]) )
+      line.erase(line.end()-1 );
+    if( line.end()[-1] != '\"' || line.size() == inc_sz)  // no trailing quote
       throw inc_exception(malformed) << line
         << "\n at line " << linenum << " of file " << filepath;
 
