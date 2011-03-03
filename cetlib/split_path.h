@@ -14,7 +14,7 @@
 namespace cet
 {
   void
-    split_path( std::string const & path
+    split_path( std::string const        & path
               , std::vector<std::string> & components
               );
 }
