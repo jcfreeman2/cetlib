@@ -36,6 +36,7 @@ set( LIB_HEADERS
   split.h
   split_path.h
   value_ptr.h
+  zero_init.h
 )
 set( LIB_SOURCES
   rpad.cc
