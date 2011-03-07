@@ -13,11 +13,11 @@ set( LIB_NAME ${PROJECT_NAME} )
 # Identify, by category, all files that comprise this library:
 
 set( LIB_HEADERS
-  rpad.h
   bit_manipulation.h
   canonical_number.h
   canonical_string.h
   coded_exception.h
+  column_width.h
   container_algorithms.h
   cpu_timer.h
   exception.h
@@ -32,6 +32,7 @@ set( LIB_HEADERS
   nybbler.h
   registry.h
   registry_via_id.h
+  rpad.h
   search_path.h
   sha1.h
   split.h
