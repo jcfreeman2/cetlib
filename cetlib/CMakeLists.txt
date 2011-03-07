@@ -28,6 +28,7 @@ set( LIB_HEADERS
   getenv.h
   include.h
   includer.h
+  maybe_ref.h
   nybbler.h
   registry.h
   registry_via_id.h
