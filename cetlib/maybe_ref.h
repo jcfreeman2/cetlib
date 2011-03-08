@@ -1,5 +1,5 @@
-#ifndef maybe_ref_HH
-#define maybe_ref_HH
+#ifndef MAYBE_REF_HH
+#define MAYBE_REF_HH
 
 // ======================================================================
 //
@@ -15,7 +15,7 @@
 // referent alive so long as there is a valid maybe_ref<> to it.
 //
 // Unlike a C++ reference, a maybe_ref<> object can be reseated (made to
-// refer to a different referent.
+// refer to a different referent).
 //
 // When invalid, a maybe_ref<> object throws if asked to produce a C++
 // reference.
