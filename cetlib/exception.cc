@@ -27,6 +27,22 @@ static  bool
   return s.empty() || *(s.end()-1) == '\n';
 }
 
+static  std::string
+indent_string( std::string const &s )
+{
+   static char const *indent = "  ";
+   std::string result(indent);
+   result.append(s);
+   size_t cpos = 0;
+   while ((cpos = result.find('\n', cpos)) != std::string::npos) {
+      ++cpos;
+      if (cpos != result.size()) {
+         result.insert(cpos, indent);
+      }
+   }
+   return result;
+}
+
 std::exception *
   exception::clone() const
 {
@@ -108,7 +124,7 @@ std::string
 
   ost << "---- " << category() << " BEGIN\n";
 
-  std::string part( ost_.str() );
+  std::string part( indent_string(ost_.str()) );
   ost << part;
   if( ! ends_with_newline(part) )
     ost << "\n";
