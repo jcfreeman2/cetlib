@@ -45,6 +45,7 @@
 //
 // ======================================================================
 
+#include "cpp0x/cstddef"
 #include "cpp0x/type_traits"
 #include <exception>
 #include <utility>
@@ -53,14 +54,12 @@ namespace cet {
   template< class Element >
     class exempt_ptr;
 
-#if defined CPP0X_HAS_NULLPTR_T
   template< class Element >
   bool
-    operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept;
+    operator == ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept;
   template< class Element >
   bool
-    operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept;
-#endif
+    operator != ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept;
   template< class Element >
   void
     swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept;
@@ -173,9 +172,9 @@ public:
 
   // --- additional interoperation with nullptr_t:
   bool
-    operator == ( nullptr_t ) noexcept  { return empty(); }
+    operator == ( std::nullptr_t ) noexcept  { return empty(); }
   bool
-    operator != ( nullptr_t ) noexcept  { return ! empty(); }
+    operator != ( std::nullptr_t ) noexcept  { return ! empty(); }
 
 private:
   pointer  p;
@@ -185,16 +184,14 @@ private:
 // ----------------------------------------------------------------------
 
 // --- provide commutative (in)equality with nullptr_t:
-#if defined CPP0X_HAS_NULLPTR_T
 template< class Element >
 bool
-  cet::operator == ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
+  cet::operator == ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept
 { return other.empty(); }
 template< class Element >
 bool
-  cet::operator != ( nullptr_t, exempt_ptr<Element> const & other ) noexcept
+  cet::operator != ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept
 { return ! other.empty(); }
-#endif
 
 // --- non-member swap:
 template< class Element >

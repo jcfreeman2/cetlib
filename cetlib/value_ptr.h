@@ -57,6 +57,7 @@
 //
 // ======================================================================
 
+#include "cpp0x/cstddef"
 #include "cpp0x/memory"
 #include "cpp0x/type_traits"
 #include <exception>
@@ -283,13 +284,13 @@ namespace cet {
 
     // --- additional interoperation with nullptr_t:
     value_ptr &
-      operator = ( nullptr_t )
+      operator = ( std::nullptr_t )
     { reset(); return *this; }
     bool
-      operator == ( nullptr_t )
+      operator == ( std::nullptr_t )
     { return empty(); }
     bool
-      operator != ( nullptr_t )
+      operator != ( std::nullptr_t )
     { return ! empty(); }
 
   private:
@@ -306,11 +307,11 @@ namespace cet {
   // --- provide commutative (in)equality with nullptr_t:
   template< class Element >
     bool
-    operator == ( nullptr_t, value_ptr<Element> const & other )
+    operator == ( std::nullptr_t, value_ptr<Element> const & other )
   { return other.empty(); }
   template< class Element >
     bool
-    operator != ( nullptr_t, value_ptr<Element> const & other )
+    operator != ( std::nullptr_t, value_ptr<Element> const & other )
   { return ! other.empty(); }
 
 
