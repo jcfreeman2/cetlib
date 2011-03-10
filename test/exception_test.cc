@@ -66,6 +66,16 @@ int
     }
   }
 
+  {
+     cet::exception e2("Inner");
+     e2 << "Secondary\nmultiline\nmessage.\n";
+     cet::exception e1("Outer", "", e2);
+     e1 << "Initial\nmultiline\nmessage.\n";
+     std::string wanted("---- Outer BEGIN\n  ---- Inner BEGIN\n    Secondary\n    multiline\n    message.\n  ---- Inner END\n  Initial\n  multiline\n  message.\n---- Outer END\n");
+     ensure( 15, wanted == e1.explain_self() );
+  }
+
+
   return 0;
 
 }  // main()
