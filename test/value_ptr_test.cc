@@ -19,6 +19,8 @@ int
   {
     value_ptr<int> p;
     ensure( 1, !p );
+    ensure( 2, p == nullptr );
+    ensure( 3, nullptr == p );
   }
 
   {
