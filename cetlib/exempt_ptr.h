@@ -171,11 +171,13 @@ public:
     operator < ( exempt_ptr<P> const & other ) noexcept
   { return get() < other.get(); }
 
+#if defined CPP0X_HAS_NULLPTR_T
   // --- additional interoperation with nullptr_t:
   bool
     operator == ( nullptr_t ) noexcept  { return empty(); }
   bool
     operator != ( nullptr_t ) noexcept  { return ! empty(); }
+#endif
 
 private:
   pointer  p;

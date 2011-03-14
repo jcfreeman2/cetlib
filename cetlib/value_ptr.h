@@ -281,6 +281,7 @@ namespace cet {
       operator < ( value_ptr<P> const & other )
     { return get() < other.get(); }
 
+#if defined CPP0X_HAS_NULLPTR_T
     // --- additional interoperation with nullptr_t:
     value_ptr &
       operator = ( nullptr_t )
@@ -291,6 +292,7 @@ namespace cet {
     bool
       operator != ( nullptr_t )
     { return ! empty(); }
+#endif
 
   private:
     pointer  p;
@@ -303,6 +305,7 @@ namespace cet {
   };  // value_ptr<>
 
 
+#if defined CPP0X_HAS_NULLPTR_T
   // --- provide commutative (in)equality with nullptr_t:
   template< class Element >
     bool
@@ -312,7 +315,7 @@ namespace cet {
     bool
     operator != ( nullptr_t, value_ptr<Element> const & other )
   { return ! other.empty(); }
-
+#endif
 
   // --- non-member swap:
   template< class Element >
