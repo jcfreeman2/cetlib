@@ -33,9 +33,9 @@ int
   ensure( 7, right_bits<uint,1>::value == 3u);
   ensure( 8, right_bits<uint,3>::value == 15u);
 
-  ensure( 11, left_bits<uint,0>::value ^ uint(-1) == right_bits<uint,32>::value );
-  ensure( 12, left_bits<uint,1>::value ^ uint(-1) == right_bits<uint,31>::value );
-  ensure( 13, left_bits<uint,3>::value ^ uint(-1) == right_bits<uint,29>::value );
+  ensure( 11, (left_bits<uint,0>::value ^ uint(-1)) == right_bits<uint,32>::value );
+  ensure( 12, (left_bits<uint,1>::value ^ uint(-1)) == right_bits<uint,31>::value );
+  ensure( 13, (left_bits<uint,3>::value ^ uint(-1)) == right_bits<uint,29>::value );
 
   for( uint k = 0, pow2 = 1; k != bit_size<uint>::value; ++k, pow2 *= 2 )
     ensure( 21+k, circ_lshift(1u,k) == pow2 );

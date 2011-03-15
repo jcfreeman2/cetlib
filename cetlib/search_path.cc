@@ -48,7 +48,7 @@ std::string
   search_path::to_string( ) const
 {
   std::string printable_path = dirs[0];
-  for( int k = 1; k != dirs.size(); ++k )
+  for( std::size_t k = 1; k != dirs.size(); ++k )
     printable_path.append(1, ':')
                   .append(dirs[k]);
   return printable_path;
@@ -79,9 +79,9 @@ bool
   for( std::vector<std::string>::const_iterator it = dirs.begin()
      ; it != end; ++it ) {
     std::string fullpath = *it + '/' + filename;
-    for( int k = fullpath.find("//"); k != std::string::npos
-                                    ; k = fullpath.find("//") )
+    for( std::size_t k;  (k = fullpath.find("//")) != std::string::npos;  ) {
       fullpath.erase(k,1);
+    }
     if( cet::file_exists(fullpath) )  {
       result = fullpath;
       return true;

@@ -46,7 +46,7 @@ int
   {
     try {
       search_path sp( ":/tmp:" );
-      std::string const & s = sp.find_file("");
+      sp.find_file("");
       ensure( 21, false );
     }
     catch( cet::exception const & e ) {
