@@ -1,4 +1,4 @@
-#define BOOST_TEST_MODULE ( is_absolute_filepath_t test )
+#define BOOST_TEST_MODULE ( rpad test )
 
 #include "boost/test/auto_unit_test.hpp"
 #include "cetlib/rpad.h"

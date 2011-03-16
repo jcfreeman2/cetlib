@@ -28,6 +28,7 @@ set( LIB_HEADERS
   getenv.h
   include.h
   includer.h
+  lpad.h
   maybe_ref.h
   nybbler.h
   registry.h
@@ -41,11 +42,10 @@ set( LIB_HEADERS
   zero_init.h
 )
 set( LIB_SOURCES
-  rpad.cc
-  detail/polarssl_sha1.cc
   canonical_number.cc
   canonical_string.cc
   cpu_timer.cc
+  detail/polarssl_sha1.cc
   exception.cc
   exception_collector.cc
   filepath_maker.cc
@@ -53,7 +53,9 @@ set( LIB_SOURCES
   getenv.cc
   include.cc
   includer.cc
+  lpad.cc
   nybbler.cc
+  rpad.cc
   search_path.cc
   split_path.cc
 )
