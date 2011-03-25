@@ -3,7 +3,7 @@
 #
 #  cd .../path/to/build/directory
 #  source .../path/to/cetlib/ups/setup_for_development
-#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path] .../path/to/cetlib
+#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path] [-DCMAKE_BUILD_TYPE=Debug] .../path/to/cetlib
 #  make
 #  make test
 #  make install
@@ -65,7 +65,7 @@ set( CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall" )
 message( STATUS "Using GCC ${GCC_VERSION} with ${CMAKE_CXX_FLAGS}" )
 
 find_ups_boost( v1_45_0 filesystem regex unit_test_framework )
-find_ups_product( cetbuildtools v1_08_00 )
+find_ups_product( cetbuildtools v1_10_00 )
 find_ups_product( cpp0x v1_0_15 )
 
 # ----------------------------------------------------------------------
