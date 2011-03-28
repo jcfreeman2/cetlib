@@ -25,20 +25,17 @@ search_path::search_path( std::string const & arg )
 : dirs( )
 , end ( )
 {
-  split( arg.find(':') == std::string::npos
-         ?  cet::getenv(arg)  // arg is an env var
-         :  arg               // arg is a path
-       , ':'
-       , std::back_inserter(dirs)
-       );
+  if( ! arg.empty() )
+    split( arg.find(':') == std::string::npos
+           ?  cet::getenv(arg)  // arg is an env var
+           :  arg               // arg is a path
+         , ':'
+         , std::back_inserter(dirs)
+         );
 
-  dirs.erase( std::remove( dirs.begin(), dirs.end()
-                         , std::string()
-                         )
-            , dirs.end()
-            );
   if( dirs.empty() )
-    throw cet::exception(exception_category) << "Path is empty.";
+    dirs.push_back( std::string() );
+
   end = dirs.end();
 }  // c'tor
 
@@ -69,8 +66,8 @@ std::string
 }  // find_file()
 
 bool
-  search_path::find_file( std::string   filename
-                        , std::string & result
+  search_path::find_file( std::string const &  filename
+                        , std::string       & result
                         ) const
 {
   if( filename.empty() )

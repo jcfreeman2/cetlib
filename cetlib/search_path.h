@@ -39,7 +39,7 @@ public:
   std::string
     find_file( std::string const & filename ) const;
   bool
-    find_file( std::string filename, std::string & result ) const;
+    find_file( std::string const & filename, std::string & result ) const;
   std::size_t
     find_files( std::string const        & filename_pattern
               , std::vector<std::string> & result

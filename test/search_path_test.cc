@@ -34,13 +34,13 @@ int
   }
 
   {
-    try {
-      search_path(":");
-      ensure( 11, false );
-    }
-    catch( cet::exception const & e ) {
-      ensure( 12, e.category() == "search_path" );
-    }
+    ensure( 11, ! search_path("").empty() );
+    ensure( 12, ! search_path(":").empty() );
+    ensure( 13, ! search_path("::").empty() );
+
+    ensure( 14, search_path("")  .size() == 1 );
+    ensure( 15, search_path(":") .size() == 1 );
+    ensure( 16, search_path("::").size() == 1 );
   }
 
   {
