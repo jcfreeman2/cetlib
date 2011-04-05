@@ -20,6 +20,7 @@ set( LIB_HEADERS
   column_width.h
   container_algorithms.h
   cpu_timer.h
+  demangle.h
   exception.h
   exception_collector.h
   exempt_ptr.h
@@ -45,6 +46,7 @@ set( LIB_SOURCES
   canonical_number.cc
   canonical_string.cc
   cpu_timer.cc
+  demangle.cc
   detail/polarssl_sha1.cc
   exception.cc
   exception_collector.cc
