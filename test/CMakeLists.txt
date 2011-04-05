@@ -27,6 +27,7 @@ cet_test(includer_test)
 cet_test(lpad_test USE_BOOST_UNIT)
 cet_test(maybe_ref_test USE_BOOST_UNIT)
 cet_test(nybbler_test)
+cet_test(pow_test USE_BOOST_UNIT)
 cet_test(registry_test)
 cet_test(registry_via_id_test)
 cet_test(registry_via_id_test_2 NO_AUTO) # for now -- see test's source
