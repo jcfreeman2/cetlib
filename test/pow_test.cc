@@ -16,6 +16,7 @@ BOOST_AUTO_TEST_CASE( zero ) {
   BOOST_CHECK( cet::pow<3>(0.0F) == 0.0F );
   BOOST_CHECK( cet::cube  (0.0L) == 0.0L );
   BOOST_CHECK( cet::pow<4>(0UL ) == 0UL  );
+  BOOST_CHECK( cet::fourth(0UL ) == 0UL  );
   BOOST_CHECK( cet::pow<5>(0L  ) == 0L   );
   BOOST_CHECK( cet::pow<9>(0.0 ) == 0.0  );
 }
@@ -28,6 +29,7 @@ BOOST_AUTO_TEST_CASE( one ) {
   BOOST_CHECK( cet::pow<3>(1.0F) == 1.0F );
   BOOST_CHECK( cet::cube  (1.0L) == 1.0L );
   BOOST_CHECK( cet::pow<4>(1UL ) == 1UL  );
+  BOOST_CHECK( cet::fourth(1UL ) == 1UL  );
   BOOST_CHECK( cet::pow<5>(1L  ) == 1L   );
   BOOST_CHECK( cet::pow<9>(1.0 ) == 1.0  );
 }
@@ -40,6 +42,7 @@ BOOST_AUTO_TEST_CASE( two ) {
   BOOST_CHECK( cet::pow<3>(2.0F) == 8.0F  );
   BOOST_CHECK( cet::cube  (2.0L) == 8.0L  );
   BOOST_CHECK( cet::pow<4>(2UL ) == 16UL  );
+  BOOST_CHECK( cet::fourth(2UL ) == 16UL  );
   BOOST_CHECK( cet::pow<5>(2L  ) == 32L   );
   BOOST_CHECK( cet::pow<9>(2.0 ) == 512.0 );
 }
