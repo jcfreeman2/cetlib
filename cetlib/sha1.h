@@ -7,8 +7,8 @@
 //
 // ======================================================================
 
-#include "cetlib/detail/polarssl_sha1.h"
 #include "cpp0x/array"
+#include "polarssl/sha1.h"
 #include <cstring>
 #include <string>
 
@@ -21,8 +21,9 @@ namespace cet {
 class cet::sha1
 {
 public:
-  typedef  unsigned char         uchar;
-  typedef  std::array<uchar,20>  digest_t;
+  static  std::size_t const             digest_sz  = 20;
+  typedef  unsigned char                uchar;
+  typedef  std::array<uchar,digest_sz>  digest_t;
 
   sha1( ) { reset(); }
   explicit
@@ -30,25 +31,25 @@ public:
   explicit
     sha1( char const mesg ) { reset(); operator<<(mesg); }
 
-  void  reset( ) { sha1_starts( & context ); }
+  void  reset( ) { polarssl::sha1_starts( & context ); }
 
   sha1 &
     operator << ( std::string const & mesg )
   {
-    sha1_update( & context
-               , (uchar const *)( & mesg[0] )
-               , mesg.size()
-               );
+    polarssl::sha1_update( & context
+                         , (uchar const *)( & mesg[0] )
+                         , mesg.size()
+                         );
     return *this;
   }
 
   sha1 &
     operator << ( char const mesg )
   {
-    sha1_update( & context
-               , (uchar const *)( & mesg )
-               , 1u
-               );
+    polarssl::sha1_update( & context
+                         , (uchar const *)( & mesg )
+                         , 1u
+                         );
     return *this;
   }
 
@@ -56,13 +57,13 @@ public:
     digest( )
   {
     digest_t result;
-    sha1_finish( & context, & result[0] );
-    std::memset( & context, 0, sizeof(sha1_context) );
+    polarssl::sha1_finish( & context, & result[0] );
+    std::memset( & context, 0, sizeof(polarssl::sha1_context) );
     return result;
   }
 
 private:
-  sha1_context  context;
+  polarssl::sha1_context  context;
 
 };  // sha1
 

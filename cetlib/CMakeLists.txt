@@ -43,11 +43,11 @@ set( LIB_HEADERS
   zero_init.h
 )
 set( LIB_SOURCES
+  ../polarssl/sha1.cc
   canonical_number.cc
   canonical_string.cc
   cpu_timer.cc
   demangle.cc
-  detail/polarssl_sha1.cc
   exception.cc
   exception_collector.cc
   filepath_maker.cc
@@ -73,9 +73,10 @@ add_library( ${LIB_NAME} SHARED ${LIB_SOURCES} )
 
 install( FILES ${LIB_HEADERS}
          DESTINATION ${product}/${version}/include/${LIB_NAME} )
-install( FILES detail/polarssl_config.h
-               detail/polarssl_sha1.h
-        DESTINATION ${product}/${version}/include/${LIB_NAME}/detail )
+install( FILES ../polarssl/config.h
+               ../polarssl/version.h
+               ../polarssl/sha1.h
+        DESTINATION ${product}/${version}/include/polarssl )
 install( TARGETS ${LIB_NAME}
          DESTINATION ${flavorqual_dir}/lib )
 
