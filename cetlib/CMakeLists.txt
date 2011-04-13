@@ -20,6 +20,7 @@ set( LIB_HEADERS
   column_width.h
   container_algorithms.h
   cpu_timer.h
+  crc32.h
   demangle.h
   exception.h
   exception_collector.h
@@ -47,6 +48,7 @@ set( LIB_SOURCES
   canonical_number.cc
   canonical_string.cc
   cpu_timer.cc
+  crc32.cc
   demangle.cc
   exception.cc
   exception_collector.cc
