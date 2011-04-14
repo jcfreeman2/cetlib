@@ -32,6 +32,7 @@ set( LIB_HEADERS
   includer.h
   lpad.h
   maybe_ref.h
+  md5.h
   nybbler.h
   registry.h
   registry_via_id.h
@@ -44,6 +45,7 @@ set( LIB_HEADERS
   zero_init.h
 )
 set( LIB_SOURCES
+  ../polarssl/md5.cc
   ../polarssl/sha1.cc
   canonical_number.cc
   canonical_string.cc
@@ -77,6 +79,7 @@ install( FILES ${LIB_HEADERS}
          DESTINATION ${product}/${version}/include/${LIB_NAME} )
 install( FILES ../polarssl/config.h
                ../polarssl/version.h
+               ../polarssl/md5.h
                ../polarssl/sha1.h
         DESTINATION ${product}/${version}/include/polarssl )
 install( TARGETS ${LIB_NAME}
