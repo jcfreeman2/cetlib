@@ -47,6 +47,7 @@ cet_test(sha1_test_performance NO_AUTO
 cet_test(sha1_test_2 SOURCES sha1_test_2.cc sha1.cpp)
 cet_test(split_path_test)
 cet_test(split_test)
+cet_test(trim_test USE_BOOST_UNIT)
 cet_test(value_ptr_test)
 cet_test(value_ptr_test_2)
 cet_test(is_absolute_filepath_t USE_BOOST_UNIT)
