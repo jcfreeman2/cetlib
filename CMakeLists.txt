@@ -46,6 +46,7 @@ include( FindUpsPackage )
 include( FindUpsBoost )
 include( SetFlavorQual )
 include( ParseUpsVersion )
+include( InstallSource )
 
 #set package version from ups version
 set_version_from_ups( ${version} )
@@ -83,6 +84,7 @@ set( EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin )
 # Describe source tree layout:
 
 add_subdirectory( ${PROJECT_NAME} )  # source code
+add_subdirectory( polarssl )         # externally-imported code
 add_subdirectory( test )             # test code
 add_subdirectory( ups )              # ups files
 
