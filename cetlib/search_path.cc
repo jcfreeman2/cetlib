@@ -66,7 +66,7 @@ std::string
 }  // find_file()
 
 bool
-  search_path::find_file( std::string const &  filename
+  search_path::find_file( std::string const & filename
                         , std::string       & result
                         ) const
 {

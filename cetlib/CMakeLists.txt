@@ -31,9 +31,11 @@ set( LIB_HEADERS
   include.h
   includer.h
   lpad.h
+  map_vector.h
   maybe_ref.h
   md5.h
   nybbler.h
+  pow.h
   registry.h
   registry_via_id.h
   rpad.h
@@ -41,6 +43,7 @@ set( LIB_HEADERS
   sha1.h
   split.h
   split_path.h
+  trim.h
   value_ptr.h
   zero_init.h
 )
