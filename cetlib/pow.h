@@ -14,7 +14,7 @@ namespace cet {
 
   template< unsigned N, class T >  inline T  pow( T x );
 
-  template< class T >  inline T  sqr   ( T x )  { return pow<2u>(x); }
+  template< class T >  inline T  square( T x )  { return pow<2u>(x); }
   template< class T >  inline T  cube  ( T x )  { return pow<3u>(x); }
   template< class T >  inline T  fourth( T x )  { return pow<4u>(x); }
 }
