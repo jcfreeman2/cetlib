@@ -17,6 +17,9 @@ namespace cet {
   template< class T >  inline T  square( T x )  { return pow<2u>(x); }
   template< class T >  inline T  cube  ( T x )  { return pow<3u>(x); }
   template< class T >  inline T  fourth( T x )  { return pow<4u>(x); }
+
+  template< class T >  inline T  sum_of_squares ( T x, T y );
+  template< class T >  inline T  diff_of_squares( T x, T y );
 }
 
 namespace cet { namespace detail {
@@ -77,6 +80,16 @@ template< class T >
 {
   T  operator () ( T x ) { return x * x; }
 };  // pow<2,T,0>
+
+// ----------------------------------------------------------------------
+
+template< class T >
+inline T
+  cet::sum_of_squares( T x, T y )  { return square(x) + square(y); }
+
+template< class T >
+inline T
+  cet::diff_of_squares( T x, T y )  { return (x+y) * (x-y); }
 
 // ======================================================================
 
