@@ -18,8 +18,9 @@ namespace cet {
   template< class T >  inline T  cube  ( T x )  { return pow<3u>(x); }
   template< class T >  inline T  fourth( T x )  { return pow<4u>(x); }
 
-  template< class T >  inline T  sum_of_squares ( T x, T y );
   template< class T >  inline T  diff_of_squares( T x, T y );
+  template< class T >  inline T  sum_of_squares ( T x, T y );
+  template< class T >  inline T  sum_of_squares ( T x, T y, T z );
 }
 
 namespace cet { namespace detail {
@@ -40,7 +41,8 @@ namespace cet { namespace detail {
 
 template< unsigned N, class T >
 inline T
-  cet::pow( T x ) { return detail::pow<N,T>()( x ); }
+  cet::pow( T x )
+{ return detail::pow<N,T>()( x ); }
 
 // ----------------------------------------------------------------------
 
@@ -48,14 +50,18 @@ template< unsigned N, class T >
   struct cet::detail::pow<N,T,0u>
 {
   pow<N/2u,T> pow_half;
-  T  operator () ( T x ) { return pow_half(x * x); }
+  T
+    operator () ( T x )
+  { return pow_half(x * x); }
 };  // pow<N,T,0>
 
 template< unsigned N, class T >
   struct cet::detail::pow<N,T,1u>
 {
   pow<N/2u,T> pow_half;
-  T  operator () ( T x ) { return x * pow_half(x * x); }
+  T
+    operator () ( T x )
+  { return x * pow_half(x * x); }
 };  // pow<N,T,1>
 
 template< class T >
@@ -85,11 +91,18 @@ template< class T >
 
 template< class T >
 inline T
-  cet::sum_of_squares( T x, T y )  { return square(x) + square(y); }
+  cet::diff_of_squares( T x, T y )
+{ return (x+y) * (x-y); }
 
 template< class T >
 inline T
-  cet::diff_of_squares( T x, T y )  { return (x+y) * (x-y); }
+  cet::sum_of_squares( T x, T y )
+{ return square(x) + square(y); }
+
+template< class T >
+inline T
+  cet::sum_of_squares( T x, T y, T z )
+{ return square(x) + square(y) + square(z); }
 
 // ======================================================================
 
