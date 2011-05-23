@@ -11,13 +11,13 @@
 
 #include "cetlib/exception.h"
 #include "cpp0x/algorithm"
-#include "cpp0x/cstdint"
 #include <iostream>
 #include <stdexcept>
 #include <vector>
 
 namespace cet  {
   class map_vector_key;
+
   bool  operator == ( map_vector_key const &, map_vector_key const & );
   bool  operator != ( map_vector_key const &, map_vector_key const & );
   bool  operator <  ( map_vector_key const &, map_vector_key const & );
@@ -25,7 +25,10 @@ namespace cet  {
   bool  operator <= ( map_vector_key const &, map_vector_key const & );
   bool  operator >= ( map_vector_key const &, map_vector_key const & );
 
+  std::ostream &  operator << ( std::ostream &, map_vector_key const & );
+
   template< class Value>  class map_vector;
+
   template< class Value >
   bool
     operator < ( typename map_vector<Value>::value_type const &
@@ -39,18 +42,18 @@ class cet::map_vector_key
 {
 public:
   // c'tors:
-  map_vector_key( )                            : key_(-1)   { }
-  explicit map_vector_key( std::int32_t  key ) : key_(key)  { }
-  explicit map_vector_key( std::uint32_t key ) : key_(key)  { }
+  map_vector_key( )                       : key_(-1)   { }
+  explicit map_vector_key( int      key ) : key_(key)  { }
+  explicit map_vector_key( unsigned key ) : key_(key)  { }
 
   // use compiler-generated copy c'tor, copy assignment, and d'tor
 
   // observers:
-  std::int32_t   asInt ( ) const  { return key_; }
-  std::uint32_t  asUint( ) const  { return key_; }
+  int       asInt ( ) const  { return key_; }
+  unsigned  asUint( ) const  { return key_; }
 
 private:
-  std::int32_t  key_;
+  int  key_;
 
 };  // map_vector_key
 
@@ -144,7 +147,7 @@ private:
   impl_type  v_;
 
   bool  class_invariant( ) const;
-  std::int32_t  delta( ) const  { return v_.empty() ? 0u : 1 + v_.back().first.asInt(); }
+  int  delta( ) const  { return v_.empty() ? 0u : 1 + v_.back().first.asInt(); }
 
 };  // map_vector<,>
 
@@ -177,6 +180,13 @@ inline bool
 inline bool
   cet::operator >= ( map_vector_key const & k1, map_vector_key const & k2 )
 { return k1.asInt() >= k2.asInt(); }
+
+// ----------------------------------------------------------------------
+// output:
+
+inline std::ostream &
+  operator << ( std::ostream & os, cet::map_vector_key const & key )
+{ return  os << key.asInt(); }
 
 // ======================================================================
 // additional map_vector<,> implementation
