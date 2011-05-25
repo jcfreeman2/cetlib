@@ -103,6 +103,8 @@ public:
   value_type  front( ) const  { return v_.empty() ? value_type() : v_.front(); }
   value_type  back ( ) const  { return v_.empty() ? value_type() : v_.back(); }
 
+  int  delta( ) const  { return v_.empty() ? 0 : 1 + v_.back().first.asInt(); }
+
   bool  has( key_type key ) const;
 
   iterator        find( key_type key );
@@ -147,9 +149,8 @@ private:
   impl_type  v_;
 
   bool  class_invariant( ) const;
-  int  delta( ) const  { return v_.empty() ? 0u : 1 + v_.back().first.asInt(); }
 
-};  // map_vector<,>
+};  // map_vector<>
 
 // ======================================================================
 // additional map_vector_key implementation
@@ -189,7 +190,7 @@ inline std::ostream &
 { return os << key.asInt(); }
 
 // ======================================================================
-// additional map_vector<,> implementation
+// additional map_vector<> implementation
 
 // ----------------------------------------------------------------------
 // observers:
@@ -307,8 +308,9 @@ template< class InIter >
 void
   cet::map_vector<Value>::insert( InIter b, InIter e )
 {
+  int d = delta();
   for(  ;  b != e;  ++b )
-    v_.push_back( std::make_pair(b->first.asInt() + delta(), b->second) );
+    v_.push_back( std::make_pair(b->first.asInt() + d, b->second) );
 }
 
 // ----------------------------------------------------------------------

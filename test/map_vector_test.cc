@@ -132,14 +132,23 @@ BOOST_AUTO_TEST_CASE( nonemptymap_test )
   {
     map_vector<value_t> m2(m);
     BOOST_CHECK( m2.size() == sz );
+
     m2.insert(m.begin(), m.end());
     BOOST_CHECK( m2.size() == 2 * sz );
     map_vector<value_t>::const_iterator b = m.begin();
-    for( map_vector<value_t>::const_iterator it = m2.begin();  it != m2.end();  ++b, ++it )  {
+    for( map_vector<value_t>::const_iterator it = m2.begin()
+                                           , e  = m2.end();  it != e;  ++b, ++it )  {
       if( b == m.end() )
         b = m.begin();
       BOOST_CHECK( b->second == it->second );
     }
+    int d = m.delta();
+    for( map_vector<value_t>::const_iterator b1 = m2.begin()
+                                           , b2 = b1 + sz
+                                           , e  = m2.end();  b2 != e;  ++b1, ++b2 )  {
+      BOOST_CHECK_EQUAL( b1->first.asInt() + d, b2->first.asInt() );
+    }
+
   }
 
 }
