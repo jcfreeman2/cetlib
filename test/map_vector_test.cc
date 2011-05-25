@@ -1,7 +1,9 @@
 #define BOOST_TEST_MODULE ( map_vector test )
 
 #include "boost/test/auto_unit_test.hpp"
+#include <boost/test/output_test_stream.hpp>
 #include "cetlib/map_vector.h"
+#include <iostream>
 #include <string>
 
 using cet::map_vector;
@@ -9,7 +11,41 @@ using cet::map_vector_key;
 
 BOOST_AUTO_TEST_SUITE( map_vector_test )
 
-BOOST_AUTO_TEST_CASE( empty_test )
+class cout_redirect
+{
+public:
+  cout_redirect( std::streambuf * new_buf )
+    : old_buf( std::cout.rdbuf(new_buf) )
+  { }
+
+  ~cout_redirect( )  { std::cout.rdbuf(old_buf); }
+
+private:
+  std::streambuf * old_buf;
+};
+
+BOOST_AUTO_TEST_CASE( key_test )
+{
+  {
+    boost::test_tools::output_test_stream output;
+    {
+      cout_redirect guard( output.rdbuf() );
+      map_vector_key k(3);
+      std::cout << k << std::endl;
+    }
+    BOOST_CHECK( output.is_equal("3\n") );
+  }
+
+  {
+    map_vector_key k1(11), k2(12);
+    BOOST_CHECK( k1 == k1 );
+    BOOST_CHECK( k1 != k2 );
+    BOOST_CHECK( k1 <= k2 );
+    BOOST_CHECK( k1 <  k2 );
+  }
+}
+
+BOOST_AUTO_TEST_CASE( emptymap_test )
 {
   map_vector_key k(3);
   {
@@ -35,7 +71,7 @@ BOOST_AUTO_TEST_CASE( empty_test )
   }
 }
 
-BOOST_AUTO_TEST_CASE( nonempty_test )
+BOOST_AUTO_TEST_CASE( nonemptymap_test )
 {
   typedef  int  value_t;
   map_vector<value_t> m;

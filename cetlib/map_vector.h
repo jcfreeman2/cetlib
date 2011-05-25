@@ -185,8 +185,8 @@ inline bool
 // output:
 
 inline std::ostream &
-  operator << ( std::ostream & os, cet::map_vector_key const & key )
-{ return  os << key.asInt(); }
+  cet::operator << ( std::ostream & os, cet::map_vector_key const & key )
+{ return os << key.asInt(); }
 
 // ======================================================================
 // additional map_vector<,> implementation
