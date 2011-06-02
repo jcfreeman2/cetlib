@@ -67,7 +67,7 @@ message( STATUS "Using GCC ${GCC_VERSION} with ${CMAKE_CXX_FLAGS}" )
 
 find_ups_boost( v1_45_0 filesystem regex unit_test_framework )
 find_ups_product( cetbuildtools v1_11_00 )
-find_ups_product( cpp0x v1_01_06 )
+find_ups_product( cpp0x v1_01_09 )
 
 # ----------------------------------------------------------------------
 # Describe include path:
