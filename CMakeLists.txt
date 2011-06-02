@@ -21,7 +21,7 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 
 project( cetlib )
 set( product cetlib )
-set( version v0_06_08 )
+set( version v1_00_00 )
 set( qualifier a2 )
 
 # cetbuildtools contains our cmake modules
