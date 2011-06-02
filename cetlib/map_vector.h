@@ -42,9 +42,10 @@ class cet::map_vector_key
 {
 public:
   // c'tors:
-  map_vector_key( )                       : key_(-1)   { }
-  explicit map_vector_key( int      key ) : key_(key)  { }
-  explicit map_vector_key( unsigned key ) : key_(key)  { }
+  map_vector_key( )                            : key_(-1)   { }
+  explicit map_vector_key( int           key ) : key_(key)  { }
+  explicit map_vector_key( unsigned      key ) : key_(key)  { }
+  explicit map_vector_key( unsigned long key ) : key_(key)  { }
 
   // use compiler-generated copy c'tor, copy assignment, and d'tor
 

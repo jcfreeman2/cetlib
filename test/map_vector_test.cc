@@ -43,6 +43,12 @@ BOOST_AUTO_TEST_CASE( key_test )
     BOOST_CHECK( k1 <= k2 );
     BOOST_CHECK( k1 <  k2 );
   }
+
+  {
+    map_vector_key k1(123u), k2(123uL);
+    BOOST_CHECK( k1 == k2 );
+  }
+
 }
 
 BOOST_AUTO_TEST_CASE( emptymap_test )
