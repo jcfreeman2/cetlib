@@ -106,35 +106,6 @@
  */
 
 /**
- * \def POLARSSL_DEBUG_MSG
- *
- * Enable all SSL/TLS debugging messages.
- */
-#define POLARSSL_DEBUG_MSG
-
-/**
- * \def POLARSSL_SELF_TEST
- *
- * Enable the checkup functions (*_self_test).
- */
-#define POLARSSL_SELF_TEST
-
-/**
- * \def POLARSSL_PKCS1_V21
- *
- * Enable support for PKCS#1 v2.1 encoding.
- * This enables support for RSAES-OAEP and RSASSA-PSS operations.
- */
-#define POLARSSL_PKCS1_V21
-
-/**
- * \def POLARSSL_GENPRIME
- *
- * Enable the prime-number generation code.
- */
-#define POLARSSL_GENPRIME
-
-/**
  * \def POLARSSL_AES_ROM_TABLES
  *
  * Store the AES tables in ROM.
@@ -145,6 +116,55 @@
  */
 
 /**
+ * \def POLARSSL_CIPHER_MODE_CFB
+ *
+ * Enable Cipher Feedback mode (CFB) for symmetric ciphers.
+ */
+#define POLARSSL_CIPHER_MODE_CFB
+
+/**
+ * \def POLARSSL_CIPHER_MODE_CTR
+ *
+ * Enable Counter Block Cipher mode (CTR) for symmetric ciphers.
+ */
+#define POLARSSL_CIPHER_MODE_CTR
+
+/**
+ * \def POLARSSL_DEBUG_MSG
+ *
+ * Requires: POLARSSL_DEBUG_C
+ *
+ * Enable all SSL/TLS debugging messages.
+ */
+#define POLARSSL_DEBUG_MSG
+
+/**
+ * \def POLARSSL_GENPRIME
+ *
+ * Requires: POLARSSL_BIGNUM_C, POLARSSL_RSA_C
+ *
+ * Enable the RSA prime-number generation code.
+ */
+#define POLARSSL_GENPRIME
+
+/**
+ * \def POLARSSL_FS_IO
+ *
+ * Enable functions that use the filesystem.
+ */
+#define POLARSSL_FS_IO
+
+/**
+ * \def POLARSSL_PKCS1_V21
+ *
+ * Requires: POLARSSL_MD_C, POLARSSL_RSA_C
+ *
+ * Enable support for PKCS#1 v2.1 encoding.
+ * This enables support for RSAES-OAEP and RSASSA-PSS operations.
+ */
+#define POLARSSL_PKCS1_V21
+
+/**
  * \def POLARSSL_RSA_NO_CRT
  *
  * Do not use the Chinese Remainder Theorem for the RSA private operation.
@@ -153,6 +173,13 @@
  *
 #define POLARSSL_RSA_NO_CRT
  */
+
+/**
+ * \def POLARSSL_SELF_TEST
+ *
+ * Enable the checkup functions (*_self_test).
+ */
+#define POLARSSL_SELF_TEST
 /* \} name */
 
 /**
@@ -198,9 +225,9 @@
  * Enable the Base64 module.
  *
  * Module:  library/base64.c
- * Caller:  library/x509parse.c
+ * Caller:  library/pem.c
  *
- * This module is required for X.509 support.
+ * This module is required for PEM support (required by X.509).
  */
 #define POLARSSL_BASE64_C
 
@@ -303,12 +330,26 @@
 #define POLARSSL_DHM_C
 
 /**
+ * \def POLARSSL_ERROR_C
+ *
+ * Enable error code to error string conversion.
+ *
+ * Module:  library/error.c
+ * Caller:
+ *
+ * This module enables err_strerror().
+ */
+#define POLARSSL_ERROR_C
+
+/**
  * \def POLARSSL_HAVEGE_C
  *
  * Enable the HAVEGE random generator.
  *
  * Module:  library/havege.c
  * Caller:
+ *
+ * Requires: POLARSSL_TIMING_C
  *
  * This module enables the HAVEGE random number generator.
  */
@@ -397,9 +438,27 @@
  * Module:  library/pem.c
  * Caller:  library/x509parse.c
  *
+ * Requires: POLARSSL_BASE64_C
+ *
  * This modules adds support for decoding PEM files.
  */
 #define POLARSSL_PEM_C
+
+/**
+ * \def POLARSSL_PKCS11_C
+ *
+ * Enable support for PKCS#11 smartcard support.
+ *
+ * Module:  library/ssl_srv.c
+ * Caller:  library/ssl_cli.c
+ *          library/ssl_srv.c
+ *
+ * Requires: POLARSSL_SSL_TLS_C
+ *
+ * This module is required for SSL/TLS PKCS #11 smartcard support.
+ * Requires the presence of the PKCS#11 helper library (libpkcs11-helper)
+#define POLARSSL_PKCS11_C
+ */
 
 /**
  * \def POLARSSL_RSA_C
@@ -411,6 +470,8 @@
  *          library/ssl_srv.c
  *          library/ssl_tls.c
  *          library/x509.c
+ *
+ * Requires: POLARSSL_BIGNUM_C
  *
  * This module is required for SSL/TLS and MD5-signed certificates.
  */
@@ -465,6 +526,8 @@
  * Module:  library/ssl_cli.c
  * Caller:
  *
+ * Requires: POLARSSL_SSL_TLS_C
+ *
  * This module is required for SSL/TLS client support.
  */
 #define POLARSSL_SSL_CLI_C
@@ -477,6 +540,8 @@
  * Module:  library/ssl_srv.c
  * Caller:
  *
+ * Requires: POLARSSL_SSL_TLS_C
+ *
  * This module is required for SSL/TLS server support.
  */
 #define POLARSSL_SSL_SRV_C
@@ -484,29 +549,17 @@
 /**
  * \def POLARSSL_SSL_TLS_C
  *
- * Enable the generic SSL/RLS code.
+ * Enable the generic SSL/TLS code.
  *
  * Module:  library/ssl_tls.c
  * Caller:  library/ssl_cli.c
  *          library/ssl_srv.c
  *
+ * Requires: POLARSSL_MD5_C, POLARSSL_SHA1_C, POLARSSL_X509_PARSE_C
+ *
  * This module is required for SSL/TLS.
  */
 #define POLARSSL_SSL_TLS_C
-
-/**
- * \def POLARSSL_PKCS11_C
- *
- * Enable support for PKCS#11 smartcard support.
- *
- * Module:  library/ssl_srv.c
- * Caller:  library/ssl_cli.c
- *          library/ssl_srv.c
- *
- * This module is required for SSL/TLS PKCS #11 smartcard support.
- * Requires the presence of the PKCS#11 helper library (libpkcs11-helper)
-#define POLARSSL_PKCS11_C
- */
 
 /**
  * \def POLARSSL_TIMING_C
@@ -540,6 +593,8 @@
  * Caller:  library/ssl_cli.c
  *          library/ssl_srv.c
  *          library/ssl_tls.c
+ *
+ * Requires: POLARSSL_BIGNUM_C, POLARSSL_RSA_C
  *
  * This module is required for X.509 certificate parsing.
  */

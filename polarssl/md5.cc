@@ -34,8 +34,9 @@
 
 #include "polarssl/md5.h"
 
-#include <string.h>
+#if defined(POLARSSL_FS_IO) || defined(POLARSSL_SELF_TEST)
 #include <stdio.h>
+#endif
 
 #ifdef __cplusplus
 namespace polarssl {
@@ -204,9 +205,9 @@ static void md5_process( md5_context *ctx, const unsigned char data[64] )
 /*
  * MD5 process buffer
  */
-void md5_update( md5_context *ctx, const unsigned char *input, int ilen )
+void md5_update( md5_context *ctx, const unsigned char *input, size_t ilen )
 {
-    int fill;
+    size_t fill;
     unsigned long left;
 
     if( ilen <= 0 )
@@ -215,7 +216,7 @@ void md5_update( md5_context *ctx, const unsigned char *input, int ilen )
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
 
-    ctx->total[0] += ilen;
+    ctx->total[0] += (unsigned long) ilen;
     ctx->total[0] &= 0xFFFFFFFF;
 
     if( ctx->total[0] < (unsigned long) ilen )
@@ -284,7 +285,7 @@ void md5_finish( md5_context *ctx, unsigned char output[16] )
 /*
  * output = MD5( input buffer )
  */
-void md5( const unsigned char *input, int ilen, unsigned char output[16] )
+void md5( const unsigned char *input, size_t ilen, unsigned char output[16] )
 {
     md5_context ctx;
 
@@ -295,6 +296,7 @@ void md5( const unsigned char *input, int ilen, unsigned char output[16] )
     memset( &ctx, 0, sizeof( md5_context ) );
 }
 
+#if defined(POLARSSL_FS_IO)
 /*
  * output = MD5( file contents )
  */
@@ -326,13 +328,14 @@ int md5_file( const char *path, unsigned char output[16] )
     fclose( f );
     return( 0 );
 }
+#endif /* POLARSSL_FS_IO */
 
 /*
  * MD5 HMAC context setup
  */
-void md5_hmac_starts( md5_context *ctx, const unsigned char *key, int keylen )
+void md5_hmac_starts( md5_context *ctx, const unsigned char *key, size_t keylen )
 {
-    int i;
+    size_t i;
     unsigned char sum[16];
 
     if( keylen > 64 )
@@ -360,7 +363,7 @@ void md5_hmac_starts( md5_context *ctx, const unsigned char *key, int keylen )
 /*
  * MD5 HMAC process buffer
  */
-void md5_hmac_update( md5_context *ctx, const unsigned char *input, int ilen )
+void md5_hmac_update( md5_context *ctx, const unsigned char *input, size_t ilen )
 {
     md5_update( ctx, input, ilen );
 }
@@ -393,8 +396,8 @@ void md5_hmac_reset( md5_context *ctx )
 /*
  * output = HMAC-MD5( hmac key, input buffer )
  */
-void md5_hmac( const unsigned char *key, int keylen,
-               const unsigned char *input, int ilen,
+void md5_hmac( const unsigned char *key, size_t keylen,
+               const unsigned char *input, size_t ilen,
                unsigned char output[16] )
 {
     md5_context ctx;
