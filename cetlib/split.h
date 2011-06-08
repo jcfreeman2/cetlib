@@ -22,18 +22,18 @@
 namespace cet  {
   template< class OutIter >
   void
-    split( std::string s, char c, OutIter dest );
+    split( std::string const & s, char c, OutIter dest );
 
   template< class Pred, class OutIter >
   void
-    split_if( std::string s, Pred is_sep, OutIter dest );
+    split_if( std::string const & s, Pred is_sep, OutIter dest );
 }
 
 // ======================================================================
 
 template< class OutIter >
 void
-  cet::split( std::string s, char c, OutIter dest )
+  cet::split( std::string const & s, char c, OutIter dest )
 {
   using std::placeholders::_1;
 
@@ -60,7 +60,7 @@ namespace cet { namespace detail {
 
 template< class Pred, class OutIter >
 void
-  cet::split_if( std::string s, Pred is_sep, OutIter dest )
+  cet::split_if( std::string const & s, Pred is_sep, OutIter dest )
 {
   typedef  std::string::const_iterator  str_c_iter;
   str_c_iter  b = s.begin()
