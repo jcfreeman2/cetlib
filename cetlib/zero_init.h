@@ -34,23 +34,41 @@ public:
   zero_init( )       : val( static_cast<T>(0) )  { }
   zero_init( T val ) : val( val               )  { }
 
+  // use compiler-generated copy c'tor, copy assignment, and d'tor
+
 #if defined __GXX_EXPERIMENTAL_CXX0X__
-  template< class U
-          , class = typename std::enable_if< std::is_convertible<U,T>::value
+  template< class OT
+          , class = typename std::enable_if< std::is_convertible<OT,T>::value
                                            >::type
           >
-    zero_init( zero_init<U> const & other )
+    zero_init( zero_init<OT> const & other )
 #else
-  template< class U >
-    zero_init( zero_init<U> const & other
-             , typename std::enable_if< std::is_convertible<U,T>::value
+  template< class OT >
+    zero_init( zero_init<OT> const & other
+             , typename std::enable_if< std::is_convertible<OT,T>::value
                                       >::type * = 0
              )
 #endif
   : val( static_cast<T>(other) )
   { }
 
-  // use compiler-generated copy c'tor, copy assignment, and d'tor
+#if defined __GXX_EXPERIMENTAL_CXX0X__
+  template< class OT
+          , class = typename std::enable_if< std::is_convertible<OT,T>::value
+                                           >::type
+          >
+  zero_init &
+#else
+  template< class OT >
+  typename std::enable_if< std::is_convertible<OT,T>::value
+                         , zero_init &
+                         >::type
+#endif
+    operator = ( zero_init<OT> const & other )
+  {
+    val = static_cast<T>(other);
+    return *this;
+  }
 
   operator T_ref     ( )        { return val; }
   operator T const & ( ) const  { return val; }
