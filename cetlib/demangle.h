@@ -8,7 +8,9 @@
 #include <string>
 
 namespace cet {
-  std::string demangle(std::string const &mangled);
+  std::string demangle_symbol(std::string const &mangled);
+  std::string demangle_message(std::string const &mangled);
+  std::string demangle(std::string const &mangled); // Deprecated.
 }
 
 #endif /* cetlib_demangle_h */
