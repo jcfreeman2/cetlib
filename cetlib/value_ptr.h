@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// value_ptr - a pointer treating its pointee as-if contained by value
+// value_ptr: A pointer treating its pointee as-if contained by value
 //
 // ----------------------------------------------------------------------
 //

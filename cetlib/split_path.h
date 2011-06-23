@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// split_path: split the string 'path' into components delimited by a
+// split_path: Split the string 'path' into components delimited by a
 //             single colon. Adjacent colons result in an empty string.
 //
 // ======================================================================

@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// lpad: left-pad a string to the wanted size, unless already longer
+// lpad: Left-pad a string to the wanted size, unless already longer
 //
 // ======================================================================
 

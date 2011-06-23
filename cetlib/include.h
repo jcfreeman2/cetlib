@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// include - file ->string, interpolating #include'd files along the way
+// include: File->string, interpolating #include'd files along the way
 //
 // ======================================================================
 

@@ -1,6 +1,6 @@
 // ======================================================================
 //
-// cpu_timer: measure the cpu and wallclock times
+// cpu_timer: Measure the cpu and wallclock elapsed times
 //
 // ======================================================================
 

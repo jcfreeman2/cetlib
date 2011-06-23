@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// column_width: obtain the length of the longest in a vector of strings
+// column_width: Obtain the length of the longest in a vector of strings
 //
 // ======================================================================
 

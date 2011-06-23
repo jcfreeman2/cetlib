@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// maybe_ref<>: reference-like types that may refer to nothing
+// maybe_ref<>: Reference-like types that may refer to nothing
 //
 // A maybe_ref<> object has the following members of special interest:
 //   - isValid() : does it have a referent?

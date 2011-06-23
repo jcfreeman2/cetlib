@@ -1,9 +1,8 @@
 // ======================================================================
 //
-// nybble-processing
+// nybbler: Half-byte manipulations
 //
 // ======================================================================
-
 
 #include "cetlib/nybbler.h"
 
@@ -12,9 +11,7 @@ using cet::nybbler;
 typedef  unsigned char  uchar;
 typedef  std::string    string;
 
-
 // ======================================================================
-
 
 string
   nybbler::as_hex ( ) const
@@ -31,7 +28,6 @@ string
   return r;
 }
 
-
 string
   nybbler::as_char( ) const
 {
@@ -47,20 +43,17 @@ string
   return r;
 }
 
-
 uchar
   nybbler::msn( char ch )
 {
   return (uchar(ch) >> 4) & 0xF;
 }
 
-
 uchar
   nybbler::lsn( char ch )
 {
   return uchar(ch) & 0xF;
 }
-
 
 char
   nybbler::to_hex( uchar nyb )
@@ -75,7 +68,6 @@ char
       return '?';
   }
 }
-
 
 uchar
   nybbler::to_nyb( char hex )
@@ -93,13 +85,11 @@ uchar
   }
 }
 
-
 nybbler &
   nybbler::operator << ( string const & s )
 {
   s_ = s;
   return *this;
 }
-
 
 // ======================================================================

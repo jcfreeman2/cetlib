@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// trim:  remove a string's leading/trailing whitespace
+// trim: Remove a string's leading/trailing whitespace
 //
 // ======================================================================
 

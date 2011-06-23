@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// filepath_maker: a family of related policies governing the translation
+// filepath_maker: A family of related policies governing the translation
 //                 of a filename into a fully-qualified filepath
 //
 // ======================================================================

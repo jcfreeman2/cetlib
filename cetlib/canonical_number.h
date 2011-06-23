@@ -3,7 +3,10 @@
 
 // ======================================================================
 //
-// canonical_number: transform a number string into a canonical form
+// canonical_number: Transform a number string into a canonical form
+//
+// "Number string" is defined by the following regular expression:
+//      ^[-+]?([0-9]*\.?[0-9]+|[0-9]+\.?[0-9]*)([eE][-+]?[0-9]+)?$
 //
 // ======================================================================
 

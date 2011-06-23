@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// zero_init: wrap a value of native arithmetic or pointer type T,
+// zero_init: Wrap a value of native arithmetic or pointer type T,
 //            ensuring a default-initialized value of T(0)
 //
 // ======================================================================

@@ -1,6 +1,6 @@
 // ======================================================================
 //
-// getenv - obtain value of environment variable; throw if none such
+// getenv: Obtain value of environment variable; throw if none such
 //
 // ======================================================================
 

@@ -1,6 +1,8 @@
 // ======================================================================
 //
-// includer
+// includer: A container-like data structure that
+//           a) transparently handles #include'd files, and
+//           b) can trace back its iterators
 //
 // ======================================================================
 

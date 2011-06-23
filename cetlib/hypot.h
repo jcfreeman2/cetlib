@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// hypot: checked and unchecked Euclidean planar hypotenuse calculations
+// hypot: Checked and unchecked Euclidean planar hypotenuse calculations
 //
 // ======================================================================
 

@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// pow<>(): minimal-multiply algorithm for integral non-negative powers
+// pow<>(): Minimal-multiply algorithm for integral non-negative powers
 //
 // ======================================================================
 

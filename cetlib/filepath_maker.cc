@@ -1,6 +1,7 @@
 // ======================================================================
 //
-// filepath_maker
+// filepath_maker: A family of related policies governing the translation
+//                 of a filename into a fully-qualified filepath
 //
 // ======================================================================
 

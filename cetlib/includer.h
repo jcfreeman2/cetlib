@@ -3,14 +3,13 @@
 
 // ======================================================================
 //
-// includer: a container-like data structure that
-//   a) transparently handles #include'd files, and
-//   b) can trace back its iterators
+// includer: A container-like data structure that
+//           a) transparently handles #include'd files, and
+//           b) can trace back its iterators
 //
 // ======================================================================
 
 #include "cetlib/filepath_maker.h"
-//#include <iterator>
 #include <string>
 #include <vector>
 

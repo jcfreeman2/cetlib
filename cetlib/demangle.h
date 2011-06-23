@@ -1,9 +1,12 @@
 #ifndef cetlib_demangle_h
 #define cetlib_demangle_h
-////////////////////////////////////////////////////////////////////////
-// Call the cross-vendor API to demangle symbols (eg for ROOT dictionary
-// errors).
-////////////////////////////////////////////////////////////////////////
+
+// ======================================================================
+//
+// demangle: Call the cross-vendor API to demangle symbols
+//           (eg for ROOT dictionary errors).
+//
+// ======================================================================
 
 #include <string>
 

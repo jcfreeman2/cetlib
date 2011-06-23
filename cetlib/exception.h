@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-//  exception:  an exception type with category capability
+//  exception: An exception type with category capability
 //
 // ----------------------------------------------------------------------
 //

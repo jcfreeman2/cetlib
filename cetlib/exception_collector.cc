@@ -1,6 +1,8 @@
 // ======================================================================
 //
-// exception_collector
+// exception_collector: Ensure that each function/functor in a sequence
+//                      of calls is invoked even if a previous function
+//                      throws.
 //
 // ======================================================================
 

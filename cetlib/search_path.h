@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// search_path: seek filename or pattern in a given list of pathnames
+// search_path: Seek filename or pattern in a given list of pathnames
 //
 // ======================================================================
 

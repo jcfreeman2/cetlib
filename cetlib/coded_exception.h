@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-//  coded_exception:  a family of enumeration-based exception types
+//  coded_exception: A family of enumeration-based exception types
 //
 // ======================================================================
 

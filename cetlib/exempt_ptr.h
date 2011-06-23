@@ -3,9 +3,9 @@
 
 // ======================================================================
 //
-// exempt_ptr - a pointer taking no notice of its pointee's lifetime
-//              (thus exempt from any role in managing same, and thus
-//              copyable with no impact on its pointee)
+// exempt_ptr: A pointer taking no notice of its pointee's lifetime
+//             (thus exempt from any role in managing same, and thus
+//             copyable with no impact on its pointee)
 //
 // ----------------------------------------------------------------------
 //

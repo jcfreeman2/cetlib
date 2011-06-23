@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// rpad: right-pad a string to the wanted size, unless already longer
+// rpad: Right-pad a string to the wanted size, unless already longer
 //
 // ======================================================================
 

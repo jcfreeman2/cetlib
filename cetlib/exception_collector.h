@@ -3,9 +3,9 @@
 
 // ======================================================================
 //
-// exception_collector:  ensure that each function/functor in a sequence
-//                       of calls is invoked even if a previous function
-//                       throws.
+// exception_collector: Ensure that each function/functor in a sequence
+//                      of calls is invoked even if a previous function
+//                      throws.
 //
 // Each function/functor must take no arguments and return a void.  The
 // exception strings are saved in a cms::Exception for optional rethrow.

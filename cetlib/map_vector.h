@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// map_vector: a map mimicking a sparse vector interface
+// map_vector: A map mimicking a sparse vector interface
 //
 // Integer subscripting is unsupported and yields a compilation failure.
 //
@@ -27,7 +27,7 @@ namespace cet  {
 
   std::ostream &  operator << ( std::ostream &, map_vector_key const & );
 
-  template< class Value>  class map_vector;
+  template< class Value >  class map_vector;
 
   template< class Value >
   bool

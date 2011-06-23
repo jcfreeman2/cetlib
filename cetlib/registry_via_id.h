@@ -3,10 +3,8 @@
 
 // ======================================================================
 //
-// registry_via_id<K,V> - a singleton std::map<K,V>
-//
-// NOTE:
-//   V::id() is required to exist and to yield values of type K
+// registry_via_id<K,V>: A singleton std::map<K,V> requiring that V::id()
+//                       exists and yields values of type K
 //
 // ======================================================================
 

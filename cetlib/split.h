@@ -3,7 +3,7 @@
 
 // ======================================================================
 //
-// split: obtain substrings at a string's specified boundaries.
+// split: Obtain substrings at a string's specified boundaries.
 //
 // Examples of splitting with ':' as the separator:
 //    input     result

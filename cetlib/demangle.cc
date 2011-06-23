@@ -1,17 +1,28 @@
-#include "cetlib/demangle.h"
-#include "cetlib/split.h"
+// ======================================================================
+//
+// demangle: Call the cross-vendor API to demangle symbols
+//           (eg for ROOT dictionary errors).
+//
+// ======================================================================
 
-#include <cxxabi.h>
+#include "cetlib/demangle.h"
+
+#include "cetlib/split.h"
 #include <cstdlib>
+#include <cxxabi.h>
 #include <sstream>
 #include <vector>
 
 namespace {
-  struct buffer_sentry {
+
+  struct buffer_sentry
+  {
     buffer_sentry() : buf(0) { }
     ~buffer_sentry() { free(buf); }
+
     char * buf;
-  };
+  };  // buffer_sentry
+
 }
 
 std::string cet::demangle_symbol(std::string const &mangled) {
@@ -22,12 +33,8 @@ std::string cet::demangle_symbol(std::string const &mangled) {
                                       unmangled.buf,
                                       &length,
                                       &status);
-  if (unmangled.buf == NULL) {
-    return mangled; // Failure
-  } else {
-    std::string result(unmangled.buf);
-    return result;
-  }
+  if (unmangled.buf == NULL)  return mangled; // Failure
+  else                        return unmangled.buf;
 }
 
 std::string cet::demangle_message(std::string const &message) {
