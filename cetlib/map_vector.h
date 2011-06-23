@@ -43,20 +43,54 @@ class cet::map_vector_key
 public:
   // c'tors:
   map_vector_key( )                            : key_(-1)   { }
-  explicit map_vector_key( int           key ) : key_(key)  { }
+  explicit map_vector_key( int           key );
   explicit map_vector_key( unsigned      key ) : key_(key)  { }
-  explicit map_vector_key( unsigned long key ) : key_(key)  { }
+  explicit map_vector_key( unsigned long key );
 
   // use compiler-generated copy c'tor, copy assignment, and d'tor
 
   // observers:
-  int       asInt ( ) const  { return key_; }
+  unsigned  asInt ( ) const  { return key_; }
   unsigned  asUint( ) const  { return key_; }
+  void ensure_valid() const;
 
 private:
-  int  key_;
+  unsigned key_;
 
 };  // map_vector_key
+
+inline
+cet::map_vector_key::map_vector_key( int key )
+  : key_(key)
+{
+  if (key < 0) {
+    throw cet::exception("InvalidKey")
+      << "Negative key "
+      << key
+      << " not valid for map_vector_key.";
+  }
+}
+
+inline
+cet::map_vector_key::map_vector_key( unsigned long key )
+  : key_(key)
+{
+  if (key != key_) {
+    throw cet::exception("InvalidKey")
+      << "Key "
+      << key
+      << " too large for map_vector_key.";
+  }
+}
+
+inline
+void
+cet::map_vector_key::ensure_valid() const {
+  if (key_ == static_cast<unsigned>(-1)) { // Invalid key
+    throw cet::exception("InvalidKey")
+      << "Attempt to use an invalid cet::map_vector_key.";
+  }
+}
 
 // ======================================================================
 
@@ -104,7 +138,7 @@ public:
   value_type  front( ) const  { return v_.empty() ? value_type() : v_.front(); }
   value_type  back ( ) const  { return v_.empty() ? value_type() : v_.back(); }
 
-  int  delta( ) const  { return v_.empty() ? 0 : 1 + v_.back().first.asInt(); }
+  size_t  delta( ) const  { return v_.empty() ? 0 : 1 + v_.back().first.asInt(); }
 
   bool  has( key_type key ) const;
 
@@ -145,6 +179,9 @@ public:
 
   template< class InIter >
     void  insert( InIter b, InIter e );
+
+  // MUST UPDATE WHEN CLASS IS CHANGED!
+  static short Class_Version() { return 10; }
 
 private:
   impl_type  v_;
@@ -301,6 +338,7 @@ template< class Value >
 void
   cet::map_vector<Value>::push_back( value_type const & x )
 {
+  x.first.ensure_valid();
   v_.push_back( std::make_pair(x.first.asInt() + delta(), x.second) );
 }
 
@@ -309,9 +347,11 @@ template< class InIter >
 void
   cet::map_vector<Value>::insert( InIter b, InIter e )
 {
-  int d = delta();
-  for(  ;  b != e;  ++b )
+  size_t d = delta();
+  for(  ;  b != e;  ++b ) {
+    b->first.ensure_valid();
     v_.push_back( std::make_pair(b->first.asInt() + d, b->second) );
+  }
 }
 
 // ----------------------------------------------------------------------
