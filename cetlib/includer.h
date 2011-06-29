@@ -56,6 +56,7 @@ private:
                 , std::string const   & filename
                 , cet::filepath_maker & abs_filename
                 );
+  std::string  backtrace( uint from_frame ) const;
   void  debug   ( ) const;
 
 };  // includer

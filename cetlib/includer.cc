@@ -24,6 +24,7 @@ namespace { namespace detail {
   enum error { cant_open
              , cant_read
              , malformed
+             , recursive
              };
 
   std::string
@@ -33,6 +34,7 @@ namespace { namespace detail {
       case cant_open  : return "Can't locate or can't open specified file:";
       case cant_read  : return "Can't read from supplied input stream:";
       case malformed  : return "Malformed #include directive:";
+      case recursive  : return "Recursive #include directive:";
       default         : return "Unknown code";
     }
   }  // translate()
@@ -95,16 +97,8 @@ std::string
          << ", character " << charpos
          << ", of file \"" << this_frame.filename << '\"';
 
-  // append the backtrace:
-  for( uint k = frames[framenum].including_framenum
-     ; k != 0u
-     ; k = frames[k].including_framenum
-     ) {
-    result << "\nincluded from line " << frames[k].starting_linenum
-           << " of file \"" << frames[k].filename << '\"';
-   }
-
-  return result.str();
+  return result.str()
+       + backtrace( frames[framenum].including_framenum );
 
 }  // whereis()
 
@@ -119,15 +113,27 @@ void
   static std::string const inc_lit = std::string("#include \"");
   static std::size_t const inc_sz  = inc_lit.size();
 
+  // expand filename to obtain, per policy, absolute path to file:
   bool use_cin = filename == "-";
   std::string const filepath = use_cin ? filename
                                        : abs_filename(filename);
+
+  // check for recursive #inclusion:
+  for( uint k = 0u, e = frames.size(); k != e; ++k )
+    if( frames[k].filename == filepath )
+      throw inc_exception(recursive)
+         << filename << " => " << filepath
+         << backtrace( frames.size()-1 );
+
+  // open the #included file:
   std::ifstream ifs;
   if( ! use_cin )
     ifs.open(filepath.c_str(), std::ifstream::in);
   std::istream & f = use_cin ? std::cin : ifs;
   if( ! f )
-    throw inc_exception(cant_open) << filename << " => " << filepath;
+    throw inc_exception(cant_open)
+       << filename << " => " << filepath
+       << backtrace( frames.size()-1 );
 
   int linenum = 1;
   frame new_frame( including_framenum, filepath, linenum, text.size() );
@@ -153,7 +159,7 @@ void
       line.erase(line.end()-1 );
     if( line.end()[-1] != '\"' || line.size() == inc_sz)  // no trailing quote
       throw inc_exception(malformed) << line
-        << "\n at line " << linenum << " of file " << filepath;
+         << "\n at line " << linenum << " of file " << filepath;
 
     // process the #include:
     std::string nextfilename( line.substr( inc_sz
@@ -161,7 +167,7 @@ void
                             )            );
     include(frames.size()-1, nextfilename, abs_filename);
 
-    // prepare to resume:
+    // prepare to resume where we left off:
     new_frame.starting_linenum = linenum + 1;
     new_frame.starting_textpos = text.size();
   }  // for
@@ -170,6 +176,22 @@ void
   frames.push_back(new_frame);
 
 }  // include()
+
+// ----------------------------------------------------------------------
+
+std::string
+  includer::backtrace( uint from_frame ) const
+{
+  std::ostringstream result;
+  // append the backtrace:
+  for( uint k = from_frame; k != 0u; k = frames[k].including_framenum ) {
+    result << "\nincluded from line " << frames[k].starting_linenum
+           << " of file \"" << frames[k].filename << '\"';
+   }
+
+  return result.str();
+
+}  // backtrace()
 
 // ----------------------------------------------------------------------
 
@@ -184,8 +206,8 @@ void
          << frames[0].starting_textpos << "  "
          << frames[0].filename << '\n';
 
-  for( uint k = 1; k != frames.size(); ++k ) {
-    uint starting_textpos = frames[k-1].starting_textpos;
+  for( uint k = 1u; k != frames.size(); ++k ) {
+    uint starting_textpos = frames[k-1u].starting_textpos;
     result << "\nframe[" << k << "] "
            << frames[k].including_framenum << "  "
            << frames[k].starting_linenum << "  "
