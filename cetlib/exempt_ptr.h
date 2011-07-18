@@ -27,14 +27,15 @@
 //   austere_ptr, bare_ptr, blameless_ptr, classic_ptr,
 //   disinterested_ptr, disowned_ptr, disowning_ptr, dumb_ptr,
 //   emancipated_ptr, estranged_ptr, excused_ptr,
-//   faultless_ptr, freeagent_ptr, guiltless_ptr, handsoff_ptr,
+//   faultless_ptr, free_ptr, freeagent_ptr, guiltless_ptr, handsoff_ptr,
 //   ignorant_ptr, impartial_ptr, independent_ptr, innocent_ptr,
 //   just_a_ptr, legacy_ptr,
 //   naked_ptr, neutral_ptr, nonown_ptr, nonowning_ptr, notme_ptr,
 //   oblivious_ptr, observer_ptr, observing_ptr, open_ptr, ownerless_ptr,
 //   pointer, ptr, pure_ptr, quintessential_ptr,
 //   severe_ptr, simple_ptr, stark_ptr, straight_ptr,
-//   true_ptr, untainted_ptr, unyoked_ptr, virgin_ptr, visiting_ptr
+//   true_ptr, unmanaged_ptr, unowned_ptr, untainted_ptr, unyoked_ptr,
+//   virgin_ptr, visiting_ptr
 //
 // ----------------------------------------------------------------------
 //
@@ -96,7 +97,7 @@ public:
   : p( pointer() )
   { }
 
-  // --- use compiler-generated copy c'tor, copy assignment, d'tor
+  // --- use compiler-generated copy c'tor, copy assignment, and d'tor
 
   // --- copy from native pointer, possibly nullptr:
   explicit
@@ -117,9 +118,7 @@ public:
   { return empty() ? throw std::exception() : *get(); }
 
   // --- conversions:
-  EXPLICIT_CONV_OP
     operator bool    ( ) const noexcept  { return get(); }
-  EXPLICIT_CONV_OP
     operator pointer ( ) const noexcept  { return get(); }
 
   // --- smart pointer observing behaviors:
