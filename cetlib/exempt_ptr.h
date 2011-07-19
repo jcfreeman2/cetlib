@@ -99,14 +99,36 @@ public:
 
   // --- use compiler-generated copy c'tor, copy assignment, and d'tor
 
-  // --- copy from native pointer, possibly nullptr:
-  explicit
-    exempt_ptr( pointer p ) noexcept
-  : p( p )
+  // --- copying from native pointers, possibly nullptr:
+  template< class P >
+  CONSTEXPR_FCTN
+    exempt_ptr( P other
+              , typename std::enable_if< std::is_convertible< P, pointer
+                                                            >::value
+                                       >::type * = 0
+              ) noexcept
+  : p( other )
   { }
-  exempt_ptr &
-    operator = ( pointer p ) noexcept
-  { reset(p); return *this; }
+  template< class P >
+    typename std::enable_if< std::is_convertible<P,pointer>::value
+                           , exempt_ptr &
+                           >::type
+    operator = ( P other ) noexcept
+  { reset( other ); return *this; }
+
+  // --- copying from other exempt_ptr<>s:
+  template< class P >
+    exempt_ptr( exempt_ptr<P> const & other
+              , typename std::enable_if<is_compatible<P>::value>::type * = 0
+              ) noexcept
+  : p( other.get() )
+  { }
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , exempt_ptr &
+                           >::type
+    operator = ( exempt_ptr<P> const & other ) noexcept
+  { reset( other.get() ); return *this; }
 
   // --- pointer behaviors:
   reference
@@ -134,20 +156,6 @@ public:
     reset( pointer t = pointer() ) noexcept  { p = t; }
   void
     swap( exempt_ptr & other ) noexcept  { std::swap(p, other.p); }
-
-  // --- copying from other exempt_ptr<>s:
-  template< class P >
-    exempt_ptr( exempt_ptr<P> const & other
-              , typename std::enable_if<is_compatible<P>::value>::type * = 0
-              ) noexcept
-  : p( other.get() )
-  { }
-  template< class P >
-    typename std::enable_if< is_compatible<P>::value
-                           , exempt_ptr &
-                           >::type
-    operator = ( exempt_ptr<P> const & other ) noexcept
-  { reset( other.get() ); return *this; }
 
   // --- comparisons:
   template< class P >
