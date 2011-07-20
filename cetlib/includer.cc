@@ -9,7 +9,8 @@
 #include "cetlib/includer.h"
 
 #include "cetlib/coded_exception.h"
-#include <algorithm>
+#include "cetlib/trim.h"
+#include "cpp0x/algorithm"
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -110,11 +111,11 @@ void
                    , cet::filepath_maker & abs_filename
                    )
 {
-  static std::string const inc_lit = std::string("#include \"");
-  static std::size_t const inc_sz  = inc_lit.size();
+  static CONSTEXPR_VAR std::string inc_lit = std::string("#include");
+  static CONSTEXPR_VAR uint        min_sz  = inc_lit.size() + 3u;
 
   // expand filename to obtain, per policy, absolute path to file:
-  bool use_cin = filename == "-";
+  bool const use_cin = filename == "-";
   std::string const filepath = use_cin ? filename
                                        : abs_filename(filename);
 
@@ -155,15 +156,17 @@ void
     frames.push_back(new_frame);
 
     // validate the rest of the #include line's syntax:
-    while( std::isspace(line.end()[-1]) )
-      line.erase(line.end()-1 );
-    if( line.end()[-1] != '\"' || line.size() == inc_sz)  // no trailing quote
+    trim_right(line, " \t\n");
+    if(  line.size() <= min_sz                      // too short?
+      || line[8] != ' '                             // missing separator?
+      || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
+      )
       throw inc_exception(malformed) << line
          << "\n at line " << linenum << " of file " << filepath;
 
     // process the #include:
-    std::string nextfilename( line.substr( inc_sz
-                                         , line.size() - inc_sz - 1
+    std::string nextfilename( line.substr( min_sz - 1u
+                                         , line.size() - min_sz
                             )            );
     include(frames.size()-1, nextfilename, abs_filename);
 
@@ -172,7 +175,7 @@ void
     new_frame.starting_textpos = text.size();
   }  // for
 
-  // save last buffered text:
+  // save final buffered text:
   frames.push_back(new_frame);
 
 }  // include()
