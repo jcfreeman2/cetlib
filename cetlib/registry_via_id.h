@@ -10,7 +10,6 @@
 
 #include "cetlib/exception.h"
 #include "cpp0x/type_traits"
-#include <cassert>
 #include <iterator>
 #include <map>
 #include <stdexcept>
@@ -86,6 +85,7 @@ private:
 };  // registry_via_id<>
 
 // ----------------------------------------------------------------------
+// put() overloads:
 
 template< class K, class V >
 typename cet::detail::must_have_id<K,V>::type
@@ -104,7 +104,8 @@ void
   STATIC_ASSERT( (std::is_same< V
                               , typename std::iterator_traits<FwdIt>::value_type
                               >::value)
-               , "Iterator is inconsistent with registry's value_type!"
+               , "Iterator is inconsistent"
+                 " with cet::registry_via_id<>'s value_type!"
                );
   for( ; b != e; ++b )
     (void)put(*b);
@@ -121,6 +122,7 @@ void
 }
 
 // ----------------------------------------------------------------------
+// get() overloads:
 
 template< class K, class V >
 V const &
