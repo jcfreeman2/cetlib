@@ -21,6 +21,8 @@ int
     ensure( 1, !p );
     ensure( 2, p == nullptr );
     ensure( 3, nullptr == p );
+    ensure( 4, p == 0 );
+    ensure( 5, 0 == p );
   }
 
   {

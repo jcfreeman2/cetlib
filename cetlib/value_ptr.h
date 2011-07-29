@@ -67,7 +67,7 @@
 
 namespace cet {
 
-  namespace detail {
+  namespace _ {
 
     template< class T >
       struct has_clone
@@ -85,11 +85,11 @@ namespace cet {
       static  bool const  value = sizeof(test<T>(0)) == sizeof(yes_t);
     };  // has_clone<>
 
-  }  // namespace detail
+  }  // namespace _
 
   template< class Element
           , class Pointee = typename std::remove_reference<Element>::type
-          , bool = detail::has_clone<Pointee>::value
+          , bool = _::has_clone<Pointee>::value
           >
     class default_clone
   {
@@ -204,12 +204,17 @@ namespace cet {
     { return empty() ? throw std::exception() : *get(); }
 
     // --- conversions:
-    EXPLICIT_CONV_OP
-      operator bool    ( ) const noexcept
+#ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
+    explicit
+      operator bool ( ) const noexcept
     { return get(); }
-    EXPLICIT_CONV_OP
-      operator pointer ( ) const noexcept
-    { return get(); }
+#else
+  private:
+    struct _safe_ { int _bool_; };
+  public:
+      operator int _safe_::* ( ) const noexcept
+    { return get() ? & _safe_::_bool_ : 0; }
+#endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
 
     // --- smart pointer observing behaviors:
     bool
@@ -282,17 +287,6 @@ namespace cet {
       operator < ( value_ptr<P> const & other )
     { return get() < other.get(); }
 
-    // --- additional interoperation with nullptr_t:
-    value_ptr &
-      operator = ( std::nullptr_t )
-    { reset(); return *this; }
-    bool
-      operator == ( std::nullptr_t )
-    { return empty(); }
-    bool
-      operator != ( std::nullptr_t )
-    { return ! empty(); }
-
   private:
     pointer  p;
 
@@ -303,16 +297,6 @@ namespace cet {
 
   };  // value_ptr<>
 
-
-  // --- provide commutative (in)equality with nullptr_t:
-  template< class Element >
-    bool
-    operator == ( std::nullptr_t, value_ptr<Element> const & other )
-  { return other.empty(); }
-  template< class Element >
-    bool
-    operator != ( std::nullptr_t, value_ptr<Element> const & other )
-  { return ! other.empty(); }
 
   // --- non-member swap:
   template< class Element >
