@@ -21,6 +21,8 @@ int
     ensure( 11, !p );
     ensure( 12, p == nullptr );
     ensure( 13, nullptr == p );
+    ensure( 14, p == 0 );
+    ensure( 15, 0 == p );
   }
 
   { // non-const => const

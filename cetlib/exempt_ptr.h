@@ -56,14 +56,8 @@ namespace cet {
     class exempt_ptr;
 
   template< class Element >
-  bool
-    operator == ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept;
-  template< class Element >
-  bool
-    operator != ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept;
-  template< class Element >
   void
-    swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept;
+    swap( exempt_ptr<Element> &, exempt_ptr<Element> & ) noexcept;
 }
 
 // ======================================================================
@@ -140,8 +134,16 @@ public:
   { return empty() ? throw std::exception() : *get(); }
 
   // --- conversions:
+#ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
+  explicit
     operator bool    ( ) const noexcept  { return get(); }
-    operator pointer ( ) const noexcept  { return get(); }
+#else
+private:
+  struct _safe_ { int _bool_; };
+public:
+    operator int _safe_::* ( ) const noexcept
+  { return get() ? & _safe_::_bool_ : 0; }
+#endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
 
   // --- smart pointer observing behaviors:
   bool
@@ -177,12 +179,6 @@ public:
     operator < ( exempt_ptr<P> const & other ) noexcept
   { return get() < other.get(); }
 
-  // --- additional interoperation with nullptr_t:
-  bool
-    operator == ( std::nullptr_t ) noexcept  { return empty(); }
-  bool
-    operator != ( std::nullptr_t ) noexcept  { return ! empty(); }
-
 private:
   pointer  p;
 
@@ -190,19 +186,9 @@ private:
 
 // ----------------------------------------------------------------------
 
-// --- provide commutative (in)equality with nullptr_t:
-template< class Element >
-bool
-  cet::operator == ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept
-{ return other.empty(); }
-template< class Element >
-bool
-  cet::operator != ( std::nullptr_t, exempt_ptr<Element> const & other ) noexcept
-{ return ! other.empty(); }
-
 // --- non-member swap:
 template< class Element >
-void
+inline void
   cet::swap( exempt_ptr<Element> & x, exempt_ptr<Element> & y ) noexcept
 { x.swap(y); }
 
