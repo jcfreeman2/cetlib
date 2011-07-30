@@ -9,7 +9,7 @@ struct sometype;
 
 BOOST_AUTO_TEST_SUITE( name_of_test )
 
-BOOST_AUTO_TEST_CASE( unknown_t_test )
+BOOST_AUTO_TEST_CASE( unknown_type_test )
 {
   BOOST_CHECK_EQUAL( name_of<sometype   >::is(), "unknown-type"             );
   BOOST_CHECK_EQUAL( name_of<sometype * >::is(), "ptr-to_unknown-type"      );
@@ -45,21 +45,21 @@ BOOST_AUTO_TEST_CASE( fundamental_types_test )
   BOOST_CHECK_EQUAL( name_of<void>::is(), "void" );
 }
 
-BOOST_AUTO_TEST_CASE( composite_types_test )
+BOOST_AUTO_TEST_CASE( cv_types_test )
 {
   // const:
-  BOOST_CHECK_EQUAL( name_of<int         const>::is(), "const_int"   );
-  BOOST_CHECK_EQUAL( name_of<long        const>::is(), "const_long"  );
-  BOOST_CHECK_EQUAL( name_of<long long   const>::is(), "const_llong" );
-  BOOST_CHECK_EQUAL( name_of<short       const>::is(), "const_short" );
-  BOOST_CHECK_EQUAL( name_of<signed char const>::is(), "const_schar" );
+  BOOST_CHECK_EQUAL( name_of<int         const>::is(), "c_int"   );
+  BOOST_CHECK_EQUAL( name_of<long        const>::is(), "c_long"  );
+  BOOST_CHECK_EQUAL( name_of<long long   const>::is(), "c_llong" );
+  BOOST_CHECK_EQUAL( name_of<short       const>::is(), "c_short" );
+  BOOST_CHECK_EQUAL( name_of<signed char const>::is(), "c_schar" );
 
   // volatile:
-  BOOST_CHECK_EQUAL( name_of<unsigned char      volatile>::is(), "volatile_uchar" );
-  BOOST_CHECK_EQUAL( name_of<unsigned int       volatile>::is(), "volatile_uint"   );
-  BOOST_CHECK_EQUAL( name_of<unsigned long      volatile>::is(), "volatile_ulong"  );
-  BOOST_CHECK_EQUAL( name_of<unsigned long long volatile>::is(), "volatile_ullong" );
-  BOOST_CHECK_EQUAL( name_of<unsigned short     volatile>::is(), "volatile_ushort" );
+  BOOST_CHECK_EQUAL( name_of<unsigned char      volatile>::is(), "v_uchar" );
+  BOOST_CHECK_EQUAL( name_of<unsigned int       volatile>::is(), "v_uint"   );
+  BOOST_CHECK_EQUAL( name_of<unsigned long      volatile>::is(), "v_ulong"  );
+  BOOST_CHECK_EQUAL( name_of<unsigned long long volatile>::is(), "v_ullong" );
+  BOOST_CHECK_EQUAL( name_of<unsigned short     volatile>::is(), "v_ushort" );
 
   // const-volatile:
   BOOST_CHECK_EQUAL( name_of<double      const volatile>::is(), "c-v_double"  );
@@ -68,6 +68,26 @@ BOOST_AUTO_TEST_CASE( composite_types_test )
   BOOST_CHECK_EQUAL( name_of<bool        const volatile>::is(), "c-v_bool" );
   BOOST_CHECK_EQUAL( name_of<char        const volatile>::is(), "c-v_char" );
   BOOST_CHECK_EQUAL( name_of<void        const volatile>::is(), "c-v_void" );
+}
+
+BOOST_AUTO_TEST_CASE( array_types_test )
+{
+  BOOST_CHECK_EQUAL( name_of<sometype[1]>::is(), "array[1]-of_unknown-type" );
+  BOOST_CHECK_EQUAL( name_of<sometype[0]>::is(), "array[0]-of_unknown-type" );
+
+  BOOST_CHECK_EQUAL( name_of<int         [9]>::is(), "array[9]-of_int" );
+  //BOOST_CHECK_EQUAL( name_of<int const   [9]>::is(), "array[9]-of_c_int" );
+  BOOST_CHECK_EQUAL( name_of<int *       [9]>::is(), "array[9]-of_ptr-to_int" );
+  BOOST_CHECK_EQUAL( name_of<int const * [9]>::is(), "array[9]-of_ptr-to_c_int" );
+  //BOOST_CHECK_EQUAL( name_of<int * const [9]>::is(), "array[9]-of_c_ptr-to_int" );
+}
+
+BOOST_AUTO_TEST_CASE( library_types_test )
+{
+  BOOST_CHECK_EQUAL( name_of<std::nullptr_t>::is(), "std::nullptr_t" );
+  BOOST_CHECK_EQUAL( name_of<std::string   >::is(), "std::string"    );
+  BOOST_CHECK_EQUAL( name_of<std::istream  >::is(), "std::istream"   );
+  BOOST_CHECK_EQUAL( name_of<std::ostream  >::is(), "std::ostream"   );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

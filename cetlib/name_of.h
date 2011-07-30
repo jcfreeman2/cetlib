@@ -7,11 +7,14 @@
 //          specialized for arbitrary user-defined class/struct type
 //
 // TODO: specialize for function, ptr-to-mbr-obj, ptr-to-mbr_fctn
+// TODO: consider specializing for more standard library types
 //
 // ======================================================================
 
 #include "boost/lexical_cast.hpp"
 #include "cpp0x/cstddef"
+#include "cpp0x/type_traits"
+#include <iosfwd>
 #include <string>
 
 namespace cet {
@@ -47,21 +50,23 @@ namespace cet {
   template< class T
           , int N   > struct name_of<T[N]            >;
 
-  // specializations for library types:
+  // specializations for selected library types:
+  template<> struct name_of<std::istream             >;
   template<> struct name_of<std::nullptr_t           >;
+  template<> struct name_of<std::ostream             >;
   template<> struct name_of<std::string              >;
 
 }
 
 // ----------------------------------------------------------------------
-// primary template
+// primary template:
 
 template< class T >
   struct cet::name_of
 { static  std::string  is()  { return "unknown-type"; } };
 
 // ----------------------------------------------------------------------
-// signed integral types
+// signed integral types:
 
 template<>
   struct cet::name_of<signed char>
@@ -84,7 +89,7 @@ template<>
 { static  std::string  is()  { return "llong"; } };
 
 // ----------------------------------------------------------------------
-// unsigned integral types
+// unsigned integral types:
 
 template<>
   struct cet::name_of<unsigned char>
@@ -107,7 +112,7 @@ template<>
 { static  std::string  is()  { return "ullong"; } };
 
 // ----------------------------------------------------------------------
-// floating types
+// floating types:
 
 template<>
   struct cet::name_of<float>
@@ -123,7 +128,7 @@ template<>
 
 
 // ----------------------------------------------------------------------
-// remaining fundamental types
+// remaining fundamental types:
 
 template<>
   struct cet::name_of<void>
@@ -137,25 +142,23 @@ template<>
   struct cet::name_of<char>
 { static  std::string  is()  { return "char"; } };
 
-
 // ----------------------------------------------------------------------
-// cv-qualified types
+// cv-qualified types:
 
 template< class T >
   struct cet::name_of<T const>
-{ static  std::string  is()  { return "const_" + name_of<T>::is(); } };
+{ static  std::string  is()  { return "c_" + name_of<T>::is(); } };
 
 template< class T >
   struct cet::name_of<T volatile>
-{ static  std::string  is()  { return "volatile_" + name_of<T>::is(); } };
+{ static  std::string  is()  { return "v_" + name_of<T>::is(); } };
 
 template< class T >
   struct cet::name_of<T const volatile>
 { static  std::string  is()  { return "c-v_" + name_of<T>::is(); } };
 
-
 // ----------------------------------------------------------------------
-// pointer and reference types
+// pointer and reference types:
 
 template< class T >
   struct cet::name_of<T*>
@@ -165,9 +168,8 @@ template< class T >
   struct cet::name_of<T&>
 { static  std::string  is()  { return "ref-to_" + name_of<T>::is(); } };
 
-
 // ----------------------------------------------------------------------
-// array types
+// array types:
 
 template< class T >
   struct cet::name_of<T[0]>
@@ -186,6 +188,25 @@ template< class T, int N >
   }
 };
 
-// ======================================================================
+// ----------------------------------------------------------------------
+// selected library types::
+
+template<>
+  struct cet::name_of<std::istream>
+{ static  std::string  is()  { return "std::istream"; } };
+
+template<>
+  struct cet::name_of<std::nullptr_t>
+{ static  std::string  is()  { return "std::nullptr_t"; } };
+
+template<>
+  struct cet::name_of<std::ostream>
+{ static  std::string  is()  { return "std::ostream"; } };
+
+template<>
+  struct cet::name_of<std::string>
+{ static  std::string  is()  { return "std::string"; } };
+
+// ======================================================================:
 
 #endif  // CETLIB_NAME_OF_H
