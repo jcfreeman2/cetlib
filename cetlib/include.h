@@ -7,7 +7,7 @@
 //
 // ======================================================================
 
-#include <fstream>
+#include <iosfwd>
 #include <string>
 
 namespace cet {

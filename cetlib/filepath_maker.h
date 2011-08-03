@@ -29,7 +29,7 @@ public:
   virtual std::string
     operator () ( std::string const & filename );
 
-  virtual ~filepath_maker( );
+  virtual ~filepath_maker( ) noexcept;
 
 };  // filepath_maker
 
@@ -44,7 +44,7 @@ public:
   virtual std::string
     operator () ( std::string const & filename );
 
-  virtual ~filepath_lookup( );
+  virtual ~filepath_lookup( ) noexcept;
 
 private:
   cet::search_path paths;
@@ -62,7 +62,7 @@ public:
   virtual std::string
     operator () ( std::string const & filename );
 
-  virtual ~filepath_lookup_nonabsolute( );
+  virtual ~filepath_lookup_nonabsolute( ) noexcept;
 
 private:
   cet::search_path paths;
@@ -83,7 +83,7 @@ public:
   void
     reset( );
 
-  virtual ~filepath_lookup_after1( );
+  virtual ~filepath_lookup_after1( ) noexcept;
 
 private:
   bool             after1;

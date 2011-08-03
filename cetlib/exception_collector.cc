@@ -17,7 +17,7 @@ using namespace cet;
 , has_thrown_( false )
 { }
 
-exception_collector::~exception_collector( )
+exception_collector::~exception_collector( ) noexcept
 { rethrow(); }
 
 // ----------------------------------------------------------------------

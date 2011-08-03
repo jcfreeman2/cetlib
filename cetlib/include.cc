@@ -9,6 +9,7 @@
 #include "cetlib/coded_exception.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/search_path.h"
+#include <fstream>
 
 // ----------------------------------------------------------------------
 
@@ -75,9 +76,9 @@ void
 // ----------------------------------------------------------------------
 
 void
-  cet::include( std::istream & in
+  cet::include( std::istream      & in
               , std::string const & search_path_arg
-              , std::string  & result
+              , std::string       & result
               )
 {
   static std::string const include_lit("#include \"");

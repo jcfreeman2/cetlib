@@ -36,7 +36,7 @@ namespace cet {
 
     // default c'tor, d'tor:
     exception_collector( );
-    ~exception_collector( );
+    ~exception_collector( ) noexcept;
 
     // observer:
     bool  has_thrown() const;

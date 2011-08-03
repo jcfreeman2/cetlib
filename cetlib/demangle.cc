@@ -18,7 +18,7 @@ namespace {
   struct buffer_sentry
   {
     buffer_sentry() : buf(0) { }
-    ~buffer_sentry() { free(buf); }
+    ~buffer_sentry() noexcept { free(buf); }
 
     char * buf;
   };  // buffer_sentry

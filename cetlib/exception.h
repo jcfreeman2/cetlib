@@ -110,7 +110,7 @@ namespace cet {
     exception( exception const & other );
 
     virtual
-      ~exception( ) throw();
+      ~exception( ) noexcept;
 
     // --- inspectors:
 

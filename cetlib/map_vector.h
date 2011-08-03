@@ -11,7 +11,7 @@
 
 #include "cetlib/exception.h"
 #include "cpp0x/algorithm"
-#include <iostream>
+#include <iosfwd>
 #include <stdexcept>
 #include <vector>
 

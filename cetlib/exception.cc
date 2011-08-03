@@ -92,7 +92,7 @@ exception::exception( Category    const & c
   append( e );
 }
 
-exception::~exception( ) throw()
+exception::~exception( ) noexcept
 { }
 
 // ======================================================================

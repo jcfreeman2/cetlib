@@ -19,7 +19,7 @@ std::string
   filepath_maker::operator () ( std::string const & filename )
 { return filename; }
 
-filepath_maker::~filepath_maker( )
+filepath_maker::~filepath_maker( ) noexcept
 { }
 
 // ----------------------------------------------------------------------
@@ -35,7 +35,7 @@ std::string
   return paths.find_file(filename);
 }
 
-filepath_lookup::~filepath_lookup( )
+filepath_lookup::~filepath_lookup( ) noexcept
 { }
 
 // ----------------------------------------------------------------------
@@ -52,7 +52,7 @@ std::string
                                              : paths.find_file(filename);
 }
 
-filepath_lookup_nonabsolute::~filepath_lookup_nonabsolute( )
+filepath_lookup_nonabsolute::~filepath_lookup_nonabsolute( ) noexcept
 { }
 
 // ----------------------------------------------------------------------
@@ -74,7 +74,7 @@ void
   filepath_lookup_after1::reset( )
 { after1 = false; }
 
-filepath_lookup_after1::~filepath_lookup_after1( )
+filepath_lookup_after1::~filepath_lookup_after1( ) noexcept
 { }
 
 // ======================================================================
