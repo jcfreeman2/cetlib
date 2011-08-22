@@ -83,7 +83,7 @@ namespace cet {
     class value_ptr;
 
   template< class Element >
-    void
+  void
     swap( value_ptr<Element> & x, value_ptr<Element> & y ) noexcept;
 }
 
@@ -96,7 +96,7 @@ private:
   typedef  char (& yes_t)[1];
   typedef  char (& no_t )[2];
 
-  template< class U, U* (U::*)() = &U::clone >  struct cloneable { };
+  template< class U, U* (U::*)() const = &U::clone >  struct cloneable { };
 
   template< class U >  static  yes_t  test( cloneable<U>* );
   template< class   >  static  no_t   test( ... );
@@ -160,7 +160,7 @@ private:
           , class Q = typename value_ptr<P>::pointer
           >
     struct is_compatible
-  : public std::is_convertible< Q, pointer >
+    : public std::is_convertible< Q, pointer >
   { };
 
 public:
@@ -171,11 +171,11 @@ public:
   { }
 
   // --- copy/move c'tors:
-  value_ptr( value_ptr const & other )
+    value_ptr( value_ptr const & other )
     : p( clone_from (other.p) )
   { }
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
-  value_ptr( value_ptr && other ) noexcept
+    value_ptr( value_ptr && other ) noexcept
     : p( other.release() )
   { }
 #endif
@@ -258,7 +258,7 @@ public:
     value_ptr( value_ptr<P> const & other
              , typename std::enable_if<is_compatible<P>::value>::type * = 0
              )
-  : p( clone_from(other.get()) )
+    : p( clone_from(other.get()) )
   { }
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
   template< class P >

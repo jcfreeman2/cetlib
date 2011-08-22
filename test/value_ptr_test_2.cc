@@ -55,20 +55,14 @@ int main()
     assert(e.operator->() == pc);
 
     cet::value_ptr<simple> f;
-    if (f) {
-      assert(0);
-    }
-    else {
-    }
+    if (f) assert(0);
+    else   { }
     f = d;
     assert(d.get() == 0);
     assert(*e == *f);
     assert(f.operator->() == pd);
-    if (f) {
-    }
-    else {
-      assert(0);
-    }
+    if (f) { }
+    else   assert(0);
 
     assert(simple::n_alive == 2);
     assert(simple::n_born == 4);
