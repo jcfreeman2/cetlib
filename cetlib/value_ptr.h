@@ -11,9 +11,9 @@
 //   - the pointee lifetime matches the pointer lifetime, and
 //   - the pointee is copied whenever the pointer is copied.
 //
-// Having such a template provides a standard vocabulary to denote
-// such pointers, with no need for further comment or other
-// documentation to describe the semantics involved.
+// Having such a template provides a standard vocabulary to denote such
+// pointers, with no need for further comment or other documentation to
+// describe the semantics involved.
 //
 // As a small bonus, this template's c'tors ensure that all instance
 // variables are initialized.
@@ -63,248 +63,263 @@
 #include <exception>
 #include <utility>
 
-// ======================================================================
-
 namespace cet {
-
   namespace _ {
-
-    template< class T >
-      struct has_clone
-    {
-    private:
-      typedef  char (& yes_t)[1];
-      typedef  char (& no_t )[2];
-
-      template< class U, U* (U::*)() = &U::clone >  struct cloneable { };
-
-      template< class U >  static  yes_t  test( cloneable<U>* );
-      template< class   >  static  no_t   test( ... );
-
-    public:
-      static  bool const  value = sizeof(test<T>(0)) == sizeof(yes_t);
-    };  // has_clone<>
-
-  }  // namespace _
+    template< class T >  struct has_clone;
+  }
 
   template< class Element
           , class Pointee = typename std::remove_reference<Element>::type
-          , bool = _::has_clone<Pointee>::value
+          , bool          = _::has_clone<Pointee>::value
           >
-    class default_clone
-  {
-    typedef  typename std::add_pointer<Pointee>::type
-             pointer;
-
-  public:
-    template< class Ptr >
-    pointer
-      operator () ( Ptr const & p ) const
-    { return p->clone(); }
-
-  };  // default_clone<>
-
+    class default_clone;
   template< class Element, class Pointee >
-    class default_clone<Element, Pointee, false>
-  {
-    typedef  typename std::add_pointer<Pointee>::type
-             pointer;
-
-  public:
-    template< class Ptr >
-    pointer
-      operator () ( Ptr const & p ) const
-    { return new Pointee( *p ); }
-
-  };  // default_clone<>
-
-  // ======================================================================
+    class default_clone<Element, Pointee, false>;
 
   template< class Element
-          , class Cloner = default_clone<Element>
+          , class Cloner  = default_clone<Element>
           , class Deleter = std::default_delete<Element>
           >
-    class value_ptr
-  {
-  public:
-    // --- publish our type parameter and variations thereof:
-    typedef  Element
-             element_type;
-    typedef  typename std::remove_reference<element_type>::type
-             pointee;
-    typedef  typename std::add_pointer<pointee>::type
-             pointer;
-    typedef  typename std::add_lvalue_reference<pointee>::type
-             reference;
+    class value_ptr;
 
-  private:
-    template< class P
-            , class Q = typename value_ptr<P>::pointer
-            >
-      struct is_compatible
-    : public std::is_convertible< Q, pointer >
-    { };
-
-  public:
-    // --- default c'tor:
-    CONSTEXPR_FCTN
-      value_ptr( ) noexcept
-      : p( pointer() )
-    { }
-
-    // --- copy/move c'tors:
-    value_ptr( value_ptr const & other )
-      : p( clone_from (other.p) )
-    { }
-  #ifdef CPP0X_HAS_RVALUE_REFERENCES
-    value_ptr( value_ptr && other ) noexcept
-      : p( other.release() )
-    { }
-  #endif
-
-    // --- copy/move assignments:
-    value_ptr &
-      operator = ( value_ptr const & other ) noexcept
-    { value_ptr tmp(other); swap(tmp); return *this; }
-  #ifdef CPP0X_HAS_RVALUE_REFERENCES
-    value_ptr &
-      operator = ( value_ptr && other ) noexcept
-    { reset( other.release() ); return *this; }
-  #endif
-
-    // --- copy from native pointer, possibly nullptr:
-    explicit
-      value_ptr( pointer const other ) noexcept
-      : p( other )
-    { }
-    value_ptr &
-      operator = ( pointer const other )
-    { reset( other ); return *this; }
-
-    // --- copy from auto_ptr<>:
-    value_ptr( std::auto_ptr<Element> & other ) :
-      p( other.release() )
-    { }
-    value_ptr &  operator = ( std::auto_ptr<Element> & other )
-    { value_ptr tmp(other); swap(tmp); return *this; }
-
-    // --- d'tor:
-      ~value_ptr( void ) noexcept
-    { reset(); }
-
-    // --- pointer behaviors:
-    reference
-      operator *  ( ) const noexcept
-    { return *get(); }
-    pointer
-      operator -> ( ) const noexcept
-    { return  get(); }
-    reference
-      at          ( ) const
-    { return empty() ? throw std::exception() : *get(); }
-
-    // --- conversions:
-#ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-    explicit
-      operator bool ( ) const noexcept
-    { return get(); }
-#else
-  private:
-    struct _safe_ { int _bool_; };
-  public:
-      operator int _safe_::* ( ) const noexcept
-    { return get() ? & _safe_::_bool_ : 0; }
-#endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-
-    // --- smart pointer observing behaviors:
-    bool
-      empty( ) const noexcept
-    { return get() == pointer(); }
-    pointer
-      get( ) const noexcept
-    { return p; }
-
-    // --- smart pointer mutating behaviors:
-    pointer
-      release( ) noexcept
-    { pointer old = get(); p = pointer(); return old; }
-    void
-      reset( pointer const t = pointer() ) noexcept
-    { Deleter()(p); p = t; }
-    void
-      swap( value_ptr & other ) noexcept
-    { std::swap(p, other.p); }
-
-    // --- copying/moving from other value_ptr<>s:
-    template< class P >
-      value_ptr( value_ptr<P> const & other
-               , typename std::enable_if<is_compatible<P>::value>::type * = 0
-               )
-    : p( clone_from(other.get()) )
-    { }
-  #ifdef CPP0X_HAS_RVALUE_REFERENCES
-    template< class P >
-      value_ptr( value_ptr<P> && other
-               , typename std::enable_if<is_compatible<P>::value>::type * = 0
-               )
-    : p( other.release() )
-    { }
-  #endif
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , value_ptr &
-                             >::type
-      operator = ( value_ptr<P> const & other )
-    { reset( clone_from(other.get()) ); return *this; }
-  #ifdef CPP0X_HAS_RVALUE_REFERENCES
-    template< class P
-            , bool = std::is_convertible< typename value_ptr<P>::pointer
-                                        , pointer
-                                        >::value
-            >
-      value_ptr &
-      operator = ( value_ptr<P> && other )
-    { reset( other.release() ); return *this; }
-  #endif
-
-    // --- comparisons:
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , bool
-                             >::type
-      operator == ( value_ptr<P> const & other )
-    { return get() == other.get(); }
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , bool
-                             >::type
-      operator != ( value_ptr<P> const & other )
-    { return ! operator == (other); }
-    template< class P >
-      typename std::enable_if< is_compatible<P>::value
-                             , bool
-                             >::type
-      operator < ( value_ptr<P> const & other )
-    { return get() < other.get(); }
-
-  private:
-    pointer  p;
-
-    template< class P >
-      pointer
-      clone_from( P const p ) const
-    { return p ? Cloner()(p) : pointer(); }
-
-  };  // value_ptr<>
-
-
-  // --- non-member swap:
   template< class Element >
     void
-    swap( value_ptr<Element> & x, value_ptr<Element> & y ) noexcept
-  { x.swap(y); }
+    swap( value_ptr<Element> & x, value_ptr<Element> & y ) noexcept;
+}
 
-}  // namespace cet
+// ======================================================================
+
+template< class T >
+  struct cet::_::has_clone
+{
+private:
+  typedef  char (& yes_t)[1];
+  typedef  char (& no_t )[2];
+
+  template< class U, U* (U::*)() = &U::clone >  struct cloneable { };
+
+  template< class U >  static  yes_t  test( cloneable<U>* );
+  template< class   >  static  no_t   test( ... );
+
+public:
+  static  bool const  value = sizeof(test<T>(0)) == sizeof(yes_t);
+};  // has_clone<>
+
+// ----------------------------------------------------------------------
+
+template< class Element, class Pointee, bool >
+  class cet::default_clone
+{
+  typedef  typename std::add_pointer<Pointee>::type
+           pointer;
+
+public:
+  template< class Ptr >
+  pointer
+    operator () ( Ptr const & p ) const
+  { return p->clone(); }
+
+};  // default_clone<>
+
+template< class Element, class Pointee >
+  class cet::default_clone<Element, Pointee, false>
+{
+  typedef  typename std::add_pointer<Pointee>::type
+           pointer;
+
+public:
+  template< class Ptr >
+  pointer
+    operator () ( Ptr const & p ) const
+  { return new Pointee( *p ); }
+
+};  // default_clone<>
+
+// ----------------------------------------------------------------------
+
+template< class Element
+        , class Cloner
+        , class Deleter
+        >
+  class cet::value_ptr
+{
+public:
+  // --- publish our type parameter and variations thereof:
+  typedef  Element
+           element_type;
+  typedef  typename std::remove_reference<element_type>::type
+           pointee;
+  typedef  typename std::add_pointer<pointee>::type
+           pointer;
+  typedef  typename std::add_lvalue_reference<pointee>::type
+           reference;
+
+private:
+  template< class P
+          , class Q = typename value_ptr<P>::pointer
+          >
+    struct is_compatible
+  : public std::is_convertible< Q, pointer >
+  { };
+
+public:
+  // --- default c'tor:
+  CONSTEXPR_FCTN
+    value_ptr( ) noexcept
+    : p( pointer() )
+  { }
+
+  // --- copy/move c'tors:
+  value_ptr( value_ptr const & other )
+    : p( clone_from (other.p) )
+  { }
+#ifdef CPP0X_HAS_RVALUE_REFERENCES
+  value_ptr( value_ptr && other ) noexcept
+    : p( other.release() )
+  { }
+#endif
+
+  // --- copy/move assignments:
+  value_ptr &
+    operator = ( value_ptr const & other ) noexcept
+  { value_ptr tmp(other); swap(tmp); return *this; }
+#ifdef CPP0X_HAS_RVALUE_REFERENCES
+  value_ptr &
+    operator = ( value_ptr && other ) noexcept
+  { reset( other.release() ); return *this; }
+#endif
+
+  // --- copy from native pointer, possibly nullptr:
+  explicit
+    value_ptr( pointer const other ) noexcept
+    : p( other )
+  { }
+  value_ptr &
+    operator = ( pointer const other )
+  { reset( other ); return *this; }
+
+  // --- copy from auto_ptr<>:
+  value_ptr( std::auto_ptr<Element> & other ) :
+    p( other.release() )
+  { }
+  value_ptr &  operator = ( std::auto_ptr<Element> & other )
+  { value_ptr tmp(other); swap(tmp); return *this; }
+
+  // --- d'tor:
+    ~value_ptr( void ) noexcept
+  { reset(); }
+
+  // --- pointer behaviors:
+  reference
+    operator *  ( ) const noexcept
+  { return *get(); }
+  pointer
+    operator -> ( ) const noexcept
+  { return  get(); }
+  reference
+    at          ( ) const
+  { return empty() ? throw std::exception() : *get(); }
+
+  // --- conversions:
+#ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
+  explicit
+    operator bool ( ) const noexcept
+  { return get(); }
+#else
+private:
+  struct _safe_ { int _bool_; };
+public:
+    operator int _safe_::* ( ) const noexcept
+  { return get() ? & _safe_::_bool_ : 0; }
+#endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
+
+  // --- smart pointer observing behaviors:
+  bool
+    empty( ) const noexcept
+  { return get() == pointer(); }
+  pointer
+    get( ) const noexcept
+  { return p; }
+
+  // --- smart pointer mutating behaviors:
+  pointer
+    release( ) noexcept
+  { pointer old = get(); p = pointer(); return old; }
+  void
+    reset( pointer const t = pointer() ) noexcept
+  { Deleter()(p); p = t; }
+  void
+    swap( value_ptr & other ) noexcept
+  { std::swap(p, other.p); }
+
+  // --- copying/moving from other value_ptr<>s:
+  template< class P >
+    value_ptr( value_ptr<P> const & other
+             , typename std::enable_if<is_compatible<P>::value>::type * = 0
+             )
+  : p( clone_from(other.get()) )
+  { }
+#ifdef CPP0X_HAS_RVALUE_REFERENCES
+  template< class P >
+    value_ptr( value_ptr<P> && other
+             , typename std::enable_if<is_compatible<P>::value>::type * = 0
+             )
+  : p( other.release() )
+  { }
+#endif
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , value_ptr &
+                           >::type
+    operator = ( value_ptr<P> const & other )
+  { reset( clone_from(other.get()) ); return *this; }
+#ifdef CPP0X_HAS_RVALUE_REFERENCES
+  template< class P
+          , bool = std::is_convertible< typename value_ptr<P>::pointer
+                                      , pointer
+                                      >::value
+          >
+    value_ptr &
+    operator = ( value_ptr<P> && other )
+  { reset( other.release() ); return *this; }
+#endif
+
+  // --- comparisons:
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , bool
+                           >::type
+    operator == ( value_ptr<P> const & other )
+  { return get() == other.get(); }
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , bool
+                           >::type
+    operator != ( value_ptr<P> const & other )
+  { return ! operator == (other); }
+  template< class P >
+    typename std::enable_if< is_compatible<P>::value
+                           , bool
+                           >::type
+    operator < ( value_ptr<P> const & other )
+  { return get() < other.get(); }
+
+private:
+  pointer  p;
+
+  template< class P >
+    pointer
+    clone_from( P const p ) const
+  { return p ? Cloner()(p) : pointer(); }
+
+};  // value_ptr<>
+
+
+// --- non-member swap:
+template< class Element >
+  void
+  cet::swap( value_ptr<Element> & x, value_ptr<Element> & y ) noexcept
+{ x.swap(y); }
 
 // ======================================================================
 
