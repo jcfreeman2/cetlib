@@ -115,7 +115,9 @@ template< class Element, class Pointee, bool >
 
 public:
   template< class Ptr >
-  pointer
+  typename  std::enable_if< std::is_convertible<Ptr, pointer>::value
+                          , pointer
+                          >::type
     operator () ( Ptr const & p ) const
   { return p->clone(); }
 
@@ -129,7 +131,9 @@ template< class Element, class Pointee >
 
 public:
   template< class Ptr >
-  pointer
+  typename  std::enable_if< std::is_convertible<Ptr, pointer>::value
+                          , pointer
+                          >::type
     operator () ( Ptr const & p ) const
   { return new Pointee( *p ); }
 
@@ -137,10 +141,7 @@ public:
 
 // ----------------------------------------------------------------------
 
-template< class Element
-        , class Cloner
-        , class Deleter
-        >
+template< class Element, class Cloner, class Deleter >
   class cet::value_ptr
 {
 public:
