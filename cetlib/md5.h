@@ -38,9 +38,9 @@ public:
     operator << ( std::string const & mesg )
   {
     polarssl::md5_update( & context
-                         , (uchar const *)( & mesg[0] )
-                         , mesg.size()
-                         );
+                        , (uchar const *)( & mesg[0] )
+                        , mesg.size()
+                        );
     return *this;
   }
 
@@ -48,9 +48,9 @@ public:
     operator << ( char const mesg )
   {
     polarssl::md5_update( & context
-                         , (uchar const *)( & mesg )
-                         , 1u
-                         );
+                        , (uchar const *)( & mesg )
+                        , 1u
+                        );
     return *this;
   }
 

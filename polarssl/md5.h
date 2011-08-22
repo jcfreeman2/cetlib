@@ -147,7 +147,7 @@ void md5_hmac( const unsigned char *key, size_t keylen,
 int md5_self_test( int verbose );
 
 #ifdef __cplusplus
-}
+}  // namespace polarssl
 #endif
 
 #endif /* md5.h */

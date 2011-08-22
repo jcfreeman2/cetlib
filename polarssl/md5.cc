@@ -153,7 +153,7 @@ static void md5_process( md5_context *ctx, const unsigned char data[64] )
     P( B, C, D, A, 12, 20, 0x8D2A4C8A );
 
 #undef F
-    
+
 #define F(x,y,z) (x ^ y ^ z)
 
     P( A, B, C, D,  5,  4, 0xFFFA3942 );
@@ -313,7 +313,7 @@ int md5_file( const char *path, unsigned char output[16] )
     md5_starts( &ctx );
 
     while( ( n = fread( buf, 1, sizeof( buf ), f ) ) > 0 )
-        md5_update( &ctx, buf, (int) n );
+        md5_update( &ctx, buf, n );
 
     md5_finish( &ctx, output );
 
@@ -415,7 +415,7 @@ void md5_hmac( const unsigned char *key, size_t keylen,
  */
 static unsigned char md5_test_buf[7][81] =
 {
-    { "" }, 
+    { "" },
     { "a" },
     { "abc" },
     { "message digest" },
