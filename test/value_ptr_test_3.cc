@@ -51,7 +51,7 @@ int main()
     simple_base* pc = c.get();
     simple_base* pd = d.get();
 
-    cet::value_ptr<simple_base> e(c);
+    cet::value_ptr<simple_base> e(c.release());
     assert(c.get() == 0);
     assert(*d == *e);
     assert(e.operator->() == pc);
@@ -59,7 +59,7 @@ int main()
     cet::value_ptr<simple_base> f;
     if (f) assert(0);
     else   { }
-    f = d;
+    f.reset(d.release());
     assert(d.get() == 0);
     assert(*e == *f);
     assert(f.operator->() == pd);

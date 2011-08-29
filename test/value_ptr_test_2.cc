@@ -1,7 +1,8 @@
 #include "cetlib/value_ptr.h"
 
-#include <memory>
 #include <cassert>
+#include <map>
+#include <memory>
 
 class simple
 {
@@ -49,7 +50,7 @@ int main()
     simple* pc = c.get();
     simple* pd = d.get();
 
-    cet::value_ptr<simple> e(c);
+    cet::value_ptr<simple> e(c.release());
     assert(c.get() == 0);
     assert(*d == *e);
     assert(e.operator->() == pc);
@@ -57,7 +58,7 @@ int main()
     cet::value_ptr<simple> f;
     if (f) assert(0);
     else   { }
-    f = d;
+    f.reset(d.release());
     assert(d.get() == 0);
     assert(*e == *f);
     assert(f.operator->() == pd);
@@ -66,7 +67,12 @@ int main()
 
     assert(simple::n_alive == 2);
     assert(simple::n_born == 4);
+
+    std::map<cet::value_ptr<simple>, int>  m;
+    m[f] = 0;  // copies f twice!
+    assert(simple::n_born == 6);
   }
   assert(simple::n_alive == 0);
-  assert(simple::n_born == 4);
+  assert(simple::n_born == 6);
+
 }
