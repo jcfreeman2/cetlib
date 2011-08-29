@@ -11,6 +11,7 @@
 #include "cetlib/filepath_maker.h"
 #include "cetlib/includer.h"
 #include <fstream>
+#include <sstream>
 
 char const file_a [] = "./a.txt";
 char const file_b [] = "./b.txt";
@@ -114,6 +115,24 @@ BOOST_AUTO_TEST_CASE( recursive_inclusion_test )
   catch( ... )  {
     BOOST_FAIL("Wrong exception type thrown");
   }
+}
+
+BOOST_AUTO_TEST_CASE( string_inclusion_test )
+{
+  std::string a = contents_a;
+  std::istringstream is_a(a);
+  cet::includer inc_a(is_a, policy);
+  std::string result_a(inc_a.begin(), inc_a.end());
+  BOOST_CHECK_EQUAL( result_a, a );
+
+  std::string i = contents_i;
+  std::istringstream is_i(i);
+  cet::includer inc_i(is_i, policy);
+  std::string result_i(inc_i.begin(), inc_i.end());
+  BOOST_CHECK_EQUAL( result_i,   std::string("begin\n")
+                               + std::string(contents_a)
+                               + std::string("end\n")
+                     );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

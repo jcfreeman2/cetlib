@@ -66,6 +66,19 @@ includer::includer( std::string const   & filename
 
 // ----------------------------------------------------------------------
 
+includer::includer( std::istream        & is
+                  , cet::filepath_maker & abs_filename
+                  )
+: text  ( )
+, frames( 1, frame(0, begin_string(), 0, text.size()) )
+{
+  include(0, is, abs_filename);
+  frames.push_back( frame(0, end_string(), 0, text.size()) );
+}
+
+
+// ----------------------------------------------------------------------
+
 std::string
   includer::whereis( const_iterator const & it ) const
 {
@@ -134,6 +147,70 @@ void
   if( ! f )
     throw inc_exception(cant_open)
        << filename << " => " << filepath
+       << backtrace( frames.size()-1 );
+
+  int linenum = 1;
+  frame new_frame( including_framenum, filepath, linenum, text.size() );
+
+  // iterate over each line of the input file:
+  for( std::string line; std::getline(f, line); ++linenum  ) {
+    if( line.find(inc_lit) != 0 ) {  // ordinary line (not an #include)
+      text.append(line)
+          .append(1, '\n');
+      continue;
+    }
+
+    // save buffered text:
+    frames.push_back(new_frame);
+
+    // record this #include's place:
+    new_frame.starting_linenum = linenum;
+    new_frame.starting_textpos = text.size();
+    frames.push_back(new_frame);
+
+    // validate the rest of the #include line's syntax:
+    trim_right(line, " \t\n");
+    if(  line.size() <= min_sz                      // too short?
+      || line[8] != ' '                             // missing separator?
+      || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
+      )
+      throw inc_exception(malformed) << line
+         << "\n at line " << linenum << " of file " << filepath;
+
+    // process the #include:
+    std::string nextfilename( line.substr( min_sz - 1u
+                                         , line.size() - min_sz
+                            )            );
+    include(frames.size()-1, nextfilename, abs_filename);
+
+    // prepare to resume where we left off:
+    new_frame.starting_linenum = linenum + 1;
+    new_frame.starting_textpos = text.size();
+  }  // for
+
+  // save final buffered text:
+  frames.push_back(new_frame);
+
+}  // include()
+
+// ----------------------------------------------------------------------
+
+void
+  includer::include( int                   including_framenum
+                   , std::istream        & f
+                   , cet::filepath_maker & abs_filename
+                   )
+{
+  static CONSTEXPR_VAR std::string inc_lit = std::string("#include");
+  static CONSTEXPR_VAR uint        min_sz  = inc_lit.size() + 3u;
+
+  // expand filename to obtain, per policy, absolute path to file:
+  std::string const filepath = "-";
+
+  // check the open file:
+  if( ! f )
+    throw inc_exception(cant_open)
+       << filepath
        << backtrace( frames.size()-1 );
 
   int linenum = 1;

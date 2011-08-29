@@ -29,6 +29,9 @@ public:
   explicit        includer( std::string const   & filename
                           , cet::filepath_maker & abs_filename
                           );
+  explicit        includer( std::istream        & is
+                          , cet::filepath_maker & abs_filename
+                          );
   const_iterator  begin   ( ) const  { return text.begin(); }
   const_iterator  end     ( ) const  { return text.end  (); }
   std::string     whereis ( const_iterator const & it ) const;
@@ -54,6 +57,10 @@ private:
 
   void  include ( int                   including_framenum
                 , std::string const   & filename
+                , cet::filepath_maker & abs_filename
+                );
+  void  include ( int                   including_framenum
+                , std::istream        & is
                 , cet::filepath_maker & abs_filename
                 );
   std::string  backtrace( uint from_frame ) const;
