@@ -164,19 +164,19 @@ public:
     typename std::enable_if< is_compatible<P>::value
                            , bool
                            >::type
-    operator == ( exempt_ptr<P> const & other ) noexcept
+    operator == ( exempt_ptr<P> const & other ) const noexcept
   { return get() == other.get(); }
   template< class P >
     typename std::enable_if< is_compatible<P>::value
                            , bool
                            >::type
-    operator != ( exempt_ptr<P> const & other ) noexcept
+    operator != ( exempt_ptr<P> const & other ) const noexcept
   { return ! operator == (other); }
   template< class P >
     typename std::enable_if< is_compatible<P>::value
                            , bool
                            >::type
-    operator < ( exempt_ptr<P> const & other ) noexcept
+    operator < ( exempt_ptr<P> const & other ) const noexcept
   { return get() < other.get(); }
 
 private:
