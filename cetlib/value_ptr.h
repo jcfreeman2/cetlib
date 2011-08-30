@@ -83,29 +83,29 @@ namespace cet {
           >
     class value_ptr;
 
-  template< class E1, class C, class D, class E2 >
+  template< class E, class C, class D >
   void
-    swap( value_ptr<E1,C,D> &, value_ptr<E2,C,D> & ) noexcept;
+    swap( value_ptr<E,C,D> &, value_ptr<E,C,D> & ) noexcept;
 
-  template< class E1, class C, class D, class E2 >
+  template< class E, class C, class D >
   bool
-    operator == ( value_ptr<E1,C,D> const &, value_ptr<E2,C,D> const & );
-  template< class E1, class C, class D, class E2 >
+    operator == ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
+  template< class E, class C, class D >
   bool
-    operator != ( value_ptr<E1,C,D> const &, value_ptr<E2,C,D> const & );
+    operator != ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
 
-  template< class E1, class C, class D, class E2 >
+  template< class E, class C, class D >
   bool
-    operator < ( value_ptr<E1,C,D> const &, value_ptr<E2,C,D> const & );
-  template< class E1, class C, class D, class E2 >
+    operator < ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
+  template< class E, class C, class D >
   bool
-    operator > ( value_ptr<E1,C,D> const &, value_ptr<E2,C,D> const & );
-  template< class E1, class C, class D, class E2 >
+    operator > ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
+  template< class E, class C, class D >
   bool
-    operator <= ( value_ptr<E1,C,D> const &, value_ptr<E2,C,D> const & );
-  template< class E1, class C, class D, class E2 >
+    operator <= ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
+  template< class E, class C, class D >
   bool
-    operator >= ( value_ptr<E1,C,D> const &, value_ptr<E2,C,D> const & );
+    operator >= ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
 }
 
 // ======================================================================
@@ -175,11 +175,9 @@ public:
   typedef  typename std::add_lvalue_reference<Element>::type  reference;
 
 private:
-  template< class P
-          , class Q = typename value_ptr<P>::pointer
-          >
+  template< class P >
     struct is_compatible
-    : public std::is_convertible< Q, pointer >
+    : public std::is_convertible< typename std::add_pointer<P>::type, pointer >
   { };
 
 public:
@@ -192,30 +190,36 @@ public:
 
   // copying c'tors:
   explicit  value_ptr( value_ptr const & );
-  template< class E >
-    explicit  value_ptr( value_ptr<E,Cloner,Deleter> const & );
+  template< class E2 >
+    explicit  value_ptr( value_ptr<E2,Cloner,Deleter> const &
+                       , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+                       );
 
-#ifdef CPP0X_HAS_RVALUE_REFERENCES
   // moving c'tors:
+#ifdef CPP0X_HAS_RVALUE_REFERENCES
   value_ptr( value_ptr && ) noexcept;
-  template< class E >
-    value_ptr( value_ptr<E,Cloner,Deleter> && ) noexcept;
+  template< class E2 >
+    value_ptr( value_ptr<E2,Cloner,Deleter> &&
+             , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+             ) noexcept;
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
   // d'tor:
   ~value_ptr( ) noexcept;
 
-  // copy assignments:
+  // copying assignments:
   value_ptr &  operator = ( std::nullptr_t ) noexcept;
   value_ptr &  operator = ( value_ptr const & );
-  template< class E >
-    value_ptr &  operator = ( value_ptr<E,Cloner,Deleter> const & );
+  template< class E2 >
+  typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
+    operator = ( value_ptr<E2,Cloner,Deleter> const & );
 
+  // moving assignments:
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
-  // move assignments:
   value_ptr &  operator = ( value_ptr && );
-  template< class E >
-    value_ptr &  operator = ( value_ptr<E,Cloner,Deleter> && );
+  template< class E2 >
+  typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
+    operator = ( value_ptr<E2,Cloner,Deleter> && );
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
   // observers:
@@ -235,8 +239,6 @@ public:
   pointer  release( ) noexcept;
   void     reset( pointer = pointer() ) noexcept;
   void     swap( value_ptr & ) noexcept;
-  template< class E >
-    void   swap( value_ptr<E,Cloner,Deleter> & ) noexcept;
 
 private:
   pointer       p;
@@ -247,9 +249,7 @@ private:
   { return p ? Cloner()(p) : nullptr; }
 
 
-#if 0
-  // --------------------------------------------------
-
+#if 0 // --------------------------------------------------
   // --- copy from auto_ptr<>:
   value_ptr( std::auto_ptr<Element> & other ) :
     p( other.release() )
@@ -264,18 +264,7 @@ private:
   bool
     empty( ) const noexcept
   { return p == nullptr; }
-
-#ifdef CPP0X_HAS_RVALUE_REFERENCES
-  template< class P >
-    value_ptr( value_ptr<P> && other
-             , typename std::enable_if<is_compatible<P>::value>::type * = 0
-             )
-  : p( other.release() )
-  { }
-#endif  // CPP0X_HAS_RVALUE_REFERENCES
-#endif  // 0
-
-  // --------------------------------------------------
+#endif  // 0 --------------------------------------------------
 
 };  // value_ptr<>
 
@@ -289,7 +278,7 @@ template< class E, class C, class D >
 CONSTEXPR_FCTN
   cet::value_ptr<E,C,D>::
   value_ptr( ) noexcept
-: p( pointer() )
+: p( nullptr )
 { }
 
 // ----------------------------------------------------------------------
@@ -299,7 +288,7 @@ template< class E, class C, class D >
 CONSTEXPR_FCTN
   cet::value_ptr<E,C,D>::
   value_ptr( std::nullptr_t ) noexcept
-: p( pointer() )
+: p( nullptr )
 { }
 
 template< class E, class C, class D >
@@ -313,16 +302,17 @@ template< class E, class C, class D >
 
 template< class E, class C, class D >
   cet::value_ptr<E,C,D>::
-  value_ptr( value_ptr const & other )
-: p( clone_from (other.p) )
+  value_ptr( value_ptr<E,C,D> const & other )
+: p( clone_from(other.p) )
 { }
 
-
-template< class E1, class C, class D >
+template< class E, class C, class D >
 template< class E2 >
-  cet::value_ptr<E1,C,D>::
-  value_ptr( value_ptr<E2,C,D> const & other )
-: p( clone_from (other.p) )
+  cet::value_ptr<E,C,D>::
+  value_ptr( value_ptr<E2,C,D> const & other
+           , typename std::enable_if< is_compatible<E2>::value >::type *
+           )
+: p( clone_from(other.p) )
 { }
 
 // ----------------------------------------------------------------------
@@ -332,14 +322,16 @@ template< class E2 >
 
 template< class E, class C, class D >
   cet::value_ptr<E,C,D>::
-  value_ptr( value_ptr && other ) noexcept
+  value_ptr( value_ptr<E,C,D> && other ) noexcept
 : p( other.release() )
 { }
 
-template< class E1, class C, class D >
+template< class E, class C, class D >
 template< class E2 >
-  cet::value_ptr<E1,C,D>::
-  value_ptr( value_ptr<E2,C,D> && other ) noexcept
+  cet::value_ptr<E,C,D>::
+  value_ptr( value_ptr<E2,C,D> && other
+           , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+           ) noexcept
 : p( other.release() )
 { }
 
@@ -356,7 +348,7 @@ template< class E, class C, class D >
 }
 
 // ----------------------------------------------------------------------
-// copy assignments:
+// copying assignments:
 
 template< class E, class C, class D >
 cet::value_ptr<E,C,D> &
@@ -379,16 +371,19 @@ cet::value_ptr<E,C,D> &
 
 template< class E, class C, class D >
 template< class E2 >
-cet::value_ptr<E,C,D> &
+typename std::enable_if< cet::value_ptr<E,C,D>::template is_compatible<E2>::value
+                       , cet::value_ptr<E,C,D> &
+                       >::type
   cet::value_ptr<E,C,D>::
   operator = ( value_ptr<E2,C,D> const & other )
 {
-  reset( clone_from(other.p) );
+  value_ptr tmp(other);
+  swap(tmp);
   return *this;
 }
 
 // ----------------------------------------------------------------------
-// move assignments:
+// moving assignments:
 
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
 
@@ -397,17 +392,21 @@ cet::value_ptr<E,C,D> &
   cet::value_ptr<E,C,D>::
   operator = ( value_ptr && other )
 {
-  reset( other.release() );
+  value_ptr tmp( std::move(other) );
+  swap(tmp);
   return *this;
 }
 
 template< class E, class C, class D >
 template< class E2 >
-cet::value_ptr<E,C,D> &
+typename std::enable_if< cet::value_ptr<E,C,D>::template is_compatible<E2>::value
+                       , cet::value_ptr<E,C,D> &
+                       >::type
   cet::value_ptr<E,C,D>::
-  operator = ( value_ptr<E2,C,D> && other )
+  operator = ( value_ptr<E2,C,D> const && other )
 {
-  reset( other.release() );
+  value_ptr tmp( std::move(other) );
+  swap(tmp);
   return *this;
 }
 
@@ -484,24 +483,15 @@ void
   std::swap(p, other.p);
 }
 
-template< class E1, class C, class D >
-template< class E2 >
-void
-  cet::value_ptr<E1,C,D>::
-  swap( value_ptr<E2,C,D> & other ) noexcept
-{
-  std::swap(p, other.p);
-}
-
 // ======================================================================
 // non-member functions:
 
 // ----------------------------------------------------------------------
 // non-member swap:
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
   void
-  cet::swap( value_ptr<E1,C,D> & x, value_ptr<E2,C,D> & y ) noexcept
+  cet::swap( value_ptr<E,C,D> & x, value_ptr<E,C,D> & y ) noexcept
 {
   x.swap(y);
 }
@@ -509,16 +499,16 @@ template< class E1, class C, class D, class E2 >
 // ----------------------------------------------------------------------
 // non-member (in)equality comparison:
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
 bool
-  cet::operator == ( value_ptr<E1,C,D> const & x, value_ptr<E2,C,D> const & y )
+  cet::operator == ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
 {
   return x.get() == y.get();
 }
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
 bool
-  cet::operator != ( value_ptr<E1,C,D> const & x, value_ptr<E2,C,D> const & y )
+  cet::operator != ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
 {
   return ! operator == (x, y);
 }
@@ -526,34 +516,34 @@ bool
 // ----------------------------------------------------------------------
 // non-member ordering:
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
 bool
-  cet::operator < ( value_ptr<E1,C,D> const & x, value_ptr<E2,C,D> const & y )
+  cet::operator < ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
 {
-  typedef  typename std::common_type< typename value_ptr<E1,C,D>::pointer
-                                    , typename value_ptr<E2,C,D>::pointer
+  typedef  typename std::common_type< typename value_ptr<E,C,D>::pointer
+                                    , typename value_ptr<E,C,D>::pointer
                                     >::type
            CT;
   return std::less<CT>()( x.get(), y.get() );
 }
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
 bool
-  cet::operator > ( value_ptr<E1,C,D> const & x, value_ptr<E2,C,D> const & y )
+  cet::operator > ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
 {
   return y < x;
 }
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
 bool
-  cet::operator <= ( value_ptr<E1,C,D> const & x, value_ptr<E2,C,D> const & y )
+  cet::operator <= ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
 {
   return ! (y < x);
 }
 
-template< class E1, class C, class D, class E2 >
+template< class E, class C, class D >
 bool
-  cet::operator >= ( value_ptr<E1,C,D> const & x, value_ptr<E2,C,D> const & y )
+  cet::operator >= ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
 {
   return ! (x < y);
 }
