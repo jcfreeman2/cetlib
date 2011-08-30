@@ -27,13 +27,13 @@ int
 
   { // non-const => const
     int * p = new int(0);
-    exempt_ptr<int const> ep = p;
+    exempt_ptr<int const> ep(p);
   }
 
   #if 0
   { // const => non-const (ought fail to compile)
     int const * p = new int(0);
-    exempt_ptr<int> ep = p;
+    exempt_ptr<int> ep(p);
   }
   #endif  // 0
 
