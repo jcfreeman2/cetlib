@@ -28,12 +28,6 @@ namespace cet  {
   std::ostream &  operator << ( std::ostream &, map_vector_key const & );
 
   template< class Value >  class map_vector;
-
-  template< class Value >
-  bool
-    operator < ( typename map_vector<Value>::value_type const &
-               , typename map_vector<Value>::value_type const &
-               );
 }
 
 // ======================================================================
@@ -181,12 +175,14 @@ public:
     void  insert( InIter b, InIter e );
 
   // MUST UPDATE WHEN CLASS IS CHANGED!
-  static short Class_Version() { return 10; }
+  static short  Class_Version() { return 10; }
 
 private:
   impl_type  v_;
 
   bool  class_invariant( ) const;
+
+  static  bool  lt ( value_type const &, value_type const & );
 
 };  // map_vector<>
 
@@ -238,7 +234,7 @@ bool
   cet::map_vector<Value>::has( key_type key ) const
 {
   value_type  v(key, mapped_type());
-  return std::binary_search(v_.begin(), v_.end(), v, operator < <Value> );
+  return std::binary_search(v_.begin(), v_.end(), v, lt );
 }
 
 template< class Value >
@@ -250,7 +246,7 @@ typename cet::map_vector<Value>::iterator
   iterator const begin = v_.begin()
                , end   = v_.end();
 
-  iterator  it = std::lower_bound(begin, end, v, operator < <Value>);
+  iterator  it = std::lower_bound(begin, end, v, lt);
   if( it != end  &&  it->first != key )
     it = end;
 
@@ -266,7 +262,7 @@ typename cet::map_vector<Value>::const_iterator
   const_iterator const begin = v_.begin()
                      , end   = v_.end();
 
-  const_iterator  it = std::lower_bound(begin, end, v, operator < <Value>);
+  const_iterator  it = std::lower_bound(begin, end, v, lt);
   if( it != end  &&  it->first != key )
     it = end;
 
@@ -324,7 +320,7 @@ Value &
   iterator const begin = v_.begin()
                , end   = v_.end();
 
-  iterator  it = std::lower_bound(begin, end, v, operator < <Value>);
+  iterator  it = std::lower_bound(begin, end, v, lt);
   if( it == end  ||  it->first != key )
     it = v_.insert(it, v);
 
@@ -361,16 +357,16 @@ template< class Value >
 bool
   cet::map_vector<Value>::class_invariant( ) const
 {
-  return std::is_sorted(v_.begin(), v_.end(), operator < <Value> );
+  return std::is_sorted(v_.begin(), v_.end(), lt );
 }
 
 // ======================================================================
 
 template< class Value >
 bool
-  cet::operator < ( typename map_vector<Value>::value_type const & v1
-                  , typename map_vector<Value>::value_type const & v2
-                  )
+  cet::map_vector<Value>::lt ( value_type const & v1
+                             , value_type const & v2
+                             )
 {
   return v1.first < v2.first;
 }
