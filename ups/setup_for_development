@@ -38,9 +38,9 @@ tnotnull UPS_DIR || echo "$msg2"
 setup cmake
 setup gcc v4_5_1
 setup -j boost v1_45_0 -q gcc45
-setup cetbuildtools v1_11_09
 # set up CET products
-setup -j cpp0x v1_01_14 -q a2$extraqual
+setup cetbuildtools v1_11_09
+setup -j cpp0x v1_02_00 -q a2$extraqual
 
 test $?shell = 1 && set ss=csh || ss=sh
 test "$ss" = csh && alias set_ set && alias vecho_ 'if ($?vv == 1) echo \!*' || eval 'vecho_() { test -n "${vv-}" && echo "$@";}'
@@ -67,7 +67,7 @@ tnotnull CETLIB_BUILD && set_ thisdir=$CETLIB_BUILD || set_ thisdir=`pwd`
 test -n "$thisdir" && setenv CETLIB_BUILD $thisdir
 test -d "$thisdir/lib" || mkdir -p $thisdir/lib
 test -d "$thisdir/bin" || mkdir -p $thisdir/bin
-echo The workng build directory is $thisdir
+echo The working build directory is $thisdir
 
 tnotnull CETLIB_BUILD && setenv LD_LIBRARY_PATH `echo :${LD_LIBRARY_PATH}: | sed -e "s|:${CETLIB_BUILD}/lib:|:|" -e 's|^:||;s|:$||'`
 tnotnull CETLIB_BUILD && setenv LD_LIBRARY_PATH ${CETLIB_BUILD}/lib:${LD_LIBRARY_PATH}
