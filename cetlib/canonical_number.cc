@@ -9,12 +9,10 @@
 
 #include "cetlib/canonical_number.h"
 
-#include "boost/lexical_cast.hpp"
 #include <cctype>
 #include <cstddef>
 #include <cstdlib>
 
-using boost::lexical_cast;
 using std::abs;
 
 
@@ -95,7 +93,7 @@ try
     result.append(digits);
     if( exp != 0 ) {
       result.append( 1, 'e' )
-            .append( lexical_cast<std::string>(exp) );
+            .append( std::to_string(exp) );
     }
   }
   return true;

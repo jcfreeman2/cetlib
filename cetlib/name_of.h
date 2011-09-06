@@ -11,11 +11,10 @@
 //
 // ======================================================================
 
-#include "boost/lexical_cast.hpp"
 #include "cpp0x/cstddef"
+#include "cpp0x/string"
 #include "cpp0x/type_traits"
 #include <iosfwd>
-#include <string>
 
 namespace cet {
 
@@ -182,7 +181,7 @@ template< class T, int N >
     is()
   {
     return "array["
-         + boost::lexical_cast< std::string >(N)
+         + std::to_string(N)
          + "]-of_"
          + name_of<T>::is();
   }
