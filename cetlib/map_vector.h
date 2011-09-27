@@ -12,7 +12,6 @@
 #include "cetlib/exception.h"
 #include "cpp0x/algorithm"
 #include <iosfwd>
-#include <stdexcept>
 #include <vector>
 
 namespace cet  {
@@ -59,8 +58,7 @@ cet::map_vector_key::map_vector_key( int key )
 {
   if (key < 0) {
     throw cet::exception("InvalidKey")
-      << "Negative key "
-      << key
+      << "Negative key " << key
       << " not valid for map_vector_key.";
   }
 }
@@ -71,8 +69,7 @@ cet::map_vector_key::map_vector_key( unsigned long key )
 {
   if (key != key_) {
     throw cet::exception("InvalidKey")
-      << "Key "
-      << key
+      << "Key " << key
       << " too large for map_vector_key.";
   }
 }
@@ -129,8 +126,8 @@ public:
   allocator_type  get_allocator( ) const  { return v_.get_allocator(); }
 
   // observers:
-  value_type  front( ) const  { return v_.empty() ? value_type() : v_.front(); }
-  value_type  back ( ) const  { return v_.empty() ? value_type() : v_.back(); }
+  value_type  front( ) const;
+  value_type  back ( ) const;
 
   size_t  delta( ) const  { return v_.empty() ? 0 : 1 + v_.back().first.asInt(); }
 
@@ -230,8 +227,29 @@ inline std::ostream &
 // observers:
 
 template< class Value >
+typename cet::map_vector<Value>::value_type
+  cet::map_vector<Value>::
+  front( ) const
+{
+  return v_.empty()
+       ? throw cet::exception("map_vector::front") << "container is empty!\n"
+       : v_.front();
+}
+
+template< class Value >
+typename cet::map_vector<Value>::value_type
+  cet::map_vector<Value>::
+  back ( ) const
+{
+  return v_.empty()
+       ? throw cet::exception("map_vector::back") << "container is empty!\n"
+       : v_.back();
+}
+
+template< class Value >
 bool
-  cet::map_vector<Value>::has( key_type key ) const
+  cet::map_vector<Value>::
+  has( key_type key ) const
 {
   value_type  v(key, mapped_type());
   return std::binary_search(v_.begin(), v_.end(), v, lt );
@@ -239,7 +257,8 @@ bool
 
 template< class Value >
 typename cet::map_vector<Value>::iterator
-  cet::map_vector<Value>::find( key_type key )
+  cet::map_vector<Value>::
+  find( key_type key )
 {
   value_type  v(key, mapped_type());
 
@@ -255,7 +274,8 @@ typename cet::map_vector<Value>::iterator
 
 template< class Value >
 typename cet::map_vector<Value>::const_iterator
-  cet::map_vector<Value>::find( key_type key ) const
+  cet::map_vector<Value>::
+  find( key_type key ) const
 {
   value_type  v(key, mapped_type());
 
@@ -271,7 +291,8 @@ typename cet::map_vector<Value>::const_iterator
 
 template< class Value >
 Value *
-  cet::map_vector<Value>::getOrNull( key_type key )
+  cet::map_vector<Value>::
+  getOrNull( key_type key )
 {
   iterator  it = find(key);
   return it == v_.end()  ?  nullptr  :  & it->second;
@@ -279,7 +300,8 @@ Value *
 
 template< class Value >
 Value const *
-  cet::map_vector<Value>::getOrNull( key_type key ) const
+  cet::map_vector<Value>::
+  getOrNull( key_type key ) const
 {
   const_iterator  it = find(key);
   return it == v_.end()  ?  nullptr  :  & it->second;
@@ -287,7 +309,8 @@ Value const *
 
 template< class Value >
 Value &
-  cet::map_vector<Value>::getOrThrow( key_type key )
+  cet::map_vector<Value>::
+  getOrThrow( key_type key )
 {
   Value *  p = getOrNull(key);
   if( p == nullptr )
@@ -300,7 +323,8 @@ Value &
 
 template< class Value >
 Value const &
-  cet::map_vector<Value>::getOrThrow( key_type key ) const
+  cet::map_vector<Value>::
+  getOrThrow( key_type key ) const
 {
   Value const *  p = getOrNull(key);
   if( p == nullptr )
@@ -313,7 +337,8 @@ Value const &
 
 template< class Value >
 Value &
-  cet::map_vector<Value>::operator [] ( key_type key )
+  cet::map_vector<Value>::
+  operator [] ( key_type key )
 {
   value_type  v(key, mapped_type());
 
@@ -332,7 +357,8 @@ Value &
 
 template< class Value >
 void
-  cet::map_vector<Value>::push_back( value_type const & x )
+  cet::map_vector<Value>::
+  push_back( value_type const & x )
 {
   x.first.ensure_valid();
   v_.push_back( std::make_pair(x.first.asInt() + delta(), x.second) );
@@ -341,7 +367,8 @@ void
 template< class Value >
 template< class InIter >
 void
-  cet::map_vector<Value>::insert( InIter b, InIter e )
+  cet::map_vector<Value>::
+  insert( InIter b, InIter e )
 {
   size_t d = delta();
   for(  ;  b != e;  ++b ) {
@@ -355,7 +382,8 @@ void
 
 template< class Value >
 bool
-  cet::map_vector<Value>::class_invariant( ) const
+  cet::map_vector<Value>::
+  class_invariant( ) const
 {
   return std::is_sorted(v_.begin(), v_.end(), lt );
 }
@@ -364,9 +392,8 @@ bool
 
 template< class Value >
 bool
-  cet::map_vector<Value>::lt ( value_type const & v1
-                             , value_type const & v2
-                             )
+  cet::map_vector<Value>::
+  lt ( value_type const & v1, value_type const & v2 )
 {
   return v1.first < v2.first;
 }

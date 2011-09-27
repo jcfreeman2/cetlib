@@ -63,6 +63,8 @@ BOOST_AUTO_TEST_CASE( emptymap_test )
     BOOST_CHECK( m.find(k) == m.end() );
     BOOST_CHECK( m.getOrNull(k) == 0 );
     BOOST_CHECK_THROW( m.getOrThrow(k), cet::exception );
+    BOOST_CHECK_THROW( m.front(), cet::exception );
+    BOOST_CHECK_THROW( m.back(), cet::exception );
   }
 
   {
@@ -74,6 +76,8 @@ BOOST_AUTO_TEST_CASE( emptymap_test )
     BOOST_CHECK( m.find(k) == m.end() );
     BOOST_CHECK( m.getOrNull(k) == 0 );
     BOOST_CHECK_THROW( m.getOrThrow(k), cet::exception );
+    BOOST_CHECK_THROW( m.front(), cet::exception );
+    BOOST_CHECK_THROW( m.back(), cet::exception );
   }
 }
 
