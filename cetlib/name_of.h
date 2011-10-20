@@ -45,7 +45,6 @@ namespace cet {
   template< class T > struct name_of<T const volatile>;
   template< class T > struct name_of<T*              >;
   template< class T > struct name_of<T&              >;
-  template< class T > struct name_of<T[0]            >;
   template< class T
           , int N   > struct name_of<T[N]            >;
 
@@ -169,10 +168,6 @@ template< class T >
 
 // ----------------------------------------------------------------------
 // array types:
-
-template< class T >
-  struct cet::name_of<T[0]>
-{ static  std::string  is()  { return "array[0]-of_" + name_of<T>::is(); } };
 
 template< class T, int N >
   struct cet::name_of<T[N]>

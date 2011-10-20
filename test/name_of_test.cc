@@ -15,7 +15,6 @@ BOOST_AUTO_TEST_CASE( unknown_type_test )
   BOOST_CHECK_EQUAL( name_of<sometype * >::is(), "ptr-to_unknown-type"      );
   BOOST_CHECK_EQUAL( name_of<sometype & >::is(), "ref-to_unknown-type"      );
   BOOST_CHECK_EQUAL( name_of<sometype[1]>::is(), "array[1]-of_unknown-type" );
-  BOOST_CHECK_EQUAL( name_of<sometype[0]>::is(), "array[0]-of_unknown-type" );
 }
 
 BOOST_AUTO_TEST_CASE( fundamental_types_test )
@@ -73,7 +72,6 @@ BOOST_AUTO_TEST_CASE( cv_types_test )
 BOOST_AUTO_TEST_CASE( array_types_test )
 {
   BOOST_CHECK_EQUAL( name_of<sometype[1]>::is(), "array[1]-of_unknown-type" );
-  BOOST_CHECK_EQUAL( name_of<sometype[0]>::is(), "array[0]-of_unknown-type" );
 
   BOOST_CHECK_EQUAL( name_of<int         [9]>::is(), "array[9]-of_int" );
   //BOOST_CHECK_EQUAL( name_of<int const   [9]>::is(), "array[9]-of_c_int" );

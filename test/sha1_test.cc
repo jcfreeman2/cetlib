@@ -21,7 +21,7 @@ int
 
   {
     sha1 d;
-    digest_t  r = d.digest();
+    d.digest();
   }
 
   {

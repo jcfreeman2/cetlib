@@ -307,7 +307,10 @@ void sha1_finish( sha1_context *ctx, unsigned char output[20] )
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
     sha1_update( ctx, (unsigned char *) sha1_padding, padn );
+#pragma GCC diagnostic pop
     sha1_update( ctx, msglen, 8 );
 
     PUT_ULONG_BE( ctx->state[0], output,  0 );

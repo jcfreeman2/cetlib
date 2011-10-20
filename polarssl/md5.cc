@@ -273,7 +273,10 @@ void md5_finish( md5_context *ctx, unsigned char output[16] )
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wcast-qual"
     md5_update( ctx, (unsigned char *) md5_padding, padn );
+#pragma GCC diagnostic pop
     md5_update( ctx, msglen, 8 );
 
     PUT_ULONG_LE( ctx->state[0], output,  0 );

@@ -29,7 +29,7 @@
 //   emancipated_ptr, estranged_ptr, excused_ptr,
 //   faultless_ptr, free_ptr, freeagent_ptr, guiltless_ptr, handsoff_ptr,
 //   ignorant_ptr, impartial_ptr, independent_ptr, innocent_ptr,
-//   just_a_ptr, legacy_ptr,
+//   irresponsible_ptr, just_a_ptr, legacy_ptr,
 //   naked_ptr, neutral_ptr, nonown_ptr, nonowning_ptr, notme_ptr,
 //   oblivious_ptr, observer_ptr, observing_ptr, open_ptr, ownerless_ptr,
 //   pointer, ptr, pure_ptr, quintessential_ptr,
