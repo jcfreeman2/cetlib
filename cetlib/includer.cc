@@ -124,8 +124,8 @@ void
                    , cet::filepath_maker & abs_filename
                    )
 {
-  static CONSTEXPR_VAR std::string inc_lit = std::string("#include");
-  static CONSTEXPR_VAR uint        min_sz  = inc_lit.size() + 3u;
+  static  std::string const  inc_lit = std::string("#include");
+  static  uint        const  min_sz  = inc_lit.size() + 3u;
 
   // expand filename to obtain, per policy, absolute path to file:
   bool const use_cin = filename == "-";
@@ -201,8 +201,8 @@ void
                    , cet::filepath_maker & abs_filename
                    )
 {
-  static CONSTEXPR_VAR std::string inc_lit = std::string("#include");
-  static CONSTEXPR_VAR uint        min_sz  = inc_lit.size() + 3u;
+  static std::string const  inc_lit = std::string("#include");
+  static uint        const  min_sz  = inc_lit.size() + 3u;
 
   // expand filename to obtain, per policy, absolute path to file:
   std::string const filepath = "-";

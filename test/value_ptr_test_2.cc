@@ -4,6 +4,8 @@
 #include <map>
 #include <memory>
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
 class simple
 {
   int i;

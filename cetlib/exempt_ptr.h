@@ -47,6 +47,7 @@
 // ======================================================================
 
 #include "cpp0x/cstddef"
+#include "cpp0x/functional"
 #include "cpp0x/type_traits"
 #include <exception>
 #include <utility>
@@ -65,6 +66,22 @@ namespace cet {
   template< class E >
   bool
     operator != ( exempt_ptr<E> const &, exempt_ptr<E> const & );
+
+#if defined CPP0X_HAS_NULLPTR
+  template< class E >
+  bool
+    operator == ( exempt_ptr<E> const &, std::nullptr_t const & );
+  template< class E >
+  bool
+    operator != ( exempt_ptr<E> const &, std::nullptr_t const & );
+
+  template< class E >
+  bool
+    operator == ( std::nullptr_t const &, exempt_ptr<E> const & );
+  template< class E >
+  bool
+    operator != ( std::nullptr_t const &, exempt_ptr<E> const & );
+#endif  // CPP0X_HAS_NULLPTR
 
   template< class E >
   bool
@@ -363,6 +380,36 @@ bool
 {
   return ! operator == (x, y);
 }
+
+#if defined CPP0X_HAS_NULLPTR
+template< class E >
+bool
+  cet::operator == ( exempt_ptr<E> const & x, std::nullptr_t const & y )
+{
+  return x.get() == y;
+}
+
+template< class E >
+bool
+  cet::operator != ( exempt_ptr<E> const & x, std::nullptr_t const & y )
+{
+  return ! operator == (x, y);
+}
+
+template< class E >
+bool
+  cet::operator == ( std::nullptr_t const & x, exempt_ptr<E> const & y )
+{
+  return x == y.get();
+}
+
+template< class E >
+bool
+  cet::operator != ( std::nullptr_t const & x, exempt_ptr<E> const & y )
+{
+  return ! operator == (x, y);
+}
+#endif  // CPP0X_HAS_NULLPTR
 
 // ----------------------------------------------------------------------
 // non-member ordering:

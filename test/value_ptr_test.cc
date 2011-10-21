@@ -27,7 +27,7 @@ int
 
   {
     value_ptr<int> p( new int(16) );
-    ensure( 11, p );
+    ensure( 11, bool(p) );
     ensure( 12, *p == 16 );
 
     value_ptr<int> q( p );

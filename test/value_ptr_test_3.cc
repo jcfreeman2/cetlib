@@ -3,6 +3,9 @@
 #include <memory>
 #include <cassert>
 
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+
+
 class simple_base
 {
   int i;

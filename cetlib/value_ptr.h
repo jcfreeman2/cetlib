@@ -94,6 +94,22 @@ namespace cet {
   bool
     operator != ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
 
+#if defined CPP0X_HAS_NULLPTR
+  template< class E, class C, class D >
+  bool
+    operator == ( value_ptr<E,C,D> const &, std::nullptr_t const & );
+  template< class E, class C, class D >
+  bool
+    operator != ( value_ptr<E,C,D> const &, std::nullptr_t const & );
+
+  template< class E, class C, class D >
+  bool
+    operator == ( std::nullptr_t const &, value_ptr<E,C,D> const & );
+  template< class E, class C, class D >
+  bool
+    operator != ( std::nullptr_t const &, value_ptr<E,C,D> const & );
+#endif  // CPP0X_HAS_NULLPTR
+
   template< class E, class C, class D >
   bool
     operator < ( value_ptr<E,C,D> const &, value_ptr<E,C,D> const & );
@@ -321,16 +337,10 @@ template< class E2 >
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
 
 template< class E, class C, class D >
-  cet::value_ptr<E,C,D>::
-  value_ptr( value_ptr<E,C,D> && other ) noexcept
-: p( other.release() )
-{ }
-
-template< class E, class C, class D >
 template< class E2 >
   cet::value_ptr<E,C,D>::
   value_ptr( value_ptr<E2,C,D> && other
-           , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+           , typename std::enable_if< is_compatible<E2>::value >::type *
            ) noexcept
 : p( other.release() )
 { }
@@ -388,22 +398,12 @@ typename std::enable_if< cet::value_ptr<E,C,D>::template is_compatible<E2>::valu
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
 
 template< class E, class C, class D >
-cet::value_ptr<E,C,D> &
-  cet::value_ptr<E,C,D>::
-  operator = ( value_ptr && other )
-{
-  value_ptr tmp( std::move(other) );
-  swap(tmp);
-  return *this;
-}
-
-template< class E, class C, class D >
 template< class E2 >
 typename std::enable_if< cet::value_ptr<E,C,D>::template is_compatible<E2>::value
                        , cet::value_ptr<E,C,D> &
                        >::type
   cet::value_ptr<E,C,D>::
-  operator = ( value_ptr<E2,C,D> const && other )
+  operator = ( value_ptr<E2,C,D> && other )
 {
   value_ptr tmp( std::move(other) );
   swap(tmp);
@@ -512,6 +512,36 @@ bool
 {
   return ! operator == (x, y);
 }
+
+#if defined CPP0X_HAS_NULLPTR
+template< class E, class C, class D >
+bool
+  cet::operator == ( value_ptr<E,C,D> const & x, std::nullptr_t const & y )
+{
+  return x.get() == y;
+}
+
+template< class E, class C, class D >
+bool
+  cet::operator != ( value_ptr<E,C,D> const & x, std::nullptr_t const & y )
+{
+  return ! operator == (x, y);
+}
+
+template< class E, class C, class D >
+bool
+  cet::operator == ( std::nullptr_t const & x, value_ptr<E,C,D> const & y )
+{
+  return x == y.get();
+}
+
+template< class E, class C, class D >
+bool
+  cet::operator != ( std::nullptr_t const & x, value_ptr<E,C,D> const & y )
+{
+  return ! operator == (x, y);
+}
+#endif  // CPP0X_HAS_NULLPTR
 
 // ----------------------------------------------------------------------
 // non-member ordering:
