@@ -198,290 +198,118 @@ private:
 
 public:
   // default c'tor:
-  CONSTEXPR_FCTN  value_ptr( ) noexcept;
+  CONSTEXPR_FCTN  value_ptr( ) noexcept : p( nullptr )  { }
 
   // ownership-taking c'tors:
-  CONSTEXPR_FCTN  value_ptr( std::nullptr_t ) noexcept;
-  explicit        value_ptr( pointer        ) noexcept;
+  CONSTEXPR_FCTN  value_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
+  explicit        value_ptr( pointer other  ) noexcept : p( other   )  { }
 
   // copying c'tors:
-  explicit  value_ptr( value_ptr const & );
+  explicit  value_ptr( value_ptr const & other )
+  : p( clone_from(other.p) )
+  { }
   template< class E2 >
-    explicit  value_ptr( value_ptr<E2,Cloner,Deleter> const &
+    explicit  value_ptr( value_ptr<E2,Cloner,Deleter> const & other
                        , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-                       );
+                       )
+  : p( clone_from(other.p) )
+  { }
 
   // moving c'tors:
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
-  value_ptr( value_ptr && ) noexcept;
+  value_ptr( value_ptr && other ) noexcept
+  : p( other.release() )
+  { }
+
   template< class E2 >
-    value_ptr( value_ptr<E2,Cloner,Deleter> &&
+    value_ptr( value_ptr<E2,Cloner,Deleter> && other
              , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-             ) noexcept;
+             ) noexcept
+  : p( other.release() )
+  { }
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
+  // copy from auto_ptr<>:
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
+  value_ptr( std::auto_ptr<Element> & other ) : p( other.release() )  { }
+  value_ptr &  operator = ( std::auto_ptr<Element> & other )
+  { value_ptr tmp(other); swap(tmp); return *this; }
+#pragma GCC diagnostic pop
+
   // d'tor:
-  ~value_ptr( ) noexcept;
+  ~value_ptr( ) noexcept  { reset(); }
 
   // copying assignments:
-  value_ptr &  operator = ( std::nullptr_t ) noexcept;
-  value_ptr &  operator = ( value_ptr const & );
+  value_ptr &  operator = ( std::nullptr_t ) noexcept
+  {
+    reset( nullptr );
+    return *this;
+  }
+  value_ptr &  operator = ( value_ptr const & other )
+  {
+    value_ptr tmp(other);
+    swap(tmp);
+    return *this;
+  }
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
-    operator = ( value_ptr<E2,Cloner,Deleter> const & );
+    operator = ( value_ptr<E2,Cloner,Deleter> const & other )
+  {
+    value_ptr tmp(other);
+    swap(tmp);
+    return *this;
+  }
 
   // moving assignments:
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
-  value_ptr &  operator = ( value_ptr && );
+  value_ptr &  operator = ( value_ptr && other )
+  {
+    value_ptr tmp( std::move(other) );
+    swap(tmp);
+    return *this;
+  }
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
-    operator = ( value_ptr<E2,Cloner,Deleter> && );
+    operator = ( value_ptr<E2,Cloner,Deleter> && other )
+  {
+    value_ptr tmp( std::move(other) );
+    swap(tmp);
+    return *this;
+  }
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
   // observers:
-  reference             operator *  ( ) const;
-  pointer               operator -> ( ) const noexcept;
-  pointer               get         ( ) const noexcept;
+  reference  operator *  ( ) const  { return *get(); }
+  pointer    operator -> ( ) const noexcept  { return get(); }
+  pointer    get         ( ) const noexcept  { return p; }
 #ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-  explicit  operator bool ( ) const noexcept;
+  explicit   operator bool ( ) const noexcept  { return get(); }
 #else
 private:
   struct _safe_ { int _bool_; };
 public:
-  operator int _safe_::* ( ) const noexcept;
+  operator int _safe_::* ( ) const noexcept  { return get() ? & _safe_::_bool_ : 0; }
 #endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
 
   // modifiers:
-  pointer  release( ) noexcept;
-  void     reset( pointer = pointer() ) noexcept;
-  void     swap( value_ptr & ) noexcept;
+  pointer  release( ) noexcept  { pointer old = p; p = nullptr; return old; }
+  void     reset( pointer t = pointer() ) noexcept  { Deleter()(p); p = t; }
+  void     swap( value_ptr & other ) noexcept  { std::swap(p, other.p); }
 
 private:
-  pointer       p;
+  pointer  p;
 
   template< class P >
-    pointer
-    clone_from( P const p ) const
-  { return p ? Cloner()(p) : nullptr; }
+  pointer
+    clone_from( P const p ) const  { return p ? Cloner()(p) : nullptr; }
 
-
-#if 0 // --------------------------------------------------
-  // --- copy from auto_ptr<>:
-  value_ptr( std::auto_ptr<Element> & other ) :
-    p( other.release() )
-  { }
-  value_ptr &  operator = ( std::auto_ptr<Element> & other )
-  { value_ptr tmp(other); swap(tmp); return *this; }
-
-  reference
-    at          ( ) const
-  { return empty() ? throw std::exception() : *get(); }
-
+#if 0  // --------------------------------------------------
   bool
-    empty( ) const noexcept
-  { return p == nullptr; }
+    empty( ) const noexcept { return p == nullptr; }
 #endif  // 0 --------------------------------------------------
 
 };  // value_ptr<>
-
-// ======================================================================
-// member functions:
-
-// ----------------------------------------------------------------------
-// default c'tor:
-
-template< class E, class C, class D >
-CONSTEXPR_FCTN
-  cet::value_ptr<E,C,D>::
-  value_ptr( ) noexcept
-: p( nullptr )
-{ }
-
-// ----------------------------------------------------------------------
-// ownership-taking c'tors:
-
-template< class E, class C, class D >
-CONSTEXPR_FCTN
-  cet::value_ptr<E,C,D>::
-  value_ptr( std::nullptr_t ) noexcept
-: p( nullptr )
-{ }
-
-template< class E, class C, class D >
-  cet::value_ptr<E,C,D>::
-  value_ptr( pointer const other ) noexcept
-: p( other )
-{ }
-
-// ----------------------------------------------------------------------
-// copying c'tors:
-
-template< class E, class C, class D >
-  cet::value_ptr<E,C,D>::
-  value_ptr( value_ptr<E,C,D> const & other )
-: p( clone_from(other.p) )
-{ }
-
-template< class E, class C, class D >
-template< class E2 >
-  cet::value_ptr<E,C,D>::
-  value_ptr( value_ptr<E2,C,D> const & other
-           , typename std::enable_if< is_compatible<E2>::value >::type *
-           )
-: p( clone_from(other.p) )
-{ }
-
-// ----------------------------------------------------------------------
-// moving c'tors:
-
-#ifdef CPP0X_HAS_RVALUE_REFERENCES
-
-template< class E, class C, class D >
-template< class E2 >
-  cet::value_ptr<E,C,D>::
-  value_ptr( value_ptr<E2,C,D> && other
-           , typename std::enable_if< is_compatible<E2>::value >::type *
-           ) noexcept
-: p( other.release() )
-{ }
-
-#endif // CPP0X_HAS_RVALUE_REFERENCES
-
-// ----------------------------------------------------------------------
-// d'tor:
-
-template< class E, class C, class D >
-  cet::value_ptr<E,C,D>::
-  ~value_ptr( ) noexcept
-{
-  reset();
-}
-
-// ----------------------------------------------------------------------
-// copying assignments:
-
-template< class E, class C, class D >
-cet::value_ptr<E,C,D> &
-  cet::value_ptr<E,C,D>::
-  operator = ( std::nullptr_t ) noexcept
-{
-  reset( nullptr );
-  return *this;
-}
-
-template< class E, class C, class D >
-cet::value_ptr<E,C,D> &
-  cet::value_ptr<E,C,D>::
-    operator = ( value_ptr const & other )
-{
-  value_ptr tmp(other);
-  swap(tmp);
-  return *this;
-}
-
-template< class E, class C, class D >
-template< class E2 >
-typename std::enable_if< cet::value_ptr<E,C,D>::template is_compatible<E2>::value
-                       , cet::value_ptr<E,C,D> &
-                       >::type
-  cet::value_ptr<E,C,D>::
-  operator = ( value_ptr<E2,C,D> const & other )
-{
-  value_ptr tmp(other);
-  swap(tmp);
-  return *this;
-}
-
-// ----------------------------------------------------------------------
-// moving assignments:
-
-#ifdef CPP0X_HAS_RVALUE_REFERENCES
-
-template< class E, class C, class D >
-template< class E2 >
-typename std::enable_if< cet::value_ptr<E,C,D>::template is_compatible<E2>::value
-                       , cet::value_ptr<E,C,D> &
-                       >::type
-  cet::value_ptr<E,C,D>::
-  operator = ( value_ptr<E2,C,D> && other )
-{
-  value_ptr tmp( std::move(other) );
-  swap(tmp);
-  return *this;
-}
-
-#endif // CPP0X_HAS_RVALUE_REFERENCES
-
-// ----------------------------------------------------------------------
-// observers:
-
-template< class E, class C, class D >
-typename cet::value_ptr<E,C,D>::reference
-  cet::value_ptr<E,C,D>::
-  operator * ( ) const
-{
-  return *get();
-}
-
-template< class E, class C, class D >
-typename cet::value_ptr<E,C,D>::pointer
-  cet::value_ptr<E,C,D>::
-  operator -> ( ) const noexcept
-{
-  return get();
-}
-
-template< class E, class C, class D >
-typename cet::value_ptr<E,C,D>::pointer
-  cet::value_ptr<E,C,D>::
-  get( ) const noexcept
-{
-  return p;
-}
-
-template< class E, class C, class D >
-  cet::value_ptr<E,C,D>::
-#ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-  operator bool ( ) const noexcept
-{
-  return get();
-}
-#else
-  operator int _safe_::* ( ) const noexcept
-{
-  return get() ? & _safe_::_bool_ : 0;
-}
-#endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-
-// ----------------------------------------------------------------------
-// modifiers:
-
-template< class E, class C, class D >
-typename cet::value_ptr<E,C,D>::pointer
-  cet::value_ptr<E,C,D>::
-  release( ) noexcept
-{
-  pointer old = p;
-  p = nullptr;
-  return old;
-}
-
-template< class E, class C, class D >
-void
-  cet::value_ptr<E,C,D>::
-  reset( pointer const t ) noexcept
-{
-  D()(p);
-  p = t;
-}
-
-template< class E, class C, class D >
-void
-  cet::value_ptr<E,C,D>::
-  swap( value_ptr & other ) noexcept
-{
-  std::swap(p, other.p);
-}
 
 // ======================================================================
 // non-member functions:
@@ -492,9 +320,7 @@ void
 template< class E, class C, class D >
   void
   cet::swap( value_ptr<E,C,D> & x, value_ptr<E,C,D> & y ) noexcept
-{
-  x.swap(y);
-}
+{ x.swap(y); }
 
 // ----------------------------------------------------------------------
 // non-member (in)equality comparison:
@@ -502,45 +328,33 @@ template< class E, class C, class D >
 template< class E, class C, class D >
 bool
   cet::operator == ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
-{
-  return x.get() == y.get();
-}
+{ return x.get() == y.get(); }
 
 template< class E, class C, class D >
 bool
   cet::operator != ( value_ptr<E,C,D> const & x, value_ptr<E,C,D> const & y )
-{
-  return ! operator == (x, y);
-}
+{ return ! operator == (x, y); }
 
 #if defined CPP0X_HAS_NULLPTR
 template< class E, class C, class D >
 bool
   cet::operator == ( value_ptr<E,C,D> const & x, std::nullptr_t const & y )
-{
-  return x.get() == y;
-}
+{ return x.get() == y; }
 
 template< class E, class C, class D >
 bool
   cet::operator != ( value_ptr<E,C,D> const & x, std::nullptr_t const & y )
-{
-  return ! operator == (x, y);
-}
+{ return ! operator == (x, y); }
 
 template< class E, class C, class D >
 bool
   cet::operator == ( std::nullptr_t const & x, value_ptr<E,C,D> const & y )
-{
-  return x == y.get();
-}
+{ return x == y.get(); }
 
 template< class E, class C, class D >
 bool
   cet::operator != ( std::nullptr_t const & x, value_ptr<E,C,D> const & y )
-{
-  return ! operator == (x, y);
-}
+{ return ! operator == (x, y); }
 #endif  // CPP0X_HAS_NULLPTR
 
 // ----------------------------------------------------------------------

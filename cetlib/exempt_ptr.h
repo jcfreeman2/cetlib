@@ -116,240 +116,70 @@ private:
 
 public:
   // --- default c'tor:
-  CONSTEXPR_FCTN  exempt_ptr( ) noexcept;
+  CONSTEXPR_FCTN  exempt_ptr( ) noexcept : p( nullptr )  { }
 
   // pointer-accepting c'tors:
-  CONSTEXPR_FCTN  exempt_ptr( std::nullptr_t ) noexcept;
-  explicit        exempt_ptr( pointer        ) noexcept;
+  CONSTEXPR_FCTN  exempt_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
+  explicit        exempt_ptr( pointer other ) noexcept  : p( other   )  { }
   template< class E2 >
-    explicit      exempt_ptr( E2 *
-                            , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-                            ) noexcept;
+  explicit      exempt_ptr( E2 * other
+                          , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+                          ) noexcept
+  : p( other )
+  { }
 
   // copying c'tors:
-  // explicit     exempt_ptr( exempt_ptr const & ) = default;
+  // use compiler-generated copy c'tor
   template< class E2 >
-    explicit      exempt_ptr( exempt_ptr<E2> const &
-                            , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-                            ) noexcept;
+  explicit  exempt_ptr( exempt_ptr<E2> const & other
+                      , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+                      ) noexcept
+  : p( other.get() )
+  { }
 
   // pointer-accepting assignments:
-  exempt_ptr &    operator = ( std::nullptr_t ) noexcept;
+  exempt_ptr &  operator = ( std::nullptr_t ) noexcept { reset(nullptr); return *this; }
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, exempt_ptr & >::type
-                  operator = ( E2 * ) noexcept;
+                operator = ( E2 * other ) noexcept
+  {
+    reset( other );
+    return *this;
+  }
 
   // copying assignments:
-  // exempt_ptr &  operator = ( exempt_ptr const & ) = default;
+  // use compiler-generated copy assignment
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, exempt_ptr & >::type
-                  operator = ( exempt_ptr<E2> const & ) noexcept;
+                  operator = ( exempt_ptr<E2> const & other ) noexcept
+  {
+    reset( other.get() );
+    return *this;
+  }
 
   // observers:
-  reference       operator *  ( ) const noexcept;
-  pointer         operator -> ( ) const noexcept;
-  pointer         get( ) const noexcept;
-  bool            empty( ) const noexcept;
+  reference  operator *  ( ) const noexcept  { return *get(); }
+  pointer    operator -> ( ) const noexcept  { return get(); }
+  pointer    get( ) const noexcept  { return p; }
+  bool       empty( ) const noexcept  { return get() == nullptr; }
 #ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-  explicit        operator bool ( ) const noexcept;
+  explicit   operator bool ( ) const noexcept  { return get(); }
 #else
 private:
   struct _safe_ { int _bool_; };
 public:
-                  operator int _safe_::* ( ) const noexcept;
+    operator int _safe_::* ( ) const noexcept  { return get() ? & _safe_::_bool_ : 0; }
 #endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
 
   // modifiers:
-  pointer         release( ) noexcept;
-  void            reset( pointer = nullptr ) noexcept;
-  void            swap( exempt_ptr & ) noexcept;
-
-#if 0 // ----------
-  reference
-    at          ( ) const
-  { return empty() ? throw std::exception() : *get(); }
-#endif  // 0 ----------
+  pointer  release( ) noexcept  { pointer old = get(); reset(); return old; }
+  void     reset( pointer t = nullptr ) noexcept  { p = t; }
+  void     swap( exempt_ptr & other ) noexcept  { std::swap(p, other.p); }
 
 private:
   pointer  p;
 
 };  // exempt_ptr<>
-
-// ======================================================================
-// member functions:
-
-// ----------------------------------------------------------------------
-// default c'tor:
-
-template< class E >
-CONSTEXPR_FCTN
-  cet::exempt_ptr<E>::
-  exempt_ptr( ) noexcept
-: p( nullptr )
-{ }
-
-// ----------------------------------------------------------------------
-// pointer-accepting c'tors:
-
-template< class E >
-CONSTEXPR_FCTN
-  cet::exempt_ptr<E>::
-  exempt_ptr( std::nullptr_t ) noexcept
-: p( nullptr )
-{ }
-
-template< class E >
-  cet::exempt_ptr<E>::
-  exempt_ptr( pointer other ) noexcept
-: p( other )
-{ }
-
-template< class E >
-template< class E2 >
-  cet::exempt_ptr<E>::
-  exempt_ptr( E2 * other
-            , typename std::enable_if< cet::exempt_ptr<E>::template is_compatible<E2>::value >::type *
-            ) noexcept
-: p( other )
-{ }
-
-// ----------------------------------------------------------------------
-// copying c'tors:
-
-//template< class E >
-//  cet::exempt_ptr<E>::
-//  exempt_ptr( exempt_ptr const & ) = default;
-
-template< class E >
-template< class E2 >
-  cet::exempt_ptr<E>::
-  exempt_ptr( exempt_ptr<E2> const & other
-            , typename std::enable_if< cet::exempt_ptr<E>::template is_compatible<E2>::value >::type *
-            ) noexcept
-: p( other.get() )
-{ }
-
-// ----------------------------------------------------------------------
-// pointer-accepting assignments:
-
-template< class E >
-cet::exempt_ptr<E> &
-  cet::exempt_ptr<E>::
-  operator = ( std::nullptr_t ) noexcept
-{
-  reset( nullptr );
-  return *this;
-}
-
-template< class E >
-template< class E2 >
-typename std::enable_if< cet::exempt_ptr<E>::template is_compatible<E2>::value
-                       , cet::exempt_ptr<E> &
-                       >::type
-  cet::exempt_ptr<E>::
-  operator = ( E2 * other ) noexcept
-{
-  reset( other );
-  return *this;
-}
-
-// ----------------------------------------------------------------------
-// copying assignments:
-
-//template< class E >
-//exempt_ptr<E> &
-//  cet::exempt_ptr<E>::
-//  operator = ( exempt_ptr const & ) = default;
-
-template< class E >
-template< class E2 >
-typename std::enable_if< cet::exempt_ptr<E>::template is_compatible<E2>::value
-                       , cet::exempt_ptr<E> &
-                       >::type
-  cet::exempt_ptr<E>::
-  operator = ( exempt_ptr<E2> const & other ) noexcept
-{
-  reset( other.get() );
-  return *this;
-}
-
-// ----------------------------------------------------------------------
-// observers:
-
-template< class E >
-typename cet::exempt_ptr<E>::reference
-  cet::exempt_ptr<E>::
-  operator * ( ) const noexcept
-{
-  return *get();
-}
-
-template< class E >
-typename cet::exempt_ptr<E>::pointer
-  cet::exempt_ptr<E>::
-  operator -> ( ) const noexcept
-{
-  return get();
-}
-
-template< class E >
-typename cet::exempt_ptr<E>::pointer
-  cet::exempt_ptr<E>::
-  get( ) const noexcept
-{
-  return p;
-}
-
-template< class E >
-bool
-  cet::exempt_ptr<E>::
-  empty( ) const noexcept
-{
-  return get() == nullptr;
-}
-
-template< class E >
-  cet::exempt_ptr<E>::
-#ifdef CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-  operator bool ( ) const noexcept
-{
-  return get();
-}
-#else
-  operator int _safe_::* ( ) const noexcept
-{
-  return get() ? & _safe_::_bool_ : 0;
-}
-#endif  // CPP0X_HAS_EXPLICIT_CONVERSION_OPERATORS
-
-// ----------------------------------------------------------------------
-// modifiers:
-
-template< class E >
-typename cet::exempt_ptr<E>::pointer
-  cet::exempt_ptr<E>::
-  release( ) noexcept
-{
-  pointer old = get();
-  reset();
-  return old;
-}
-
-template< class E >
-void
-  cet::exempt_ptr<E>::
-  reset( pointer t ) noexcept
-{
-  p = t;
-}
-
-template< class E >
-void
-  cet::exempt_ptr<E>::
-  swap( exempt_ptr & other ) noexcept
-{
-  std::swap(p, other.p);
-}
 
 // ======================================================================
 // non-member functions:
