@@ -41,6 +41,9 @@ enable_testing()
 include(EnsureOutOfSourceBuild)
 cet_ensure_out_of_source_build()
 
+include(SetCompilerFlags)
+cet_set_compiler_flags(DIAGS VIGILANT EXTRA_FLAGS -pedantic)
+
 # define some necessary modules
 include( FindUpsPackage )
 include( FindUpsBoost )
@@ -62,12 +65,10 @@ if( NOT GCC_VERSION )
            "Can't locate GCC_VERSION, required to test ${PROJECT_NAME}"
          )
 endif()
-SET(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++98 -g -O3  -Wall -Werror=return-type -pedantic -Wextra -Wno-long-long -Winit-self -Wcast-qual -Woverloaded-virtual")
-message( STATUS "Using GCC ${GCC_VERSION} with ${CMAKE_CXX_FLAGS}" )
 
 find_ups_boost( v1_46_1 filesystem regex unit_test_framework )
-find_ups_product( cetbuildtools v1_12_00 )
-find_ups_product( cpp0x v1_02_02 )
+find_ups_product( cetbuildtools v1_13_02)
+find_ups_product( cpp0x v1_02_03 )
 
 # ----------------------------------------------------------------------
 # Describe include path:
