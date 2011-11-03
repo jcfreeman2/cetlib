@@ -21,7 +21,7 @@ cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
 
 project( cetlib )
 set( product cetlib )
-set( version v1_02_03 )
+set( version v1_02_04 )
 set( qualifier a4 )
 
 # cetbuildtools contains our cmake modules
@@ -68,7 +68,7 @@ endif()
 
 find_ups_boost( v1_46_1 filesystem regex unit_test_framework )
 find_ups_product( cetbuildtools v1_13_03)
-find_ups_product( cpp0x v1_02_03 )
+find_ups_product( cpp0x v1_02_04 )
 
 # ----------------------------------------------------------------------
 # Describe include path:
