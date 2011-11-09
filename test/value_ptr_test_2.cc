@@ -47,10 +47,10 @@ int main()
   {
     std::auto_ptr<simple> c(new simple(11));
     std::auto_ptr<simple> d(new simple(11));
-    assert(c.get() != 0);
-    assert(d.get() != 0);
     simple* pc = c.get();
     simple* pd = d.get();
+    assert(pc != 0);
+    assert(pd != 0);
 
     cet::value_ptr<simple> e(c.release());
     assert(c.get() == 0);

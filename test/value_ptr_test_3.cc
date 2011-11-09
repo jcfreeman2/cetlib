@@ -49,10 +49,10 @@ int main()
   {
     std::auto_ptr<simple_base> c(new simple_base(11));
     std::auto_ptr<simple_base> d(new simple_base(11));
-    assert(c.get() != 0);
-    assert(d.get() != 0);
     simple_base* pc = c.get();
     simple_base* pd = d.get();
+    assert(pc != 0);
+    assert(pd != 0);
 
     cet::value_ptr<simple_base> e(c.release());
     assert(c.get() == 0);
