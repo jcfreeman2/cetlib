@@ -85,9 +85,7 @@ exception::exception( Category    const & c
   , category_     ( 1, c )
   , what_         ( )
 {
-  ost_ << m;
-  if( ! ends_with_whitespace(m) )
-    ost_ << ' ';
+  if ( ! m.empty() ) ost_ << m << '\n';
   category_.push_back( e.category() );
   append( e );
 }
