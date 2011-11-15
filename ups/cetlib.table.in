@@ -14,8 +14,8 @@ Qualifiers = ""
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_BASE_QUAL@ -j)
-    setupRequired(boost @BOOST_VERS@ @BOOST_BASE_QUAL@)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@ -j)
+    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@"
@@ -27,8 +27,8 @@ Qualifiers = "@qualifier@"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_BASE_QUAL@ -j)
-    setupRequired(boost @BOOST_VERS@ @BOOST_BASE_QUAL@)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@ -j)
+    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@:debug"
@@ -40,8 +40,8 @@ Qualifiers = "@qualifier@:debug"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_BASE_QUAL@:debug -j)
-    setupRequired(boost @BOOST_VERS@ @BOOST_BASE_QUAL@:debug)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug -j)
+    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@:debug)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@:opt"
@@ -53,8 +53,8 @@ Qualifiers = "@qualifier@:opt"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_BASE_QUAL@:opt -j)
-    setupRequired(boost @BOOST_VERS@ @BOOST_BASE_QUAL@:opt)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt -j)
+    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@:opt)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@:prof"
@@ -66,13 +66,14 @@ Qualifiers = "@qualifier@:prof"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ @CPP0X_BASE_QUAL@:prof -j)
-    setupRequired(boost @BOOST_VERS@ @BOOST_BASE_QUAL@:prof)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:prof -j)
+    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@:prof)
 
 Common:
   Action = setup
     prodDir()
     setupEnv()
+    setupRequired(cetpkgsupport)
     exeActionRequired(GetFQDir)
     envSet(${UPS_PROD_NAME_UC}_VERSION, @version@)
     prodDir( _FQ_DIR, ${${UPS_PROD_NAME_UC}_FQ} )
@@ -94,7 +95,7 @@ Common:
     # uncomment or add to this list as relevant
     setupRequired(cmake)
     exeActionRequired(GetExtraProducts)
-    setupRequired(gcc   @GCC_VERSION@   @GCC_QUAL@)
+    setupRequired(gcc   @GCC_VERSION@)
 
 End:
 # End Group definition
