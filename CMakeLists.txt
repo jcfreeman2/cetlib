@@ -67,7 +67,7 @@ if( NOT GCC_VERSION )
 endif()
 
 find_ups_boost( v1_47_0 filesystem regex unit_test_framework )
-find_ups_product( cetbuildtools v1_14_00)
+find_ups_product( cetbuildtools v1_14_02)
 find_ups_product( cpp0x v1_03_00 )
 
 # ----------------------------------------------------------------------
