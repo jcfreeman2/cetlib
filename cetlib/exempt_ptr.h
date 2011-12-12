@@ -61,6 +61,10 @@ namespace cet {
     swap( exempt_ptr<E> &, exempt_ptr<E> & ) noexcept;
 
   template< class E >
+  exempt_ptr<E>
+    make_exempt_ptr( E * ) noexcept;
+
+  template< class E >
   bool
     operator == ( exempt_ptr<E> const &, exempt_ptr<E> const & );
   template< class E >
@@ -111,7 +115,7 @@ public:
 private:
   template< class P >
     struct is_compatible
-    : public std::is_convertible< typename std::add_pointer<P>::type, pointer >
+  : public std::is_convertible< typename std::add_pointer<P>::type, pointer >
   { };
 
 public:
@@ -120,28 +124,33 @@ public:
 
   // pointer-accepting c'tors:
   CONSTEXPR_FCTN  exempt_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
-  explicit        exempt_ptr( pointer other ) noexcept  : p( other   )  { }
+  explicit        exempt_ptr( pointer other  ) noexcept : p( other   )  { }
   template< class E2 >
-  explicit      exempt_ptr( E2 * other
-                          , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-                          ) noexcept
+  exempt_ptr( E2 * other
+            , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+            ) noexcept
   : p( other )
   { }
 
   // copying c'tors:
   // use compiler-generated copy c'tor
   template< class E2 >
-  explicit  exempt_ptr( exempt_ptr<E2> const & other
-                      , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-                      ) noexcept
+  exempt_ptr( exempt_ptr<E2> const & other
+            , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+            ) noexcept
   : p( other.get() )
   { }
 
   // pointer-accepting assignments:
-  exempt_ptr &  operator = ( std::nullptr_t ) noexcept { reset(nullptr); return *this; }
+  exempt_ptr &
+    operator = ( std::nullptr_t ) noexcept
+  {
+    reset(nullptr);
+    return *this;
+  }
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, exempt_ptr & >::type
-                operator = ( E2 * other ) noexcept
+    operator = ( E2 * other ) noexcept
   {
     reset( other );
     return *this;
@@ -151,7 +160,7 @@ public:
   // use compiler-generated copy assignment
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, exempt_ptr & >::type
-                  operator = ( exempt_ptr<E2> const & other ) noexcept
+    operator = ( exempt_ptr<E2> const & other ) noexcept
   {
     reset( other.get() );
     return *this;
@@ -192,6 +201,16 @@ inline void
   cet::swap( exempt_ptr<E> & x, exempt_ptr<E> & y ) noexcept
 {
   x.swap(y);
+}
+
+// ----------------------------------------------------------------------
+// non-member make_exempt_ptr:
+
+template< class E >
+cet::exempt_ptr<E>
+  cet::make_exempt_ptr( E * p ) noexcept
+{
+  return exempt_ptr<E>(p);
 }
 
 // ----------------------------------------------------------------------

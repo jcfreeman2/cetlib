@@ -3,6 +3,7 @@
 
 
 using cet::exempt_ptr;
+using cet::make_exempt_ptr;
 
 
 void
@@ -30,6 +31,13 @@ int
     exempt_ptr<int const> ep(p);
   }
 
+  {
+    exempt_ptr<double const> p = make_exempt_ptr( new double(42.0) );
+    ensure( 21, p != nullptr );
+    ensure( 22, nullptr != p );
+    ensure( 23, *p == 42.0 );
+  }
+
   #if 0
   { // const => non-const (ought fail to compile)
     int const * p = new int(0);
@@ -39,13 +47,13 @@ int
 
   {
     exempt_ptr<int> p( new int(16) );
-    ensure( 21, p != nullptr );
-    ensure( 22, nullptr != p );
-    ensure( 23, *p == 16 );
+    ensure( 31, p != nullptr );
+    ensure( 32, nullptr != p );
+    ensure( 33, *p == 16 );
 
     exempt_ptr<int> q( p );
-    ensure( 24, p == q );
-    ensure( 25, *p == *q );
+    ensure( 34, p == q );
+    ensure( 35, *p == *q );
 
     p.reset( new int(0) );
     return *p;
