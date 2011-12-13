@@ -14,8 +14,7 @@ Qualifiers = ""
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@ -j)
-    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@"
@@ -27,8 +26,7 @@ Qualifiers = "@qualifier@"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@ -j)
-    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@:debug"
@@ -40,8 +38,7 @@ Qualifiers = "@qualifier@:debug"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug -j)
-    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@:debug)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@:opt"
@@ -53,8 +50,7 @@ Qualifiers = "@qualifier@:opt"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt -j)
-    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@:opt)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt)
 
 Flavor     = ANY
 Qualifiers = "@qualifier@:prof"
@@ -66,8 +62,7 @@ Qualifiers = "@qualifier@:prof"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:prof -j)
-    setupRequired(boost @BOOST_VERS@ -q @BOOST_BASE_QUAL@:prof)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:prof)
 
 Common:
   Action = setup
@@ -93,7 +88,6 @@ Common:
     Execute(dropit -E, NO_UPS_ENV, PATH)
 
     # uncomment or add to this list as relevant
-    setupRequired(cmake)
     exeActionRequired(GetExtraProducts)
     setupRequired(gcc   @GCC_VERSION@)
 
