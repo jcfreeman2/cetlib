@@ -3,7 +3,10 @@
 #
 #  cd .../path/to/build/directory
 #  source .../path/to/cetlib/ups/setup_for_development
-#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path] [-DCMAKE_BUILD_TYPE=Debug] .../path/to/cetlib
+#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path]
+#        -Dqualifier:STRING=$CETPKG_QUAL
+#        -DCMAKE_BUILD_TYPE=$CETPKG_TYPE
+#        $CETPKG_SOURCE
 #  make
 #  make test
 #  make install
@@ -14,60 +17,38 @@
 # ----------------------------------------------------------------------
 # Describe build tool requirements:
 
-cmake_minimum_required(VERSION 2.6)  # use cmake 2.6 or later
+cmake_minimum_required(VERSION 2.8)  # use cmake 2.8 or later
 
 # ----------------------------------------------------------------------
 # Describe product:
-
-project( cetlib )
-set( product cetlib )
-set( version v1_03_01 )
-set( qualifier a4 )
 
 # cetbuildtools contains our cmake modules
 set( CETBUILDTOOLS_VERSION $ENV{CETBUILDTOOLS_VERSION} )
 if( NOT CETBUILDTOOLS_VERSION )
   message( FATAL_ERROR "ERROR: setup cetbuildtools to get the cmake modules" )
 endif()
-set( CMAKE_MODULE_PATH "${CMAKE_ROOT}/Modules" )
 set( CMAKE_MODULE_PATH $ENV{CETBUILDTOOLS_DIR}/Modules ${CMAKE_MODULE_PATH} )
-message( STATUS "module path is ${CMAKE_MODULE_PATH}" )
 
-set( CMAKE_SKIP_RPATH ) # don't embed path in shared lib's or executables
+include(CetCMakeEnv)
 
-enable_testing()
+if ( NOT qualifier )
+    message (FATAL_ERROR "ERROR: please call cmake with -Dqualifier:STRING=qualifier")
+endif ( NOT qualifier )
+cet_cmake_env( cetlib v1_03_01 ${qualifier} )
 
-# make sure someone isn't typing cmake in the source code tree
-include(EnsureOutOfSourceBuild)
-cet_ensure_out_of_source_build()
-
-include(SetCompilerFlags)
 cet_set_compiler_flags(DIAGS VIGILANT EXTRA_FLAGS -pedantic)
-
-# define some necessary modules
-include( FindUpsPackage )
-include( FindUpsBoost )
-include( SetFlavorQual )
-include( ParseUpsVersion )
-include( InstallSource )
-
-#set package version from ups version
-set_version_from_ups( ${version} )
-#define flavorqual and flavorqual_dir
-set_flavor_qual()
+if ("${qualifier}" STREQUAL "e1")
+  cet_add_compiler_flags(CXX -std=c++0x;-Wno-deprecated-declarations)
+endif()
+cet_report_compiler_flags()
 
 # ----------------------------------------------------------------------
 # Describe build prerequisites:
 
-set( GCC_VERSION $ENV{GCC_VERSION} )  # compiler
-if( NOT GCC_VERSION )
-  message( FATAL_ERROR
-           "Can't locate GCC_VERSION, required to test ${PROJECT_NAME}"
-         )
-endif()
+cet_check_gcc()
 
-find_ups_boost( v1_47_0 filesystem regex unit_test_framework )
-find_ups_product( cetbuildtools v1_14_02)
+find_ups_product(cetbuildtools v1_15_00)
+find_ups_boost( v1_48_0 filesystem regex unit_test_framework )
 find_ups_product( cpp0x v1_03_00 )
 
 # ----------------------------------------------------------------------
