@@ -34,6 +34,10 @@ public:
   double       sum( )   const noexcept  { return sum_; }
   double       sumsq( ) const noexcept  { return sumsq_; }
 
+  // statistics calculators:
+  double       mean( )  const noexcept;
+  double       rms( )   const noexcept;
+
   // mutators:
   void  reset( ) noexcept;
   void  use( double ) noexcept;
@@ -42,6 +46,9 @@ private:
   std::size_t  n_;             // counter
   double  min_, max_, small_;  // extrema
   double  sum_, sumsq_;        // accumulations
+
+  // helpers:
+  double  sqr( double x )  { return x * x; }
 
 };  // simple_stats
 

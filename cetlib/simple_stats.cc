@@ -12,6 +12,19 @@
 
 using cet::simple_stats;
 
+// ----------------------------------------------------------------------
+// statistics calculators:
+
+double  simple_stats::mean( ) const noexcept
+{
+  return sum_ / double(n_);
+}
+
+double  simple_stats::rms( ) const noexcept
+{
+  return std::sqrt( sumsq_ / double(n_) );
+}
+
 
 // ----------------------------------------------------------------------
 // mutators:
