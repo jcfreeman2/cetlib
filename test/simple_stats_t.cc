@@ -21,6 +21,7 @@ BOOST_AUTO_TEST_CASE( default_ctor_test )
 
   BOOST_CHECK( std::isnan(s.mean()) );
   BOOST_CHECK( std::isnan(s.rms()) );
+  BOOST_CHECK( std::isnan(s.rms0()) );
 }
 
 BOOST_AUTO_TEST_CASE( value_ctor_test )
@@ -36,13 +37,14 @@ BOOST_AUTO_TEST_CASE( value_ctor_test )
   BOOST_CHECK_EQUAL( s.sumsq(), pi * pi );
 
   BOOST_CHECK_EQUAL( s.mean(), pi );
-  BOOST_CHECK_EQUAL( s.rms(), pi );
+  BOOST_CHECK( std::isnan(s.rms()) );
+  BOOST_CHECK( std::isnan(s.rms0()) );
 }
 
-BOOST_AUTO_TEST_CASE( use_test )
+BOOST_AUTO_TEST_CASE( sample_test )
 {
   double pi = 3.14;
-  simple_stats  s(pi); s.use(-pi);
+  simple_stats  s(pi); s.sample(-pi);
 
   BOOST_CHECK_EQUAL( s.size(), 2u );
   BOOST_CHECK_EQUAL( s.max(), pi );
@@ -52,7 +54,6 @@ BOOST_AUTO_TEST_CASE( use_test )
   BOOST_CHECK_EQUAL( s.sumsq(), 2 * pi * pi );
 
   BOOST_CHECK_EQUAL( s.mean(), 0.0 );
-  BOOST_CHECK_EQUAL( s.rms(), pi );
 }
 
 BOOST_AUTO_TEST_SUITE_END()

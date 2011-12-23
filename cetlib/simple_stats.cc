@@ -6,30 +6,60 @@
 
 #include "cetlib/simple_stats.h"
 
-#include <algorithm>
-#include <cmath>
-#include <limits>
+#include "cetlib/pow.h"  // square
+#include <algorithm>     // max, min
+#include <cmath>         // abs, sqrt
+#include <limits>        // numeric_limits
 
 using cet::simple_stats;
 
 // ----------------------------------------------------------------------
 // statistics calculators:
 
-double  simple_stats::mean( ) const noexcept
+double
+  simple_stats::mean( ) const noexcept
 {
-  return sum_ / double(n_);
+  return n_ == 0u  ?  std::numeric_limits<double>::quiet_NaN()
+                   :  sum_ / double(n_);
 }
 
-double  simple_stats::rms( ) const noexcept
+double
+  simple_stats::rms( std::size_t nparams ) const noexcept
 {
-  return std::sqrt( sumsq_ / double(n_) );
+  if( n_ <= nparams )
+    return std::numeric_limits<double>::quiet_NaN();
+
+  double  diff  = sumsq_ / double(n_)
+                - square(mean());
+  if( diff < 0.0 )
+    return 0.0;
+
+  double  factor  = double(n_)
+                  / double(n_-nparams);
+  return std::sqrt(factor * diff);
+}
+
+double
+  simple_stats::rms0( std::size_t nparams ) const noexcept
+{
+  if( n_ <= nparams )
+    return std::numeric_limits<double>::quiet_NaN();
+
+  double  diff  = sumsq_ / double(n_);
+  if( diff < 0.0 )
+    return 0.0;
+
+  double  factor  = double(n_)
+                  / double(n_-nparams);
+  return std::sqrt(factor * diff);
 }
 
 
 // ----------------------------------------------------------------------
 // mutators:
 
-void  simple_stats::reset( ) noexcept
+void
+  simple_stats::reset( ) noexcept
 {
   n_     = 0u;
   min_   = + std::numeric_limits<double>::infinity();
@@ -39,12 +69,15 @@ void  simple_stats::reset( ) noexcept
   sumsq_ = 0.0;
 }
 
-void  simple_stats::use( double x ) noexcept
+void
+  simple_stats::sample( double x ) noexcept
 {
   ++n_;
   min_   = std::min(x, min_);
   max_   = std::max(x, max_);
   small_ = std::min( std::abs(x), small_);
   sum_   += x;
-  sumsq_ += x * x;
+  sumsq_ += square(x);
 }
+
+// ======================================================================
