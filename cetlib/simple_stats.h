@@ -42,6 +42,13 @@ public:
   // mutators:
   void  reset( ) noexcept;
   void  sample( double ) noexcept;
+  template< class Iter >
+  void
+    sample( Iter begin, Iter end ) noexcept
+  {
+    for(  ; begin != end;  ++begin )
+      sample(*begin);
+  }
 
 private:
   std::size_t  n_;             // counter
