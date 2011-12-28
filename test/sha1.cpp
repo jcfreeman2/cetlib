@@ -42,7 +42,7 @@
 
 namespace fhicl {
 
-/*  
+/*
  *  SHA1
  *
  *  Description:
@@ -62,7 +62,7 @@ SHA1::SHA1()
     Reset();
 }
 
-/*  
+/*
  *  ~SHA1
  *
  *  Description:
@@ -82,7 +82,7 @@ SHA1::~SHA1()
     // The destructor does nothing
 }
 
-/*  
+/*
  *  Reset
  *
  *  Description:
@@ -114,7 +114,7 @@ void SHA1::Reset()
     Corrupted   = false;
 }
 
-/*  
+/*
  *  Result
  *
  *  Description:
@@ -155,7 +155,7 @@ bool SHA1::Result(unsigned *message_digest_array)
     return true;
 }
 
-/*  
+/*
  *  Input
  *
  *  Description:
@@ -212,7 +212,7 @@ void SHA1::Input(   const unsigned char *message_array,
     }
 }
 
-/*  
+/*
  *  Input
  *
  *  Description:
@@ -238,7 +238,7 @@ void SHA1::Input(   const char  *message_array,
     Input((unsigned char *) message_array, length);
 }
 
-/*  
+/*
  *  Input
  *
  *  Description:
@@ -259,7 +259,7 @@ void SHA1::Input(unsigned char message_element)
     Input(&message_element, 1);
 }
 
-/*  
+/*
  *  Input
  *
  *  Description:
@@ -280,7 +280,7 @@ void SHA1::Input(char message_element)
     Input((unsigned char *) &message_element, 1);
 }
 
-/*  
+/*
  *  operator<<
  *
  *  Description:
@@ -311,7 +311,7 @@ SHA1& SHA1::operator<<(const char *message_array)
     return *this;
 }
 
-/*  
+/*
  *  operator<<
  *
  *  Description:
@@ -342,7 +342,7 @@ SHA1& SHA1::operator<<(const unsigned char *message_array)
     return *this;
 }
 
-/*  
+/*
  *  operator<<
  *
  *  Description:
@@ -366,7 +366,7 @@ SHA1& SHA1::operator<<(const char message_element)
     return *this;
 }
 
-/*  
+/*
  *  operator<<
  *
  *  Description:
@@ -390,7 +390,7 @@ SHA1& SHA1::operator<<(const unsigned char message_element)
     return *this;
 }
 
-/*  
+/*
  *  ProcessMessageBlock
  *
  *  Description:
@@ -498,7 +498,7 @@ void SHA1::ProcessMessageBlock()
     Message_Block_Index = 0;
 }
 
-/*  
+/*
  *  PadMessage
  *
  *  Description:
@@ -567,7 +567,7 @@ void SHA1::PadMessage()
 }
 
 
-/*  
+/*
  *  CircularShift
  *
  *  Description:

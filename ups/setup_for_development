@@ -24,14 +24,14 @@ test "$ss" =  sh && eval 'set_() { sts=$?;for xx in "$@";do var=`expr "$xx" : "\
 test "$ss" =  sh && eval 'setenv() { export $1;eval "$1=\"\${2-}\""; }; source() { file=$1; shift; . $file "$@"; }; unsetenv_() { unset "$@"; }'
 test "$ss" =  sh && eval 'tnotnull() { eval "test -n \"\${$1-}\""; }'                             && eval 'nullout() { "$@" >/dev/null 2>&1; }'
 test "$ss" = csh && alias tnotnull "eval '"'test $?'"\!* -eq 1' && eval '"'test -n "$'"\!*"'"'"'" && alias nullout "\!* >& /dev/null"
-test "$ss" = csh && alias return exit 
+test "$ss" = csh && alias return exit
 
 set_ msg2='ERROR: You MUST setup ups'
 test -z $UPS_DIR && ( echo ""; echo "$msg2"; echo "" ) && return
 
 set_ msg3='ERROR: You MUST specify either -o, -p, or -d'
 set_ msg4='Usage: setup_for_development <-d|-o|-p> [rootqual]'
-test -z "$1" && ( echo ""; echo "$msg4"; echo "" ) 
+test -z "$1" && ( echo ""; echo "$msg4"; echo "" )
 test -z "$1" && ( echo ""; echo "$msg3"; echo "" ) && return
 
 
