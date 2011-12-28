@@ -205,13 +205,13 @@ public:
   explicit        value_ptr( pointer other  ) noexcept : p( other   )  { }
 
   // copying c'tors:
-  explicit  value_ptr( value_ptr const & other )
+  value_ptr( value_ptr const & other )
   : p( clone_from(other.p) )
   { }
   template< class E2 >
-    explicit  value_ptr( value_ptr<E2,Cloner,Deleter> const & other
-                       , typename std::enable_if< is_compatible<E2>::value >::type * = 0
-                       )
+    value_ptr( value_ptr<E2,Cloner,Deleter> const & other
+             , typename std::enable_if< is_compatible<E2>::value >::type * = 0
+             )
   : p( clone_from(other.p) )
   { }
 
@@ -318,7 +318,7 @@ private:
 // non-member swap:
 
 template< class E, class C, class D >
-  void
+void
   cet::swap( value_ptr<E,C,D> & x, value_ptr<E,C,D> & y ) noexcept
 { x.swap(y); }
 
