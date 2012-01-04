@@ -294,7 +294,7 @@ public:
 
   // modifiers:
   pointer  release( ) noexcept  { pointer old = p; p = nullptr; return old; }
-  void     reset( pointer t = pointer() ) noexcept  { Deleter()(p); p = t; }
+  void     reset( pointer t = pointer() ) noexcept  { std::swap(p, t); Deleter()(t); }
   void     swap( value_ptr & other ) noexcept  { std::swap(p, other.p); }
 
 private:
