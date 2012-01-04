@@ -35,13 +35,21 @@ int main()
   assert(simple::n_alive == 0);
   {
     cet::value_ptr<simple> a(new simple(10));
+    assert(simple::n_born == 1);
     assert(simple::n_alive == 1);
-    cet::value_ptr<simple> b(a);
-    assert(simple::n_alive == 2);
 
-    assert(*a==*b);
-    assert(a->isSame(*b) == false);
-  } // a and b destroyed
+    {
+      cet::value_ptr<simple> b(a);
+      assert(simple::n_born == 2);
+      assert(simple::n_alive == 2);
+
+      assert(*a==*b);
+      assert(a->isSame(*b) == false);
+    } // b destroyed
+    assert(simple::n_born == 2);
+    assert(simple::n_alive == 1);
+  } // a destroyed, too
+  assert(simple::n_born == 2);
   assert(simple::n_alive == 0);
 
   {
