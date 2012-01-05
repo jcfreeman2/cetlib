@@ -1,41 +1,47 @@
-#include "cetlib/value_ptr.h"
-#include <cstdlib>
 
+// ======================================================================
+//
+// test value_ptr
+//
+// ======================================================================
+
+#define BOOST_TEST_MODULE ( value_ptr test )
+#include "boost/test/auto_unit_test.hpp"
+
+#include "cetlib/value_ptr.h"
 
 using cet::value_ptr;
 
+struct Base { virtual ~Base() { } };
+struct Derived : public Base { };
 
-void
-  ensure( int which, bool claim )
+BOOST_AUTO_TEST_SUITE( value_ptr_test )
+
+BOOST_AUTO_TEST_CASE( nullptr_test )
 {
-  if( not claim )
-    std::exit(which);
+  value_ptr<int> p;
+  BOOST_CHECK( !p );
+  BOOST_CHECK( p == nullptr );
+  BOOST_CHECK( nullptr == p );
+  BOOST_CHECK( p == 0 );
+  BOOST_CHECK( 0 == p );
 }
 
-
-int
-  main( )
+BOOST_AUTO_TEST_CASE( basic_test )
 {
-  {
-    value_ptr<int> p;
-    ensure( 1, !p );
-    ensure( 2, p == nullptr );
-    ensure( 3, nullptr == p );
-    ensure( 4, p == 0 );
-    ensure( 5, 0 == p );
-  }
+  value_ptr<int> p( new int(16) );
+  BOOST_CHECK( bool(p) );
+  BOOST_CHECK_EQUAL( *p, 16 );
 
-  {
-    value_ptr<int> p( new int(16) );
-    ensure( 11, bool(p) );
-    ensure( 12, *p == 16 );
+  int * p_addr = p.get();
+  value_ptr<int> q( p );
+  BOOST_CHECK_EQUAL( *p, *q );
+  BOOST_CHECK( p != q );
+  BOOST_CHECK( p_addr != q.get() );
 
-    value_ptr<int> q( p );
-    ensure( 13, *p == *q );
-    ensure( 14, p != q );
+  p.reset( new int(0) );
+  BOOST_CHECK_EQUAL( *p, 0 );
+  BOOST_CHECK( p_addr != p.get() );
+}
 
-    p.reset( new int(0) );
-    return *p;
-  }
-
-}  // main()
+BOOST_AUTO_TEST_SUITE_END()
