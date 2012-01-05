@@ -247,7 +247,7 @@ public:
   { }
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
-  // copy from auto_ptr<>:
+  // copy from an auto_ptr<>:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   value_ptr( std::auto_ptr<Element> & other ) : p( other.release() )  { }
