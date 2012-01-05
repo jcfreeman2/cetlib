@@ -44,4 +44,13 @@ BOOST_AUTO_TEST_CASE( basic_test )
   BOOST_CHECK( p_addr != p.get() );
 }
 
+BOOST_AUTO_TEST_CASE( compile_failure_test )
+{
+#if 0
+  value_ptr<double> p( new int(16) ); // unrelated types
+  value_ptr<Base> b( new Derived );   // polymorphic, but no clone()
+  value_ptr<Derived> d( new Base );   // no conversion in this direction
+#endif
+}
+
 BOOST_AUTO_TEST_SUITE_END()

@@ -139,7 +139,8 @@ private:
   template< class   >  static  no_t   test( ... );
 
 public:
-  static  bool const  value = sizeof(test<T>(0)) == sizeof(yes_t);
+  static  bool const  value =  std::is_polymorphic<T>::value
+                            && sizeof(test<T>(0)) == sizeof(yes_t);
 };  // has_clone<>
 
 // ----------------------------------------------------------------------
@@ -193,7 +194,7 @@ public:
 private:
   template< class P >
     struct is_compatible
-    : public std::is_convertible< typename std::add_pointer<P>::type, pointer >
+  : public std::is_convertible< typename std::add_pointer<P>::type, pointer >
   { };
 
 public:
@@ -202,7 +203,24 @@ public:
 
   // ownership-taking c'tors:
   CONSTEXPR_FCTN  value_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
-  explicit        value_ptr( pointer other  ) noexcept : p( other   )  { }
+
+  template< class E2 >
+  explicit
+    value_ptr( E2 * other ) noexcept
+  : p( other )
+  {
+    STATIC_ASSERT( is_compatible<E2>::value
+                 , "value_ptr<>'s pointee type is incompatible!"
+                 );
+
+    typedef  typename std::remove_reference<Element>::type  Pointee;
+    STATIC_ASSERT(    ! std::is_polymorphic<E2>::value
+                   || ! (std::is_same< Cloner
+                                     , default_clone<Element,Pointee,false>
+                                     >::value)
+                 , "value_ptr<>'s pointee type would slice when copying!"
+                 );
+  }
 
   // copying c'tors:
   value_ptr( value_ptr const & other )
