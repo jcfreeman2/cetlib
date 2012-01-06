@@ -43,6 +43,7 @@ public:
 
   // statistics calculators:
   double       mean    ( ) const noexcept;
+  double       range   ( ) const noexcept;
   double       err_mean( std::size_t nparams = 1u ) const noexcept;
   double       rms     ( std::size_t nparams = 1u ) const noexcept;
   double       rms0    ( std::size_t nparams = 0u ) const noexcept;
@@ -79,7 +80,9 @@ std::basic_ostream<charT,traits> &
             << " +/- " << stats.err_mean()
             << ", "    << stats.rms()
             << " +/- " << stats.err_rms()
-            << "";
+            << ", "    << stats.min()
+            << " "     << stats.max()
+            << " )";
 }
 
 // ======================================================================

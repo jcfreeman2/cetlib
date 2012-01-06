@@ -49,6 +49,12 @@ double
 }
 
 double
+  simple_stats::range( ) const noexcept
+{
+  return max_ - min_;
+}
+
+double
   simple_stats::err_mean( std::size_t nparams ) const noexcept
 {
   return n_ == 0u  ?  std::numeric_limits<double>::quiet_NaN()
