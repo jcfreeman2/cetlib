@@ -67,18 +67,21 @@
 namespace cet {
   namespace _ {
     template< class T >  struct has_clone;
+
+  template< class Element
+          , bool  =    std::is_polymorphic<Element>::value
+                    && _::has_clone       <Element>::value
+          >
+    struct default_action;
+  template< class Element >
+    struct default_action<Element, false>;
   }
 
-  template< class Element
-          , class Pointee = typename std::remove_reference<Element>::type
-          , bool          = _::has_clone<Pointee>::value
-          >
-    class default_clone;
-  template< class Element, class Pointee >
-    class default_clone<Element, Pointee, false>;
+  template< class Element >  struct default_copy;
+  template< class Element >  struct default_clone;
 
   template< class Element
-          , class Cloner  = default_clone<Element>
+          , class Cloner  = _::default_action<Element>
           , class Deleter = std::default_delete<Element>
           >
     class value_ptr;
@@ -139,43 +142,50 @@ private:
   template< class   >  static  no_t   test( ... );
 
 public:
-  static  bool const  value =  std::is_polymorphic<T>::value
-                            && sizeof(test<T>(0)) == sizeof(yes_t);
+  static  bool const  value =  sizeof(test<T>(0)) == sizeof(yes_t);
 };  // has_clone<>
 
 // ----------------------------------------------------------------------
 
-template< class Element, class Pointee, bool >
-  class cet::default_clone
+template< class Element >
+  struct cet::default_copy
 {
-  typedef  typename std::add_pointer<Pointee>::type
-           pointer;
-
 public:
-  template< class Ptr >
-  typename  std::enable_if< std::is_convertible<Ptr, pointer>::value
-                          , pointer
-                          >::type
-    operator () ( Ptr const & p ) const
-  { return p->clone(); }
+  Element *
+    operator () ( Element * p ) const  { return new Element( *p ); }
+
+};  // default_copy<>
+
+// ----------------------------------------------------------------------
+
+template< class Element >
+  struct cet::default_clone
+{
+public:
+  Element *
+    operator () ( Element * p ) const  { return p->clone(); }
 
 };  // default_clone<>
 
-template< class Element, class Pointee >
-  class cet::default_clone<Element, Pointee, false>
+// ----------------------------------------------------------------------
+
+template< class Element, bool >
+  struct cet::_::default_action
+: public default_clone<Element>
 {
-  typedef  typename std::add_pointer<Pointee>::type
-           pointer;
-
 public:
-  template< class Ptr >
-  typename  std::enable_if< std::is_convertible<Ptr, pointer>::value
-                          , pointer
-                          >::type
-    operator () ( Ptr const & p ) const
-  { return new Pointee( *p ); }
+  using default_clone<Element>::operator();
 
-};  // default_clone<>
+};  // default_action<>
+
+template< class Element >
+  struct cet::_::default_action<Element, false>
+: public default_copy<Element>
+{
+public:
+  using default_copy<Element>::operator();
+
+};  // default_action<>
 
 // ----------------------------------------------------------------------
 
@@ -216,7 +226,7 @@ public:
     typedef  typename std::remove_reference<Element>::type  Pointee;
     STATIC_ASSERT(    ! std::is_polymorphic<E2>::value
                    || ! (std::is_same< Cloner
-                                     , default_clone<Element,Pointee,false>
+                                     , _::default_action<Element,false>
                                      >::value)
                  , "value_ptr<>'s pointee type would slice when copying!"
                  );
@@ -247,6 +257,7 @@ public:
   { }
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
+#if 0
   // copy from an auto_ptr<>:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
@@ -254,6 +265,7 @@ public:
   value_ptr &  operator = ( std::auto_ptr<Element> & other )
   { value_ptr tmp(other); swap(tmp); return *this; }
 #pragma GCC diagnostic pop
+#endif  // 0
 
   // d'tor:
   ~value_ptr( ) noexcept  { reset(); }

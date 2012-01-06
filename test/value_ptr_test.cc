@@ -6,13 +6,25 @@
 
 #define BOOST_TEST_MODULE ( value_ptr test )
 #include "boost/test/auto_unit_test.hpp"
+#include <string>
 
 #include "cetlib/value_ptr.h"
 
 using cet::value_ptr;
+using cet::default_copy;
+using cet::default_clone;
 
-struct Base { virtual ~Base() { } };
-struct Derived : public Base { };
+struct Base
+{
+  virtual std::string  who( ) const  { return "Base"; }
+  virtual ~Base() { }
+};
+
+struct Derived
+  : public Base
+{
+  virtual std::string  who( ) const  { return "Derived"; }
+};
 
 BOOST_AUTO_TEST_SUITE( value_ptr_test )
 
@@ -50,6 +62,21 @@ BOOST_AUTO_TEST_CASE( compile_failure_test )
   value_ptr<Base> b( new Derived );   // polymorphic, but no clone()
   value_ptr<Derived> d( new Base );   // no conversion in this direction
 #endif
+}
+
+BOOST_AUTO_TEST_CASE( polymorphism_test )
+{
+  value_ptr< Base
+           , default_copy<Base>
+           > b( new Base );
+  BOOST_CHECK( bool(b) );
+  BOOST_CHECK_EQUAL( b->who(), std::string("Base") );
+
+  value_ptr< Base
+           , default_copy<Base>  // request slicing
+           > d( new Derived );
+  BOOST_CHECK( bool(d) );
+  BOOST_CHECK_EQUAL( d->who(), std::string("Derived") );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
