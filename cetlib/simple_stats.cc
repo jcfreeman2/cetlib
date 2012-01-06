@@ -14,6 +14,31 @@
 using cet::simple_stats;
 
 // ----------------------------------------------------------------------
+// c'tors:
+
+simple_stats::simple_stats( ) noexcept
+: n_     ( 0u )
+, min_   ( + std::numeric_limits<double>::infinity() )
+, max_   ( - std::numeric_limits<double>::infinity() )
+, small_ ( + std::numeric_limits<double>::infinity() )
+, sum_   ( 0.0 )
+, sumsq_ ( 0.0 )
+{
+  ;
+}
+
+simple_stats::simple_stats( double x ) noexcept
+: n_     ( 0u )
+, min_   ( + std::numeric_limits<double>::infinity() )
+, max_   ( - std::numeric_limits<double>::infinity() )
+, small_ ( + std::numeric_limits<double>::infinity() )
+, sum_   ( 0.0 )
+, sumsq_ ( 0.0 )
+{
+  sample(x);
+}
+
+// ----------------------------------------------------------------------
 // statistics calculators:
 
 double
@@ -21,6 +46,14 @@ double
 {
   return n_ == 0u  ?  std::numeric_limits<double>::quiet_NaN()
                    :  sum_ / double(n_);
+}
+
+double
+  simple_stats::err_mean( std::size_t nparams ) const noexcept
+{
+  return n_ == 0u  ?  std::numeric_limits<double>::quiet_NaN()
+                   :    rms(nparams)
+                      / std::sqrt(double(n_));
 }
 
 double
@@ -54,6 +87,14 @@ double
   return std::sqrt(factor * diff);
 }
 
+double
+  simple_stats::err_rms( std::size_t nparams ) const noexcept
+{
+  return n_ == 0u  ?  std::numeric_limits<double>::quiet_NaN()
+                   :    rms(nparams)
+                      / std::sqrt(double(2u * n_));
+}
+
 
 // ----------------------------------------------------------------------
 // mutators:
@@ -61,12 +102,7 @@ double
 void
   simple_stats::reset( ) noexcept
 {
-  n_     = 0u;
-  min_   = + std::numeric_limits<double>::infinity();
-  max_   = - std::numeric_limits<double>::infinity();
-  small_ = + std::numeric_limits<double>::infinity();
-  sum_   = 0.0;
-  sumsq_ = 0.0;
+  *this = simple_stats();
 }
 
 void

@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE( value_ctor_test )
 
   BOOST_CHECK_EQUAL( s.mean(), pi );
   BOOST_CHECK( std::isnan(s.rms()) );
-  BOOST_CHECK( std::isnan(s.rms0()) );
+  BOOST_CHECK( std::isnan(s.rms0(1u)) );
 }
 
 BOOST_AUTO_TEST_CASE( sample_test )

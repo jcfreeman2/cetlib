@@ -8,10 +8,17 @@
 // ======================================================================
 
 #include "cpp0x/cstddef"  // size_t
+#include <iosfwd>         // basic_ostream
 
 namespace cet {
 
   class simple_stats;
+
+  template< class charT, class traits >
+  std::basic_ostream<charT,traits> &
+    operator << ( std::basic_ostream<charT,traits> &
+                , simple_stats const &
+                );
 
 }
 
@@ -21,8 +28,8 @@ class cet::simple_stats
 {
 public:
   // c'tors:
-  simple_stats( ) noexcept  { reset(); }
-  simple_stats( double x ) noexcept  { reset(); sample(x); }
+  simple_stats( ) noexcept;
+  simple_stats( double x ) noexcept;
 
   // use compiler-generated copy/move/d'tor
 
@@ -35,9 +42,11 @@ public:
   double       sumsq( ) const noexcept  { return sumsq_; }
 
   // statistics calculators:
-  double       mean ( ) const noexcept;
-  double       rms  ( std::size_t nparams = 1u ) const noexcept;
-  double       rms0 ( std::size_t nparams = 1u ) const noexcept;
+  double       mean    ( ) const noexcept;
+  double       err_mean( std::size_t nparams = 1u ) const noexcept;
+  double       rms     ( std::size_t nparams = 1u ) const noexcept;
+  double       rms0    ( std::size_t nparams = 0u ) const noexcept;
+  double       err_rms ( std::size_t nparams = 1u ) const noexcept;
 
   // mutators:
   void  reset( ) noexcept;
@@ -56,6 +65,22 @@ private:
   double  sum_, sumsq_;        // accumulations
 
 };  // simple_stats
+
+// ======================================================================
+
+template< class charT, class traits >
+std::basic_ostream<charT,traits> &
+  cet::operator << ( std::basic_ostream<charT,traits> & os
+                   , simple_stats const & stats
+                   )
+{
+  return os << "( "    << stats.size()
+            << ", "    << stats.mean()
+            << " +/- " << stats.err_mean()
+            << ", "    << stats.rms()
+            << " +/- " << stats.err_rms()
+            << "";
+}
 
 // ======================================================================
 
