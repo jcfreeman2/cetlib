@@ -223,7 +223,6 @@ public:
                  , "value_ptr<>'s pointee type is incompatible!"
                  );
 
-    typedef  typename std::remove_reference<Element>::type  Pointee;
     STATIC_ASSERT(    ! std::is_polymorphic<E2>::value
                    || ! (std::is_same< Cloner
                                      , _::default_action<Element,false>
@@ -236,6 +235,7 @@ public:
   value_ptr( value_ptr const & other )
   : p( clone_from(other.p) )
   { }
+
   template< class E2 >
     value_ptr( value_ptr<E2,Cloner,Deleter> const & other
              , typename std::enable_if< is_compatible<E2>::value >::type * = 0
@@ -262,6 +262,7 @@ public:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
   value_ptr( std::auto_ptr<Element> & other ) : p( other.release() )  { }
+
   value_ptr &  operator = ( std::auto_ptr<Element> & other )
   { value_ptr tmp(other); swap(tmp); return *this; }
 #pragma GCC diagnostic pop
@@ -276,12 +277,14 @@ public:
     reset( nullptr );
     return *this;
   }
+
   value_ptr &  operator = ( value_ptr const & other )
   {
     value_ptr tmp(other);
     swap(tmp);
     return *this;
   }
+
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
     operator = ( value_ptr<E2,Cloner,Deleter> const & other )
@@ -299,6 +302,7 @@ public:
     swap(tmp);
     return *this;
   }
+
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
     operator = ( value_ptr<E2,Cloner,Deleter> && other )
