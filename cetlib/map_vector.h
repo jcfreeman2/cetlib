@@ -126,8 +126,8 @@ public:
   allocator_type  get_allocator( ) const  { return v_.get_allocator(); }
 
   // observers:
-  value_type  front( ) const;
-  value_type  back ( ) const;
+  value_type const &  front( ) const;
+  value_type const &  back ( ) const;
 
   size_t  delta( ) const  { return v_.empty() ? 0 : 1 + v_.back().first.asInt(); }
 
@@ -227,23 +227,23 @@ inline std::ostream &
 // observers:
 
 template< class Value >
-typename cet::map_vector<Value>::value_type
+typename cet::map_vector<Value>::value_type const &
   cet::map_vector<Value>::
   front( ) const
 {
-  return v_.empty()
-       ? throw cet::exception("map_vector::front") << "container is empty!\n"
-       : v_.front();
+  if( v_.empty() )
+    throw cet::exception("map_vector::front") << "container is empty!\n";
+   return v_.front();
 }
 
 template< class Value >
-typename cet::map_vector<Value>::value_type
+typename cet::map_vector<Value>::value_type const &
   cet::map_vector<Value>::
   back ( ) const
 {
-  return v_.empty()
-       ? throw cet::exception("map_vector::back") << "container is empty!\n"
-       : v_.back();
+  if( v_.empty() )
+    throw cet::exception("map_vector::back") << "container is empty!\n";
+  return v_.back();
 }
 
 template< class Value >
