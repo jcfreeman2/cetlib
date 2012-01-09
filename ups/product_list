@@ -4,6 +4,6 @@ setup -B gcc v4_6_1
 
 # set up CET products
 setup cetpkgsupport
-setup -B cetbuildtools v1_15_01
+setup -B cetbuildtools v1_15_02
 setup -B cpp0x v1_03_02 -q +$CETPKG_QUAL$extraqual
 
