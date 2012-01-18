@@ -5,31 +5,7 @@ Product = @product@
 Group:
 
 Flavor     = ANY
-Qualifiers = ""
-
-  Action = GetFQDir
-       # faking out unsetup
-       envSet( ${UPS_PROD_NAME_UC}_FQ, "" )
-       execute( "get-directory-name subdir '' ${UPS_PROD_FLAVOR}", UPS_ENV, ${UPS_PROD_NAME_UC}_FQ )
-       fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
-
-  Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@)
-
-Flavor     = ANY
-Qualifiers = "a5"
-
-  Action = GetFQDir
-       # faking out unsetup
-       envSet( ${UPS_PROD_NAME_UC}_FQ, "" )
-       execute( "get-directory-name subdir a5 ${UPS_PROD_FLAVOR}", UPS_ENV, ${UPS_PROD_NAME_UC}_FQ )
-       fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
-
-  Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@)
-
-Flavor     = ANY
-Qualifiers = "a5:debug"
+Qualifiers = "+a5:+debug"
 
   Action = GetFQDir
        # faking out unsetup
@@ -41,7 +17,7 @@ Qualifiers = "a5:debug"
     setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug)
 
 Flavor     = ANY
-Qualifiers = "a5:opt"
+Qualifiers = "+a5:+opt"
 
   Action = GetFQDir
        # faking out unsetup
@@ -53,7 +29,7 @@ Qualifiers = "a5:opt"
     setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt)
 
 Flavor     = ANY
-Qualifiers = "a5:prof"
+Qualifiers = "+a5:+prof"
 
   Action = GetFQDir
        # faking out unsetup
@@ -65,19 +41,7 @@ Qualifiers = "a5:prof"
     setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:prof)
 
 Flavor     = ANY
-Qualifiers = "e1"
-
-  Action = GetFQDir
-       # faking out unsetup
-       envSet( ${UPS_PROD_NAME_UC}_FQ, "" )
-       execute( "get-directory-name subdir e1 ${UPS_PROD_FLAVOR}", UPS_ENV, ${UPS_PROD_NAME_UC}_FQ )
-       fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
-
-  Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@)
-
-Flavor     = ANY
-Qualifiers = "e1:debug"
+Qualifiers = "+e1:+debug"
 
   Action = GetFQDir
        # faking out unsetup
@@ -89,7 +53,7 @@ Qualifiers = "e1:debug"
     setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug)
 
 Flavor     = ANY
-Qualifiers = "e1:opt"
+Qualifiers = "+e1:+opt"
 
   Action = GetFQDir
        # faking out unsetup
@@ -101,7 +65,7 @@ Qualifiers = "e1:opt"
     setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt)
 
 Flavor     = ANY
-Qualifiers = "e1:prof"
+Qualifiers = "+e1:+prof"
 
   Action = GetFQDir
        # faking out unsetup
