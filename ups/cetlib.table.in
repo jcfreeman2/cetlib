@@ -5,7 +5,7 @@ Product = @product@
 Group:
 
 Flavor     = ANY
-Qualifiers = "+a5:+debug"
+Qualifiers = "a5:debug"
 
   Action = GetFQDir
        # faking out unsetup
@@ -14,10 +14,10 @@ Qualifiers = "+a5:+debug"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q +@CPP0X_BASE_QUAL@:+debug)
 
 Flavor     = ANY
-Qualifiers = "+a5:+opt"
+Qualifiers = "a5:opt"
 
   Action = GetFQDir
        # faking out unsetup
@@ -26,10 +26,10 @@ Qualifiers = "+a5:+opt"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q +@CPP0X_BASE_QUAL@:+opt)
 
 Flavor     = ANY
-Qualifiers = "+a5:+prof"
+Qualifiers = "a5:prof"
 
   Action = GetFQDir
        # faking out unsetup
@@ -38,10 +38,10 @@ Qualifiers = "+a5:+prof"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:prof)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q +@CPP0X_BASE_QUAL@:+prof)
 
 Flavor     = ANY
-Qualifiers = "+e1:+debug"
+Qualifiers = "e1:debug"
 
   Action = GetFQDir
        # faking out unsetup
@@ -50,10 +50,10 @@ Qualifiers = "+e1:+debug"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:debug)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q +@CPP0X_BASE_QUAL@:+debug)
 
 Flavor     = ANY
-Qualifiers = "+e1:+opt"
+Qualifiers = "e1:opt"
 
   Action = GetFQDir
        # faking out unsetup
@@ -62,10 +62,10 @@ Qualifiers = "+e1:+opt"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:opt)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q +@CPP0X_BASE_QUAL@:+opt)
 
 Flavor     = ANY
-Qualifiers = "+e1:+prof"
+Qualifiers = "e1:prof"
 
   Action = GetFQDir
        # faking out unsetup
@@ -74,7 +74,7 @@ Qualifiers = "+e1:+prof"
        fileTest( ${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ}, -d, "${UPS_PROD_DIR}/${${UPS_PROD_NAME_UC}_FQ} directory not found: SETUP ABORTED")
 
   Action = GetExtraProducts
-    setupRequired(cpp0x @CPP0X_VERSION@ -q @CPP0X_BASE_QUAL@:prof)
+    setupRequired(cpp0x @CPP0X_VERSION@ -q +@CPP0X_BASE_QUAL@:+prof)
 
 Common:
   Action = setup
