@@ -36,7 +36,7 @@ include(CetCMakeEnv)
 if ( NOT qualifier )
     message (FATAL_ERROR "ERROR: please call cmake with -Dqualifier:STRING=qualifier")
 endif ( NOT qualifier )
-cet_cmake_env( cetlib v1_03_03 ${qualifier} )
+cet_cmake_env( cetlib v1_03_04 ${qualifier} )
 
 cet_set_compiler_flags(DIAGS VIGILANT WERROR EXTRA_FLAGS -pedantic)
 if ("${qualifier}" STREQUAL "e1")
