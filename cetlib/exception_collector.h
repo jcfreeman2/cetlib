@@ -34,9 +34,13 @@ namespace cet {
   public:
     // compiler generates copy c'tor, copy assignment
 
-    // default c'tor, d'tor:
     exception_collector( );
-    ~exception_collector( ) noexcept;
+
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+    ~exception_collector( ) noexcept(false);
+#else
+    ~exception_collector( );
+#endif
 
     // observer:
     bool  has_thrown() const;

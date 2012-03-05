@@ -17,7 +17,10 @@ using namespace cet;
 , has_thrown_( false )
 { }
 
-exception_collector::~exception_collector( ) noexcept
+exception_collector::~exception_collector( )
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+noexcept(false)
+#endif
 { rethrow(); }
 
 // ----------------------------------------------------------------------
