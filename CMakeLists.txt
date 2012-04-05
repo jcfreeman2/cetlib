@@ -49,7 +49,7 @@ cet_report_compiler_flags()
 
 cet_check_gcc()
 
-find_ups_product(cetbuildtools v1_15_00)
+find_ups_product(cetbuildtools v1_16_00)
 find_ups_boost( v1_48_0 filesystem regex unit_test_framework )
 find_ups_product( cpp0x v1_03_02 )
 
