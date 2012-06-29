@@ -373,7 +373,7 @@ void
   size_t d = delta();
   for(  ;  b != e;  ++b ) {
     b->first.ensure_valid();
-    v_.push_back( std::make_pair(b->first.asInt() + d, b->second) );
+    v_.emplace_back(map_vector_key(b->first.asInt() + d), b->second);
   }
 }
 
