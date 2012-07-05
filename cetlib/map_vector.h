@@ -352,6 +352,7 @@ Value &
   return it->second;
 }
 
+#ifndef __GCCXML__
 // ----------------------------------------------------------------------
 // mutators:
 
@@ -361,7 +362,7 @@ void
   push_back( value_type const & x )
 {
   x.first.ensure_valid();
-  v_.push_back( std::make_pair(x.first.asInt() + delta(), x.second) );
+  v_.emplace_back(map_vector_key(x.first.asInt() + delta()), x.second);
 }
 
 template< class Value >
@@ -399,5 +400,5 @@ bool
 }
 
 // ======================================================================
-
+#endif /* GCCXML */
 #endif
