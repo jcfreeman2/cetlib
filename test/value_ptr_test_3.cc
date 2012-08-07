@@ -47,8 +47,8 @@ int main()
   assert(simple_base::n_alive == 0);
 
   {
-    std::auto_ptr<simple_base> c(new simple_base(11));
-    std::auto_ptr<simple_base> d(new simple_base(11));
+    std::unique_ptr<simple_base> c(new simple_base(11));
+    std::unique_ptr<simple_base> d(new simple_base(11));
     simple_base* pc = c.get();
     simple_base* pd = d.get();
     assert(pc != 0);

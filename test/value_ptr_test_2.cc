@@ -53,8 +53,8 @@ int main()
   assert(simple::n_alive == 0);
 
   {
-    std::auto_ptr<simple> c(new simple(11));
-    std::auto_ptr<simple> d(new simple(11));
+    std::unique_ptr<simple> c(new simple(11));
+    std::unique_ptr<simple> d(new simple(11));
     simple* pc = c.get();
     simple* pd = d.get();
     assert(pc != 0);

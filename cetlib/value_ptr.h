@@ -257,17 +257,6 @@ public:
   { }
 #endif // CPP0X_HAS_RVALUE_REFERENCES
 
-#if 0
-  // copy from an auto_ptr<>:
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-  value_ptr( std::auto_ptr<Element> & other ) : p( other.release() )  { }
-
-  value_ptr &  operator = ( std::auto_ptr<Element> & other )
-  { value_ptr tmp(other); swap(tmp); return *this; }
-#pragma GCC diagnostic pop
-#endif  // 0
-
   // d'tor:
   ~value_ptr( ) noexcept  { reset(); }
 
