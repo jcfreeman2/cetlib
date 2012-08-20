@@ -12,12 +12,31 @@
 #include <algorithm>
 
 // ----------------------------------------------------------------------
+// C++ 2011 has std::begin() and std::end(), but not the obvious const
+// versions
+#ifndef __GCCXML__
+namespace cet {
+  template <class Container>
+  auto cbegin(Container const& c) -> decltype(c.cbegin())
+  { return c.cbegin(); }
+
+  template <class Container>
+  auto cend(Container const& c) -> decltype(c.cend())
+  { return c.cend(); }
+}
+#endif
+
+// ----------------------------------------------------------------------
 // wrapper for std::for_each
 namespace cet {
   template< class FwdCont, class Func >
   inline Func
     for_all( FwdCont & s, Func f )
   { return std::for_each(s.begin(), s.end(), f); }
+  template< class FwdCont, class Func >
+  inline Func
+    for_all( FwdCont const & s, Func f )
+  { return std::for_each(cbegin(s), cend(s), f); }
 }
 
 // ----------------------------------------------------------------------
@@ -27,6 +46,10 @@ namespace cet {
   inline FwdIter
     copy_all( FwdCont & s, FwdIter it )
   { return std::copy(s.begin(), s.end(), it); }
+  template< class FwdCont, class FwdIter >
+  inline FwdIter
+    copy_all( FwdCont const & s, FwdIter it )
+  { return std::copy(cbegin(s), cend(s), it); }
 }
 
 // ----------------------------------------------------------------------
