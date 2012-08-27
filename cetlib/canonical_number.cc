@@ -50,6 +50,31 @@ try
     // canonical form for the unsigned decimal number
     return canonical_number( dec, result );
   }
+
+  // 0b or 0B leaded binary numbers
+  if( value.size()>2 && value[0]=='0' && toupper(value[1])=='B' )
+  {
+    it += 2;
+
+    // extract the whole part
+    static std::string const binallowed("01");
+    std::string bin;
+    for( ; it != end && binallowed.find(*it) != std::string::npos
+         ; ++it ) 
+      bin.append( 1, *it );
+
+    // consumed all?
+    if( it != end )
+      return false;
+
+    // convert to decimal
+    std::string dec;
+    try{ dec = base_converter::bin_to_dec(bin); }
+    catch( ... ) { return false; }
+
+    // canonical form for the unsigned decimal number
+    return canonical_number( dec, result );
+  }
     
 
   // extract sign, if any

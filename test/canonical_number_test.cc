@@ -66,14 +66,23 @@ int
   ensure( 32, ! becomes( "1.2,3", "" ) );
   ensure( 33, ! becomes( "1.2X3", "" ) );
   ensure( 34, ! becomes( "0x123abx", "" ) );
-  ensure( 35, ! becomes( "+0x123abx", "" ) );
+  ensure( 35, ! becomes( "+0x123ab", "" ) );
+  ensure( 36, ! becomes( "0x", "" ) );
+  ensure( 37, ! becomes( "0b123", "" ) );
+  ensure( 38, ! becomes( "+0b101", "" ) );
+  ensure( 39, ! becomes( "0b", "" ) );
 
-  ensure( 41,   becomes( "0x1234567890", "7.818749352e10" ) );
+  ensure( 41,   becomes( "0X000", "0" ) );
   ensure( 42,   becomes( "0x123ab", "74667" ) );
-  ensure( 42,   becomes( "0x123DE", "74718" ) );
-  ensure( 43,   becomes( "0X123ab", "74667" ) );
-  ensure( 44,   becomes( "0X00123De", "74718" ) );
-  ensure( 45,   becomes( "0X000", "0" ) );
+  ensure( 43,   becomes( "0x123DE", "74718" ) );
+  ensure( 44,   becomes( "0X123ab", "74667" ) );
+  ensure( 45,   becomes( "0X00123De", "74718" ) );
+  ensure( 46,   becomes( "0x1234567890", "7.818749352e10" ) );
+
+  ensure( 51,   becomes( "0b000", "0" ) );
+  ensure( 51,   becomes( "0b101", "5" ) );
+  ensure( 51,   becomes( "0b01101", "13" ) );
+  ensure( 51,   becomes( "0b1000110100101100011001", "2.312985e6" ) );
 
   return 0;
 
