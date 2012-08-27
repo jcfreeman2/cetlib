@@ -8,6 +8,7 @@
 // ======================================================================
 
 #include "cetlib/canonical_number.h"
+#include "cetlib/base_converter.h"
 
 #include <cctype>
 #include <cstddef>
@@ -24,6 +25,32 @@ try
 {
   std::string::const_iterator       it  = value.begin();
   std::string::const_iterator const end = value.end();
+
+  // 0x or 0X leaded hex number
+  if( value.size()>2 && value[0]=='0' && toupper(value[1])=='X' ) 
+  {
+    it += 2;
+
+    // extract the whole part
+    static std::string const hexallowed("0123456789ABCDEFabcdef");
+    std::string hex;
+    for( ; it != end && hexallowed.find(*it) != std::string::npos
+         ; ++it ) 
+      hex.append( 1, toupper(*it) );
+
+    // consumed all?
+    if( it != end )
+      return false;
+
+    // convert to decimal
+    std::string dec;
+    try{ dec = base_converter::hex_to_dec(hex); }
+    catch( ... ) { return false; }
+
+    // canonical form for the unsigned decimal number
+    return canonical_number( dec, result );
+  }
+    
 
   // extract sign, if any
   std::string sign( *it == '-' ?  "-" : "" );

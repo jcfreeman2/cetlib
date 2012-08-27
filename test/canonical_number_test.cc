@@ -65,6 +65,15 @@ int
   ensure( 31, ! becomes( "1.2.3", "" ) );
   ensure( 32, ! becomes( "1.2,3", "" ) );
   ensure( 33, ! becomes( "1.2X3", "" ) );
+  ensure( 34, ! becomes( "0x123abx", "" ) );
+  ensure( 35, ! becomes( "+0x123abx", "" ) );
+
+  ensure( 41,   becomes( "0x1234567890", "7.818749352e10" ) );
+  ensure( 42,   becomes( "0x123ab", "74667" ) );
+  ensure( 42,   becomes( "0x123DE", "74718" ) );
+  ensure( 43,   becomes( "0X123ab", "74667" ) );
+  ensure( 44,   becomes( "0X00123De", "74718" ) );
+  ensure( 45,   becomes( "0X000", "0" ) );
 
   return 0;
 
