@@ -12,19 +12,6 @@
 #include <algorithm>
 
 // ----------------------------------------------------------------------
-// C++ 2011 has std::begin() and std::end(), but not the obvious const
-// versions
-namespace cet {
-  template <class Container>
-  auto cbegin(Container const& c) -> decltype(c.cbegin())
-  { return c.cbegin(); }
-
-  template <class Container>
-  auto cend(Container const& c) -> decltype(c.cend())
-  { return c.cend(); }
-}
-
-// ----------------------------------------------------------------------
 // wrapper for std::for_each
 namespace cet {
   template< class FwdCont, class Func >
