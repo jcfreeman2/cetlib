@@ -10,7 +10,7 @@
 
 #include "cetlib/coded_exception.h"
 #include "cetlib/trim.h"
-#include "cpp0x/algorithm"
+#include <algorithm>
 #include <cctype>
 #include <fstream>
 #include <iostream>

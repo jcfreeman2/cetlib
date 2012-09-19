@@ -2,7 +2,7 @@
 #include "boost/test/auto_unit_test.hpp"
 
 #include "cetlib/ston.h"
-#include "cpp0x/string"
+#include <string>
 #include <stdexcept>
 
 using cet::ston;

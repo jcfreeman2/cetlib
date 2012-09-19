@@ -8,8 +8,8 @@
 // ======================================================================
 
 #include "boost/lexical_cast.hpp"
-#include "cpp0x/string"
-#include "cpp0x/type_traits"
+#include <string>
+#include <type_traits>
 
 // ======================================================================
 

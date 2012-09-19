@@ -2,7 +2,7 @@
 #include "boost/test/auto_unit_test.hpp"
 
 #include "cetlib/simple_stats.h"
-#include "cpp0x/cmath"
+#include <cmath>
 
 using cet::simple_stats;
 

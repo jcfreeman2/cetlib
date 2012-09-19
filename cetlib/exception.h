@@ -53,7 +53,7 @@
 //
 // ======================================================================
 
-#include "cpp0x/type_traits"
+#include <type_traits>
 #include <exception>
 #include <iosfwd>
 #include <list>

@@ -23,7 +23,7 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include "cpp0x/functional"
+#include <functional>
 #include <exception>
 
 // ======================================================================

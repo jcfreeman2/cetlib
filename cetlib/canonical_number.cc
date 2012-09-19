@@ -16,7 +16,6 @@
 
 using std::abs;
 
-
 bool
   cet::canonical_number( std::string const & value
                        , std::string       & result

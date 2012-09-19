@@ -9,7 +9,7 @@
 #include "cetlib/exception.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/getenv.h"
-#include "cpp0x/regex"
+#include <regex>
 #include <dirent.h>
 #include <iterator>
 #include <sys/stat.h>

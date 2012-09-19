@@ -7,7 +7,7 @@
 //
 // ======================================================================
 
-#include "cpp0x/array"
+#include <array>
 #include "polarssl/md5.h"
 #include <cstring>
 #include <string>

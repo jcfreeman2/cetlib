@@ -4,7 +4,6 @@ defaultqual e2
 # define product/version pairs
 product		version
 gcc		v4_7_1
-cpp0x		v1_03_12
 
 only_for_build cetbuildtools	v2_03_00
 
