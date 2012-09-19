@@ -8,7 +8,7 @@
 //
 // ======================================================================
 
-#include <type_traits>
+#include "cpp0x/type_traits"
 
 namespace cet {
   template< class T

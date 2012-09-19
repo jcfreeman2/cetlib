@@ -15,7 +15,7 @@
 //
 // ======================================================================
 
-#include <functional>
+#include "cpp0x/functional"
 #include <algorithm>
 #include <string>
 

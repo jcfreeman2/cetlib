@@ -7,7 +7,7 @@
 //
 // ======================================================================
 
-#include <cstdint>
+#include "cpp0x/cstdint"
 #include <string>
 
 namespace cet {

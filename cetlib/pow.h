@@ -8,7 +8,7 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include <type_traits>
+#include "cpp0x/type_traits"
 
 namespace cet {
 

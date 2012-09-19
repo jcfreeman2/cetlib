@@ -18,8 +18,6 @@ namespace {
   struct buffer_sentry
   {
     buffer_sentry() : buf(0) { }
-    buffer_sentry(buffer_sentry const&) = delete;
-    buffer_sentry& operator=(buffer_sentry const&) = delete;
     ~buffer_sentry() noexcept { free(buf); }
 
     char * buf;
@@ -43,8 +41,8 @@ std::string cet::demangle_message(std::string const &message) {
   std::ostringstream result;
   std::vector<std::string> words;
   cet::split(message, ' ', std::back_inserter(words));
-  for (auto
-	 b = words.begin(),
+  for (std::vector<std::string>::const_iterator
+         b = words.begin(),
          i = b,
          e = words.end();
        i != e;

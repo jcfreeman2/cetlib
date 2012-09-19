@@ -9,7 +9,7 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include <type_traits>
+#include "cpp0x/type_traits"
 #include <iterator>
 #include <map>
 #include <stdexcept>
@@ -101,7 +101,7 @@ template< class FwdIt >
 void
   cet::registry_via_id<K,V>::put( FwdIt b, FwdIt e )
 {
-  static_assert( (std::is_same< V
+  STATIC_ASSERT( (std::is_same< V
                               , typename std::iterator_traits<FwdIt>::value_type
                               >::value)
                , "Iterator is inconsistent"

@@ -46,9 +46,9 @@
 //
 // ======================================================================
 
-#include <cstddef>
-#include <functional>
-#include <type_traits>
+#include "cpp0x/cstddef"
+#include "cpp0x/functional"
+#include "cpp0x/type_traits"
 #include <exception>
 #include <utility>
 
@@ -120,10 +120,10 @@ private:
 
 public:
   // --- default c'tor:
-  constexpr  exempt_ptr( ) noexcept : p( nullptr )  { }
+  CONSTEXPR_FCTN  exempt_ptr( ) noexcept : p( nullptr )  { }
 
   // pointer-accepting c'tors:
-  constexpr  exempt_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
+  CONSTEXPR_FCTN  exempt_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
   explicit        exempt_ptr( pointer other  ) noexcept : p( other   )  { }
   template< class E2 >
   exempt_ptr( E2 * other

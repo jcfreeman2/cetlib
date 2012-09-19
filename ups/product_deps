@@ -4,12 +4,12 @@ defaultqual e2
 # define product/version pairs
 product		version
 gcc		v4_7_1
-boost           v1_50_0
+cpp0x		v1_03_12
 
 only_for_build cetbuildtools	v2_03_00
 
 # Matrix of qualifiers versus dependent products
-qualifier   boost	gcc	notes
+qualifier   cpp0x	gcc	notes
 e2:debug    e2:debug	-nq-	-std=c++0x
 e2:opt	    e2:opt	-nq-	-std=c++0x
-e2:prof	    e2:opt	-nq-	-std=c++0x
+e2:prof	    e2:prof	-nq-	-std=c++0x

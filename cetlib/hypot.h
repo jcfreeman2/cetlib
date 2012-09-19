@@ -7,8 +7,8 @@
 //
 // ======================================================================
 
-#include <cmath>
-#include <type_traits>
+#include "cpp0x/cmath"
+#include "cpp0x/type_traits"
 #include <limits>
 #include <utility>
 

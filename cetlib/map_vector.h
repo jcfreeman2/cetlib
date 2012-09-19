@@ -10,7 +10,7 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include <algorithm>
+#include "cpp0x/algorithm"
 #include <iosfwd>
 #include <vector>
 
