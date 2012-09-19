@@ -71,10 +71,10 @@ unsigned int
 {
   std::string quotient;
 
-  size_t lenght = x.length();
-  for (size_t i = 0; i < lenght; ++i)
+  size_t length = x.length();
+  for (size_t i = 0; i < length; ++i)
   {
-    size_t j = i + 1 + x.length() - lenght;
+    size_t j = i + 1 + x.length() - length;
     if (x.length() < j)
       break;
 
