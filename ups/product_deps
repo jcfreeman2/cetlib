@@ -7,7 +7,7 @@ product		version
 gcc		v4_7_1
 cpp0x		v1_03_14
 
-only_for_build cetbuildtools	v3_01_01
+only_for_build cetbuildtools	v3_02_00
 
 # Matrix of qualifiers versus dependent products
 qualifier   cpp0x	gcc	notes
