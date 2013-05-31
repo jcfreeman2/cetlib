@@ -19,7 +19,7 @@ cet_make( LIBRARY_NAME ${LIB_NAME}
 # ----------------------------------------------------------------------
 # Build and install this project's executables:
 
-cet_make_exec( NAME inc-expand
+cet_make_exec( inc-expand
                LIBRARIES ${LIB_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} )
 
 # ----------------------------------------------------------------------
