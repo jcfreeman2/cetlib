@@ -1,6 +1,7 @@
 #include "cetlib/value_ptr.h"
 
 #include <cassert>
+#include <iostream>
 #include <map>
 #include <memory>
 
@@ -79,10 +80,18 @@ int main()
     assert(simple::n_born == 4);
 
     std::map<cet::value_ptr<simple>, int>  m;
-    m[f] = 0;  // copies f twice!
+    m[f] = 0;
+#if GCC_IS_AT_LEAST(4,8,1)
+    // Avoids a copy of f.
+    assert(simple::n_born == 5);
+#else
     assert(simple::n_born == 6);
+#endif
   }
   assert(simple::n_alive == 0);
+#if GCC_IS_AT_LEAST(4,8,1)
+  assert(simple::n_born == 5);
+#else
   assert(simple::n_born == 6);
-
+#endif
 }
