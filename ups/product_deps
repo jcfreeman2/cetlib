@@ -1,7 +1,7 @@
 parent cetlib v1_03_17
 defaultqual e4
 #
-libdir	fq_dir lib2
+libdir	fq_dir lib
 # define product/version pairs
 product		version
 gcc		v4_8_1
