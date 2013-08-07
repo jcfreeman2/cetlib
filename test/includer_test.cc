@@ -135,4 +135,29 @@ BOOST_AUTO_TEST_CASE( string_inclusion_test )
                      );
 }
 
+BOOST_AUTO_TEST_CASE( backtrace_test )
+{
+  cet::includer j(file_j, policy);
+  auto it = j.begin();
+  std::advance(it, 5);
+  BOOST_REQUIRE(*it == '\n');
+  std::cerr << j.whereis(it) << "\n";
+  std::cerr << "\n";
+  std::string cmp("line 1, character 6, of file \"././j.txt\"");
+  BOOST_REQUIRE_EQUAL(j.whereis(it), cmp);
+  std::advance(it, 10);
+  BOOST_REQUIRE(*it == 'y');
+  std::cerr << j.whereis(it) << "\n";
+  std::cerr << "\n";
+  cmp = "line 2, character 4, of file \"././a.txt\"\n"
+        "included from line 2 of file \"././j.txt\"";
+  BOOST_REQUIRE_EQUAL(j.whereis(it), cmp);
+  std::advance(it, 10);
+  BOOST_REQUIRE(*it == '7');
+  std::cerr << j.whereis(it) << "\n";
+  cmp = "line 2, character 2, of file \"././b.txt\"\n"
+        "included from line 3 of file \"././j.txt\"";
+  BOOST_REQUIRE_EQUAL(j.whereis(it), cmp);
+}
+
 BOOST_AUTO_TEST_SUITE_END()
