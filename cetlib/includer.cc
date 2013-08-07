@@ -11,6 +11,8 @@
 #include "cetlib/coded_exception.h"
 #include "cetlib/trim.h"
 #include "cpp0x/algorithm"
+
+#include <algorithm>
 #include <cctype>
 #include <fstream>
 #include <iostream>
@@ -57,11 +59,13 @@ using namespace ::detail;
 includer::includer( std::string const   & filename
                   , cet::filepath_maker & abs_filename
                   )
-: text  ( )
-, frames( 1, frame(0, begin_string(), 0, text.size()) )
+  :
+  text  ( ),
+  frames { frame(0, begin_string(), 0, text.size()) },
+  recursion_stack ( )
 {
   include(0, filename, abs_filename);
-  frames.push_back( frame(0, end_string(), 0, text.size()) );
+  frames.emplace_back(0, end_string(), 0, text.size());
 }
 
 // ----------------------------------------------------------------------
@@ -69,11 +73,13 @@ includer::includer( std::string const   & filename
 includer::includer( std::istream        & is
                   , cet::filepath_maker & abs_filename
                   )
-: text  ( )
-, frames( 1, frame(0, begin_string(), 0, text.size()) )
+ :
+  text  ( ),
+  frames { frame(0, begin_string(), 0, text.size()) },
+  recursion_stack ( )
 {
-  include(0, is, abs_filename);
-  frames.push_back( frame(0, end_string(), 0, text.size()) );
+  include(is, abs_filename);
+  frames.emplace_back(0, end_string(), 0, text.size());
 }
 
 
@@ -133,11 +139,16 @@ void
                                        : abs_filename(filename);
 
   // check for recursive #inclusion:
-  for( uint k = 0u, e = frames.size(); k != e; ++k )
-    if( frames[k].filename == filepath )
-      throw inc_exception(recursive)
-         << filename << " => " << filepath
-         << backtrace( frames.size()-1 );
+  if (std::find(recursion_stack.crbegin(),
+                recursion_stack.crend(),
+                filepath) != recursion_stack.crend()) {
+    throw inc_exception(recursive)
+      << filename << " => " << filepath
+      << backtrace( frames.size()-1u );
+  } else {
+    // Record opening of file.
+    recursion_stack.emplace_back(filepath);
+  }
 
   // open the #included file:
   std::ifstream ifs;
@@ -147,7 +158,7 @@ void
   if( ! f )
     throw inc_exception(cant_open)
        << filename << " => " << filepath
-       << backtrace( frames.size()-1 );
+       << backtrace( frames.size()-1u );
 
   int linenum = 1;
   frame new_frame( including_framenum, filepath, linenum, text.size() );
@@ -181,7 +192,7 @@ void
     std::string nextfilename( line.substr( min_sz - 1u
                                          , line.size() - min_sz
                             )            );
-    include(frames.size()-1, nextfilename, abs_filename);
+    include(frames.size()-1u, nextfilename, abs_filename);
 
     // prepare to resume where we left off:
     new_frame.starting_linenum = linenum + 1;
@@ -191,13 +202,15 @@ void
   // save final buffered text:
   frames.push_back(new_frame);
 
+  // Done with this file.
+  recursion_stack.pop_back();
+
 }  // include()
 
 // ----------------------------------------------------------------------
 
 void
-  includer::include( int                   including_framenum
-                   , std::istream        & f
+  includer::include( std::istream        & f
                    , cet::filepath_maker & abs_filename
                    )
 {
@@ -211,10 +224,10 @@ void
   if( ! f )
     throw inc_exception(cant_open)
        << filepath
-       << backtrace( frames.size()-1 );
+       << backtrace( frames.size()-1u );
 
   int linenum = 1;
-  frame new_frame( including_framenum, filepath, linenum, text.size() );
+  frame new_frame( 0, filepath, linenum, text.size() );
 
   // iterate over each line of the input file:
   for( std::string line; std::getline(f, line); ++linenum  ) {
@@ -245,7 +258,7 @@ void
     std::string nextfilename( line.substr( min_sz - 1u
                                          , line.size() - min_sz
                             )            );
-    include(frames.size()-1, nextfilename, abs_filename);
+    include(frames.size()-1u, nextfilename, abs_filename);
 
     // prepare to resume where we left off:
     new_frame.starting_linenum = linenum + 1;

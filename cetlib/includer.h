@@ -37,14 +37,15 @@ public:
   std::string     whereis ( const_iterator const & it ) const;
 
 private:
+
   struct frame
   {
     uint         including_framenum;
     std::string  filename;
     uint         starting_linenum;
-    uint         starting_textpos;
+    size_t       starting_textpos;
 
-    frame( int framenum, std::string filename, int linenum, int textpos )
+frame( uint framenum, std::string filename, uint linenum, size_t textpos )
       : including_framenum( framenum )
       , filename          ( filename )
       , starting_linenum  ( linenum )
@@ -54,13 +55,13 @@ private:
 
   std::string         text;
   std::vector<frame>  frames;
+  std::vector<std::string> recursion_stack;
 
   void  include ( int                   including_framenum
                 , std::string const   & filename
                 , cet::filepath_maker & abs_filename
                 );
-  void  include ( int                   including_framenum
-                , std::istream        & is
+  void  include ( std::istream        & is
                 , cet::filepath_maker & abs_filename
                 );
   std::string  backtrace( uint from_frame ) const;
