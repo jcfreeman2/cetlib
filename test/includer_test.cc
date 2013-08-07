@@ -13,11 +13,15 @@
 #include <fstream>
 #include <sstream>
 
-char const file_a [] = "./a.txt";
-char const file_b [] = "./b.txt";
-char const file_i [] = "./i.txt";
-char const file_j [] = "./j.txt";
-char const file_r [] = "./r.txt";
+char const file_a[] = "./a.txt";
+char const file_b[] = "./b.txt";
+char const file_i[] = "./i.txt";
+char const file_j[] = "./j.txt";
+char const file_k[] = "./k.txt";
+char const file_r[] = "./r.txt";
+char const file_r2[] = "./r2.txt";
+char const file_r3[] = "./r3.txt";
+char const file_r4[] = "./r4.txt";
 char const file_x1[] = "./x1.txt";
 char const file_x2[] = "./x2.txt";
 char const file_x3[] = "./x3.txt";
@@ -33,9 +37,23 @@ char const contents_j [] = "begin\n"
                            "#include \"./a.txt\"\n"
                            "#include \"./b.txt\"\t\n"
                            "end\n";
+char const contents_k [] = "begin\n"
+                           "#include \"./j.txt\"\n"
+                           "#include \"./i.txt\"\n"
+                           "end\n";
 char const contents_r [] = "begin\n"
                            "#include \"./r.txt\"\n"
                            "end\n";
+char const contents_r2 [] = "begin\n"
+                            "#include \"./r3.txt\"\n"
+                            "end\n";
+char const contents_r3 [] = "begin\n"
+                            "#include \"./j.txt\"\n"
+                            "#include \"./r4.txt\"\n"
+                            "end\n";
+char const contents_r4 [] = "begin\n"
+                            "#include \"./r2.txt\"\n"
+                            "end\n";
 char const contents_x1[] = "#include\"./a.txt\"\n";
 char const contents_x2[] = "#include ./a.txt\"\n";
 char const contents_x3[] = "#include \"./a.txt\n";
@@ -49,7 +67,11 @@ void
   std::ofstream b (file_b );  b  << contents_b;
   std::ofstream i (file_i );  i  << contents_i;
   std::ofstream j (file_j );  j  << contents_j;
+  std::ofstream k (file_k );  k  << contents_k;
   std::ofstream r (file_r );  r  << contents_r;
+  std::ofstream r2 (file_r2 );  r2  << contents_r2;
+  std::ofstream r3 (file_r3 );  r3  << contents_r3;
+  std::ofstream r4 (file_r4 );  r4  << contents_r4;
   std::ofstream x1(file_x1);  x1 << contents_x1;
   std::ofstream x2(file_x2);  x2 << contents_x2;
   std::ofstream x3(file_x3);  x3 << contents_x3;
@@ -93,6 +115,23 @@ BOOST_AUTO_TEST_CASE( double_inclusion_test )
                    );
 }
 
+BOOST_AUTO_TEST_CASE( repeated_inclusion_test )
+{
+  cet::includer k(file_k, policy);
+  std::string result(k.begin(), k.end());
+  BOOST_CHECK_EQUAL( result,
+                     std::string("begin\n") +
+                     std::string("begin\n") +
+                     std::string(contents_a) +
+                     std::string(contents_b) +
+                     std::string("end\n") +
+                     std::string("begin\n") +
+                     std::string(contents_a) +
+                     std::string("end\n") +
+                     std::string("end\n")
+                   );
+}
+
 BOOST_AUTO_TEST_CASE( malformed_inclusion_test )
 {
   BOOST_CHECK_THROW( cet::includer(file_x1, policy), cet::exception );
@@ -100,21 +139,24 @@ BOOST_AUTO_TEST_CASE( malformed_inclusion_test )
   BOOST_CHECK_THROW( cet::includer(file_x3, policy), cet::exception );
 }
 
-BOOST_AUTO_TEST_CASE( recursive_inclusion_test )
+BOOST_AUTO_TEST_CASE( simple_recursive_inclusion_test )
 {
-  BOOST_CHECK_THROW( cet::includer(file_r, policy), cet::exception );
+  BOOST_CHECK_EXCEPTION(cet::includer(file_r, policy), \
+                        cet::exception, \
+                        [](cet::exception const & e) -> bool \
+                        { \
+                          return e.category() == "Recursive #include directive:"; \
+                        });
+}
 
-  try  {
-    cet::includer r(file_r, policy);
-    BOOST_FAIL("Failed to throw an exception as expected");
-  }
-  catch( cet::exception const & e )  {
-    std::string message(e.what());
-    BOOST_CHECK( message.find(file_r) != std::string::npos );
-  }
-  catch( ... )  {
-    BOOST_FAIL("Wrong exception type thrown");
-  }
+BOOST_AUTO_TEST_CASE( complex_recursive_inclusion_test )
+{
+  BOOST_CHECK_EXCEPTION(cet::includer(file_r2, policy), \
+                        cet::exception, \
+                        [](cet::exception const & e) -> bool \
+                        { \
+                          return e.category() == "Recursive #include directive:"; \
+                        });
 }
 
 BOOST_AUTO_TEST_CASE( string_inclusion_test )
