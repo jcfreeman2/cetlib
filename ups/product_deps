@@ -1,13 +1,13 @@
-parent cetlib v1_03_21
+parent cetlib v1_03_22
 defaultqual e4
 #
 libdir	fq_dir lib
 # define product/version pairs
 product		version
 gcc		v4_8_1
-cpp0x		v1_03_21
+cpp0x		v1_03_22
 
-only_for_build cetbuildtools	v3_06_00
+only_for_build cetbuildtools	v3_06_01
 
 # Matrix of qualifiers versus dependent products
 qualifier   cpp0x	gcc	notes
