@@ -1,6 +1,9 @@
 #ifndef CETLIB_MAKE_UNIQUE_H
 #define CETLIB_MAKE_UNIQUE_H
 
+#include <memory>  // for std::unique_ptr
+#include <utility> // for std::forward
+
 namespace cet
 {
   // Return a std::unique_ptr<T>. This should be essentially identical
