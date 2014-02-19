@@ -1,11 +1,11 @@
-parent cetlib v1_03_25
+parent cetlib v1_04_00
 defaultqual e5
 #
 libdir	fq_dir lib
 # define product/version pairs
 product		version
 gcc		v4_8_2
-cpp0x		v1_03_25
+cpp0x		v1_04_00
 
 only_for_build cetbuildtools	v3_08_00
 
