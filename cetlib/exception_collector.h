@@ -36,11 +36,11 @@ namespace cet {
 
     exception_collector( );
 
-#ifdef __GXX_EXPERIMENTAL_CXX0X__
-    ~exception_collector( ) noexcept(false);
+#ifdef __GXX_EXPERIMENTAL_CXX0X__ || ( defined __cplusplus && __cplusplus >= 201103L )
+    ~exception_collector ( ) noexcept(false);
 #else
     ~exception_collector( );
-#endif
+#endif  // __GXX_EXPERIMENTAL_CXX0X__
 
     // observer:
     bool  has_thrown() const;

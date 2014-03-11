@@ -81,7 +81,7 @@ int main()
 
     std::map<cet::value_ptr<simple>, int>  m;
     m[f] = 0;
-#if GCC_IS_AT_LEAST(4,8,1)
+#if GCC_IS_AT_LEAST(4,8,1) || defined(__ICC)
     // Avoids a copy of f.
     assert(simple::n_born == 5);
 #else
@@ -89,7 +89,7 @@ int main()
 #endif
   }
   assert(simple::n_alive == 0);
-#if GCC_IS_AT_LEAST(4,8,1)
+#if GCC_IS_AT_LEAST(4,8,1) || defined(__ICC)
   assert(simple::n_born == 5);
 #else
   assert(simple::n_born == 6);

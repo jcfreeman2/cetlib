@@ -36,7 +36,7 @@ public:
 
   // use compiler-generated copy c'tor, copy assignment, and d'tor
 
-#if defined __GXX_EXPERIMENTAL_CXX0X__
+#if defined __GXX_EXPERIMENTAL_CXX0X__  || ( defined __cplusplus && __cplusplus >= 201103L )
   template< class OT
           , class = typename std::enable_if< std::is_convertible<OT,T>::value
                                            >::type
