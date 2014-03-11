@@ -36,7 +36,7 @@ namespace cet {
 
     exception_collector( );
 
-#ifdef __GXX_EXPERIMENTAL_CXX0X__ || ( defined __cplusplus && __cplusplus >= 201103L )
+#if defined __GXX_EXPERIMENTAL_CXX0X__ || ( defined __cplusplus && __cplusplus >= 201103L )
     ~exception_collector ( ) noexcept(false);
 #else
     ~exception_collector( );
