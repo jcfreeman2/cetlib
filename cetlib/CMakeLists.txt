@@ -39,10 +39,12 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   search_path.cc
   simple_stats.cc
   split_path.cc
+  LibraryManager.cc
   LIBRARIES
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
+  -ldl
   )
 
 

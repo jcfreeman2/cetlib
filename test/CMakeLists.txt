@@ -62,3 +62,19 @@ cet_test(value_ptr_test_3)
 cet_test(value_ptr_test_4)
 cet_test(value_ptr_test_5)
 cet_test(zero_init_test USE_BOOST_UNIT)
+
+cet_make_library(LIBRARY_NAME cetlib_fakePlugin SOURCE moduleType.cc NO_INSTALL)
+
+cet_make_exec(LibraryManager_t USE_BOOST_UNIT
+  LIBRARIES
+  ${Boost_FILESYSTEM_LIBRARY}
+  -ldl
+)
+
+configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LibraryManager_t.sh.in
+  ${CMAKE_CURRENT_BINARY_DIR}/LibraryManager_t.sh
+  @ONLY
+  )
+cet_test(LibraryManager_t.sh HANDBUILT
+  TEST_EXEC ${CMAKE_CURRENT_BINARY_DIR}/LibraryManager_t.sh
+  )
