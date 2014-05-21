@@ -40,6 +40,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   simple_stats.cc
   split_path.cc
   LibraryManager.cc
+  detail/wrapLibraryManagerException.cc
   LIBRARIES
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}
@@ -57,8 +58,8 @@ cet_make_exec( inc-expand
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:
 
-install_headers()
-install_source()
+install_headers(SUBDIRS detail)
+install_source(SUBDIRS detail)
 
 #
 # ======================================================================

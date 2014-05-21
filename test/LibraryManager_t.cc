@@ -84,7 +84,7 @@ BOOST_AUTO_TEST_CASE(getSymbolAmbiguity)
                         [](cet::exception const & e)                    \
                         {                                               \
                           return e.category() == "Configuration";       \
-                        });                                             \
+                        });
 }
 
 BOOST_AUTO_TEST_CASE(getSymbolNoAmbiguity)
