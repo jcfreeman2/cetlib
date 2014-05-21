@@ -1,5 +1,5 @@
-#ifndef art_Utilities_CRC32Calculator_h
-#define art_Utilities_CRC32Calculator_h
+#ifndef cetlib_CRC32Calculator_h
+#define cetlib_CRC32Calculator_h
 
 /*
 Code to calculate a CRC32 checksum on a string.  This code is based
@@ -57,7 +57,7 @@ from the original code follow below to attribute the source.
 
 #include <string>
 
-namespace art {
+namespace cet {
 
   class CRC32Calculator {
 
@@ -72,7 +72,7 @@ namespace art {
     boost::uint32_t checksum_;
   };
 }
-#endif /* art_Utilities_CRC32Calculator_h */
+#endif /* cetlib_CRC32Calculator_h */
 
 // Local Variables:
 // mode: c++
