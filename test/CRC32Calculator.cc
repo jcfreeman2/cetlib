@@ -2,7 +2,7 @@
 #include "CRC32Calculator.h"
 
 
-namespace art {
+namespace cet {
 
   namespace {
 
@@ -88,7 +88,7 @@ namespace art {
     char const* p = message.data();
     for (int j = 0; j < length; j++) {
       unsigned char uc = *p++;
-      checksum_ = art::crctable[(checksum_ ^ uc) & 0xFFL] ^ (checksum_ >> 8);
+      checksum_ = crctable[(checksum_ ^ uc) & 0xFFL] ^ (checksum_ >> 8);
     }
 
     /* return XOR out value */

@@ -61,7 +61,7 @@ int
     c1 << TESTA;
     digest_t  d1 = c1.digest();
 
-    art::CRC32Calculator s1(TESTA);
+    cet::CRC32Calculator s1(TESTA);
     unsigned r1 = s1.checksum();
 
     ensure( 1, r1 == d1 );
@@ -72,7 +72,7 @@ int
     c2 << TESTB;
     digest_t  d2 = c2.digest();
 
-    art::CRC32Calculator s2(TESTB);
+    cet::CRC32Calculator s2(TESTB);
     unsigned r2 = s2.checksum();
 
     ensure( 2, r2 == d2 );
@@ -83,7 +83,7 @@ int
     c3 << TESTC;
     digest_t  d3 = c3.digest();
 
-    art::CRC32Calculator s3(TESTC);
+    cet::CRC32Calculator s3(TESTC);
     unsigned r3 = s3.checksum();
 
     ensure( 3, r3 == d3 );
