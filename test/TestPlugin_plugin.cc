@@ -1,6 +1,7 @@
 #include "TestPluginBase.h"
 
 #include "cetlib/make_unique.h"
+#include "cetlib/PluginTypeDeducer.h"
 
 #include <memory>
 
@@ -22,13 +23,10 @@ TestPlugin(std::string message)
 
 extern "C" {
   std::unique_ptr<cettest::TestPluginBase>
-  make_plugin(std::string message)
+  makePlugin(std::string message)
   {
     return cet::make_unique<cettest::TestPlugin>(std::move(message));
   }
-  std::string
-  pluginType()
-  {
-    return cet::PluginTypeDeducer<cettest::TestPluginBase>::value;
-  }
 }
+
+DEFINE_BASIC_PLUGINTYPE_FUNC(cettest::TestPluginBase)

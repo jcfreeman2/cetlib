@@ -4,13 +4,21 @@
 ////////////////////////////////////////////////////////////////////////
 // PluginTypeDeducer
 //
-// Used by PluginFactory and users thereof to ascertain and verify the
-// correct plugin type for a plugin.
+// An aid to managing multiple plugin types. See
+// cetlib/BasicPluginFactory.h for background.
 //
 // Specialize this class for your own plugin type and make sure it is
 // seen before being required. A reasonable place would be the in the
-// header file of the plugin type's base class, immediately below the
-// forward declaration of the base class name.
+// header file of the plugin type's base class (assuming there is one),
+// immediately below the forward declaration of the base class name.
+//
+// Define a macro DEFINE_BASIC_PLUGINTYPE_FUNC(base) to produce a
+// pluginType() function for a plugin library which should be findable
+// by BasicPluginFactory::pluginType(const std::string & libspec).
+//
+// PluginTypeDeducer<> is used rather than a sinple string literal to
+// allow for the ability for users of the plugin factory to compare the
+// answer with a known value to verify the type of the plugin found.
 ////////////////////////////////////////////////////////////////////////
 
 #include <string>
@@ -20,6 +28,15 @@ namespace cet {
   template <typename T>
     struct PluginTypeDeducer;
 }
+
+#define DEFINE_BASIC_PLUGINTYPE_FUNC(base)        \
+  extern "C" {                                    \
+    std::string                                   \
+    pluginType()                                  \
+    {                                             \
+      return cet::PluginTypeDeducer<base>::value; \
+    }                                             \
+  }
 
 template <typename T>
 struct cet::PluginTypeDeducer {

@@ -20,12 +20,16 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
   ../polarssl/md5.cc
   ../polarssl/sha1.cc
+  BasicPluginFactory.cc
+  LibraryManager.cc
+  PluginFactory.cc
   base_converter.cc
   canonical_number.cc
   canonical_string.cc
   cpu_timer.cc
   crc32.cc
   demangle.cc
+  detail/wrapLibraryManagerException.cc
   exception.cc
   exception_collector.cc
   filepath_maker.cc
@@ -39,8 +43,6 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   search_path.cc
   simple_stats.cc
   split_path.cc
-  LibraryManager.cc
-  detail/wrapLibraryManagerException.cc
   LIBRARIES
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}

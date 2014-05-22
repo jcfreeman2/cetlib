@@ -1,7 +1,26 @@
 #ifndef cetlib_PluginFactory_h
 #define cetlib_PluginFactory_h
+////////////////////////////////////////////////////////////////////////
+// PluginFactory.
+//
+// General facility for managing the loading and creation of plugins.
+//
+// One can use this class directly; however one is encouraged to use a
+// subclass (e.g.cet::BasicPlugin) which provides convenient facilities
+// for managing plugins that conform to a particular pattern.
+//
+// One is expected (but not mandated) to call setDiagReleaseVersion() to
+// allow to PluginFactory to provide more information about the plugin
+// in the event of a failure. In a future enhancement this will likely
+// be obtained from the plugin library itself where available.
+//
+// Note that due to the nature of the C functions which find symbols in
+// dynamic libraries, there is no type safety: a found symbol of the
+// correct name will be coerced to the desired function type. If that
+// type is inccorrect, chaos is likely to ensure.
+////////////////////////////////////////////////////////////////////////
+
 #include "cetlib/LibraryManager.h"
-#include "cetlib/PluginDefs.h"
 #include "cetlib/detail/wrapLibraryManagerException.h"
 #include "cetlib/exception.h"
 
@@ -9,118 +28,99 @@
 #include <string>
 
 namespace cet {
-  template <typename PLUGIN_TYPE,
-            typename RESULT_TYPE,
-            typename... ARGS>
   class PluginFactory;
 }
 
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
 class cet::PluginFactory {
 public:
   explicit
-  PluginFactory(std::string const & suffix = "plugin",
-                std::string const & makerName = "make_plugin",
-                std::string const & pluginTypeFuncName = "pluginType");
+  PluginFactory(std::string const & suffix = "plugin");
 
-  PluginFactory(PluginFactory const &) = delete;
-  PluginFactory & operator = (PluginFactory const &) = delete;
-
+  // Provide a string or function giving the release and version of the
+  // plugin (default "Unknown").
   void setDiagReleaseVersion(std::string rv);
   void setDiagReleaseVersion(std::function<std::string ()> rvf);
 
-  std::string pluginType(std::string const & libspec);
+  // General function to find and call a named function from the
+  // specified plugin library. RESULT_TYPE must be specified; ARGS may
+  // be deduced.
+  template <typename RESULT_TYPE,
+            typename... ARGS>
+  RESULT_TYPE call(std::string const & libspec,
+                   std::string const & funcname,
+                   ARGS... args);
 
-  RESULT_TYPE makePlugin(std::string const & libspec,
-                         ARGS... args);
+  // Nothrow tag (see find(), below).
+  static LibraryManager::nothrow_t nothrow;
+
+  // General functions to find and return a pointer to a function of the
+  // specified name and type. Use "nothrow" to select the non-throwing
+  // version of the function.
+  template <typename RESULT_TYPE, typename...ARGS>
+  auto
+  find(std::string const & funcname,
+       std::string const & libspec)
+-> RESULT_TYPE (*) (ARGS...);
+
+  template <typename RESULT_TYPE, typename...ARGS>
+  auto
+  find(std::string const & funcname,
+       std::string const & libspec,
+        LibraryManager::nothrow_t)
+-> RESULT_TYPE (*) (ARGS...);
+
+  // May define subclasses.
+  virtual ~PluginFactory() = default;
 
 private:
+  // Not copyable.
+  PluginFactory(PluginFactory const &) = delete;
+  PluginFactory & operator = (PluginFactory const &) = delete;
+
   std::string releaseVersion_();
 
   LibraryManager lm_;
-  std::string const makerName_;
-  std::string const pluginTypeFuncName_;
   std::string releaseVersionString_;
   std::function<std::string ()> releaseVersionFunc_;
 };
 
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
-cet::PluginFactory<PLUGIN_TYPE, RESULT_TYPE, ARGS...>::
-PluginFactory(std::string const & suffix,
-              std::string const & makerName,
-              std::string const & pluginTypeFuncName)
-  :
-  lm_(suffix),
-  makerName_(makerName),
-  pluginTypeFuncName_(pluginTypeFuncName),
-  releaseVersionString_(),
-  releaseVersionFunc_()
-{
-}
-
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
 inline
 void
-cet::PluginFactory<PLUGIN_TYPE, RESULT_TYPE, ARGS...>::
+cet::PluginFactory::
 setDiagReleaseVersion(std::function<std::string ()> rvf)
 {
   releaseVersionFunc_ = rvf;
 }
 
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
 inline
 void
-cet::PluginFactory<PLUGIN_TYPE, RESULT_TYPE, ARGS...>::
+cet::PluginFactory::
 setDiagReleaseVersion(std::string rv)
 {
   releaseVersionString_ = std::move(rv);
 }
 
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
-std::string
-cet::PluginFactory<PLUGIN_TYPE, RESULT_TYPE, ARGS...>::
-pluginType(std::string const & libspec)
+template <typename RESULT_TYPE, typename... ARGS>
+inline
+RESULT_TYPE
+cet::PluginFactory::
+call(std::string const & libspec,
+     std::string const & funcname,
+     ARGS... args)
 {
-  PluginTypeFunc_t symbol = nullptr;
-  try {
-    lm_.getSymbolByLibspec(libspec, pluginTypeFuncName_, symbol);
-  }
-  catch (exception & e) {
-    detail::wrapLibraryManagerException(e,
-                                        "Plugin",
-                                        libspec,
-                                        releaseVersion_());
-  }
-  if (symbol == nullptr) {
-    throw exception("Configuration", "BadPluginLibrary")
-        << "Plugin " << libspec
-        << " with version " << releaseVersion_()
-        << " has internal symbol definition problems: consult an expert.";
-  }
-  return (*symbol)();
+  return (*find<RESULT_TYPE, ARGS...>(libspec, funcname))(args...);
 }
 
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
-RESULT_TYPE
-cet::PluginFactory<PLUGIN_TYPE, RESULT_TYPE, ARGS...>::
-makePlugin(std::string const & libspec,
-           ARGS... args)
+template <typename RESULT_TYPE, typename... ARGS>
+auto
+cet::PluginFactory::
+find(std::string const & libspec,
+     std::string const & funcname)
+-> RESULT_TYPE (*) (ARGS...)
 {
-  PluginMaker_t<PLUGIN_TYPE, RESULT_TYPE, ARGS...> symbol = nullptr;
+  RESULT_TYPE (*symbol) (ARGS...)  = nullptr;
   try {
-    lm_.getSymbolByLibspec(libspec, makerName_, symbol);
+    lm_.getSymbolByLibspec(libspec, funcname, symbol);
   }
   catch (exception & e) {
     detail::wrapLibraryManagerException(e,
@@ -134,25 +134,19 @@ makePlugin(std::string const & libspec,
       << " with version " << releaseVersion_()
       << " has internal symbol definition problems: consult an expert.";
   }
-  return (*symbol)(args...);
+  return symbol;
 }
 
-template <typename PLUGIN_TYPE,
-          typename RESULT_TYPE,
-          typename... ARGS>
-std::string
-cet::PluginFactory<PLUGIN_TYPE, RESULT_TYPE, ARGS...>::
-releaseVersion_()
+template <typename RESULT_TYPE, typename... ARGS>
+inline
+auto
+cet::PluginFactory::
+find(std::string const & libspec,
+     std::string const & funcname,
+     LibraryManager::nothrow_t nothrow)
+-> RESULT_TYPE (*) (ARGS...)
 {
-  std::string result;
-  if (releaseVersionFunc_) {
-    result = releaseVersionFunc_();
-  } else {
-    result = releaseVersionString_.empty() ?
-             "Unknown" :
-             releaseVersionString_;
-  }
-  return result;
+  return lm_.getSymbolByLibspec<RESULT_TYPE (*) (ARGS...)>(libspec, funcname, nothrow);
 }
 #endif /* cetlib_PluginFactory_h */
 

@@ -1,7 +1,7 @@
 #define BOOST_TEST_MODULE ( PluginFactory_t )
 #include "boost/test/auto_unit_test.hpp"
 
-#include "cetlib/PluginFactory.h"
+#include "cetlib/BasicPluginFactory.h"
 #include "cetlib/PluginTypeDeducer.h"
 #include "cetlib/exception.h"
 
@@ -16,7 +16,7 @@ struct PluginFactoryTestFixture {
   PluginFactoryTestFixture() : pf() { pf.setDiagReleaseVersion("ETERNAL"); }
   ~PluginFactoryTestFixture() = default;
 
-  PluginFactory<cettest::TestPluginBase, std::unique_ptr<cettest::TestPluginBase>, std::string> pf;
+  BasicPluginFactory pf;
 
 };
 
@@ -32,13 +32,27 @@ BOOST_AUTO_TEST_CASE(checkType)
 
 BOOST_AUTO_TEST_CASE(checkMaker)
 {
-  auto p = pf.makePlugin("TestPlugin", "Hi");
+  auto p = pf.makePlugin<std::unique_ptr<cettest::TestPluginBase>,
+    std::string>("TestPlugin", "Hi");
   BOOST_REQUIRE_EQUAL(p->message(), std::string("Hi"));
+}
+
+BOOST_AUTO_TEST_CASE(CheckFinder)
+{
+  auto fptr = pf.find<std::string>("TestPlugin",
+                                   "pluginType",
+                                   cet::PluginFactory::nothrow);
+  BOOST_REQUIRE(fptr);
+  BOOST_REQUIRE_EQUAL(fptr(),                                           \
+                      PluginTypeDeducer<cettest::TestPluginBase>::value);
+  BOOST_REQUIRE(pf.find<std::string>("TestPlugin",
+                                     "oops",
+                                     cet::PluginFactory::nothrow) == 0);
 }
 
 BOOST_AUTO_TEST_CASE(checkError)
 {
-  BOOST_CHECK_EXCEPTION(pf.makePlugin("TestPluginX", "Hi"),             \
+  BOOST_CHECK_EXCEPTION(pf.makePlugin<std::unique_ptr<cettest::TestPluginBase> >("TestPluginX", "Hi"), \
                         cet::exception,                                 \
                         [](cet::exception const & e)                    \
                         {                                               \
