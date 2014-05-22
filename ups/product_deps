@@ -1,4 +1,4 @@
-parent cetlib v1_04_04
+parent cetlib v1_05_00
 defaultqual e5
 #
 libdir	fq_dir lib
@@ -8,7 +8,7 @@ gcc	v4_8_2
 icc	v14_0_2
 cpp0x	v1_04_04
 
-only_for_build	cetbuildtools	v3_11_00
+only_for_build	cetbuildtools	v3_12_00
 
 # Matrix of qualifiers versus dependent products
 qualifier	cpp0x		gcc	icc	compiler	notes
