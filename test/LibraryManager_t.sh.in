@@ -4,7 +4,7 @@ function libname() {
     echo "@CMAKE_SHARED_LIBRARY_PREFIX@${1}@CMAKE_SHARED_LIBRARY_SUFFIX@"
 }
 
-expected_lib="@LIBRARY_OUTPUT_PATH@/$(libname cetlib_fakePlugin)"
+expected_lib="@LIBRARY_OUTPUT_PATH@/$(libname test_fakePlugin)"
 
 if [[ ! -r "$expected_lib" ]]; then
   echo "Expected library \"$expected_lib\" does not exist!" 1>&2
