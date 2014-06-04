@@ -7,10 +7,18 @@ using cet::include;
 
 
 void
-  ensure( int which, bool claim )
+ensure( int which, bool claim )
 {
   if( not claim )
     std::exit(which);
+}
+
+inline
+void
+ensure(int which, std::istream &os)
+{
+  // Force boolean context.
+  ensure(which, !!os);
 }
 
 char const file_a[] = "./a.txt";
