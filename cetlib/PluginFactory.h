@@ -6,8 +6,8 @@
 // General facility for managing the loading and creation of plugins.
 //
 // One can use this class directly; however one is encouraged to use a
-// subclass (e.g.cet::BasicPlugin) which provides convenient facilities
-// for managing plugins that conform to a particular pattern.
+// subclass (e.g.cet::BasicPluginFactory) which provides convenient
+// facilities for managing plugins that conform to a particular pattern.
 //
 // One is expected (but not mandated) to call setDiagReleaseVersion() to
 // allow to PluginFactory to provide more information about the plugin
@@ -17,7 +17,7 @@
 // Note that due to the nature of the C functions which find symbols in
 // dynamic libraries, there is no type safety: a found symbol of the
 // correct name will be coerced to the desired function type. If that
-// type is inccorrect, chaos is likely to ensure.
+// type is inccorrect, chaos is likely to ensue.
 ////////////////////////////////////////////////////////////////////////
 
 #include "cetlib/LibraryManager.h"
