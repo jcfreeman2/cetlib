@@ -6,9 +6,9 @@
 
 #include "cetlib/registry_via_id.h"
 #include <cstdlib>
+#include <vector>
 
 using cet::registry_via_id;
-
 
 void
   ensure(  int which, bool claim )
@@ -67,6 +67,12 @@ int
   catch( ... ) {
     ensure( 24, false );
   }
+
+  reg::collection_type x { { 25.0, 25 }, { 36.0, 36 }, { 49.0, 49 } };
+  reg::put(x);
+  reg::put(x.cbegin(), x.cend());
+  std::vector<reg::mapped_type> v { 64, 81, 100 };
+  reg::put(v.cbegin(), v.cend());
 
   return 0;
 
