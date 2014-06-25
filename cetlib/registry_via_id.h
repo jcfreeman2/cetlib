@@ -68,15 +68,17 @@ public:
   template< class FwdIt >
     static
     typename std::enable_if<std::is_same<typename std::iterator_traits<FwdIt>::value_type,
-                                         typename collection_type::mapped_type>::value, void>::type
+                                         mapped_type>::value, void>::type
     put( FwdIt begin, FwdIt end );
-  // A range of iterator to std::pair<K, V>. For each pair, first == second.id() is a prerequisite.
+  // A range of iterator to std::pair<K, V>. For each pair, first ==
+  // second.id() is a prerequisite.
   template< class FwdIt >
     static
     typename std::enable_if<std::is_same<typename std::iterator_traits<FwdIt>::value_type,
-                                         typename collection_type::value_type>::value, void>::type
+                                         value_type>::value, void>::type
     put( FwdIt begin, FwdIt end );
-  // A collection_type. For each value_type, first == second.id() is a prerequisite.
+  // A collection_type. For each value_type, first == second.id() is a
+  // prerequisite.
   static  void
     put( collection_type const & c );
 
@@ -117,7 +119,7 @@ inline
 auto
   cet::registry_via_id<K,V>::put( FwdIt b, FwdIt e )
 -> typename std::enable_if<std::is_same<typename std::iterator_traits<FwdIt>::value_type,
-                                        typename collection_type::mapped_type>::value, void>::type
+                                        mapped_type>::value, void>::type
 {
   for( ; b != e; ++b )
     (void)put(*b);
@@ -129,7 +131,7 @@ inline
 auto
 cet::registry_via_id<K,V>::put( FwdIt b, FwdIt e )
 -> typename std::enable_if<std::is_same<typename std::iterator_traits<FwdIt>::value_type,
-                                        typename collection_type::value_type>::value, void>::type
+                                        value_type>::value, void>::type
 
 {
   the_registry_().insert(b, e);
