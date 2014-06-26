@@ -162,15 +162,17 @@ V const &
 
 template< class K, class V >
 bool
-  cet::registry_via_id<K,V>::get( K const & key, V & value ) noexcept
-try
+cet::registry_via_id<K,V>::get( K const & key, V & value ) noexcept
 {
-  value = get(key);
-  return true;
-}
-catch( cet::exception const & )
-{
-  return false;
+  bool result;
+  const_iterator it = the_registry_().find(key);
+  if( it == the_registry_().end() ) {
+    result = false;
+  } else {
+    value = it->second;
+    result = true;
+  }
+  return result;
 }
 
 #endif
