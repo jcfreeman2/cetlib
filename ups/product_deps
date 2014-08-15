@@ -1,23 +1,26 @@
-parent cetlib v1_06_02
-defaultqual e5
+parent cetlib v1_07_00
+defaultqual e6
 #
 libdir	fq_dir lib
 fcldir  -
 # define product/version pairs
 product	version
-gcc	v4_8_2
-icc	v14_0_2
-cpp0x	v1_04_05
-cetbuildtools	v4_00_00	-	only_for_build
+cpp0x	v1_04_06
+
+cetbuildtools	v4_00_01	-	only_for_build
 end_product_list
 
+
 # Matrix of qualifiers versus dependent products
-qualifier	cpp0x		gcc	icc	compiler	notes
-e5:debug	e5:debug	-nq-	-	gcc
-e5:opt		e5:opt		-nq-	-	gcc
-e5:prof		e5:prof		-nq-	-	gcc
-i1:debug	i1:debug	-	i1	icc
-i1:prof		i1:prof		-	i1	icc
+qualifier	cpp0x		compiler	notes
+e5:debug	e5:debug	gcc
+e5:opt		e5:opt		gcc
+e5:prof		e5:prof		gcc
+e6:debug	e6:debug	gcc
+e6:opt		e6:opt		gcc
+e6:prof		e6:prof		gcc
+i1:debug	i1:debug	icc
+i1:prof		i1:prof		icc
 end_qualifier_list
 
 # Local Variables:

@@ -11,6 +11,7 @@
 #include "cetlib/filepath_maker.h"
 #include "cetlib/includer.h"
 #include <fstream>
+#include <iostream>
 #include <sstream>
 
 char const file_a[] = "./a.txt";
