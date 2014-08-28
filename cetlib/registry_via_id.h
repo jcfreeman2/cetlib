@@ -101,6 +101,7 @@ private:
 
 };  // registry_via_id<>
 
+#ifndef __GCCXML__
 // ----------------------------------------------------------------------
 // put() overloads:
 
@@ -174,6 +175,7 @@ cet::registry_via_id<K,V>::get( K const & key, V & value ) noexcept
   }
   return result;
 }
+#endif /* __GCCXML__ */
 
 #endif
 
