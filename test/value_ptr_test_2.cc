@@ -7,6 +7,8 @@
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
+#include "cpp0x/compiler_macros.h"
+
 class simple
 {
   int i;
@@ -81,7 +83,7 @@ int main()
 
     std::map<cet::value_ptr<simple>, int>  m;
     m[f] = 0;
-#if GCC_IS_AT_LEAST(4,8,1) || defined(__ICC)
+#if GCC_IS_AT_LEAST(4,8,1) || defined(__ICC) || defined(__clang__)
     // Avoids a copy of f.
     assert(simple::n_born == 5);
 #else
