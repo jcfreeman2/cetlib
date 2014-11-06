@@ -1,35 +1,38 @@
-#include "cetlib/canonical_string.h"
-#include <cstdlib>
-#include <iostream>
-#include <string>
+#define BOOST_TEST_MODULE(canonical_string_t)
+#include "boost/test/auto_unit_test.hpp"
 
+#include "cetlib/canonical_string.h"
+
+using namespace cet;
+
+BOOST_AUTO_TEST_SUITE(canonical_string_t)
+
+BOOST_AUTO_TEST_CASE(is_single_quoted_string_t)
+{
+  BOOST_CHECK(is_single_quoted_string("'3'")); // '3'
+  BOOST_CHECK(!is_single_quoted_string("\"3\"")); // "3"
+  BOOST_CHECK(!is_single_quoted_string("'3',")); // '3',
+  BOOST_CHECK(!is_single_quoted_string(",'3'")); // ,'3'
+  BOOST_CHECK(is_single_quoted_string("'\\\'")); // '\\\'
+}
+
+BOOST_AUTO_TEST_CASE(is_double_quoted_string_t)
+{
+  BOOST_CHECK(is_double_quoted_string("\"3\"")); // "3"
+  BOOST_CHECK(!is_double_quoted_string("'3'")); // '3'
+  BOOST_CHECK(!is_double_quoted_string("\"3\",")); // "3",
+  BOOST_CHECK(!is_double_quoted_string(",\"3\"")); // ,"3"
+  // Controversial:
+  BOOST_CHECK(is_double_quoted_string("\"\\\"")); // "\"
+}
 
 void
-  ensure( int which, bool claim )
-{
-  if( not claim )
-    std::exit(which);
-}
-
-bool
-  becomes( std::string const & input
-         , std::string const & wanted
-         )
+becomes(std::string const & input, std::string const & wanted)
 {
   std::string result;
-  if( ! cet::canonical_string(input, result) )
-    return false;
-
-  if( result == wanted )
-    return true;
-
-  std::cerr << "Input:  " << input  << '\n'
-            << "Wanted: " << wanted << '\n'
-            << "Result: " << result << '\n'
-            ;
-  return false;
+  BOOST_CHECK_MESSAGE(cet::canonical_string(input, result), "canonical_result returns false on input: '" << input << "'");
+  BOOST_CHECK_EQUAL(result, wanted);
 }
-
 
 std::string
   dquoted( std::string const & s )
@@ -37,32 +40,31 @@ std::string
   return '"' + s + '"';
 }
 
-
 std::string
   squoted( std::string const & s )
 {
   return '\'' + s + '\'';
 }
 
-
-int
-  main( )
+BOOST_AUTO_TEST_CASE(canonical_string_t)
 {
-  ensure( 1, becomes( "a"         , dquoted("a") ) );
-  ensure( 2, becomes( squoted("a"), dquoted("a") ) );
-  ensure( 3, becomes( dquoted("a"), dquoted("a") ) );
-  ensure( 4, ! becomes( ""        ,  dquoted("") ) );
+  becomes("a", dquoted("a"));
+  becomes(squoted("a"), dquoted("a"));
+  becomes(dquoted("a"), dquoted("a"));
+  {
+    std::string result;
+    BOOST_CHECK_MESSAGE(!canonical_string("", result),
+                          "canonical_string() should return false on empty input.");
+  }
+  becomes(squoted("\n"), dquoted("\\n"));
+  becomes(dquoted("\n"), dquoted("\\n"));
+  becomes(squoted("\\"), dquoted("\\\\"));
+  becomes(dquoted("\\"), dquoted("\\\\"));
+  becomes(squoted("\\\\"), dquoted("\\\\\\\\"));
+  becomes(dquoted("\\\\"), dquoted("\\\\"));
 
-  ensure( 11, becomes( squoted("\n"), dquoted("\\n") ) );
-  ensure( 12, becomes( dquoted("\n"), dquoted("\\n") ) );
-  ensure( 13, becomes( squoted("\\"), dquoted("\\\\") ) );
-  ensure( 14, becomes( dquoted("\\"), dquoted("\\\\") ) );
-  ensure( 15, becomes( squoted("\\\\"), dquoted("\\\\\\\\") ) );
-  ensure( 16, becomes( dquoted("\\\\"), dquoted("\\\\") ) );
+  becomes(squoted("\t\'\""), dquoted("\\t\\\'\\\""));
+  becomes(dquoted("\t\'\""), dquoted("\\t\\\'\\\""));
+}
 
-  ensure( 21, becomes( squoted("\t\'\""), dquoted("\\t\\\'\\\"") ) );
-  ensure( 22, becomes( dquoted("\t\'\""), dquoted("\\t\\\'\\\"") ) );
-
-  return 0;
-
-}  // main()
+BOOST_AUTO_TEST_SUITE_END()

@@ -7,17 +7,16 @@
 #include "cetlib/canonical_string.h"
 
 #include "cetlib/exception.h"
-#include <cctype>
 
-using std::string;
+#include <cctype>
 
 // ----------------------------------------------------------------------
 
-string
-  cet::escape( string const & str )
+std::string
+  cet::escape( std::string const & str )
 {
-  string result;
-  for( string::const_iterator it = str.begin()
+  std::string result;
+  for( std::string::const_iterator it = str.begin()
                             , e  = str.end(); it != e; ++it ) {
     switch( *it )  {
       case '\"':  result.append("\\\"");  break;
@@ -34,11 +33,11 @@ string
 
 // ----------------------------------------------------------------------
 
-string
-  cet::unescape( string const & str )
+std::string
+  cet::unescape( std::string const & str )
 {
-  string result;
-  for( string::const_iterator it = str.begin()
+  std::string result;
+  for( std::string::const_iterator it = str.begin()
                             , e  = str.end(); it != e; ++it ) {
     char ch = *it;
     if( ch == '\\' && it != e-1 ) {
@@ -58,31 +57,37 @@ string
 
 // ----------------------------------------------------------------------
 
-bool
-  cet::canonical_string( string const & s
-                       , string       & result
-                       )
-try
+std::string
+cet::canonical_string(std::string const & s)
 {
-  if( s.empty() )
-    return false;
+  std::string result;
+  if (!s.empty()) {
+    std::string value;
+    if (is_double_quoted_string(s)) {
+      value = cet::unescape( s.substr(1, s.size()-2) );
+    } else if (is_single_quoted_string(s)) {
+      value = s.substr(1, s.size()-2);
+    } else {
+      value = s;
+    }
 
-  string value;
-  if( s[0] == '"' && s.end()[-1] == '"' )
-    value = cet::unescape( s.substr(1, s.size()-2) );
-  else if( s[0] == '\'' && s.end()[-1] == '\'' )
-    value = s.substr(1, s.size()-2);
-  else
-    value = s;
-
-  result.append( 1, '"' )
-        .append( cet::escape(value) )
-        .append( 1, '"' )
-        ;
-  return true;
+    result.append( 1, '"' )
+      .append( cet::escape(value) )
+      .append( 1, '"' );
+  }
+  return result;
 }
-catch( ... ) {
-  return false;
-}  // canonical_string()
+
+bool
+cet::detail::is_quoted_string(std::string const &s, char quot) {
+  bool result = false;
+  auto const sz = s.size();
+  if ((sz >= 2) &&
+      (s[0] == quot) &&
+      (s.back() == quot)) {
+    result = true;
+  }
+  return result;
+}
 
 // ======================================================================
