@@ -65,20 +65,6 @@ cet_test(zero_init_test USE_BOOST_UNIT)
 
 cet_make_library(LIBRARY_NAME test_fakePlugin SOURCE moduleType.cc NO_INSTALL)
 
-cet_make_exec(LibraryManager_t USE_BOOST_UNIT
-  LIBRARIES
-  ${Boost_FILESYSTEM_LIBRARY}
-  -ldl
-)
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/LibraryManager_t.sh.in
-  ${CMAKE_CURRENT_BINARY_DIR}/LibraryManager_t.sh
-  @ONLY
-  )
-cet_test(LibraryManager_t.sh HANDBUILT
-  TEST_EXEC ${CMAKE_CURRENT_BINARY_DIR}/LibraryManager_t.sh
-  )
-
 cet_make_library(LIBRARY_NAME test_TestPluginBase SOURCE TestPluginBase.cc NO_INSTALL)
 
 include(BasicPlugin)
@@ -87,3 +73,29 @@ basic_plugin(TestPlugin "plugin" NO_INSTALL test_TestPluginBase)
 cet_test(PluginFactory_t USE_BOOST_UNIT
   LIBRARIES cetlib test_TestPluginBase
 )
+
+function(test_library LIBSPEC)
+  add_custom_command(OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/${LIBSPEC}.cc
+    COMMAND ${CMAKE_COMMAND}
+    -DSRC_DIR="${CMAKE_CURRENT_SOURCE_DIR}"
+    -DBIN_DIR="${CMAKE_CURRENT_BINARY_DIR}"
+    -DLIBSPEC="${LIBSPEC}"
+    -P ${CMAKE_CURRENT_SOURCE_DIR}/configureLibraryManagerTestFunc.cmake
+    DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/configureLibraryManagerTestFunc.cmake
+    ${CMAKE_CURRENT_SOURCE_DIR}/LibraryManagerTestFunc.cc.in
+    )
+  add_library(${LIBSPEC}_cetlibtest MODULE ${CMAKE_CURRENT_BINARY_DIR}/${LIBSPEC}.cc)
+endfunction()
+
+test_library(1_1_1)
+test_library(1_1_2)
+test_library(1_1_3)
+test_library(2_1_3)
+test_library(2_1_5)
+
+cet_test(LibraryManager_t USE_BOOST_UNIT
+  LIBRARIES
+  ${Boost_FILESYSTEM_LIBRARY}
+  -ldl
+  )
+

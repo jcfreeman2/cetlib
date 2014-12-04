@@ -23,7 +23,7 @@ struct LibraryManagerTestFixture {
 
 LibraryManagerTestFixture::LibraryManagerTestFixture()
   :
-  lm("module"),
+  lm("cetlibtest"),
   lm_ref(lm)
 {
 }
@@ -63,23 +63,23 @@ BOOST_AUTO_TEST_CASE(libListIter)
 BOOST_AUTO_TEST_CASE(getSymbolLong)
 {
   BOOST_REQUIRE(lm_ref.getSymbolByLibspec<void *>("2/1/5",
-                "moduleType") != nullptr);
+                "idString") != nullptr);
 }
 
 BOOST_AUTO_TEST_CASE(getSymbolShort)
 {
   BOOST_REQUIRE(lm_ref.getSymbolByLibspec<void *>("5",
-                "moduleType") != nullptr);
+                "idString") != nullptr);
 }
 
 BOOST_AUTO_TEST_CASE(getSymbolPathPrecedence)
 {
-  BOOST_CHECK_NO_THROW(lm_ref.getSymbolByLibspec<void *> ("1/1/1", "moduleType"));
+  BOOST_CHECK_NO_THROW(lm_ref.getSymbolByLibspec<void *> ("1/1/1", "idString"));
 }
 
 BOOST_AUTO_TEST_CASE(getSymbolAmbiguity)
 {
-  BOOST_CHECK_EXCEPTION(lm_ref.getSymbolByLibspec<void *> ("3", "moduleType"), \
+  BOOST_CHECK_EXCEPTION(lm_ref.getSymbolByLibspec<void *> ("3", "idString"), \
                         cet::exception,                                 \
                         [](cet::exception const & e)                    \
                         {                                               \
@@ -89,7 +89,7 @@ BOOST_AUTO_TEST_CASE(getSymbolAmbiguity)
 
 BOOST_AUTO_TEST_CASE(getSymbolNoAmbiguity)
 {
-  BOOST_CHECK_NO_THROW(lm_ref.getSymbolByLibspec<void *> ("2/1/3", "moduleType"));
+  BOOST_CHECK_NO_THROW(lm_ref.getSymbolByLibspec<void *> ("2/1/3", "idString"));
 }
 
 BOOST_AUTO_TEST_CASE(dictLoadable)
