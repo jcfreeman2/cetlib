@@ -5,6 +5,7 @@
 
 #include "cetlib/exception.h"
 #include "cetlib/container_algorithms.h"
+#include "test/LibraryManagerTestFunc.h"
 
 #include <algorithm>
 #include <iostream>
@@ -87,9 +88,41 @@ BOOST_AUTO_TEST_CASE(getSymbolAmbiguity)
                         });
 }
 
-BOOST_AUTO_TEST_CASE(getSymbolNoAmbiguity)
+namespace {
+  void verify(std::string libspec, cettest::idString_t idString)
+  {
+    std::size_t pos = 0;
+    while ((pos = libspec.find_first_of('/', pos)) != std::string::npos) {
+      libspec[pos] = '_';
+    }
+    BOOST_REQUIRE_EQUAL(libspec, idString());
+  }
+}
+
+BOOST_AUTO_TEST_CASE(getSymbolNoAmbiguity1)
 {
-  BOOST_CHECK_NO_THROW(lm_ref.getSymbolByLibspec<void *> ("2/1/3", "idString"));
+  std::string const libspecA = "1/2/3";
+  std::string const libspecB = "1/1/3";
+  cettest::idString_t idString = nullptr;
+  BOOST_CHECK_NO_THROW(idString = lm_ref.getSymbolByLibspec<cettest::idString_t> (libspecA, "idString"));
+  verify(libspecA, idString);
+  BOOST_CHECK_NO_THROW(idString = lm_ref.getSymbolByLibspec<cettest::idString_t> (libspecB, "idString"));
+  verify(libspecB, idString);
+  BOOST_CHECK_NO_THROW(idString = lm_ref.getSymbolByLibspec<cettest::idString_t> (libspecA, "idString"));
+  verify(libspecA, idString);
+}
+
+BOOST_AUTO_TEST_CASE(getSymbolNoAmbiguity2)
+{
+  std::string const libspecA = "1/1/3";
+  std::string const libspecB = "1/2/3";
+  cettest::idString_t idString = nullptr;
+  BOOST_CHECK_NO_THROW(idString = lm_ref.getSymbolByLibspec<cettest::idString_t> (libspecA, "idString"));
+  verify(libspecA, idString);
+  BOOST_CHECK_NO_THROW(idString = lm_ref.getSymbolByLibspec<cettest::idString_t> (libspecB, "idString"));
+  verify(libspecB, idString);
+  BOOST_CHECK_NO_THROW(idString = lm_ref.getSymbolByLibspec<cettest::idString_t> (libspecA, "idString"));
+  verify(libspecA, idString);
 }
 
 BOOST_AUTO_TEST_CASE(dictLoadable)

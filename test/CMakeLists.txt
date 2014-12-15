@@ -90,7 +90,7 @@ endfunction()
 test_library(1_1_1)
 test_library(1_1_2)
 test_library(1_1_3)
-test_library(2_1_3)
+test_library(1_2_3)
 test_library(2_1_5)
 
 cet_test(LibraryManager_t USE_BOOST_UNIT

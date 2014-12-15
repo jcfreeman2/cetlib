@@ -4,7 +4,7 @@
 #include <string>
 
 namespace cettest {
-  typedef std::string (*idString) ();
+  typedef std::string (*idString_t) ();
 }
 
 #endif /* TEST_LIBRARYMANAGERTESTFUNC_H */

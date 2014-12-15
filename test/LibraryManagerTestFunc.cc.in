@@ -6,5 +6,5 @@ extern "C" {
   std::string idString() { return "@LIBSPEC@"; }
 }
 
-static_assert(std::is_same<cettest::idString, decltype(&idString)>::value,
+static_assert(std::is_same<cettest::idString_t, decltype(&idString)>::value,
               "Generated function idString has wrong signature!");
