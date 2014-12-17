@@ -84,7 +84,7 @@ function(test_library LIBSPEC)
     DEPENDS ${CMAKE_CURRENT_SOURCE_DIR}/configureLibraryManagerTestFunc.cmake
     ${CMAKE_CURRENT_SOURCE_DIR}/LibraryManagerTestFunc.cc.in
     )
-  add_library(${LIBSPEC}_cetlibtest MODULE ${CMAKE_CURRENT_BINARY_DIR}/${LIBSPEC}.cc)
+  add_library(${LIBSPEC}_cetlibtest SHARED ${CMAKE_CURRENT_BINARY_DIR}/${LIBSPEC}.cc)
 endfunction()
 
 test_library(1_1_1)
