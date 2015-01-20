@@ -36,7 +36,7 @@ char const contents_i [] = "begin\n"
                            "end\n";
 char const contents_j [] = "begin\n"
                            "#include \"./a.txt\"\n"
-                           "#include \"./b.txt\"\t\n"
+                           "#include \"./b.txt\"\t\r\n"
                            "end\n";
 char const contents_k [] = "begin\n"
                            "#include \"./j.txt\"\n"
