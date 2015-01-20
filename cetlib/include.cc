@@ -9,6 +9,7 @@
 #include "cetlib/coded_exception.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/search_path.h"
+#include "cetlib/trim.h"
 #include <fstream>
 
 // ----------------------------------------------------------------------
@@ -57,7 +58,7 @@ void
             .append(1, '\n');
       continue;
     }
-
+    trim_right(line, "\t\r");
     if( line.end()[-1] != '\"' )  // #include is missing trailing quote
       throw include_exception(malformed) << line;
 
