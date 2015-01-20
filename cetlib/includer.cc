@@ -180,7 +180,7 @@ void
     frames.push_back(new_frame);
 
     // validate the rest of the #include line's syntax:
-    trim_right(line, " \t\n");
+    trim_right(line, " \t\r\n");
     if(  line.size() <= min_sz                      // too short?
       || line[8] != ' '                             // missing separator?
       || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
