@@ -203,4 +203,32 @@ BOOST_AUTO_TEST_CASE( backtrace_test )
   BOOST_REQUIRE_EQUAL(j.whereis(it), cmp);
 }
 
+BOOST_AUTO_TEST_CASE( highlighted_backtrace_test )
+{
+  cet::includer j(file_j, policy);
+  auto it = j.begin();
+  std::advance(it, 5);
+  BOOST_REQUIRE(*it == '\n');
+  std::cerr << j.highlighted_whereis(it) << "\n";
+  std::cerr << "\n";
+  std::string cmp("line 1, character 6, of file \"././j.txt\"");
+  cmp += "\n\nbegin\n     ^";
+  BOOST_REQUIRE_EQUAL(j.highlighted_whereis(it), cmp);
+  std::advance(it, 10);
+  BOOST_REQUIRE(*it == 'y');
+  std::cerr << j.highlighted_whereis(it) << "\n";
+  std::cerr << "\n";
+  cmp = "line 2, character 4, of file \"././a.txt\"\n"
+        "included from line 2 of file \"././j.txt\"";
+  cmp += "\n\nvwxyz\n   ^";
+  BOOST_REQUIRE_EQUAL(j.highlighted_whereis(it), cmp);
+  std::advance(it, 10);
+  BOOST_REQUIRE(*it == '7');
+  std::cerr << j.highlighted_whereis(it) << "\n";
+  cmp = "line 2, character 2, of file \"././b.txt\"\n"
+        "included from line 3 of file \"././j.txt\"";
+  cmp += "\n\n67890\n ^";
+  BOOST_REQUIRE_EQUAL(j.highlighted_whereis(it), cmp);
+}
+
 BOOST_AUTO_TEST_SUITE_END()

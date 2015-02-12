@@ -85,8 +85,8 @@ includer::includer( std::istream        & is
 
 // ----------------------------------------------------------------------
 
-std::string
-  includer::whereis( const_iterator const & it ) const
+includer::posinfo
+includer::get_posinfo( const_iterator const & it ) const
 {
   // locate the frame corresponding to the given iterator:
   uint textpos = it - text.begin();
@@ -110,15 +110,45 @@ std::string
   uint charpos = newlinepos == std::string::npos
                ? textpos + 1
                : textpos - text.find_last_of('\n', textpos-1u);
+  return { textpos, linenum, charpos, framenum };
+}
 
+std::string
+includer::whereis( const_iterator const & it ) const
+{
+  posinfo pos(get_posinfo(it));
   // prepare the current information:
   std::ostringstream result;
-  result << "line "        << linenum
-         << ", character " << charpos
-         << ", of file \"" << this_frame.filename << '\"';
+  result << "line "        << pos.linenum
+         << ", character " << pos.charpos
+         << ", of file \"" << frames[pos.framenum].filename << '\"';
 
   return result.str()
-       + backtrace( frames[framenum].including_framenum );
+       + backtrace( frames[pos.framenum].including_framenum );
+
+}  // whereis()
+
+std::string
+includer::highlighted_whereis( const_iterator const & it ) const
+{
+  posinfo pos(get_posinfo(it));
+  // prepare the current information:
+  std::ostringstream result;
+  result << "line "        << pos.linenum
+         << ", character " << pos.charpos
+         << ", of file \"" << frames[pos.framenum].filename << '\"'
+         << backtrace( frames[pos.framenum].including_framenum )
+         << "\n\n";
+  auto cp0 = pos.charpos - 1;
+  uint eol = text.find_first_of('\n', pos.textpos);
+  result << text.substr(pos.textpos - cp0,
+                        (eol == std::string::npos) ?
+                        std::string::npos :
+                        (eol - (pos.textpos - cp0)))
+         << "\n";
+  result << std::string(cp0, ' ') << "^";
+
+  return result.str();
 
 }  // whereis()
 

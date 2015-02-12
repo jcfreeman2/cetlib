@@ -35,6 +35,7 @@ public:
   const_iterator  begin   ( ) const  { return text.begin(); }
   const_iterator  end     ( ) const  { return text.end  (); }
   std::string     whereis ( const_iterator const & it ) const;
+  std::string     highlighted_whereis (const_iterator const & it ) const;
 
 private:
 
@@ -53,6 +54,14 @@ frame( uint framenum, std::string filename, uint linenum, size_t textpos )
     { }
   };
 
+  struct posinfo
+  {
+    uint textpos; // Character position in fully-included text.
+    uint linenum; // Line number (1-based for user info).
+    uint charpos; // Character position in line (1-based for user info).
+    uint framenum; // Inclusion level.
+  };
+
   std::string         text;
   std::vector<frame>  frames;
   std::vector<std::string> recursion_stack;
@@ -66,6 +75,8 @@ frame( uint framenum, std::string filename, uint linenum, size_t textpos )
                 );
   std::string  backtrace( uint from_frame ) const;
   void  debug   ( ) const;
+
+  posinfo get_posinfo ( const_iterator const & it ) const;
 
 };  // includer
 
