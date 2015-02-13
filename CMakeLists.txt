@@ -44,7 +44,7 @@ cet_report_compiler_flags()
 # Describe build prerequisites:
 
 
-find_ups_product(cetbuildtools v3_02_00)
+find_ups_product (cetbuildtools v4_07_02)
 find_ups_product( cpp0x v1_03_02 )
 find_ups_boost(v1_50_0)
 
