@@ -99,6 +99,11 @@ public:
   template <class OutIter>
   size_t getValidLibspecs(OutIter dest) const;
 
+  // Get pair of short and full libspecs corresponding to library
+  // full path.
+  std::pair<std::string,std::string>
+  getSpecsByPath(std::string const & lib_loc) const;
+
   // Load all libraries at once.
   void loadAllLibraries() const;
 

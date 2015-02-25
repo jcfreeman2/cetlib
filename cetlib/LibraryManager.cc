@@ -82,6 +82,29 @@ cet::LibraryManager::getValidLibspecs(std::vector<std::string> &list) const
   return this->getValidLibspecs(std::back_inserter(list));
 }
 
+std::pair<std::string,std::string>
+cet::LibraryManager::getSpecsByPath(std::string const & lib_loc) const
+{
+  std::string short_spec, full_spec;
+  for ( const auto & entry : spec_trans_map_ ) {
+
+    std::string const spec            = entry.first;
+    std::set<std::string> const paths = entry.second;
+
+    auto const path_iter = paths.find(lib_loc);
+    if ( path_iter != paths.end() ) {
+      if ( spec.find("/") != std::string::npos ) full_spec = spec;
+      else short_spec = spec;
+    }
+    if ( !short_spec.empty() && !full_spec.empty() ) break;
+  }
+
+  if ( short_spec.empty() || full_spec.empty() )
+    throw exception("LogicError") << "Missing both short and full specs corresponding to library path.";
+
+  return std::make_pair( short_spec, full_spec );
+}
+
 void
 cet::LibraryManager::loadAllLibraries() const
 {
@@ -141,6 +164,7 @@ cet::LibraryManager::
 spec_trans_map_inserter(lib_loc_map_t::value_type const & entry,
                         std::string const & lib_type)
 {
+
   // First obtain short spec.
   boost::regex e("([^_]+)_" + lib_type + dllExtPattern() + '$');
   boost::match_results<std::string::const_iterator> match_results;
