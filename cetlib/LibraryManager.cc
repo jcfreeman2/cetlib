@@ -85,7 +85,8 @@ cet::LibraryManager::getValidLibspecs(std::vector<std::string> &list) const
 std::pair<std::string,std::string>
 cet::LibraryManager::getSpecsByPath(std::string const & lib_loc) const
 {
-  std::string short_spec, full_spec;
+  // pair<short_spec,full_spec>
+  std::pair<std::string,std::string> result;
   for ( const auto & entry : spec_trans_map_ ) {
 
     std::string const spec            = entry.first;
@@ -93,16 +94,16 @@ cet::LibraryManager::getSpecsByPath(std::string const & lib_loc) const
 
     auto const path_iter = paths.find(lib_loc);
     if ( path_iter != paths.end() ) {
-      if ( spec.find("/") != std::string::npos ) full_spec = spec;
-      else short_spec = spec;
+      if ( spec.find("/") != std::string::npos ) result.second = spec;
+      else result.first = spec;
     }
-    if ( !short_spec.empty() && !full_spec.empty() ) break;
+    if ( !result.first.empty() && !result.second.empty() ) break;
   }
 
-  if ( short_spec.empty() || full_spec.empty() )
+  if ( result.first.empty() || result.second.empty() )
     throw exception("LogicError") << "Missing both short and full specs corresponding to library path.";
 
-  return std::make_pair( short_spec, full_spec );
+  return std::move(result);
 }
 
 void
