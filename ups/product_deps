@@ -7,7 +7,7 @@ fcldir  -
 product	version
 cpp0x	v1_04_09
 
-cetbuildtools	v4_07_02	-	only_for_build
+cetbuildtools	v4_09_02	-	only_for_build
 end_product_list
 
 
