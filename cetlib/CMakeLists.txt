@@ -19,6 +19,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   SOURCE
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
   ../polarssl/md5.cc
+  MD5Digest.cc
   ../polarssl/sha1.cc
   BasicPluginFactory.cc
   LibraryManager.cc

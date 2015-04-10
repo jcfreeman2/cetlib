@@ -2,9 +2,10 @@
 #include <iomanip>
 #include <sstream>
 
-#include "Digest.h"
+#include "cetlib/MD5Digest.h"
+#include "cetlib/nybbler.h"
 
-namespace art
+namespace cet
 {
   namespace
   {
@@ -12,25 +13,6 @@ namespace art
     {
       static const MD5Result val;
       return val;
-    }
-
-    char unhexify(char hexed)
-    {
-      switch (hexed)
-	{
-	case '0': case '1': case '2': case '3': case '4':
-	case '5': case '6': case '7': case '8': case '9':
-	  return hexed - '0';
-	case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
-	  return hexed - 'a' + 10;
-	case 'A': case 'B': case 'C': case 'D': case 'E': case 'F':
-	  return hexed - 'A' + 10;
-	default:
-	  throw "Non-hex character in Hash";
-	}
-      // We never get here; return put in place to calm the compiler's
-      // anxieties.
-      return '\0';
     }
   }
 
@@ -88,26 +70,22 @@ namespace art
     switch (hexy.size())
       {
       case 0:
-	{
-	  set_to_default(*this);
-	}
-	break;
+        {
+          set_to_default(*this);
+        }
+        break;
       case 32:
-	{
-	  std::string::const_iterator it = hexy.begin();
-	  for (size_t i = 0; i != 16; ++i)
-	    {
-	      // first nybble
-	      bytes[i] = ( unhexify(*it++) << 4 );
-	      // second nybble
-	      bytes[i] += ( unhexify(*it++) );
-	    }
-	}
-	break;
+        {
+          cet::nybbler const temp( hexy );
+          std::string::const_iterator it = temp.as_char().begin();
+          for (size_t i = 0; i != 16; ++i)
+            bytes[i] = *it++;
+        }
+        break;
       default:
-	{
-	  throw "String of illegal length given to MD5Result::fromHexifiedString";
-	}
+        {
+          throw "String of illegal length given to MD5Result::fromHexifiedString";
+        }
       }
   }
 
@@ -125,41 +103,42 @@ namespace art
   bool operator< (MD5Result const& a, MD5Result const& b)
   {
     return std::lexicographical_compare(a.bytes,
-					a.bytes+sizeof(a.bytes),
-					b.bytes,
-					b.bytes+sizeof(b.bytes));
+                                        a.bytes+sizeof(a.bytes),
+                                        b.bytes,
+                                        b.bytes+sizeof(b.bytes));
   }
 
 
 
   //--------------------------------------------------------------------
   //
-  // Digest
+  // MD5Digest
   //
 
-  Digest::Digest() :
-    state_()
+  MD5Digest::MD5Digest() :
+    context_()
   {
-    md5_init(&state_);
+    polarssl::md5_starts(&context_);
   }
 
-  Digest::Digest(std::string const& s) :
-    state_()
+  MD5Digest::MD5Digest(std::string const& s) :
+    context_()
   {
-    md5_init(&state_);
+    polarssl::md5_starts(&context_);
     this->append(s);
   }
 
-  void Digest::append(std::string const& s)
+  void MD5Digest::append(std::string const& s)
   {
+    using md5_byte_t = unsigned char;
     const md5_byte_t* data = reinterpret_cast<const md5_byte_t*>(s.data());
-    md5_append(&state_, const_cast<md5_byte_t*>(data), s.size());
+    polarssl::md5_update(&context_, const_cast<md5_byte_t*>(data), s.size());
   }
 
-  MD5Result Digest::digest() const
+  MD5Result MD5Digest::digest() const
   {
     MD5Result aDigest;
-    md5_finish(&state_, aDigest.bytes);
+    polarssl::md5_finish(&context_, aDigest.bytes);
     return aDigest;
   }
 }

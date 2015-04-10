@@ -1,13 +1,12 @@
-#ifndef art_Utilities_Digest_h
-#define art_Utilities_Digest_h
+#ifndef cetlib_MD5Digest_h
+#define cetlib_MD5Digest_h
 
-#include "md5.h"
+#include "polarssl/md5.h"
 
 #include <iosfwd>
 #include <string>
 
-
-namespace art
+namespace cet
 {
 
   struct MD5Result
@@ -51,22 +50,22 @@ namespace art
 
   // Digest creates an MD5 digest of the given string. The digest can
   // be updated by using 'append'.
-  class Digest
+  class MD5Digest
   {
   public:
-    Digest();
-    explicit Digest(std::string const& s);
+    MD5Digest();
+    explicit MD5Digest(std::string const& s);
 
     void append(std::string const& s);
 
     MD5Result digest() const;
 
   private:
-    mutable md5_state_t state_;
+    mutable polarssl::md5_context context_;
   };
 }
 
-#endif /* art_Utilities_Digest_h */
+#endif /* cet_Utilities_Digest_h */
 
 // Local Variables:
 // mode: c++

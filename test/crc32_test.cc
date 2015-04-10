@@ -89,6 +89,19 @@ int
     ensure( 3, r3 == d3 );
   }
 
+  {
+    crc32 c4("type_label_instance_process");
+
+    // This known result was calculated using python as a cross check
+    unsigned int  knownResult = 1215348599;
+    ensure( 4, c4.digest() == knownResult);
+  }
+
+  {
+    crc32 emptyString_crc32("");
+    ensure( 5, emptyString_crc32.digest() == 0);
+  }
+
   return 0;
 
 }  // main()
