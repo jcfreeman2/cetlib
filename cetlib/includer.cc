@@ -24,63 +24,63 @@ using cet::includer;
 
 namespace { namespace detail {
 
-  enum error { cant_open
-             , cant_read
-             , malformed
-             , recursive
-             };
+    enum error { cant_open
+                 , cant_read
+                 , malformed
+                 , recursive
+    };
 
-  std::string
+    std::string
     translate( error code )
-  {
-    switch( code ) {
+    {
+      switch( code ) {
       case cant_open  : return "Can't locate or can't open specified file:";
       case cant_read  : return "Can't read from supplied input stream:";
       case malformed  : return "Malformed #include directive:";
       case recursive  : return "Recursive #include directive:";
       default         : return "Unknown code";
-    }
-  }  // translate()
+      }
+    }  // translate()
 
-  typedef  cet::coded_exception<error,translate>
-           inc_exception;
+    typedef  cet::coded_exception<error,translate>
+    inc_exception;
 
-  std::string
+    std::string
     begin_string( ) { return "<begin>"; }
-  std::string
+    std::string
     end_string( ) { return "<end>"; }
 
-} }  // ::detail
+  } }  // ::detail
 
 using namespace ::detail;
 
 // ----------------------------------------------------------------------
 
 includer::includer( std::string const   & filename
-                  , cet::filepath_maker & abs_filename
-                  )
+                    , cet::filepath_maker & abs_filename
+                    )
   :
   text  ( ),
   frames { frame(0, begin_string(), 0, text.size()) },
   recursion_stack ( )
-{
-  include(0, filename, abs_filename);
-  frames.emplace_back(0, end_string(), 0, text.size());
-}
+  {
+    include(0, filename, abs_filename);
+    frames.emplace_back(0, end_string(), 0, text.size());
+  }
 
 // ----------------------------------------------------------------------
 
 includer::includer( std::istream        & is
-                  , cet::filepath_maker & abs_filename
-                  )
- :
+                    , cet::filepath_maker & abs_filename
+                    )
+  :
   text  ( ),
   frames { frame(0, begin_string(), 0, text.size()) },
   recursion_stack ( )
-{
-  include(is, abs_filename);
-  frames.emplace_back(0, end_string(), 0, text.size());
-}
+  {
+    include(is, abs_filename);
+    frames.emplace_back(0, end_string(), 0, text.size());
+  }
 
 
 // ----------------------------------------------------------------------
@@ -98,25 +98,25 @@ includer::get_posinfo( const_iterator const & it ) const
 
   // determine the line number within the corresponding file:
   uint linenum = this_frame.starting_linenum
-               + std::count( text.begin()+this_frame.starting_textpos
-                           , text.begin()+textpos
-                           , '\n'
-                           );
+    + std::count( text.begin()+this_frame.starting_textpos
+                  , text.begin()+textpos
+                  , '\n'
+                  );
 
   // determine the character position within the corresponding line:
   uint newlinepos = textpos == 0u
-                  ? std::string::npos
-                  : text.find_last_of('\n', textpos-1u);
+    ? std::string::npos
+    : text.find_last_of('\n', textpos-1u);
   uint charpos = newlinepos == std::string::npos
-               ? textpos + 1
-               : textpos - text.find_last_of('\n', textpos-1u);
+    ? textpos + 1
+    : textpos - text.find_last_of('\n', textpos-1u);
   return { textpos, linenum, charpos, framenum };
 }
 
 std::string
 includer::whereis( const_iterator const & it ) const
 {
-  posinfo pos(get_posinfo(it));
+  posinfo const pos(get_posinfo(it));
   // prepare the current information:
   std::ostringstream result;
   result << "line "        << pos.linenum
@@ -124,14 +124,14 @@ includer::whereis( const_iterator const & it ) const
          << ", of file \"" << frames[pos.framenum].filename << '\"';
 
   return result.str()
-       + backtrace( frames[pos.framenum].including_framenum );
+    + backtrace( frames[pos.framenum].including_framenum );
 
 }  // whereis()
 
 std::string
 includer::highlighted_whereis( const_iterator const & it ) const
 {
-  posinfo pos(get_posinfo(it));
+  posinfo const pos(get_posinfo(it));
   // prepare the current information:
   std::ostringstream result;
   result << "line "        << pos.linenum
@@ -150,12 +150,23 @@ includer::highlighted_whereis( const_iterator const & it ) const
 
   return result.str();
 
-}  // whereis()
+}  // highlighted_whereis()
+
+std::string
+includer::src_whereis( const_iterator const & it ) const
+{
+  posinfo const pos(get_posinfo(it));
+
+  std::ostringstream result;
+  result << frames[pos.framenum].filename << ':' << pos.linenum;
+  return result.str();
+
+}  // src_whereis()
 
 // ----------------------------------------------------------------------
 
 void
-  includer::include( int                   including_framenum
+includer::include( int                   including_framenum
                    , std::string const   & filename
                    , cet::filepath_maker & abs_filename
                    )
@@ -166,7 +177,7 @@ void
   // expand filename to obtain, per policy, absolute path to file:
   bool const use_cin = filename == "-";
   std::string const filepath = use_cin ? filename
-                                       : abs_filename(filename);
+    : abs_filename(filename);
 
   // check for recursive #inclusion:
   if (std::find(recursion_stack.crbegin(),
@@ -187,8 +198,8 @@ void
   std::istream & f = use_cin ? std::cin : ifs;
   if( ! f )
     throw inc_exception(cant_open)
-       << filename << " => " << filepath
-       << backtrace( frames.size()-1u );
+      << filename << " => " << filepath
+      << backtrace( frames.size()-1u );
 
   int linenum = 1;
   frame new_frame( including_framenum, filepath, linenum, text.size() );
@@ -197,7 +208,7 @@ void
   for( std::string line; std::getline(f, line); ++linenum  ) {
     if( line.find(inc_lit) != 0 ) {  // ordinary line (not an #include)
       text.append(line)
-          .append(1, '\n');
+        .append(1, '\n');
       continue;
     }
 
@@ -212,16 +223,16 @@ void
     // validate the rest of the #include line's syntax:
     trim_right(line, " \t\r\n");
     if(  line.size() <= min_sz                      // too short?
-      || line[8] != ' '                             // missing separator?
-      || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
-      )
+         || line[8] != ' '                             // missing separator?
+         || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
+         )
       throw inc_exception(malformed) << line
-         << "\n at line " << linenum << " of file " << filepath;
+                                     << "\n at line " << linenum << " of file " << filepath;
 
     // process the #include:
     std::string nextfilename( line.substr( min_sz - 1u
-                                         , line.size() - min_sz
-                            )            );
+                                           , line.size() - min_sz
+                                           )            );
     include(frames.size()-1u, nextfilename, abs_filename);
 
     // prepare to resume where we left off:
@@ -240,7 +251,7 @@ void
 // ----------------------------------------------------------------------
 
 void
-  includer::include( std::istream        & f
+includer::include( std::istream        & f
                    , cet::filepath_maker & abs_filename
                    )
 {
@@ -253,8 +264,8 @@ void
   // check the open file:
   if( ! f )
     throw inc_exception(cant_open)
-       << filepath
-       << backtrace( frames.size()-1u );
+      << filepath
+      << backtrace( frames.size()-1u );
 
   int linenum = 1;
   frame new_frame( 0, filepath, linenum, text.size() );
@@ -263,7 +274,7 @@ void
   for( std::string line; std::getline(f, line); ++linenum  ) {
     if( line.find(inc_lit) != 0 ) {  // ordinary line (not an #include)
       text.append(line)
-          .append(1, '\n');
+        .append(1, '\n');
       continue;
     }
 
@@ -278,16 +289,16 @@ void
     // validate the rest of the #include line's syntax:
     trim_right(line, " \t\n");
     if(  line.size() <= min_sz                      // too short?
-      || line[8] != ' '                             // missing separator?
-      || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
-      )
+         || line[8] != ' '                             // missing separator?
+         || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
+         )
       throw inc_exception(malformed) << line
-         << "\n at line " << linenum << " of file " << filepath;
+                                     << "\n at line " << linenum << " of file " << filepath;
 
     // process the #include:
     std::string nextfilename( line.substr( min_sz - 1u
-                                         , line.size() - min_sz
-                            )            );
+                                           , line.size() - min_sz
+                                           )            );
     include(frames.size()-1u, nextfilename, abs_filename);
 
     // prepare to resume where we left off:
@@ -303,14 +314,14 @@ void
 // ----------------------------------------------------------------------
 
 std::string
-  includer::backtrace( uint from_frame ) const
+includer::backtrace( uint from_frame ) const
 {
   std::ostringstream result;
   // append the backtrace:
   for( uint k = from_frame; k != 0u; k = frames[k].including_framenum ) {
     result << "\nincluded from line " << frames[k].starting_linenum
            << " of file \"" << frames[k].filename << '\"';
-   }
+  }
 
   return result.str();
 
@@ -319,7 +330,7 @@ std::string
 // ----------------------------------------------------------------------
 
 void
-  includer::debug( ) const
+includer::debug( ) const
 {
   std::ostringstream result;
 
@@ -337,8 +348,8 @@ void
            << frames[k].starting_textpos << "  "
            << frames[k].filename << '\n'
            << text.substr( starting_textpos
-                         , frames[k].starting_textpos - starting_textpos
-                         );
+                           , frames[k].starting_textpos - starting_textpos
+                           );
   }
   std::cerr << result.str();
 }  // debug()

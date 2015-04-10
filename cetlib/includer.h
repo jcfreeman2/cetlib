@@ -26,16 +26,17 @@ class cet::includer
 public:
   typedef  std::string::const_iterator  const_iterator;
 
-  explicit        includer( std::string const   & filename
-                          , cet::filepath_maker & abs_filename
-                          );
-  explicit        includer( std::istream        & is
-                          , cet::filepath_maker & abs_filename
-                          );
-  const_iterator  begin   ( ) const  { return text.begin(); }
-  const_iterator  end     ( ) const  { return text.end  (); }
-  std::string     whereis ( const_iterator const & it ) const;
-  std::string     highlighted_whereis (const_iterator const & it ) const;
+  explicit includer(std::string const   & filename,
+                    cet::filepath_maker & abs_filename);
+
+  explicit includer(std::istream        & is,
+                    cet::filepath_maker & abs_filename);
+
+  const_iterator  begin () const  { return text.begin(); }
+  const_iterator  end   () const  { return text.end  (); }
+  std::string     whereis (const_iterator const & it) const;
+  std::string     highlighted_whereis (const_iterator const & it) const;
+  std::string     src_whereis (const_iterator const & it) const;
 
 private:
 
@@ -46,7 +47,7 @@ private:
     uint         starting_linenum;
     size_t       starting_textpos;
 
-frame( uint framenum, std::string filename, uint linenum, size_t textpos )
+    frame( uint framenum, std::string filename, uint linenum, size_t textpos )
       : including_framenum( framenum )
       , filename          ( filename )
       , starting_linenum  ( linenum )
@@ -66,15 +67,15 @@ frame( uint framenum, std::string filename, uint linenum, size_t textpos )
   std::vector<frame>  frames;
   std::vector<std::string> recursion_stack;
 
-  void  include ( int                   including_framenum
-                , std::string const   & filename
-                , cet::filepath_maker & abs_filename
-                );
-  void  include ( std::istream        & is
-                , cet::filepath_maker & abs_filename
-                );
-  std::string  backtrace( uint from_frame ) const;
-  void  debug   ( ) const;
+  void  include (int                   including_framenum,
+                 std::string const   & filename,
+                 cet::filepath_maker & abs_filename);
+
+  void  include (std::istream        & is,
+                 cet::filepath_maker & abs_filename);
+
+  std::string backtrace( uint from_frame ) const;
+  void debug () const;
 
   posinfo get_posinfo ( const_iterator const & it ) const;
 
@@ -83,3 +84,7 @@ frame( uint framenum, std::string filename, uint linenum, size_t textpos )
 // ======================================================================
 
 #endif
+
+// Local variables:
+// mode: c++
+// End:
