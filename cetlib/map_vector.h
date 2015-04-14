@@ -147,17 +147,24 @@ public:
   mapped_type const &  at          ( key_type key ) const  { return getOrThrow(key); }
 
   // iterators:
-  iterator        begin( )        { return v_.begin(); };
+  iterator        begin( )        { return v_.begin(); }
   const_iterator  begin( ) const  { return v_.begin(); }
 
-  iterator        end( )        { return v_.end(); };
+  iterator        end( )        { return v_.end(); }
   const_iterator  end( ) const  { return v_.end(); }
 
-  reverse_iterator        rbegin( )        { return v_.rbegin(); };
+  reverse_iterator        rbegin( )        { return v_.rbegin(); }
   const_reverse_iterator  rbegin( ) const  { return v_.rbegin(); }
 
-  reverse_iterator        rend( )        { return v_.rend(); };
+  reverse_iterator        rend( )        { return v_.rend(); }
   const_reverse_iterator  rend( ) const  { return v_.rend(); }
+
+#ifndef __GCCXML__
+  const_iterator cbegin( ) const  { return v_.cbegin();}
+  const_iterator cend( )   const  { return v_.cend();}
+  const_reverse_iterator crbegin( ) const  { return v_.crbegin();}
+  const_reverse_iterator crend( )   const  { return v_.crend();}
+#endif
 
   // mutators:
   void  clear( )  { v_.clear(); }
@@ -402,3 +409,7 @@ bool
 // ======================================================================
 #endif /* GCCXML */
 #endif
+
+// Local variables:
+// mode: c++
+// End:

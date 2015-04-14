@@ -146,11 +146,11 @@ BOOST_AUTO_TEST_CASE( nonemptymap_test )
     m2.insert(m.begin(), m.end());
     BOOST_CHECK( m2.size() == 2 * sz );
     map_vector<value_t>::const_iterator b = m.begin();
-    for( map_vector<value_t>::const_iterator it = m2.begin()
-                                           , e  = m2.end();  it != e;  ++b, ++it )  {
+    for ( const auto& entry : m2 ) {
       if( b == m.end() )
         b = m.begin();
-      BOOST_CHECK( b->second == it->second );
+      BOOST_CHECK( b->second == entry.second );
+      ++b;
     }
     int d = m.delta();
     for( map_vector<value_t>::const_iterator b1 = m2.begin()
