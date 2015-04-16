@@ -76,8 +76,8 @@ namespace cet
         break;
       case 32:
         {
-          cet::nybbler const temp( hexy );
-          std::string::const_iterator it = temp.as_char().begin();
+          std::string const chars = cet::nybbler( hexy ).as_char();
+          std::string::const_iterator it = chars.begin();
           for (size_t i = 0; i != 16; ++i)
             bytes[i] = *it++;
         }
