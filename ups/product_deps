@@ -23,6 +23,11 @@ i1:debug	i1:debug	icc
 i1:prof		i1:prof		icc
 end_qualifier_list
 
+table_fragment_begin
+    # For cetskel modules.
+    envPrepend(PERL5LIB, ${${UPS_PROD_NAME_UC}_DIR}/perllib)
+table_fragment_end
+
 # Local Variables:
 # tab-width: 8
 # End:
