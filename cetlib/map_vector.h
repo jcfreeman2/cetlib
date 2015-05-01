@@ -35,7 +35,7 @@ class cet::map_vector_key
 {
 public:
   // c'tors:
-  map_vector_key( )                            : key_(-1)   { }
+  map_vector_key( )                            : key_(-1l)   { }
   explicit map_vector_key( int           key );
   explicit map_vector_key( unsigned      key ) : key_(key)  { }
   explicit map_vector_key( unsigned long key );
@@ -43,12 +43,12 @@ public:
   // use compiler-generated copy c'tor, copy assignment, and d'tor
 
   // observers:
-  unsigned  asInt ( ) const  { return key_; }
-  unsigned  asUint( ) const  { return key_; }
+  unsigned long asInt ( ) const  { return key_; }
+  unsigned long asUint( ) const  { return key_; }
   void ensure_valid() const;
 
 private:
-  unsigned key_;
+  unsigned long key_;
 
 };  // map_vector_key
 
@@ -67,17 +67,12 @@ inline
 cet::map_vector_key::map_vector_key( unsigned long key )
   : key_(key)
 {
-  if (key != key_) {
-    throw cet::exception("InvalidKey")
-      << "Key " << key
-      << " too large for map_vector_key.";
-  }
 }
 
 inline
 void
 cet::map_vector_key::ensure_valid() const {
-  if (key_ == static_cast<unsigned>(-1)) { // Invalid key
+  if (key_ == static_cast<unsigned long>(-1)) { // Invalid key
     throw cet::exception("InvalidKey")
       << "Attempt to use an invalid cet::map_vector_key.";
   }
