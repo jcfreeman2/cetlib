@@ -173,7 +173,7 @@ sub AUTOLOAD {
   my $plugin = shift;
   my $default = pop;
   if ($plugin->can($func)) {
-    return eval "\$plugin->$func(@_)";
+    return $plugin->$func(@_);
   } else {
     return ($default || undef);
   }
@@ -520,7 +520,7 @@ sub generate_multi($\%) {
   print $fh "\n";
 
   # Plugin declaration (if applicable).
-  print $fh plugin_declare($plugin) || ();
+  print $fh plugin_declareMacro($plugin, $qual_name, undef) || ();
 
   print $fh "#endif /* $header_guard */\n";
 
@@ -576,7 +576,7 @@ sub generate_multi($\%) {
     header_includes($plugin, $fh, "plugin_define");
   }
 
-  print $fh plugin_define($plugin) || ();
+  print $fh plugin_defineMacro($plugin, $qual_name, undef) || ();
 
   close($fh);
   print "INFO: Wrote ${current_filename}\n";
@@ -619,8 +619,8 @@ sub generate_combined {
   class_impl($plugin, $fh, @optional_entries, @unrecognized_entries);
 
   # Plugin registration.
-  print $fh plugin_declare($plugin) || ();
-  print $fh plugin_define($plugin) || ();
+  print $fh plugin_declareMacro($plugin, $qual_name, undef) || ();
+  print $fh plugin_defineMacro($plugin, $qual_name, undef) || ();
 
   # Close file.
   $fh->close();
@@ -717,7 +717,7 @@ sub class_defn($$\@\@) {
                 @$constructors);
   if (plugin_virtualDestructor($plugin, 0)) {
     print $fh <<EOF;
-${indent}virtual ~${class_name} noexcept = default;
+${indent}virtual ~${class_name}() noexcept = default;
 
 EOF
   } else {
@@ -876,7 +876,7 @@ EOF
 EOF
   }
 
-  my $required_entries = plugin_required_entries($plugin, {});
+  my $required_entries = plugin_requiredEntries($plugin, {});
 
   foreach my $req (sort keys %$required_entries) {
     my $f = $required_entries->{${req}};

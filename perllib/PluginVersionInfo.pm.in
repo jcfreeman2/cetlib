@@ -1,6 +1,6 @@
 use strict;
 
-package CetSkel::@product@::PluginVersionInfo;
+package CetSkelPlugins::@product@::PluginVersionInfo;
 
 sub product { return "@product@"; }
 
