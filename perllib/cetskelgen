@@ -1,6 +1,6 @@
 #!/usr/bin/perl -w
 ########################################################################
-# cetskel
+# cetskelgen
 #
 # Modular skeleton generator for plugins.
 #
@@ -56,9 +56,9 @@ use Module::Pluggable
 
 use vars qw($AUTOLOAD);
 
-# Allow faster development cycle for changes to cetskel.
+# Allow faster development cycle for changes to cetskelgen.
 use vars qw($CetSkelProduct $CetSkelVersion);
-eval " use CetSkel::cetskel::VersionInfo; ";
+eval " use CetSkel::cetskelgen::VersionInfo; ";
 if ($@) {
   ($CetSkelProduct, $CetSkelVersion) = qw(TEST TEST);
 }
@@ -83,7 +83,7 @@ my $default_boilerplate = << 'EOF';
 // Plugin Type: %t (%P %V)
 // File:        %f
 //
-// Generated at %d by %U using cetskel
+// Generated at %d by %U using cetskelgen
 // from %p version %v.
 ////////////////////////////////////////////////////////////////////////
 EOF
@@ -220,7 +220,7 @@ sub process_arguments {
   help_types() if ($options->{"help-types"});
 
   if ($options->{version}) {
-    print STDERR "cetskel from $CetSkelProduct version $CetSkelVersion.\n";
+    print STDERR "cetskelgen from $CetSkelProduct version $CetSkelVersion.\n";
     exit(2);
   }
 
@@ -907,17 +907,17 @@ __END__
 
 =head1 NAME
 
-cetskel: Generate clean plugin source for art.
+cetskelgen: Generate clean plugin source for art.
 
 =head1 SYNOPSIS
 
-B<cetskel> B<-h> | B<--help> | B<-?>
+B<cetskelgen> B<-h> | B<--help> | B<-?>
 
-B<cetskel> B<--help-types>
+B<cetskelgen> B<--help-types>
 
-B<cetskel> B<--help-type> I<plugin-type>
+B<cetskelgen> B<--help-type> I<plugin-type>
 
-B<cetskel> [I<optons>] [--] [I<plugin-type>[:I<plugin-option>[,I<plugin-option>]+]] I<qualified-name>
+B<cetskelgen> [I<optons>] [--] [I<plugin-type>[:I<plugin-option>[,I<plugin-option>]+]] I<qualified-name>
 
 I<Options>: B<--all-entries|-A> |
          B<--boilerplate|-b> I<file> |
@@ -932,7 +932,7 @@ Options marked with B<+> are repeatable and cumulative.
 
 =head1 DESCRIPTION
 
-I<cetskel> is a tool to produce an art plugin source skeleton for an
+I<cetskelgen> is a tool to produce an art plugin source skeleton for an
 analyzer, a filter or a producer. The user can specify which optional
 member functions are to be configured and whether to split the source
 into three files or combine it into one. In addition, the name of a file
@@ -993,20 +993,20 @@ Certain format strings will be honored, such as:
   %F  The fully-qualified path of the file in which the
         boilerplate is included.
   %n  The qualification (namespace chain) of the class.
-  %p  The product in which cetskel was found.
+  %p  The product in which cetskelgen was found.
   %P  The product in which the plugin information was found.
   %t  The type of plugin generated.
-  %u  The login name of the invoker of cetskel.
-  %U  The full name (if available) if the invoker of cetskel, or
+  %u  The login name of the invoker of cetskelgen.
+  %U  The full name (if available) if the invoker of cetskelgen, or
         the login name if not.
-  %v  The version of the package whence came cetskel.
+  %v  The version of the package whence came cetskelgen.
   %V  The version of the package whence came the plugin information.
 
 Literal % characters should be escaped (\%).
 
-If the boilerplate file is not specified cetskel will interrogate an
+If the boilerplate file is not specified cetskelgen will interrogate an
 environment variable, "CETSKEL_BOILERPLATE" and attempt to include the
-file specified. If that is also not found, cetskel will use an internal
+file specified. If that is also not found, cetskelgen will use an internal
 default.
 
 See also B<--impl-boilerplate>, below.

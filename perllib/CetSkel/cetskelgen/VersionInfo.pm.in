@@ -1,6 +1,6 @@
 use strict;
 
-package CetSkel::cetskel::VersionInfo;
+package CetSkel::cetskelgen::VersionInfo;
 
 use Exporter;
 
