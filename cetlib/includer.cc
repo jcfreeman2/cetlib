@@ -6,9 +6,9 @@
 //
 // ======================================================================
 
-#include "cetlib/includer.h"
-
 #include "cetlib/coded_exception.h"
+#include "cetlib/includer.h"
+#include "cetlib/tokenize.h"
 #include "cetlib/trim.h"
 #include "cpp0x/algorithm"
 
@@ -24,10 +24,10 @@ using cet::includer;
 
 namespace { namespace detail {
 
-    enum error { cant_open
-                 , cant_read
-                 , malformed
-                 , recursive
+    enum error { cant_open,
+                 cant_read,
+                 malformed,
+                 recursive
     };
 
     std::string
@@ -42,13 +42,21 @@ namespace { namespace detail {
       }
     }  // translate()
 
-    typedef  cet::coded_exception<error,translate>
-    inc_exception;
+    using inc_exception = cet::coded_exception<error,translate>;
 
-    std::string
-    begin_string( ) { return "<begin>"; }
-    std::string
-    end_string( ) { return "<end>"; }
+    std::string begin_string() { return "<begin>"; }
+    std::string end_string() { return "<end>"; }
+
+    std::vector<std::string>
+    getlines(std::istream& is) {
+      std::vector<std::string> result;
+      for ( std::string readline; std::getline(is,readline); ){
+        for ( auto const& line : cet::tokenize(readline,"\r") ) {
+          result.emplace_back(line);
+        }
+      }
+      return result;
+    }
 
   } }  // ::detail
 
@@ -201,11 +209,14 @@ includer::include( int                   including_framenum
       << filename << " => " << filepath
       << backtrace( frames.size()-1u );
 
-  int linenum = 1;
-  frame new_frame( including_framenum, filepath, linenum, text.size() );
+  int const starting_linenum = 1;
+  frame new_frame( including_framenum, filepath, starting_linenum, text.size() );
 
+  int linenum = 0;
   // iterate over each line of the input file:
-  for( std::string line; std::getline(f, line); ++linenum  ) {
+  for( auto & line : getlines(f) ) {
+
+    ++linenum;
     if( line.find(inc_lit) != 0 ) {  // ordinary line (not an #include)
       text.append(line)
         .append(1, '\n');
@@ -267,11 +278,13 @@ includer::include( std::istream        & f
       << filepath
       << backtrace( frames.size()-1u );
 
-  int linenum = 1;
-  frame new_frame( 0, filepath, linenum, text.size() );
+  int const starting_linenum = 1;
+  frame new_frame( 0, filepath, starting_linenum, text.size() );
 
+  int linenum = 0;
   // iterate over each line of the input file:
-  for( std::string line; std::getline(f, line); ++linenum  ) {
+  for( auto & line : getlines(f) ) {
+    ++linenum;
     if( line.find(inc_lit) != 0 ) {  // ordinary line (not an #include)
       text.append(line)
         .append(1, '\n');
@@ -287,7 +300,7 @@ includer::include( std::istream        & f
     frames.push_back(new_frame);
 
     // validate the rest of the #include line's syntax:
-    trim_right(line, " \t\n");
+    trim_right(line, " \t\r\n");
     if(  line.size() <= min_sz                      // too short?
          || line[8] != ' '                             // missing separator?
          || line[9] != '\"' || line.end()[-1] != '\"'  // missing either quote?
