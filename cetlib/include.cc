@@ -5,7 +5,7 @@
 // ======================================================================
 
 #include "cetlib/include.h"
-#include "cetlib/tokenize.h"
+#include "cetlib/split_by_regex.h"
 
 #include "cetlib/coded_exception.h"
 #include "cetlib/filesystem.h"
@@ -42,7 +42,7 @@ namespace cet { namespace detail {
     getlines(std::istream& is) {
       std::vector<std::string> result;
       for ( std::string readline; std::getline(is,readline); ){
-        for ( auto const& line : cet::tokenize(readline,"\r") ) {
+        for ( auto const& line : cet::split_by_regex(readline,"\r") ) {
           result.emplace_back(line);
         }
       }

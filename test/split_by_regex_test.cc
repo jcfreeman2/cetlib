@@ -4,60 +4,53 @@
 //
 // ======================================================================
 
-#define BOOST_TEST_MODULE ( split test )
+#define BOOST_TEST_MODULE ( split_by_regex test )
 #include "boost/test/auto_unit_test.hpp"
 #include "boost/test/test_tools.hpp"
 
-#include "cetlib/split.h"
+#include "cetlib/split_by_regex.h"
+#include <iostream>
 #include <iterator>
+#include <ostream>
 #include <string>
 #include <vector>
 
-using cet::split;
+using cet::split_by_regex;
 using string_vector = std::vector<std::string>;
 
-BOOST_AUTO_TEST_SUITE( split_test )
+BOOST_AUTO_TEST_SUITE( split_by_regex_test )
 
 BOOST_AUTO_TEST_CASE( empty_string_test )
 {
-  std::string s;
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
-  BOOST_CHECK_EQUAL(v.size(),0ul);
+  string_vector const v = split_by_regex( "", ":" );
+  BOOST_CHECK_EQUAL(v.size(), 1ul);
 }
 
 BOOST_AUTO_TEST_CASE( a_string_test )
 {
-  std::string s("a");
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
+  string_vector const v = split_by_regex("a",":");
   BOOST_CHECK_EQUAL(v.size(),1ul);
   BOOST_CHECK_EQUAL(v[0],"a");
 }
 
 BOOST_AUTO_TEST_CASE( a1_string_test )
 {
-  std::string s("a:");
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
+  string_vector const v = split_by_regex( "a:", ":");
   BOOST_CHECK_EQUAL(v.size(),1ul);
   BOOST_CHECK_EQUAL(v[0],"a");
 }
 
 BOOST_AUTO_TEST_CASE( boo_string_test )
 {
-  std::string s(":boo");
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
-  BOOST_CHECK_EQUAL(v.size(),1ul);
-  BOOST_CHECK_EQUAL(v[0],"boo");
+  string_vector const v = split_by_regex(":boo", ":");
+  string_vector const expected {"","boo"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
+                                expected.begin(),expected.end());
 }
 
 BOOST_AUTO_TEST_CASE( ab_string_test )
 {
-  std::string s("a:b");
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
+  string_vector const v = split_by_regex("a:b", ":");
   string_vector const expected {"a","b"};
   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
                                 expected.begin(),expected.end());
@@ -65,20 +58,25 @@ BOOST_AUTO_TEST_CASE( ab_string_test )
 
 BOOST_AUTO_TEST_CASE( ab1_string_test )
 {
-  std::string s("a::b");
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
-  string_vector const expected {"a","b"};
+  string_vector const v = split_by_regex("a::b", ":");
+  string_vector const expected {"a","","b"};
   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
                                 expected.begin(),expected.end());
 }
 
 BOOST_AUTO_TEST_CASE( split_test_1 )
 {
-  std::string const s("abc:d:ef:");
-  std::vector<std::string> v;
-  split( s, ':', std::back_inserter(v) );
+  string_vector const v = split_by_regex("abc:d:ef:", ":");
   string_vector const expected {"abc","d","ef"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
+                                expected.begin(),expected.end());
+}
+
+BOOST_AUTO_TEST_CASE( split_test_2 )
+{
+  string_vector const v = split_by_regex( "namespace::class::static_function().value", 
+                                          "(::|\\(\\)\\.)" );
+  string_vector const expected {"namespace","class","static_function","value"};
   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
                                 expected.begin(),expected.end());
 }
