@@ -16,8 +16,8 @@
 //
 // ======================================================================
 
-#include "cpp0x/functional"
 #include <algorithm>
+#include <functional>
 #include <string>
 
 namespace cet  {

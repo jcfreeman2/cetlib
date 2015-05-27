@@ -7,22 +7,22 @@ perllib  product_dir
 
 # define product/version pairs
 product	version
-cpp0x	v1_04_10
+boost		v1_57_0
+gcc		v4_9_1		e6
+gcc		v4_9_2		e7
 
-cetbuildtools	v4_10_02	-	only_for_build
+cetbuildtools	v4_11_01	-	only_for_build
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
-qualifier	cpp0x		compiler	notes
-e6:debug	e6:debug	gcc
-e6:opt		e6:opt		gcc
-e6:prof		e6:prof		gcc
-e7:debug	e7:debug	gcc
-e7:opt		e7:opt		gcc
-e7:prof		e7:prof		gcc
-i1:debug	i1:debug	icc
-i1:prof		i1:prof		icc
+qualifier	boost		gcc	compiler	notes
+e6:debug	e6:debug	-nq-	gcc
+e6:opt		e6:opt		-nq-	gcc
+e6:prof		e6:prof		-nq-	gcc
+e7:debug	e7:debug	-nq-	gcc
+e7:opt		e7:opt		-nq-	gcc
+e7:prof		e7:prof		-nq-	gcc
 end_qualifier_list
 
 ##table_fragment_begin

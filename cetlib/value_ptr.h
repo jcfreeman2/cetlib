@@ -57,11 +57,11 @@
 //
 // ======================================================================
 
-#include "cpp0x/cstddef"
-#include "cpp0x/functional"
-#include "cpp0x/memory"
-#include "cpp0x/type_traits"
+#include <cstddef>
 #include <exception>
+#include <functional>
+#include <memory>
+#include <type_traits>
 #include <utility>
 
 namespace cet {
@@ -209,21 +209,21 @@ private:
 
 public:
   // default c'tor:
-  CONSTEXPR_FCTN  value_ptr( ) noexcept : p( nullptr )  { }
+  constexpr  value_ptr( ) noexcept : p( nullptr )  { }
 
   // ownership-taking c'tors:
-  CONSTEXPR_FCTN  value_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
+  constexpr  value_ptr( std::nullptr_t ) noexcept : p( nullptr )  { }
 
   template< class E2 >
   explicit
     value_ptr( E2 * other ) noexcept
   : p( other )
   {
-    STATIC_ASSERT( is_compatible<E2>::value
+    static_assert( is_compatible<E2>::value
                  , "value_ptr<>'s pointee type is incompatible!"
                  );
 
-    STATIC_ASSERT(    ! std::is_polymorphic<E2>::value
+    static_assert(    ! std::is_polymorphic<E2>::value
                    || ! (std::is_same< Cloner
                                      , _::default_action<Element,false>
                                      >::value)

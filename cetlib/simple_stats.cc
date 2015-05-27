@@ -7,8 +7,9 @@
 #include "cetlib/simple_stats.h"
 
 #include "cetlib/pow.h"     // square
-#include "cpp0x/algorithm"  // max, min
-#include "cpp0x/cmath"      // abs, sqrt
+
+#include <algorithm>  // max, min
+#include <cmath>      // abs, sqrt
 #include <limits>           // numeric_limits
 
 using cet::simple_stats;
