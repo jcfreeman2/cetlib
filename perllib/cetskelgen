@@ -389,54 +389,50 @@ sub process_generation_options($$\%) {
 sub ins_vals($$\$) {
   my ($plugin, $current_filename, $bp) = @_;
   return unless $$bp;
- WL:  while ($$bp =~ m&(.?%.)&mg) {
-    my $found_exp = ${1};
-    my $s = (pos $$bp) - length($found_exp);
-    if (${found_exp} =~ m&^\\\%(.)$&) { # Want literal %
-      my $replacement_exp = "%${1}";
-      $$bp =~ s&\Q${found_exp}\E\G&${replacement_exp}&;
-      pos $$bp = $s + length($replacement_exp);
-    } else { # Have a %X string to substitute.
-      my $wanted_data;
-      my $lc = substr $found_exp, -1, 1;
-    SW1: {
-        $lc eq "c" and do
-          { $wanted_data = $class_name; last SW1; };
-        $lc eq "C" and do
-          { $wanted_data = $qual_name; last SW1; };
-        $lc eq "d" and do
-          { $wanted_data = $currtime; last SW1; };
-        $lc eq "f" and do
-          { $wanted_data = basename($current_filename); last SW1; };
-        $lc eq "F" and do
-          { $wanted_data = $current_filename; last SW1; };
-        $lc eq "n" and do
-          { $wanted_data = join("::", @namespaces); last SW1; };
-        $lc eq "p" and do
-          { $wanted_data = "$CetSkelProduct"; last SW1; };
-        $lc eq "P" and do
-          { $wanted_data = plugin_product($plugin, "Unknown"); last SW1; };
-        $lc eq "t" and do
-          { $wanted_data = $plugin_type; last SW1; };
-        $lc eq "u" and do
-          { $wanted_data = (getpwuid($<))[0]; last SW1; };
-        $lc eq "U" and do
-          { $wanted_data = (getpwuid($<))[6] ||
-              (getpwuid($<))[0]; last SW1; };
-        $lc eq "v" and do
-          { $wanted_data = "$CetSkelVersion"; last SW1; };
-        $lc eq "V" and do
-          { $wanted_data = plugin_version($plugin, "Unknown"); last SW1; };
-        print STDERR "Unrecognized substitution expression, ",
-          "\"%$lc\" in boilerplate: ignored.";
-        next WL;
-      }
-      my $replacement_exp = $found_exp;
-      $replacement_exp =~ s&(.?)%${lc}&${1}${wanted_data}&;
-      $$bp =~ s&\Q${found_exp}\E\G&${replacement_exp}&;
-      pos $$bp = $s + length($replacement_exp);
+  my $remainder = $$bp;
+  $$bp = "";
+ WL: while ($remainder =~ s&(.*?)(\\%|%.)&&ms) {
+    $$bp = "$$bp${1}"; # Preamble.
+    my $found_exp = ${2};
+    my $wanted_data;
+    my $lc = substr $found_exp, -1, 1;
+  SW1: {
+      $lc eq "%" and do {
+        $wanted_data = "%"; last SW1; };
+      $lc eq "c" and do {
+        $wanted_data = $class_name; last SW1; };
+      $lc eq "C" and do {
+        $wanted_data = $qual_name; last SW1; };
+      $lc eq "d" and do {
+        $wanted_data = $currtime; last SW1; };
+      $lc eq "f" and do {
+        $wanted_data = basename($current_filename); last SW1; };
+      $lc eq "F" and do {
+        $wanted_data = $current_filename; last SW1; };
+      $lc eq "n" and do {
+        $wanted_data = (scalar @namespaces) ? join("::", @namespaces) : "::"; last SW1; };
+      $lc eq "p" and do {
+        $wanted_data = "$CetSkelProduct"; last SW1; };
+      $lc eq "P" and do {
+        $wanted_data = plugin_product($plugin, "Unknown"); last SW1; };
+      $lc eq "t" and do {
+        $wanted_data = $plugin_type; last SW1; };
+      $lc eq "u" and do {
+        $wanted_data = (getpwuid($<))[0]; last SW1; };
+      $lc eq "U" and do { $wanted_data = (getpwuid($<))[6] ||
+                            (getpwuid($<))[0]; last SW1; };
+      $lc eq "v" and do {
+        $wanted_data = "$CetSkelVersion"; last SW1; };
+      $lc eq "V" and do {
+        $wanted_data = plugin_version($plugin, "Unknown"); last SW1; };
+      print STDERR "Unrecognized substitution expression, ",
+        "\"%$lc\" in boilerplate: ignored.\n";
+      $$bp="$$bp${found_exp}";
+      next WL;
     }
+    $$bp = "$$bp${wanted_data}";
   }
+  $$bp = "$$bp${remainder}";
   # Deal with any embedded \\[UE] sets
   $$bp =~ s&\\[U](.*?)(?:\\E|$)&\U$1\E&gm;
   $$bp =~ s&\\[L](.*?)(?:\\E|$)&\L$1\E&gm;
@@ -985,6 +981,7 @@ Include the specified file as preamble in all generated files.
 
 Certain format strings will be honored, such as:
 
+  %%  A literal %.
   %c  The class name.
   %C  The qualified class name.
   %d  The date and time of generation of the plugin.
@@ -992,9 +989,9 @@ Certain format strings will be honored, such as:
         included.
   %F  The fully-qualified path of the file in which the
         boilerplate is included.
-  %n  The qualification (namespace chain) of the class.
-  %p  The product in which cetskelgen was found.
-  %P  The product in which the plugin information was found.
+  %n  The qualification (namespace chain) of the class (:: if empty).
+  %p  The product whence came cetskelgen
+  %P  The product whence came the plugin information.
   %t  The type of plugin generated.
   %u  The login name of the invoker of cetskelgen.
   %U  The full name (if available) if the invoker of cetskelgen, or
@@ -1002,7 +999,7 @@ Certain format strings will be honored, such as:
   %v  The version of the package whence came cetskelgen.
   %V  The version of the package whence came the plugin information.
 
-Literal % characters should be escaped (\%).
+Literal % characters may also be escaped (\%).
 
 If the boilerplate file is not specified cetskelgen will interrogate an
 environment variable, "CETSKEL_BOILERPLATE" and attempt to include the
