@@ -79,6 +79,8 @@ BOOST_AUTO_TEST_CASE(nesting)
   BOOST_CHECK_EQUAL(wanted, e1.explain_self());
   auto wanted_categories = { std::string("Outer"), std::string("Inner"), std::string("Innermost") };
   BOOST_CHECK_EQUAL_COLLECTIONS(wanted_categories.begin(), wanted_categories.end(), e1.history().begin(), e1.history().end());
+  BOOST_CHECK_EQUAL(e1.root_cause(), std::string("Innermost"));
+  BOOST_CHECK_EQUAL(e2.root_cause(), std::string("Innermost"));
 }
 
 BOOST_AUTO_TEST_SUITE_END()
