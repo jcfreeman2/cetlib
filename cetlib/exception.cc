@@ -61,7 +61,7 @@ void
 exception::exception( Category const & c )
   : std::exception( )
   , ost_          ( )
-  , category_     ( 1, c )
+  , category_     ( { c } )
   , what_         ( )
 { }
 
@@ -69,7 +69,7 @@ exception::exception( Category    const & c
                     , std::string const & m )
   : std::exception( )
   , ost_          ( )
-  , category_     ( 1, c )
+  , category_     ( { c } )
   , what_         ( )
 {
   ost_ << m;
@@ -82,11 +82,11 @@ exception::exception( Category    const & c
                     , exception   const & e )
   : std::exception( )
   , ost_          ( )
-  , category_     ( 1, c )
+  , category_     ( { c } )
   , what_         ( )
 {
   if ( ! m.empty() ) ost_ << m << '\n';
-  category_.push_back( e.category() );
+  category_.insert(category_.end(), e.history().begin(), e.history().end());
   append( e );
 }
 
