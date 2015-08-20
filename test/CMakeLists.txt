@@ -103,3 +103,7 @@ cet_test(LibraryManager_t USE_BOOST_UNIT
   -ldl
   )
 
+cet_test(replace_all_test USE_BOOST_UNIT
+  LIBRARIES
+  cetlib
+  )

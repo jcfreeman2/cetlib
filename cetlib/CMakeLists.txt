@@ -40,6 +40,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   includer.cc
   lpad.cc
   nybbler.cc
+  replace_all.cc
   rpad.cc
   search_path.cc
   simple_stats.cc
