@@ -11,7 +11,7 @@ boost		v1_57_0
 gcc		v4_9_1		e6
 gcc		v4_9_2		e7
 
-cetbuildtools	v4_11_01	-	only_for_build
+cetbuildtools	v4_13_00	-	only_for_build
 end_product_list
 
 
