@@ -107,3 +107,16 @@ cet_test(replace_all_test USE_BOOST_UNIT
   LIBRARIES
   cetlib
   )
+
+cet_test(regex_t USE_BOOST_UNIT
+  LIBRARIES
+  cetlib
+  DATAFILES regex.txt)
+
+cet_test(regex_standalone_t
+  SOURCES regex_t.cc
+  LIBRARIES
+  cetlib
+  DATAFILES regex.txt)
+
+set_target_properties(regex_standalone_t PROPERTIES COMPILE_DEFINITIONS STANDALONE_TEST)
