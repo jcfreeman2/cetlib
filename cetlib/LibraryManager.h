@@ -24,9 +24,9 @@ public:
   //  and where <ext> is provided automatically as appropriate for
   // the platform.
   explicit
-  LibraryManager(std::string const & lib_type,
-                 std::string pattern =
-                 "([-A-Za-z0-9]*_)*[A-Za-z0-9]+_");
+  LibraryManager(std::string lib_type);
+  LibraryManager(std::string lib_type,
+                 std::string pattern);
 
   // The d'tor does NOT unload libraries, because that is dangerous
   // to do in C++. Use the compiler-generated destructor.
@@ -114,8 +114,11 @@ public:
   // efficient the implementation will need to be improved.
   bool libraryIsLoadable(std::string const & path) const;
 
-  // This manager's library type
+  // This manager's library type.
   std::string libType() const { return lib_type_; }
+
+  // This managers library search pattern.
+  std::string patternStem() const { return pattern_stem_; }
 
 private:
   // Internally-useful typedefs.
@@ -128,8 +131,7 @@ private:
   static std::string dllExtPattern();
 
   void lib_loc_map_inserter(std::string const & path);
-  void spec_trans_map_inserter(lib_loc_map_t::value_type const & entry,
-                               std::string const & lib_type);
+  void spec_trans_map_inserter(lib_loc_map_t::value_type const & entry);
   void good_spec_trans_map_inserter(spec_trans_map_t::value_type const & entry);
   void * get_lib_ptr(std::string const & lib_loc) const;
   void * getSymbolByLibspec_(std::string const & libspec,
@@ -139,7 +141,8 @@ private:
                           std::string const & sym_name,
                           bool should_throw_on_dlsym = true) const;
 
-  std::string lib_type_; // eg _plugin.
+  std::string const lib_type_; // eg _plugin.
+  std::string const pattern_stem_; // Library search pattern stem.
   // Map of library filename -> full path.
   lib_loc_map_t lib_loc_map_;
   // Map of spec -> full path.

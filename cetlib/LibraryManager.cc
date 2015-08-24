@@ -20,17 +20,27 @@ extern "C" {
 #include <sstream>
 #include <vector>
 
-cet::LibraryManager::LibraryManager(std::string const & lib_type,
+namespace {
+  static std::string const default_pattern_stem
+  { "(?:[A-Za-z0-9\\-]*_)*[A-Za-z0-9]+_" };
+}
+
+cet::LibraryManager::LibraryManager(std::string lib_type)
+:
+  LibraryManager(std::move(lib_type), default_pattern_stem)
+{
+}
+
+cet::LibraryManager::LibraryManager(std::string lib_type,
                                     std::string pattern)
   :
-  lib_type_(lib_type),
+  lib_type_(std::move(lib_type)),
+  pattern_stem_(std::move(pattern)),
   lib_loc_map_(),
   spec_trans_map_(),
   good_spec_trans_map_(),
   lib_ptr_map_()
 {
-  using std::placeholders::_1;
-
   // TODO: We could also consider searching the ld.so.conf list, if
   // anyone asks for it.
   static search_path const
@@ -40,27 +50,26 @@ cet::LibraryManager::LibraryManager(std::string const & lib_type,
 #endif
       "LD_LIBRARY_PATH");
   std::vector<std::string> matches;
-  ld_lib_path.find_files(shlib_prefix() + pattern +
-                         lib_type + dllExtPattern(),
+  ld_lib_path.find_files(shlib_prefix() + pattern_stem_ +
+                         lib_type_ + dllExtPattern(),
                          matches);
+
   // Note the use of reverse iterators here: files found earlier in the
   // vector will therefore overwrite those found later, which is what
   // we want from "search path"-type behavior.
   std::for_each(matches.rbegin(), matches.rend(),
-                std::bind(&LibraryManager::lib_loc_map_inserter,
-                          this,
-                          _1));
+                [this](auto const & match){ this->lib_loc_map_inserter(match); });
+
   // Build the spec to long library name translation table.
-  std::for_each(lib_loc_map_.begin(), lib_loc_map_.end(),
-                std::bind(&LibraryManager::spec_trans_map_inserter,
-                          this,
-                          _1,
-                          std::ref(lib_type)));
+  for (auto const & p : lib_loc_map_) {
+    spec_trans_map_inserter(p);
+  }
+
   // Build the fast good-translation table.
-  std::for_each(spec_trans_map_.begin(), spec_trans_map_.end(),
-                std::bind(&LibraryManager::good_spec_trans_map_inserter,
-                          this,
-                          _1));
+  for (auto const & p : spec_trans_map_) {
+    good_spec_trans_map_inserter(p);
+  }
+
 }
 
 size_t
@@ -162,12 +171,10 @@ lib_loc_map_inserter(std::string const & path)
 
 void
 cet::LibraryManager::
-spec_trans_map_inserter(lib_loc_map_t::value_type const & entry,
-                        std::string const & lib_type)
+spec_trans_map_inserter(lib_loc_map_t::value_type const & entry)
 {
-
   // First obtain short spec.
-  boost::regex e("([^_]+)_" + lib_type + dllExtPattern() + '$');
+  boost::regex e("([^_]+)_" + lib_type_ + dllExtPattern() + '$');
   boost::match_results<std::string::const_iterator> match_results;
   if (boost::regex_search(entry.first, match_results, e)) {
     spec_trans_map_[match_results[1]].insert(entry.second);
@@ -187,7 +194,7 @@ spec_trans_map_inserter(lib_loc_map_t::value_type const & entry,
                        boost::regex("(_+)"),
                        std::string("(?1/)"),
                        boost::match_default | boost::format_all);
-  boost::regex stripper("^lib(.*)/" + lib_type + "\\..*$");
+  boost::regex stripper("^lib(.*)/" + lib_type_ + "\\..*$");
   std::string lib_name_str = lib_name.str();
   if (boost::regex_search(lib_name_str, match_results, stripper)) {
     spec_trans_map_[match_results[1]].insert(entry.second);
