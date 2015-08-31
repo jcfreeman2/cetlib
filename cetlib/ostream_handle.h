@@ -75,7 +75,8 @@ namespace cet {
   class ostream_owner : public ostream_handle {
   public:
 
-    ostream_owner(std::string const& fn) : ofs_{fn} {}
+    ostream_owner(std::string const& fn,
+                  std::ios_base::openmode const mode = std::ios_base::out) : ofs_{fn, mode} {}
     ~ostream_owner() override { ofs_.close(); }
 
   private:
