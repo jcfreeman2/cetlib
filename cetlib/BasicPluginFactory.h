@@ -33,7 +33,7 @@ public:
   template <typename RESULT_TYPE,
             typename... ARGS>
   RESULT_TYPE makePlugin(std::string const & libspec,
-                         ARGS... args);
+                         ARGS &&... args);
 
   // Find and call the pluginType() function in the plugin library.
   std::string pluginType(std::string const & libspec);
@@ -57,9 +57,10 @@ inline
 RESULT_TYPE
 cet::BasicPluginFactory::
 makePlugin(std::string const & libspec,
-           ARGS... args)
+           ARGS &&... args)
 {
-  return call<RESULT_TYPE>(libspec, makerName_, args...);
+  return call<RESULT_TYPE>(libspec, makerName_,
+                           std::forward<ARGS>(args)...);
 }
 #endif
 

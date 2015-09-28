@@ -48,7 +48,7 @@ public:
             typename... ARGS>
   RESULT_TYPE call(std::string const & libspec,
                    std::string const & funcname,
-                   ARGS... args);
+                   ARGS &&... args);
 
   // Nothrow tag (see find(), below).
   static LibraryManager::nothrow_t nothrow;
@@ -106,9 +106,9 @@ RESULT_TYPE
 cet::PluginFactory::
 call(std::string const & libspec,
      std::string const & funcname,
-     ARGS... args)
+     ARGS &&... args)
 {
-  return (*find<RESULT_TYPE, ARGS...>(libspec, funcname))(args...);
+  return (*find<RESULT_TYPE, ARGS...>(libspec, funcname))(std::forward<ARGS>(args)...);
 }
 
 template <typename RESULT_TYPE, typename... ARGS>
