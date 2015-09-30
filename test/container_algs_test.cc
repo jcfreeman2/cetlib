@@ -51,6 +51,14 @@ namespace {
 
 BOOST_AUTO_TEST_SUITE( container_algorithms )
 
+BOOST_AUTO_TEST_CASE( copy_all ) {
+
+  std::vector<int> a { 1, 2, 3, 4 };
+  std::vector<int> b;
+  cet::copy_all(a, std::back_inserter(b));
+
+}
+
 BOOST_AUTO_TEST_CASE( transform_all ) {
 
   std::vector<int>  const v1 { 1, 2, 3, 4 };

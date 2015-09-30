@@ -32,7 +32,7 @@ namespace cet {
   template< class FwdCont, class Func >
   inline auto
   for_all( FwdCont & s, Func f )
-  { return std::for_each(begin(s), end(s), f); }
+  { return std::for_each(std::begin(s), std::end(s), f); }
 
   template< class FwdCont, class Func >
   inline auto
@@ -46,7 +46,7 @@ namespace cet {
   template< class FwdCont, class FwdIter >
   inline auto
   copy_all( FwdCont & s, FwdIter it )
-  { return std::copy(begin(s), end(s), it); }
+  { return std::copy(std::begin(s), std::end(s), it); }
 
   template< class FwdCont, class FwdIter >
   inline auto
@@ -60,7 +60,7 @@ namespace cet {
   template< class FwdCont, class FwdIter, class Pred >
   inline auto
   copy_if_all( FwdCont & s, FwdIter it, Pred p)
-  { return std::copy_if(begin(s), end(s), it, p ); }
+  { return std::copy_if(std::begin(s), std::end(s), it, p ); }
 
   template< class FwdCont, class FwdIter, class Pred >
   inline auto
@@ -74,7 +74,7 @@ namespace cet {
   template< class FwdCont, class Datum >
   inline auto
   find_in_all( FwdCont & s, Datum const & d )
-  { return std::find(begin(s), end(s), d); }
+  { return std::find(std::begin(s), std::end(s), d); }
 
   template< class FwdCont, class Datum >
   inline auto
@@ -107,12 +107,12 @@ namespace cet {
   template< class FwdCont, class Datum >
   inline auto
   lower_bound_all( FwdCont & s, Datum const & d )
-  { return std::lower_bound(begin(s), end(s), d); }
+  { return std::lower_bound(std::begin(s), std::end(s), d); }
 
   template< class FwdCont, class Datum, class Pred >
   inline auto
   lower_bound_all( FwdCont & s, Datum const & d, Pred p )
-  { return std::lower_bound(begin(s), end(s), d, p); }
+  { return std::lower_bound(std::begin(s), std::end(s), d, p); }
 
   template< class FwdCont, class Datum, class Pred >
   inline auto
@@ -126,12 +126,12 @@ namespace cet {
   template< class RandCont >
   inline void
   sort_all( RandCont & s )
-  { std::sort(begin(s), end(s)); }
+  { std::sort(std::begin(s), std::end(s)); }
 
   template< class RandCont, class Pred >
   inline void
   sort_all( RandCont & s, Pred p )
-  { std::sort(begin(s), end(s), p); }
+  { std::sort(std::begin(s), std::end(s), p); }
 }
 
 // ----------------------------------------------------------------------
@@ -140,12 +140,12 @@ namespace cet {
   template< class RandCont >
   inline void
   stable_sort_all( RandCont & s )
-  { std::stable_sort(begin(s), end(s)); }
+  { std::stable_sort(std::begin(s), std::end(s)); }
 
   template< class RandCont, class Pred >
   inline void
   stable_sort_all( RandCont & s, Pred p )
-  { std::stable_sort(begin(s), end(s), p); }
+  { std::stable_sort(std::begin(s), std::end(s), p); }
 }
 
 // ----------------------------------------------------------------------
@@ -157,7 +157,7 @@ namespace cet {
   inline auto
   transform_all( Container & in,
                  OutputIt out, UnaryOp unary_op)
-  { return std::transform(begin(in), end(in), out, unary_op); }
+  { return std::transform(std::begin(in), std::end(in), out, unary_op); }
 
   template< class Container, class OutputIt, class UnaryOp >
   inline auto
@@ -171,7 +171,7 @@ namespace cet {
   transform_all( Container1 & in1,
                  Container2 & in2,
                  OutputIt out, BinaryOp binary_op)
-  { return std::transform(begin(in1), end(in1), begin(in2), out, binary_op); }
+  { return std::transform(std::begin(in1), std::end(in1), std::begin(in2), out, binary_op); }
 
   template< class Container1, class Container2, class OutputIt, class BinaryOp >
   inline auto
