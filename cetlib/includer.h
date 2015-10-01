@@ -34,6 +34,8 @@ public:
 
   const_iterator  begin () const  { return text.begin(); }
   const_iterator  end   () const  { return text.end  (); }
+  const_iterator  cbegin () const  { return text.cbegin(); }
+  const_iterator  cend   () const  { return text.cend  (); }
   std::string     whereis (const_iterator const & it) const;
   std::string     highlighted_whereis (const_iterator const & it) const;
   std::string     src_whereis (const_iterator const & it) const;
