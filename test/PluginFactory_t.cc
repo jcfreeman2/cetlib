@@ -52,7 +52,8 @@ BOOST_AUTO_TEST_CASE(CheckFinder)
 
 BOOST_AUTO_TEST_CASE(checkError)
 {
-  BOOST_CHECK_EXCEPTION(pf.makePlugin<std::unique_ptr<cettest::TestPluginBase> >("TestPluginX", "Hi"), \
+  using namespace std::string_literals;
+  BOOST_CHECK_EXCEPTION(pf.makePlugin<std::unique_ptr<cettest::TestPluginBase> >("TestPluginX"s, "Hi"s), \
                         cet::exception,                                 \
                         [](cet::exception const & e)                    \
                         {                                               \

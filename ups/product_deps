@@ -1,4 +1,4 @@
-parent cetlib v1_12_02
+parent cetlib v1_15_00
 defaultqual e7
 #
 libdir	fq_dir lib
@@ -7,15 +7,16 @@ perllib  product_dir
 
 # define product/version pairs
 product	version
-boost		v1_57_0
+boost		v1_57_0a
 gcc		v4_9_1		e6
 gcc		v4_9_2		e7
-
-cetbuildtools	v4_13_00	-	only_for_build
+gcc		v4_9_2		e9
+cetbuildtools	v4_14_01	-	only_for_build
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
+<<<<<<< HEAD
 qualifier	boost		gcc	compiler	notes
 e6:debug	e6:debug	-nq-	gcc
 e6:opt		e6:opt		-nq-	gcc
@@ -23,6 +24,9 @@ e6:prof		e6:prof		-nq-	gcc
 e7:debug	e7:debug	-nq-	gcc
 e7:opt		e7:opt		-nq-	gcc
 e7:prof		e7:prof		-nq-	gcc
+e9:debug	e9:debug	-nq-	gcc
+e9:opt		e9:opt		-nq-	gcc
+e9:prof		e9:prof		-nq-	gcc
 end_qualifier_list
 
 ##table_fragment_begin

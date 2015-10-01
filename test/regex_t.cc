@@ -14,6 +14,7 @@
 
 #ifdef STANDALONE_TEST
 int main()
+{
 #else
 BOOST_AUTO_TEST_SUITE(RegexTests)
 
@@ -22,7 +23,6 @@ BOOST_AUTO_TEST_CASE(pluginRegex)
 {
   std::ifstream inFile("regex.txt");
   BOOST_REQUIRE(inFile);
-  std::string line;
 #ifdef STANDALONE_TEST
   std::string const pattern_stem = { "(?:[A-Za-z0-9\\-]*_)*[A-Za-z0-9]+_" };
 #else
@@ -30,7 +30,7 @@ BOOST_AUTO_TEST_CASE(pluginRegex)
   std::string const pattern_stem = dummy.patternStem();
 #endif
   std::string pattern = std::string("lib(") + pattern_stem + ")([A-Za-z0-9]+)\\.so";
-  while (std::getline(inFile, line)) {
+  for (std::string line; std::getline(inFile, line); ) {
     static std::regex const r(pattern);
     std::smatch subs;
     bool result = std::regex_match(line, subs, r);
@@ -41,5 +41,49 @@ BOOST_AUTO_TEST_CASE(pluginRegex)
 }
 
 #ifndef STANDALONE_TEST
+BOOST_AUTO_TEST_CASE(alternationCheck_subscript)
+#endif
+{
+  std::regex const pattern1{R"(.*\[(?:\d*[1-9]|\d+0)\])"};
+  std::regex const pattern2{R"(.*\[(?:\d+0|\d*[1-9])\])"};
+
+  std::vector<std::string> const tests {
+    "test[0]",
+    "test[1]",
+    "test[10]"
+  };
+
+  auto verify_match = [&pattern1,&pattern2](std::string const& test) {
+    return std::regex_match(test, pattern1) == std::regex_match(test, pattern2);
+  };
+
+  for ( auto const& test : tests )
+    BOOST_CHECK( verify_match(test) );
+}
+
+#ifndef STANDALONE_TEST
+BOOST_AUTO_TEST_CASE(alternationCheck_dot)
+#endif
+{
+  std::regex const pattern1{R"(.*\.(?:\d*[1-9]|\d+0))"};
+  std::regex const pattern2{R"(.*\.(?:\d+0|\d*[1-9]))"};
+
+  std::vector<std::string> const tests {
+    "test.0",
+    "test.1",
+    "test.10" // Using pattern1 vs. pattern2 gives different result w/ clang 3.6
+  };
+
+  auto verify_match = [&pattern1,&pattern2](std::string const& test) {
+    return std::regex_match(test, pattern1) == std::regex_match(test, pattern2);
+  };
+
+  for ( auto const& test : tests )
+    BOOST_CHECK( verify_match(test) );
+}
+
+#ifdef STANDALONE_TEST
+}
+#else
 BOOST_AUTO_TEST_SUITE_END()
 #endif
