@@ -1,5 +1,5 @@
-parent cetlib v1_15_00
-defaultqual e7
+parent cetlib v1_15_01
+defaultqual e9
 #
 libdir	fq_dir lib
 fcldir  -
@@ -7,7 +7,7 @@ perllib  product_dir
 
 # define product/version pairs
 product	version
-cpp0x	v1_04_11
+cpp0x	v1_04_12
 
 cetbuildtools	v4_14_01	-	only_for_build
 end_product_list
