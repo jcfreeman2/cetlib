@@ -102,11 +102,7 @@ find_plugin_types(%plugin_types) or exit(1);
 my ($plugin_type, $plugin_options, $qual_name) = process_arguments();
 
 # Process plugin type
-if (not exists $plugin_types{lc $plugin_type}) {
-  print STDERR "ERROR: $plugin_type is not a recognized plugin type (",
-    join(",", sort keys %plugin_types), ")\n";
-  exit(1);
-}
+check_plugin_type($plugin_type);
 
 $plugin_type = lc $plugin_type;
 my $plugin_generator = $plugin_types{$plugin_type};
@@ -241,6 +237,16 @@ sub process_arguments {
   }
 }
 
+# Check provided plugin type is recognized.
+sub check_plugin_type {
+  my $plugin_type = shift;
+  if (not exists $plugin_types{lc $plugin_type}) {
+    print STDERR "ERROR: $plugin_type is not a recognized plugin type (",
+      join(", ", sort keys %plugin_types), ")\n";
+    exit(1);
+  }
+}
+
 # Print help text for available plugin types.
 sub help_types {
   print STDERR "Available plugin types:\n";
@@ -256,7 +262,8 @@ sub help_types {
 # Print help text for one particular plugin type.
 sub help_type {
   my ($plugin_type, $verbose) = @_;
-  my $plugin = $plugin_types{$plugin_type};
+  check_plugin_type($plugin_type);
+  my $plugin = lc $plugin_types{$plugin_type};
   print STDERR "* $plugin_type from ",
     plugin_product($plugin, "Unknown"), " version ",
       plugin_version($plugin, "Unknown"), " (",

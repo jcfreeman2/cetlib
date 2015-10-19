@@ -1,6 +1,7 @@
 #include "cetlib/LibraryManager.h"
 
 #include "cetlib/exception.h"
+#include "cetlib/shlib_utils.h"
 #include "boost/filesystem.hpp"
 #include "boost/regex.hpp"
 #include "cetlib/demangle.h"
@@ -21,8 +22,15 @@ extern "C" {
 #include <vector>
 
 namespace {
-  static std::string const default_pattern_stem
+  std::string const default_pattern_stem
   { "(?:[A-Za-z0-9\\-]*_)*[A-Za-z0-9]+_" };
+
+  inline std::string maybe_trim_shlib_prefix(std::string const& spec)
+  {
+    return spec.find(cet::shlib_prefix()) == 0 ?
+      spec.substr(cet::shlib_prefix().size()) :
+      spec;
+  }
 }
 
 cet::LibraryManager::LibraryManager(std::string lib_type)
@@ -96,10 +104,10 @@ cet::LibraryManager::getSpecsByPath(std::string const & lib_loc) const
 {
   // pair<short_spec,full_spec>
   std::pair<std::string,std::string> result;
-  for ( const auto & entry : spec_trans_map_ ) {
+  for (auto const & entry : spec_trans_map_) {
 
-    std::string const spec            = entry.first;
-    std::set<std::string> const paths = entry.second;
+    std::string const& spec            = maybe_trim_shlib_prefix(entry.first);
+    std::set<std::string> const& paths = entry.second;
 
     auto const path_iter = paths.find(lib_loc);
     if ( path_iter != paths.end() ) {
@@ -109,27 +117,20 @@ cet::LibraryManager::getSpecsByPath(std::string const & lib_loc) const
     if ( !result.first.empty() && !result.second.empty() ) break;
   }
 
-  if ( result.first.empty() || result.second.empty() )
-    throw exception("LogicError") << "Missing both short and full specs corresponding to library path.";
-
-  return std::move(result);
+  return result;
 }
 
 void
 cet::LibraryManager::loadAllLibraries() const
 {
-  for (lib_loc_map_t::const_iterator
-       i = lib_loc_map_.begin(),
-       end_iter = lib_loc_map_.end();
-       i != end_iter;
-       ++i) {
-    if (get_lib_ptr(i->second) == nullptr) {
+  for (auto const& lib : lib_loc_map_) {
+    if (get_lib_ptr(lib.second) == nullptr) {
       throw exception("Configuration")
-          << "Unable to load requested library "
-          << i->second
-          << "\n"
-          << demangle_message(dlerror())
-          << "\n";
+        << "Unable to load requested library "
+        << lib.second
+        << "\n"
+        << demangle_message(dlerror())
+        << "\n";
     }
   }
 }
@@ -145,13 +146,8 @@ cet::LibraryManager::libraryIsLoadable(std::string const & path) const
 {
   // TODO: If called with any frequency, this should be made more
   // efficient.
-  lib_loc_map_t::const_iterator
-  i = lib_loc_map_.begin(),
-  end_iter = lib_loc_map_.end();
-  for (;
-       i != end_iter;
-       ++i) {
-    if (path == i->second) { return true; }
+  for (auto const& lib : lib_loc_map_) {
+    if (path == lib.second) { return true; }
   }
   return false;
 }
