@@ -7,6 +7,7 @@
 #define BOOST_TEST_MODULE ( includer test )
 #include "boost/test/auto_unit_test.hpp"
 
+#include "boost/filesystem.hpp"
 #include "cetlib/exception.h"
 #include "cetlib/filepath_maker.h"
 #include "cetlib/includer.h"
@@ -79,7 +80,7 @@ namespace {
 
   std::string const contents_r4  =
     "begin\n"
-    "#include \"./r2.txt\"\n"
+    "#include \"./linked/r2.txt\"\n"
     "end\n";
 
   std::string const contents_x1 = "#include\"./a.txt\"\n";
@@ -107,6 +108,7 @@ namespace {
     std::ofstream x1(file_x1);  x1 << contents_x1;
     std::ofstream x2(file_x2);  x2 << contents_x2;
     std::ofstream x3(file_x3);  x3 << contents_x3;
+    boost::filesystem::create_symlink(".", "linked");
   }
 
 

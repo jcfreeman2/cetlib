@@ -4,10 +4,11 @@
 //           a) transparently handles #include'd files, and
 //           b) can trace back its iterators
 //
-// ======================================================================
-
-#include "cetlib/coded_exception.h"
+// =====================================================================
 #include "cetlib/includer.h"
+
+#include "boost/filesystem.hpp"
+#include "cetlib/coded_exception.h"
 #include "cetlib/split_by_regex.h"
 #include "cetlib/trim.h"
 #include "cpp0x/algorithm"
@@ -19,6 +20,8 @@
 #include <sstream>
 
 using cet::includer;
+
+namespace bfs = boost::filesystem;
 
 // ----------------------------------------------------------------------
 
@@ -58,35 +61,56 @@ namespace { namespace detail {
       return result;
     }
 
-  } }  // ::detail
+  } // ::detail.
+
+  std::string
+  canonicalizePath(std::string const & path_str)
+  try {
+    bfs::path path(path_str);
+    // If specified path does not exist, complain later.
+    if (bfs::exists(path)) {
+      path = bfs::canonical(path);
+    }
+    std::string result = path.native();
+    return result;
+  } catch (std::exception const & e) {
+    throw detail::inc_exception(detail::cant_open)
+      << "Exception while examining include specification \""
+      << path_str
+      << "\": "
+      << e.what();
+  }
+
+} // anonymous.
+
 
 using namespace ::detail;
 
 // ----------------------------------------------------------------------
 
 includer::includer( std::string const   & filename
-                    , cet::filepath_maker & abs_filename
+                    , cet::filepath_maker & policy_filename
                     )
   :
   text  ( ),
   frames { frame(0, begin_string(), 0, text.size()) },
   recursion_stack ( )
   {
-    include(0, filename, abs_filename);
+    include(0, filename, policy_filename);
     frames.emplace_back(0, end_string(), 0, text.size());
   }
 
 // ----------------------------------------------------------------------
 
 includer::includer( std::istream        & is
-                    , cet::filepath_maker & abs_filename
+                    , cet::filepath_maker & policy_filename
                     )
   :
   text  ( ),
   frames { frame(0, begin_string(), 0, text.size()) },
   recursion_stack ( )
   {
-    include(is, abs_filename);
+    include(is, policy_filename);
     frames.emplace_back(0, end_string(), 0, text.size());
   }
 
@@ -171,32 +195,32 @@ includer::src_whereis( const_iterator const & it ) const
 
 }  // src_whereis()
 
-// ----------------------------------------------------------------------
-
 void
 includer::include( int                   including_framenum
                    , std::string const   & filename
-                   , cet::filepath_maker & abs_filename
+                   , cet::filepath_maker & policy_filename
                    )
 {
   static  std::string const  inc_lit = std::string("#include");
   static  uint        const  min_sz  = inc_lit.size() + 3u;
 
-  // expand filename to obtain, per policy, absolute path to file:
-  bool const use_cin = filename == "-";
-  std::string const filepath = use_cin ? filename
-    : abs_filename(filename);
+  // expand filename to obtain, per policy, path to file:
+  bool const use_cin = (filename == "-");
+  std::string const filepath =
+    use_cin ? filename : policy_filename(filename);
+  std::string const canonical_filepath =
+    use_cin ? canonicalizePath(filepath) : filepath;
 
   // check for recursive #inclusion:
   if (std::find(recursion_stack.crbegin(),
                 recursion_stack.crend(),
-                filepath) != recursion_stack.crend()) {
+                canonical_filepath) != recursion_stack.crend()) {
     throw inc_exception(recursive)
       << filename << " => " << filepath
       << backtrace( frames.size()-1u );
   } else {
     // Record opening of file.
-    recursion_stack.emplace_back(filepath);
+    recursion_stack.emplace_back(canonical_filepath);
   }
 
   // open the #included file:
@@ -244,7 +268,7 @@ includer::include( int                   including_framenum
     std::string nextfilename( line.substr( min_sz - 1u
                                            , line.size() - min_sz
                                            )            );
-    include(frames.size()-1u, nextfilename, abs_filename);
+    include(frames.size()-1u, nextfilename, policy_filename);
 
     // prepare to resume where we left off:
     new_frame.starting_linenum = linenum + 1;
@@ -263,7 +287,7 @@ includer::include( int                   including_framenum
 
 void
 includer::include( std::istream        & f
-                   , cet::filepath_maker & abs_filename
+                   , cet::filepath_maker & policy_filename
                    )
 {
   static std::string const  inc_lit = std::string("#include");
@@ -312,7 +336,7 @@ includer::include( std::istream        & f
     std::string nextfilename( line.substr( min_sz - 1u
                                            , line.size() - min_sz
                                            )            );
-    include(frames.size()-1u, nextfilename, abs_filename);
+    include(frames.size()-1u, nextfilename, policy_filename);
 
     // prepare to resume where we left off:
     new_frame.starting_linenum = linenum + 1;
