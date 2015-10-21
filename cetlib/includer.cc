@@ -11,7 +11,6 @@
 #include "cetlib/coded_exception.h"
 #include "cetlib/split_by_regex.h"
 #include "cetlib/trim.h"
-#include "cpp0x/algorithm"
 
 #include <algorithm>
 #include <cctype>

@@ -53,12 +53,12 @@
 //
 // ======================================================================
 
-#include "cpp0x/type_traits"
 #include <exception>
 #include <iosfwd>
 #include <list>
 #include <sstream>
 #include <string>
+#include <type_traits>
 
 namespace cet {
   class exception;

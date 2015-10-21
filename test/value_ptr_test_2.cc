@@ -7,7 +7,7 @@
 
 #pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
-#include "cpp0x/compiler_macros.h"
+#include "cetlib/compiler_macros.h"
 
 class simple
 {

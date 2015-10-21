@@ -2,7 +2,8 @@
 #include "boost/test/auto_unit_test.hpp"
 
 #include "cetlib/ntos.h"
-#include "cpp0x/string"
+
+#include <string>
 
 using cet::ntos;
 using std::string;

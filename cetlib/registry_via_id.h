@@ -9,10 +9,11 @@
 // ======================================================================
 
 #include "cetlib/exception.h"
-#include "cpp0x/type_traits"
+
 #include <iterator>
 #include <map>
 #include <stdexcept>
+#include <type_traits>
 #include <utility>
 
 namespace cet {

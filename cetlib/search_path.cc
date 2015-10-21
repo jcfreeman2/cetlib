@@ -9,9 +9,10 @@
 #include "cetlib/exception.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/getenv.h"
-#include "cpp0x/regex"
+
 #include <dirent.h>
 #include <iterator>
+#include <regex>
 #include <sys/stat.h>
 
 using cet::search_path;

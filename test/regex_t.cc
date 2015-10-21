@@ -13,7 +13,8 @@
 #include <regex>
 
 #ifdef STANDALONE_TEST
-int main() {
+int main()
+{
 #else
 BOOST_AUTO_TEST_SUITE(RegexTests)
 

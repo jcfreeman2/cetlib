@@ -16,7 +16,7 @@ cet_test(canonical_number_test)
 cet_test(canonical_string_test USE_BOOST_UNIT)
 cet_test(coded_exception_test)
 cet_test(column_width_test USE_BOOST_UNIT)
-cet_test(container_algs_test)
+cet_test(container_algs_test USE_BOOST_UNIT)
 cet_test(cpu_timer_test USE_BOOST_UNIT
   TEST_PROPERTIES RUN_SERIAL true
   OPTIONAL_GROUPS LOAD_SENSITIVE
@@ -102,6 +102,11 @@ cet_test(LibraryManager_t USE_BOOST_UNIT
   LIBRARIES
   ${Boost_FILESYSTEM_LIBRARY}
   -ldl
+  )
+
+cet_test(replace_all_test USE_BOOST_UNIT
+  LIBRARIES
+  cetlib
   )
 
 cet_test(regex_t USE_BOOST_UNIT
