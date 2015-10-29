@@ -43,7 +43,7 @@ search_path::search_path( std::string const & arg )
 // ----------------------------------------------------------------------
 
 std::string
-  search_path::to_string( ) const
+search_path::to_string() const
 {
   std::string printable_path = dirs[0];
   for( std::size_t k = 1; k != dirs.size(); ++k )
@@ -56,7 +56,7 @@ std::string
 // find_file() overloads:
 
 std::string
-  search_path::find_file( std::string const & filename ) const
+search_path::find_file( std::string const & filename ) const
 {
   std::string result;
   if( find_file(filename, result) )
@@ -67,16 +67,14 @@ std::string
 }  // find_file()
 
 bool
-  search_path::find_file( std::string const & filename
-                        , std::string       & result
-                        ) const
+search_path::find_file( std::string const & filename,
+                        std::string       & result ) const
 {
   if( filename.empty() )
     return false;
 
-  for( std::vector<std::string>::const_iterator it = dirs.begin()
-     ; it != end; ++it ) {
-    std::string fullpath = *it + '/' + filename;
+  for(auto const& dir : dirs) {
+    std::string fullpath = dir + '/' + filename;
     for( std::size_t k;  (k = fullpath.find("//")) != std::string::npos;  ) {
       fullpath.erase(k,1);
     }
@@ -92,31 +90,29 @@ bool
 // ----------------------------------------------------------------------
 
 std::size_t
-  search_path::find_files( std::string const        & pat
-                         , std::vector<std::string> & out
-                         ) const
+search_path::find_files( std::string const        & pat,
+                         std::vector<std::string> & out ) const
 {
-  std::regex re(pat);
+  std::regex const re{pat};
 
   std::size_t     count = 0u;
   std::size_t     err = 0u;
   struct dirent   entry;
   struct dirent * result = 0;
 
-  for( std::vector<std::string>::const_iterator it = dirs.begin()
-     ; it != end; ++it ) {
-    DIR * dd = opendir(it->c_str());
+  for(auto const& dir : dirs) {
+    DIR * dd = opendir(dir.c_str());
     if( dd == 0 )
       continue;
     while( ! (err = readdir_r(dd, &entry, &result))
            && result != 0 ) {
       if( std::regex_match(entry.d_name, re) )
-        out.push_back(*it + '/' + entry.d_name), ++count;
+        out.push_back(dir + '/' + entry.d_name), ++count;
     }
     closedir(dd);
     if( result != 0 )
       throw cet::exception(exception_category)
-        << "Failed to read directory \"" << *it << "\"; error num = " << err;
+        << "Failed to read directory \"" << dir << "\"; error num = " << err;
   }  // for
 
   return count;
