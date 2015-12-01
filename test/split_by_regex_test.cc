@@ -74,9 +74,17 @@ BOOST_AUTO_TEST_CASE( split_test_1 )
 
 BOOST_AUTO_TEST_CASE( split_test_2 )
 {
-  string_vector const v = split_by_regex( "namespace::class::static_function().value", 
-                                          "(::|\\(\\)\\.)" );
+  string_vector const v = split_by_regex( "namespace::class::static_function().value",
+                                          R"((::|\(\)\.))" );
   string_vector const expected {"namespace","class","static_function","value"};
+  BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
+                                expected.begin(),expected.end());
+}
+
+BOOST_AUTO_TEST_CASE( variable_subscript )
+{
+  string_vector const v = split_by_regex( "v[0][1][2]", R"((\]\[|\[|\]))" );
+  string_vector const expected {"v","0","1","2"};
   BOOST_CHECK_EQUAL_COLLECTIONS(v.begin(),v.end(),
                                 expected.begin(),expected.end());
 }

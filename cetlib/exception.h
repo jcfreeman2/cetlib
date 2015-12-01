@@ -64,7 +64,7 @@ namespace cet {
   class exception;
 
   std::ostream &
-    operator << ( std::ostream & os, exception const & e );
+  operator << ( std::ostream & os, exception const & e );
 }
 
 // ======================================================================
@@ -72,15 +72,13 @@ namespace cet {
 namespace cet {
   namespace detail {
 
-    template< class D
-            , bool = std::is_base_of<cet::exception,D>::value
-            >
-      struct enable_if_an_exception
-    { typedef  D const &  type; };
+    template< class D, bool = std::is_base_of<cet::exception,D>::value >
+    struct enable_if_an_exception {
+      using type = D const&;
+    };
 
     template< class D >
-      struct enable_if_an_exception<D,false>
-    { };
+    struct enable_if_an_exception<D,false> {};
 
   }  // detail
 }  // cet
@@ -89,36 +87,33 @@ namespace cet {
 
 namespace cet {
 
-  class exception
-    : public std::exception
-  {
+  class exception : public std::exception {
   public:
-    typedef  std::string          Category;
-    typedef  std::list<Category>  CategoryList;
+    using Category = std::string;
+    using CategoryList = std::list<Category>;
 
     // --- c'tors, d'tor:
 
-    explicit
-      exception( Category const & category );
+    explicit exception( Category const & category );
 
-    exception( Category    const & category
-             , std::string const & message );
-    exception( Category    const & category
-             , std::string const & message
-             , exception   const & another );
+    exception( Category    const & category,
+               std::string const & message );
+
+    exception( Category    const & category,
+               std::string const & message,
+               exception   const & another );
 
     exception( exception const & other );
 
-    virtual
-      ~exception( ) noexcept;
+    virtual ~exception() noexcept = default;
 
     // --- inspectors:
 
-    virtual  char const *  what( ) const throw();
-    virtual  std::string   explain_self( ) const;
-    std::string            category( ) const;
-    CategoryList const &   history( ) const;
-    std::string            root_cause( ) const;
+    virtual  char const *  what() const throw();
+    virtual  std::string   explain_self() const;
+    std::string            category() const;
+    CategoryList const &   history() const;
+    std::string            root_cause() const;
 
     // --- mutators:
 
@@ -131,9 +126,10 @@ namespace cet {
     void  append( std::ios_base& f(std::ios_base&) ) const;
 
     template< class T >
-      void
-      append( T const & more_information ) const
-    { ost_ << more_information; }
+    void append( T const & more_information ) const
+    {
+      ost_ << more_information;
+    }
 
   private:
     mutable  std::ostringstream   ost_;
@@ -146,28 +142,28 @@ namespace cet {
   };  // exception
 
   template< class E >
-    typename detail::enable_if_an_exception<E>::type
-    operator << ( E const & e, std::string const & t )
+  typename detail::enable_if_an_exception<E>::type
+  operator << ( E const & e, std::string const & t )
   { e.append(t); return e; }
 
   template< class E >
-    typename detail::enable_if_an_exception<E>::type
-    operator << ( E const & e, char const t[] )
+  typename detail::enable_if_an_exception<E>::type
+  operator << ( E const & e, char const t[] )
   { e.append(t); return e; }
 
   template< class E >
-    typename detail::enable_if_an_exception<E>::type
-    operator << ( E const & e, std::ostream& f(std::ostream&) )
+  typename detail::enable_if_an_exception<E>::type
+  operator << ( E const & e, std::ostream& f(std::ostream&) )
   { e.append(f); return e; }
 
   template< class E >
-    typename detail::enable_if_an_exception<E>::type
-    operator << ( E const & e, std::ios_base& f(std::ios_base&) )
+  typename detail::enable_if_an_exception<E>::type
+  operator << ( E const & e, std::ios_base& f(std::ios_base&) )
   { e.append(f); return e; }
 
   template< class E, class T >
-    typename detail::enable_if_an_exception<E>::type
-    operator << ( E const & e, T const & t )
+  typename detail::enable_if_an_exception<E>::type
+  operator << ( E const & e, T const & t )
   { e.append(t); return e; }
 
 }  // namespace cet
@@ -175,3 +171,7 @@ namespace cet {
 // ======================================================================
 
 #endif
+
+// Local variables
+// mode: c++
+// End:

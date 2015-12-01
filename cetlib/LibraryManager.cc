@@ -247,7 +247,7 @@ getSymbolByLibspec_(std::string const & libspec,
     // No good translation => zero or too many
     std::ostringstream error_msg;
     error_msg
-        << "Library specificaton \""
+        << "Library specification \""
         << libspec << "\":";
     spec_trans_map_t::const_iterator bad_trans =
       spec_trans_map_.find(libspec);

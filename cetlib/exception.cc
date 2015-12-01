@@ -9,48 +9,50 @@
 
 using cet::exception;
 
-typedef  exception::Category      Category;
-typedef  exception::CategoryList  CategoryList;
+using Category     = exception::Category;
+using CategoryList = exception::CategoryList;
 
 // ======================================================================
 // helpers:
 
-static  bool
-  ends_with_whitespace( std::string const & s )
-{
-  return s.empty() || std::isspace( *(s.end()-1) );
-}
+namespace {
 
-static  bool
-  ends_with_newline( std::string const & s )
-{
-  return s.empty() || *(s.end()-1) == '\n';
-}
+  bool ends_with_whitespace( std::string const & s )
+  {
+    return s.empty() || std::isspace( *(s.end()-1) );
+  }
 
-static  std::string
-indent_string( std::string const &s )
-{
-   static char const *indent = "  ";
-   std::string result(indent);
-   result.append(s);
-   size_t cpos = 0;
-   while ((cpos = result.find('\n', cpos)) != std::string::npos) {
+  bool ends_with_newline( std::string const & s )
+  {
+    return s.empty() || *(s.end()-1) == '\n';
+  }
+
+  constexpr char const* indent {"  "};
+
+  std::string indent_string( std::string const &s )
+  {
+    std::string result{indent};
+    result.append(s);
+    size_t cpos = 0;
+    while ((cpos = result.find('\n', cpos)) != std::string::npos) {
       ++cpos;
       if (cpos != result.size()) {
-         result.insert(cpos, indent);
+        result.insert(cpos, indent);
       }
-   }
-   return result;
-}
+    }
+    return result;
+  }
+
+} // anon. namespace
 
 std::exception *
-  exception::clone() const
+exception::clone() const
 {
   return new exception(*this);
 }
 
 void
-  exception::rethrow()
+exception::rethrow()
 {
   throw *this;
 }
@@ -65,8 +67,8 @@ exception::exception( Category const & c )
   , what_         ( )
 { }
 
-exception::exception( Category    const & c
-                    , std::string const & m )
+exception::exception( Category    const & c,
+                      std::string const & m )
   : std::exception( )
   , ost_          ( )
   , category_     ( { c } )
@@ -77,9 +79,9 @@ exception::exception( Category    const & c
     ost_ << ' ';
 }
 
-exception::exception( Category    const & c
-                    , std::string const & m
-                    , exception   const & e )
+exception::exception( Category    const & c,
+                      std::string const & m,
+                      exception   const & e )
   : std::exception( )
   , ost_          ( )
   , category_     ( { c } )
@@ -89,9 +91,6 @@ exception::exception( Category    const & c
   category_.insert(category_.end(), e.history().begin(), e.history().end());
   append( e );
 }
-
-exception::~exception( ) noexcept
-{ }
 
 // ======================================================================
 // copy c'tor:
@@ -109,14 +108,14 @@ exception::exception( exception const & other )
 // inspectors:
 
 char const *
-  exception::what( ) const throw()
+exception::what( ) const throw()
 {
   what_ = explain_self();
   return what_.c_str();
 }
 
 std::string
-  exception::explain_self( ) const
+exception::explain_self( ) const
 {
   std::ostringstream ost;
 
@@ -125,7 +124,7 @@ std::string
   std::string part( indent_string(ost_.str()) );
   ost << part;
   if( ! ends_with_newline(part) )
-    ost << "\n";
+    ost << '\n';
 
   ost << "---- " << category() << " END\n";
 
@@ -133,19 +132,19 @@ std::string
 }
 
 std::string
-  exception::category( ) const
+exception::category( ) const
 {
   return category_.front();
 }
 
 CategoryList const &
-  exception::history( ) const
+exception::history( ) const
 {
   return category_;
 }
 
 std::string
-  exception::root_cause( ) const
+exception::root_cause( ) const
 {
   return category_.back();
 }
@@ -154,31 +153,31 @@ std::string
 // mutators:
 
 void
-  exception::append( exception const & e ) const
+exception::append( exception const & e ) const
 {
   ost_ << e.explain_self();
 }
 
 void
-  exception::append( std::string const & more_information ) const
+exception::append( std::string const & more_information ) const
 {
   ost_ << more_information;
 }
 
 void
-  exception::append( char const more_information[] ) const
+exception::append( char const more_information[] ) const
 {
   ost_ << more_information;
 }
 
 void
-  exception::append( std::ostream& f(std::ostream&) ) const
+exception::append( std::ostream& f(std::ostream&) ) const
 {
   f(ost_);
 }
 
 void
-  exception::append( std::ios_base& f(std::ios_base&) ) const
+exception::append( std::ios_base& f(std::ios_base&) ) const
 {
   f(ost_);
 }
@@ -186,7 +185,7 @@ void
 // ======================================================================
 
 std::ostream &
-  cet::operator << ( std::ostream & os, exception const & e )
+cet::operator << ( std::ostream & os, exception const & e )
 {
   return os << e.explain_self();
 }
