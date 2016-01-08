@@ -285,7 +285,7 @@ public:
 
   // moving assignments:
 #ifdef CPP0X_HAS_RVALUE_REFERENCES
-  value_ptr &  operator = ( value_ptr && other )
+  value_ptr &  operator = ( value_ptr && other ) noexcept
   {
     value_ptr tmp( std::move(other) );
     swap(tmp);
@@ -294,7 +294,7 @@ public:
 
   template< class E2 >
   typename std::enable_if< is_compatible<E2>::value, value_ptr & >::type
-    operator = ( value_ptr<E2,Cloner,Deleter> && other )
+    operator = ( value_ptr<E2,Cloner,Deleter> && other ) noexcept
   {
     value_ptr tmp( std::move(other) );
     swap(tmp);
