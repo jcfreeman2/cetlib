@@ -45,6 +45,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   search_path.cc
   simple_stats.cc
   split_path.cc
+  split_by_regex.cc
   LIBRARIES
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}
