@@ -100,7 +100,7 @@ test_library(2_1_5)
 cet_test(LibraryManager_t USE_BOOST_UNIT
   LIBRARIES
   ${Boost_FILESYSTEM_LIBRARY}
-  -ldl
+  ${CMAKE_DL_LIBS}
   )
 
 cet_test(replace_all_test USE_BOOST_UNIT
