@@ -7,9 +7,6 @@
 
 namespace {
 
-  using cet::cbegin;
-  using cet::cend;
-
   template <class T>
   struct A {
     A(T t) : t_(t) {}
@@ -61,21 +58,25 @@ BOOST_AUTO_TEST_CASE( copy_all ) {
 
 BOOST_AUTO_TEST_CASE( transform_all ) {
 
-  std::vector<int>  const v1 { 1, 2, 3, 4 };
-  std::vector<char> const v2 { 'a', 'b', 'c', 'd' };
+  using namespace std;
+  using namespace cet::container_helpers;
+
+  vector<int>  const v1 { 1, 2, 3, 4 };
+  vector<char> const v2 { 'a', 'b', 'c', 'd' };
 
   // One-input version
-  std::vector<A<int>> is1, is2;
-  std::vector<A<char>> cs1, cs2;
-  std::map<A<int>,A<char>> p1, p2;
+  vector<A<int>> is1, is2;
+  vector<A<char>> cs1, cs2;
+  map<A<int>,A<char>> p1, p2;
 
-  std::transform( cbegin(v1), cend(v1), std::back_inserter(is1), MakeA<int>() );
-  std::transform( cbegin(v2), cend(v2), std::back_inserter(cs1), MakeA<char>() );
-  std::transform( cbegin(v1), cend(v1), cbegin(v2), std::inserter(p1, begin(p1)), MakeAPair<int,char>() );
 
-  cet::transform_all( v1, std::back_inserter(is2), MakeA<int>() );
-  cet::transform_all( v2, std::back_inserter(cs2), MakeA<char>() );
-  cet::transform_all( v1, v2, std::inserter(p2, begin(p2)), MakeAPair<int,char>() );
+  transform( cbegin(v1), cend(v1), back_inserter(is1), MakeA<int>() );
+  transform( cbegin(v2), cend(v2), back_inserter(cs1), MakeA<char>() );
+  transform( cbegin(v1), cend(v1), cbegin(v2), inserter(p1, begin(p1)), MakeAPair<int,char>() );
+
+  cet::transform_all( v1, back_inserter(is2), MakeA<int>() );
+  cet::transform_all( v2, back_inserter(cs2), MakeA<char>() );
+  cet::transform_all( v1, v2, inserter(p2, begin(p2)), MakeAPair<int,char>() );
 
   BOOST_CHECK_EQUAL_COLLECTIONS( cbegin(is1), cend(is1), cbegin(is2), cend(is2) );
   BOOST_CHECK_EQUAL_COLLECTIONS( cbegin(cs1), cend(cs1), cbegin(cs2), cend(cs2) );
