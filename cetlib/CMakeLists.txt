@@ -68,3 +68,5 @@ install_source(SUBDIRS detail)
 
 #
 # ======================================================================
+# Testing
+add_subdirectory(test)

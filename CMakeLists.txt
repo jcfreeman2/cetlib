@@ -50,7 +50,6 @@ find_ups_boost(v1_50_0)
 add_subdirectory( ${PROJECT_NAME} )  # source code
 add_subdirectory( perllib )          # Modular plugin skeleton generator
 add_subdirectory( polarssl )         # externally-imported code
-add_subdirectory( test )             # test code
 add_subdirectory( ups )              # ups files
 
 # ----------------------------------------------------------------------
