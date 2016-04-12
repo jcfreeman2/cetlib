@@ -67,15 +67,15 @@ cet_test(value_ptr_test_4)
 cet_test(value_ptr_test_5)
 cet_test(zero_init_test USE_BOOST_UNIT)
 
-cet_make_library(LIBRARY_NAME test_fakePlugin SOURCE moduleType.cc NO_INSTALL)
+cet_make_library(LIBRARY_NAME cetlib_test_fakePlugin SOURCE moduleType.cc NO_INSTALL)
 
-cet_make_library(LIBRARY_NAME test_TestPluginBase SOURCE TestPluginBase.cc NO_INSTALL)
+cet_make_library(LIBRARY_NAME cetlib_test_TestPluginBase SOURCE TestPluginBase.cc NO_INSTALL)
 
 include(BasicPlugin)
-basic_plugin(TestPlugin "plugin" NO_INSTALL test_TestPluginBase)
+basic_plugin(TestPlugin "plugin" NO_INSTALL cetlib_test_TestPluginBase)
 
 cet_test(PluginFactory_t USE_BOOST_UNIT
-  LIBRARIES cetlib test_TestPluginBase
+  LIBRARIES cetlib cetlib_test_TestPluginBase
 )
 
 function(test_library LIBSPEC)

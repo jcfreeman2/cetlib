@@ -5,7 +5,7 @@
 
 #include "cetlib/exception.h"
 #include "cetlib/container_algorithms.h"
-#include "test/LibraryManagerTestFunc.h"
+#include "cetlib/test/LibraryManagerTestFunc.h"
 
 #include <algorithm>
 #include <iostream>
