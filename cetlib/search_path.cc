@@ -20,11 +20,11 @@ using cet::search_path;
 std::string exception_category("search_path");
 
 // ----------------------------------------------------------------------
-// c'tor:
+// c'tors:
 
-search_path::search_path( std::string const & arg )
-: dirs( )
-, end ( )
+search_path::search_path(std::string const & arg) : 
+  dirs( ),
+  end ( )
 {
   if( ! arg.empty() )
     split( arg.find(':') == std::string::npos

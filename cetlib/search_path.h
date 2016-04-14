@@ -14,6 +14,12 @@
 #include <vector>
 
 namespace cet {
+  // A search_path is used to manage the use of a PATH-like
+  // environment variable. It is created from the name of an
+  // environment variable; the value associated with this variable is
+  // expected to be a colon-separated list of directories. The
+  // search_path provides facilities for finding files in these
+  // directories.
   class search_path;
 }
 
@@ -22,14 +28,12 @@ namespace cet {
 class cet::search_path
 {
 public:
-  //c'tor:
-  search_path( std::string const & name_or_path );
+  explicit search_path(std::string const & name_or_path);
+  explicit search_path(char const* name_or_path);
 
-  // observers:
-  bool
-    empty( ) const  { return dirs.empty(); }
-  std::size_t
-    size( ) const  { return dirs.size(); }
+  //
+  bool empty( ) const  { return dirs.empty(); }
+  std::size_t size( ) const  { return dirs.size(); }
   std::string const &
     operator [] ( int k ) const  { return dirs.at(k); }
   std::string
