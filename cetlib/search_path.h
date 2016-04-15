@@ -10,6 +10,7 @@
 #include "cetlib/split.h"
 #include <algorithm>
 #include <cstdlib>
+#include <ostream>
 #include <string>
 #include <vector>
 
@@ -21,61 +22,60 @@ namespace cet {
   // search_path provides facilities for finding files in these
   // directories.
   class search_path;
+
+  std::ostream& operator<<(std::ostream& os, search_path const& p);
 }
 
 // ----------------------------------------------------------------------
 
-class cet::search_path
-{
-public:
-  explicit search_path(std::string const & name_or_path);
-  explicit search_path(char const* name_or_path);
+class cet::search_path {
+ public:
+  explicit search_path(std::string const& name_or_path);
+
+  // Return true if there are no directories in the path.
+  bool empty() const;
+
+  // Return the number of directories in the path.
+  std::size_t size() const;
+
+  // Return the k'th entry in the path.
+  std::string const& operator[](std::size_t k) const;
+
+  // Return the full pathname of the file named filename, found
+  // somewhere along the path. If no such file is found, an exception
+  // is thrown.
+  std::string find_file(std::string const& filename) const;
+
+  // Look for a filed named filename in the path. If filename is
+  // empty, o if no file is found, return false, without modifying
+  // result. If one is found, return true and fill result with the
+  // full pathname for the file.
+  bool find_file(std::string const& filename, std::string& result) const;
 
   //
-  bool empty( ) const  { return dirs.empty(); }
-  std::size_t size( ) const  { return dirs.size(); }
-  std::string const &
-    operator [] ( int k ) const  { return dirs.at(k); }
-  std::string
-    to_string( ) const;
+  std::size_t find_files(std::string const& filename_pattern,
+                         std::vector<std::string>& result) const;
+  template <class OutIter>
+  std::size_t find_files(std::string const& filename_pattern,
+                         OutIter dest) const;
 
-  // workers:
-  std::string
-    find_file( std::string const & filename ) const;
-  bool
-    find_file( std::string const & filename, std::string & result ) const;
-  std::size_t
-    find_files( std::string const        & filename_pattern
-              , std::vector<std::string> & result
-              ) const;
-  template< class OutIter >
-  std::size_t
-    find_files( std::string const & filename_pattern
-              , OutIter             dest
-              ) const;
-
-private:
-  std::vector<std::string>                 dirs;
-  std::vector<std::string>::const_iterator end;
-
+ private:
+  std::vector<std::string> _dirs;
+  std::vector<std::string>::const_iterator _end;
 };  // search_path
 
-// ======================================================================
 
-template< class OutIter >
-std::size_t
-  cet::search_path::find_files( std::string const & pattern
-                              , OutIter             dest
-                              ) const
-{
+
+
+
+template <class OutIter>
+std::size_t cet::search_path::find_files(std::string const& pattern,
+                                         OutIter dest) const {
   std::vector<std::string> results;
   size_t nfound = find_files(pattern, results);
-  std::copy( results.begin(), results.end()
-           , dest
-           );
+  std::copy(results.begin(), results.end(), dest);
   return nfound;
 }
 
-// ======================================================================
 
 #endif
