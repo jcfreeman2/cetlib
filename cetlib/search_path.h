@@ -46,26 +46,36 @@ class cet::search_path {
   // is thrown.
   std::string find_file(std::string const& filename) const;
 
-  // Look for a filed named filename in the path. If filename is
-  // empty, o if no file is found, return false, without modifying
+  // Look for a file named 'filename' in the path. If filename is
+  // empty, or if no file is found, return false, without modifying
   // result. If one is found, return true and fill result with the
   // full pathname for the file.
   bool find_file(std::string const& filename, std::string& result) const;
 
-  //
+  // Find all the files with names maching 'filename_pattern' in the
+  // search path. filename_pattern is used to construct a std::regex
+  // that is used for the matching. The path to each matching file is
+  // appended to out, and the total number of matching paths is the
+  // return value of the function.
   std::size_t find_files(std::string const& filename_pattern,
                          std::vector<std::string>& result) const;
+
+  // Find all the files with names maching 'filename_pattern' in the
+  // search path. filename_pattern is used to construct a std::regex
+  // that is used for the matching. The path to each matching file is
+  // written to 'dest', and the total number of matching paths is the
+  // return value of the function.
   template <class OutIter>
   std::size_t find_files(std::string const& filename_pattern,
                          OutIter dest) const;
+
+  // Return the string format (colon-delimited) of the search path.
+  std::string to_string() const;
 
  private:
   std::vector<std::string> _dirs;
   std::vector<std::string>::const_iterator _end;
 };  // search_path
-
-
-
 
 
 template <class OutIter>

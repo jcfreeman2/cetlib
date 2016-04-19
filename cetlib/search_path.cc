@@ -107,6 +107,13 @@ size_t search_path::find_files(string const& pat,
   return count;
 }  // find_files()
 
+
+std::string search_path::to_string() const {
+  std::ostringstream oss;
+  oss << *this;
+  return oss.str();
+}
+
 // ======================================================================
 
 
