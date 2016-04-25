@@ -136,9 +136,6 @@ namespace cet {
     CategoryList                  category_;
     mutable std::string           what_;
 
-    virtual  std::exception *  clone() const;
-    virtual  void  rethrow();
-
   };  // exception
 
   template< class E >
