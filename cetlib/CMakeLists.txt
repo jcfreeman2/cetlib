@@ -18,9 +18,7 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shlib_utils.cc.in
 cet_make_library(LIBRARY_NAME ${LIB_NAME}
   SOURCE
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
-  ../polarssl/md5.cc
   MD5Digest.cc
-  ../polarssl/sha1.cc
   BasicPluginFactory.cc
   LibraryManager.cc
   PluginFactory.cc
@@ -43,6 +41,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   replace_all.cc
   rpad.cc
   search_path.cc
+  sha1.cc
   simple_stats.cc
   split_path.cc
   split_by_regex.cc
@@ -51,6 +50,8 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   ${Boost_REGEX_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
   ${CMAKE_DL_LIBS}
+  -lcrypto
+  -lssl
   )
 
 
@@ -58,7 +59,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
 # Build and install this project's executables:
 
 cet_make_exec( inc-expand
-               LIBRARIES ${LIB_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY})
+               LIBRARIES ${LIB_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY} )
 
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:

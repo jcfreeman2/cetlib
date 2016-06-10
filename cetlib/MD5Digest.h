@@ -1,10 +1,9 @@
 #ifndef cetlib_MD5Digest_h
 #define cetlib_MD5Digest_h
 
-#include "polarssl/md5.h"
-
 #include <iosfwd>
 #include <string>
+#include <openssl/md5.h>
 
 namespace cet
 {
@@ -61,7 +60,7 @@ namespace cet
     MD5Result digest() const;
 
   private:
-    mutable polarssl::md5_context context_;
+    mutable MD5_CTX context_;
   };
 }
 
