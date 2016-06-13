@@ -25,6 +25,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   base_converter.cc
   canonical_number.cc
   canonical_string.cc
+  column_width.cc
   cpu_timer.cc
   crc32.cc
   demangle.cc
