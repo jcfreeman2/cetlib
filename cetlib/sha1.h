@@ -8,7 +8,13 @@
 // ======================================================================
 
 #include "boost/array.hpp"
+#ifdef __APPLE__
+#define COMMON_DIGEST_FOR_OPENSSL
+#include <CommonCrypto/CommonDigest.h>
+#undef COMMON_DIGEST_FOR_OPENSSL
+#else
 #include <openssl/sha.h>
+#endif
 #include <string>
 
 namespace cet {

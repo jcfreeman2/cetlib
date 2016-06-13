@@ -118,18 +118,12 @@ namespace cet
   MD5Digest::MD5Digest() :
     context_()
   {
-#ifdef __APPLE__
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
     MD5_Init(&context_);
   }
 
   MD5Digest::MD5Digest(std::string const& s) :
     context_()
   {
-#ifdef __APPLE__
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
     MD5_Init(&context_);
     this->append(s);
   }
@@ -138,18 +132,12 @@ namespace cet
   {
     using md5_byte_t = unsigned char;
     md5_byte_t const* data = reinterpret_cast<md5_byte_t const*>(s.data());
-#ifdef __APPLE__
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
     MD5_Update(&context_, const_cast<md5_byte_t*>(data), s.size());
   }
 
   MD5Result MD5Digest::digest() const
   {
     MD5Result aDigest;
-#ifdef __APPLE__
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
-#endif
     MD5_Final(aDigest.bytes, &context_);
     return aDigest;
   }
