@@ -10,12 +10,13 @@
 #include <string>
 
 namespace cet {
-
-  std::string
-    getenv( std::string const & name );
-
+  std::string getenv(std::string const& name);
 }
 
 // ======================================================================
 
 #endif
+
+// Local variables:
+// mode: c++
+// End:
