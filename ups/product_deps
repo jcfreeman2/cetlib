@@ -1,5 +1,5 @@
-parent cetlib v1_15_04
-defaultqual e9
+parent cetlib v1_15_05
+defaultqual e10
 #
 libdir	fq_dir lib
 fcldir  -
@@ -7,23 +7,23 @@ perllib  product_dir
 
 # define product/version pairs
 product	version
-cpp0x	v1_04_13
+cpp0x	v1_04_14
 
-cetbuildtools	v4_18_02	-	only_for_build
+cetbuildtools	v5_02_02	-	only_for_build
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
 qualifier	cpp0x		compiler	notes
-e6:debug	e6:debug	gcc
-e6:opt		e6:opt		gcc
-e6:prof		e6:prof		gcc
 e7:debug	e7:debug	gcc
 e7:opt		e7:opt		gcc
 e7:prof		e7:prof		gcc
 e9:debug	e9:debug	gcc
 e9:opt		e9:opt		gcc
 e9:prof		e9:prof		gcc
+e10:debug	e10:debug	gcc
+e10:opt		e10:opt		gcc
+e10:prof	e10:prof	gcc
 i1:debug	i1:debug	icc
 i1:prof		i1:prof		icc
 end_qualifier_list
