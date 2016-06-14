@@ -11,12 +11,9 @@
 #include <string>
 #include <vector>
 
-namespace cet
-{
-  void
-    split_path( std::string const        & path
-              , std::vector<std::string> & components
-              );
+namespace cet {
+  void split_path(std::string const& path,
+                  std::vector<std::string>& components);
 }
 
 // ======================================================================

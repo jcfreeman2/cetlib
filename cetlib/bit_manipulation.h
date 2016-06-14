@@ -76,7 +76,7 @@ namespace cet {
   // U circ_lshift<U>().
   template <class U>
   inline
-  typename std::enable_if<std::is_unsigned<U>::value, U>::type
+  std::enable_if_t<std::is_unsigned<U>::value, U>
   circ_lshift(U X, U n)
   {
     constexpr std::size_t nbits = bit_size<U>::value;
