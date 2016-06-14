@@ -1,5 +1,5 @@
-#ifndef CETLIB_REGISTRY_VIA_ID_H
-#define CETLIB_REGISTRY_VIA_ID_H
+#ifndef cetlib_registry_via_id_h
+#define cetlib_registry_via_id_h
 
 // ======================================================================
 //
@@ -177,7 +177,7 @@ cet::registry_via_id<K,V>::get( K const & key, V & value ) noexcept
 }
 #endif /* __GCCXML__ */
 
-#endif
+#endif /* cetlib_registry_via_id_h */
 
 // Local Variables:
 // mode: c++

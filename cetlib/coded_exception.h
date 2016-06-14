@@ -1,5 +1,5 @@
-#ifndef CETLIB_CODED_EXCEPTION_H
-#define CETLIB_CODED_EXCEPTION_H
+#ifndef cetlib_coded_exception_h
+#define cetlib_coded_exception_h
 
 // ======================================================================
 //
@@ -82,7 +82,7 @@ cet::coded_exception<Code,translate>::codeToString(Code code)
 
 // ======================================================================
 
-#endif
+#endif /* cetlib_coded_exception_h */
 
 // Local variables:
 // mode: c++

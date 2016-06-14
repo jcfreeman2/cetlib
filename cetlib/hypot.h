@@ -1,5 +1,5 @@
-#ifndef CETLIB_HYPOT_H
-#define CETLIB_HYPOT_H
+#ifndef cetlib_hypot_h
+#define cetlib_hypot_h
 
 // ======================================================================
 //
@@ -63,4 +63,8 @@ inline typename std::enable_if<std::is_arithmetic<T>::value, T>::type
 
 // ======================================================================
 
-#endif  // CETLIB_HYPOT_H
+#endif /* cetlib_hypot_h */
+
+// Local Variables:
+// mode: c++
+// End:

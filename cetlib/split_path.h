@@ -1,5 +1,5 @@
-#ifndef CETLIB_SPLIT_PATH_H
-#define CETLIB_SPLIT_PATH_H
+#ifndef cetlib_split_path_h
+#define cetlib_split_path_h
 
 // ======================================================================
 //
@@ -21,4 +21,8 @@ namespace cet
 
 // ======================================================================
 
-#endif
+#endif /* cetlib_split_path_h */
+
+// Local Variables:
+// mode: c++
+// End:

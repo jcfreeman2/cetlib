@@ -1,5 +1,5 @@
-#ifndef CETLIB_BIT_MANIPULATION_H
-#define CETLIB_BIT_MANIPULATION_H
+#ifndef cetlib_bit_manipulation_h
+#define cetlib_bit_manipulation_h
 
 // ======================================================================
 //
@@ -86,7 +86,7 @@ namespace cet {
   }
 
 }
-#endif
+#endif /* cetlib_bit_manipulation_h */
 
 // Local Variables:
 // mode: c++

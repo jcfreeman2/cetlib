@@ -67,7 +67,7 @@ namespace cet {
   };
 }
 
-#endif /* cet_Utilities_Digest_h */
+#endif /* cetlib_MD5Digest_h */
 
 // Local Variables:
 // mode: c++

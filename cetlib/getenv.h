@@ -1,5 +1,5 @@
-#ifndef CETLIB_GETENV_H
-#define CETLIB_GETENV_H
+#ifndef cetlib_getenv_h
+#define cetlib_getenv_h
 
 // ======================================================================
 //
@@ -15,7 +15,7 @@ namespace cet {
 
 // ======================================================================
 
-#endif
+#endif /* cetlib_getenv_h */
 
 // Local variables:
 // mode: c++

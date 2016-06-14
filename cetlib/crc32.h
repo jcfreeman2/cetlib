@@ -1,5 +1,5 @@
-#ifndef CETLIB_CRC32_H
-#define CETLIB_CRC32_H
+#ifndef cetlib_crc32_h
+#define cetlib_crc32_h
 
 // ======================================================================
 //
@@ -45,4 +45,8 @@ private:
 
 // ======================================================================
 
-#endif
+#endif /* cetlib_crc32_h */
+
+// Local Variables:
+// mode: c++
+// End:

@@ -7,5 +7,5 @@
   BOOST_CHECK_EQUAL_COLLECTIONS( test.begin(), test.end(),    \
                                  ref.begin(), ref.end() )
 
-#endif
+#endif /* cetlib_test_macros_h */
 

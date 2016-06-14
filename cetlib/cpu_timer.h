@@ -1,5 +1,5 @@
-#ifndef CETLIB_CPU_TIMER_H
-#define CETLIB_CPU_TIMER_H
+#ifndef cetlib_cpu_timer_h
+#define cetlib_cpu_timer_h
 
 // ======================================================================
 //
@@ -69,7 +69,7 @@ cet::cpu_timer::is_stopped() const
 
 // ======================================================================
 
-#endif
+#endif /* cetlib_cpu_timer_h */
 
 // Local variables:
 // mode: c++

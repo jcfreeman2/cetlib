@@ -1,5 +1,5 @@
-#ifndef CETLIB_COLUMN_WIDTH_H
-#define CETLIB_COLUMN_WIDTH_H
+#ifndef cetlib_column_width_h
+#define cetlib_column_width_h
 
 // ======================================================================
 //
@@ -14,7 +14,7 @@ namespace cet {
   std::string::size_type column_width(std::vector<std::string> const&);
 }
 
-#endif
+#endif /* cetlib_column_width_h */
 
 // Local variables:
 // mode: c++

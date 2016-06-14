@@ -1,5 +1,5 @@
-#ifndef CETLIB_SHA1_H
-#define CETLIB_SHA1_H
+#ifndef cetlib_sha1_h
+#define cetlib_sha1_h
 
 // ======================================================================
 //
@@ -46,7 +46,7 @@ private:
 
 // ======================================================================
 
-#endif
+#endif /* cetlib_sha1_h */
 
 // Local variables:
 // mode: c++
