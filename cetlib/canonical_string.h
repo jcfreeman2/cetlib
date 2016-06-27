@@ -38,7 +38,6 @@ namespace cet {
 
 }
 
-#ifndef __GCCXML__
 inline
 bool
 cet::is_single_quoted_string(std::string const & str)
@@ -78,8 +77,6 @@ catch( ... ) {
   return false;
 }  // canonical_string()
 
-
-#endif /* __GCCXML__ */
 
 // ======================================================================
 
