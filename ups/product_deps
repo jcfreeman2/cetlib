@@ -1,4 +1,4 @@
-parent cetlib v1_18_02
+parent cetlib v1_19_00
 defaultqual e10
 #
 libdir	fq_dir lib
