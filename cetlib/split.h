@@ -20,67 +20,42 @@
 #include <functional>
 #include <string>
 
-namespace cet  {
-  template< class OutIter >
-  void
-  split( std::string const & s, char c, OutIter dest );
+namespace cet {
+  template <class OutIter>
+  void split(std::string const& s, char c, OutIter dest);
 
-  template< class Pred, class OutIter >
-  void
-  split_if( std::string const & s, Pred is_sep, OutIter dest );
+  template <class Pred, class OutIter>
+  void split_if(std::string const& s, Pred is_sep, OutIter dest);
 }
 
 // ======================================================================
 
-template< class OutIter >
-void
-cet::split( std::string const & s, char c, OutIter dest )
-{
-  using std::placeholders::_1;
-
-  std::equal_to<char> eq;
-  split_if( s, std::bind(eq,_1,c), dest );
+template <class OutIter>
+void cet::split(std::string const& s, char c, OutIter dest) {
+  split_if(s, [c](char x) { return x == c; }, dest);
 }
 
 // ======================================================================
 
-namespace cet { namespace detail {
+template <class Pred, class OutIter>
+void cet::split_if(std::string const& s, Pred is_sep, OutIter dest) {
+  auto const b = s.cbegin();
+  auto const e = s.cend();
 
-    template< class F >
-    class negate
-    {
-    public:
-      negate( F f ) : f(f)  { }
-      bool  operator () ( char c ) const  { return ! f(c); }
-    private:
-      F f;
-    };  // negate
-
-  } }  // cet::detail
-
-
-template< class Pred, class OutIter >
-void
-cet::split_if( std::string const & s, Pred is_sep, OutIter dest )
-{
-  typedef  std::string::const_iterator  str_c_iter;
-  str_c_iter  b = s.begin()
-    ,  e = s.end();
-
-  detail::negate<Pred> is_not_sep(is_sep);
+  auto is_not_sep = [is_sep](auto c) { return !is_sep(c); };
 
   // invariant:  we've found all items in [b..boi)
-  for( str_c_iter  boi = std::find_if(b, e, is_not_sep)
-         ,  eoi = e  // arbitrary initializer
-         ; boi != e;  boi = std::find_if(eoi, e, is_not_sep)
-       )
-    {
-      // find end of current item:
-      eoi = std::find_if(boi, e, is_sep);
+  // e is an arbitrary value to use as the initializer
+  for (auto boi = std::find_if(b, e, is_not_sep), eoi = e; boi != e;
+       boi = std::find_if(eoi, e, is_not_sep))  // advance to next non-separator
+  {
+    // find end of current item:
+    eoi = std::find_if(boi, e, is_sep);
 
-      // copy the item formed from characters in [boi..eoi):
-      *dest++ = std::string(boi, eoi);
-    }  // for
+    // copy the item formed from characters in [boi..eoi):
+    *dest = std::string(boi, eoi);
+    ++dest;
+  }  // for
 
 }  // split_if<>()
 
