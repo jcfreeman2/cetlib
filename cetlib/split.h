@@ -39,15 +39,18 @@ void cet::split(std::string const& s, char c, OutIter dest) {
 
 template <class Pred, class OutIter>
 void cet::split_if(std::string const& s, Pred is_sep, OutIter dest) {
-  auto const b = s.cbegin();
   auto const e = s.cend();
-
-  auto is_not_sep = [is_sep](auto c) { return !is_sep(c); };
-
+  auto const is_not_sep = [is_sep](auto const c) { return !is_sep(c); };
+  auto const new_boi = [is_not_sep, &e](auto const si) {
+    return std::find_if(si, e, is_not_sep);
+  };
   // invariant:  we've found all items in [b..boi)
   // e is an arbitrary value to use as the initializer
-  for (auto boi = std::find_if(b, e, is_not_sep), eoi = e; boi != e;
-       boi = std::find_if(eoi, e, is_not_sep))  // advance to next non-separator
+  for (typename std::remove_const<decltype(e)>::type
+         boi = new_boi(s.cbegin()),
+         eoi = e;
+       boi != e;
+       boi = new_boi(eoi))  // advance to next non-separator
   {
     // find end of current item:
     eoi = std::find_if(boi, e, is_sep);
