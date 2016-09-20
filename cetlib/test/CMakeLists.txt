@@ -8,8 +8,9 @@ include(CetTest)
 cet_enable_asserts()
 
 # Identify libraries to be linked:
-link_libraries( cetlib )
+link_libraries(cetlib)
 
+add_subdirectory(Ntuple)
 cet_test(bit_test)
 cet_test(base_converter_test)
 cet_test(canonical_number_test)
