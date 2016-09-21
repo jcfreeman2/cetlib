@@ -10,12 +10,19 @@
 
 #include <string>
 
+#define DEMANGLE_MSG                                                    \
+  "\n\n"                                                                \
+  "cetlib warning: The 'cet::demangle(std::string const&)' function is deprecated.\n" \
+  "                Please use 'cet::demangle_symbol(std::string const&)'.\n\n"
+
 namespace cet {
   std::string demangle_symbol(std::string const &mangled);
   std::string demangle_message(std::string const &mangled);
-  std::string demangle(std::string const &mangled); // Deprecated.
+
+  [[deprecated(DEMANGLE_MSG)]] std::string demangle(std::string const &mangled);
 }
 
+#undef DEMANGLE_MSG
 #endif /* cetlib_demangle_h */
 
 // Local Variables:
