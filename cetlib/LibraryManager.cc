@@ -43,12 +43,8 @@ cet::LibraryManager::LibraryManager(std::string lib_type)
 cet::LibraryManager::LibraryManager(std::string lib_type,
                                     std::string pattern)
   :
-  lib_type_(std::move(lib_type)),
-  pattern_stem_(std::move(pattern)),
-  lib_loc_map_(),
-  spec_trans_map_(),
-  good_spec_trans_map_(),
-  lib_ptr_map_()
+  lib_type_{std::move(lib_type)},
+  pattern_stem_{std::move(pattern)},
 {
   // TODO: We could also consider searching the ld.so.conf list, if
   // anyone asks for it.

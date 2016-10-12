@@ -143,13 +143,13 @@ private:
   std::string const lib_type_; // eg _plugin.
   std::string const pattern_stem_; // Library search pattern stem.
   // Map of library filename -> full path.
-  lib_loc_map_t lib_loc_map_;
+  lib_loc_map_t lib_loc_map_ {};
   // Map of spec -> full path.
-  spec_trans_map_t spec_trans_map_;
+  spec_trans_map_t spec_trans_map_ {};
   // Map of only good translations.
-  good_spec_trans_map_t good_spec_trans_map_;
+  good_spec_trans_map_t good_spec_trans_map_ {};
   // Cache of already-loaded libraries.
-  mutable lib_ptr_map_t lib_ptr_map_;
+  mutable lib_ptr_map_t lib_ptr_map_ {};
 };
 
 inline
