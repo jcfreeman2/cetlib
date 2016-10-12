@@ -1,0 +1,23 @@
+There are two mutable data members:
+      mutable std::ostringstream ost_;
+      mutable std::string        what_;
+
+The member function overload set 'append' writes data to ost_. They
+are const.
+
+Suggestion: make 'append' non-const. This will have a ripple effect;
+the things that inherit from cet::exception all need similar
+treatment.
+
+It appears that 'append' is non-const so that
+operator<<(cet::excpetion const& e, ...) can have a 'const&' for the
+first argument, because of inability to bind a non-const lvalue
+reference to a temporary, in the usage pattern:
+  cet::exception("...") << thing;
+
+This should be fixable by using rvalue references appropriately.
+
+To remove the mutability of the what_ data member, it is probably
+necessary to make explain_self() non-const.
+
+
