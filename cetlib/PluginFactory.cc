@@ -16,7 +16,7 @@ PluginFactory(std::string const & suffix)
 
 std::string
 cet::PluginFactory::
-releaseVersion_()
+releaseVersion_() const
 {
   std::string result;
   if (releaseVersionFunc_) {

@@ -77,7 +77,7 @@ private:
   PluginFactory(PluginFactory const &) = delete;
   PluginFactory & operator = (PluginFactory const &) = delete;
 
-  std::string releaseVersion_();
+  std::string releaseVersion_() const;
 
   LibraryManager lm_;
   std::string releaseVersionString_;
