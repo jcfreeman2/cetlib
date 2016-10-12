@@ -148,13 +148,7 @@ void
 cet::LibraryManager::
 lib_loc_map_inserter(std::string const & path)
 {
-#if BOOST_FILESYSTEM_VERSION == 2
-  lib_loc_map_[boost::filesystem::path(path).filename()] = path;
-#elif BOOST_FILESYSTEM_VERSION == 3
   lib_loc_map_[boost::filesystem::path(path).filename().native()] = path;
-#else
-#error unknown BOOST_FILESYSTEM_VERSION!
-#endif
 }
 
 void
