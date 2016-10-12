@@ -48,7 +48,7 @@ public:
             typename... ARGS>
   RESULT_TYPE call(std::string const & libspec,
                    std::string const & funcname,
-                   ARGS &&... args);
+                   ARGS &&... args) const;
 
   // Nothrow tag (see find(), below).
   static LibraryManager::nothrow_t nothrow;
@@ -59,14 +59,14 @@ public:
   template <typename RESULT_TYPE, typename...ARGS>
   auto
   find(std::string const & funcname,
-       std::string const & libspec)
+       std::string const & libspec) const
 -> RESULT_TYPE (*) (ARGS...);
 
   template <typename RESULT_TYPE, typename...ARGS>
   auto
   find(std::string const & funcname,
        std::string const & libspec,
-        LibraryManager::nothrow_t)
+        LibraryManager::nothrow_t) const
 -> RESULT_TYPE (*) (ARGS...);
 
   // May define subclasses.
@@ -106,7 +106,7 @@ RESULT_TYPE
 cet::PluginFactory::
 call(std::string const & libspec,
      std::string const & funcname,
-     ARGS &&... args)
+     ARGS &&... args) const
 {
   return (*find<RESULT_TYPE, ARGS...>(libspec, funcname))(std::forward<ARGS>(args)...);
 }
@@ -115,7 +115,7 @@ template <typename RESULT_TYPE, typename... ARGS>
 auto
 cet::PluginFactory::
 find(std::string const & libspec,
-     std::string const & funcname)
+     std::string const & funcname) const
 -> RESULT_TYPE (*) (ARGS...)
 {
   RESULT_TYPE (*symbol) (ARGS...)  = nullptr;
@@ -143,7 +143,7 @@ auto
 cet::PluginFactory::
 find(std::string const & libspec,
      std::string const & funcname,
-     LibraryManager::nothrow_t nothrow)
+     LibraryManager::nothrow_t nothrow) const
 -> RESULT_TYPE (*) (ARGS...)
 {
   return lm_.getSymbolByLibspec<RESULT_TYPE (*) (ARGS...)>(libspec, funcname, nothrow);
