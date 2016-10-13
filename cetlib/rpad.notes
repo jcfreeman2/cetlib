@@ -1,4 +1,4 @@
-% Multi-threading report for cetlib/rpad.h
+% Multi-threading report for cetlib/rpad.{h,cc}
 % Chris Green.
 % 2016-10-13 (on commit 889f6a2).
 

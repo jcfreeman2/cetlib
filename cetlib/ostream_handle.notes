@@ -1,4 +1,4 @@
-% Multi-threading report for cetlib/ostream_handle.hpp
+% Multi-threading report for cetlib/ostream_handle.h
 % Chris Green.
 % 2016-10-13 (on commit 889f6a2).
 
@@ -8,17 +8,17 @@
 
 * As a general issue: rather than delegating to the user the responsibility for creating the correct subclass and utilizing the polymorphism directly, one might consider providing a concrete `cet::ostream_handle`{.cpp}, owning an `std::unique_ptr`{.cpp} to (renamed) base, the exact subclass of which to be determined by the constructor used, such as:
 
-        ~~~~~cpp
-        template <typename T, typename ... ARGS,
-                 typename std::enable_if<std::is_base_of<std::ostream, T>::value>::type>
-        ostream_handle(ARGS && ... args);
-        ~~~~~
+    ~~~~~cpp
+    template <typename T, typename ... ARGS,
+             typename std::enable_if<std::is_base_of<std::ostream, T>::value>::type>
+    ostream_handle(ARGS && ... args);
+    ~~~~~
 
     or
 
-        ~~~~~cpp
-        ostream_handle(std::ostream & os);
-        ~~~~~
+    ~~~~~cpp
+    ostream_handle(std::ostream & os);
+    ~~~~~
 
     The choice of subclass (and therefore resource management) would be automatic and correct, there is no ambiguity between ownership and non-ownership (specifying the template argument to the constructor implies ownership; ommiting it implies non-ownership), and the result is much more flexible than the original wherein ownership is restricted particularly to `std::ofstream`{.cpp}.
 
