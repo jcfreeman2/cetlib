@@ -33,7 +33,7 @@ public:
 
   // Find and return a symbol named 'sym_name' in the library
   // identified by 'libspec'. The library is dynamically loaded if
-  // necessary. If more than one library matching libspec if found, an
+  // necessary. If more than one library matching libspec is found, an
   // exception is thrown. If the correct library cannot be found or
   // loaded, an exception is thrown. If the symbol specified cannot be
   // loaded, an exception is thrown unless the final argument to the
@@ -207,14 +207,10 @@ getSymbolByPath(std::string const & lib_loc,
 template <class OutIter>
 size_t cet::LibraryManager::getLoadableLibraries(OutIter dest) const
 {
-  size_t count = 0;
-  lib_loc_map_t::const_iterator
-  i = lib_loc_map_.begin(),
-  end_iter = lib_loc_map_.end();
-  for (;
-       i != end_iter;
-       ++i, ++count) {
-    *dest++ = i->second;
+  size_t count {};
+  for (auto const& lib_loc : lib_loc_map_) {
+    *dest++ = lib_loc.second;
+    ++count;
   }
   return count;
 }
@@ -269,14 +265,10 @@ getSymbolByPath(std::string const & lib_loc,
 template <class OutIter>
 size_t cet::LibraryManager::getLoadedLibraries(OutIter dest) const
 {
-  size_t count = 0;
-  lib_ptr_map_t::const_iterator
-  i = lib_ptr_map_.begin(),
-  end_iter = lib_ptr_map_.end();
-  for (;
-       i != end_iter;
-       ++i, ++count) {
-    *dest++ = i->first;
+  size_t count {};
+  for (auto const& lib_ptr : lib_ptr_map_) {
+    *dest++ = lib_ptr.first;
+    ++count;
   }
   return count;
 }
@@ -284,14 +276,10 @@ size_t cet::LibraryManager::getLoadedLibraries(OutIter dest) const
 template <class OutIter>
 size_t cet::LibraryManager::getValidLibspecs(OutIter dest) const
 {
-  size_t count = 0;
-  spec_trans_map_t::const_iterator
-  i = spec_trans_map_.begin(),
-  end_iter = spec_trans_map_.end();
-  for (;
-       i != end_iter;
-       ++i, ++count) {
-    *dest++ = i->first;
+  size_t count {};
+  for (auto const& spec_trans : spec_trans_map_) {
+    *dest++ = spec_trans.first;
+    ++count;
   }
   return count;
 }

@@ -130,7 +130,7 @@ cet::LibraryManager::loadAllLibraries() const
 bool
 cet::LibraryManager::libraryIsLoaded(std::string const & path) const
 {
-  return (lib_ptr_map_.find(path) != lib_ptr_map_.end());
+  return lib_ptr_map_.find(path) != lib_ptr_map_.end();
 }
 
 bool
@@ -156,7 +156,7 @@ cet::LibraryManager::
 spec_trans_map_inserter(lib_loc_map_t::value_type const & entry)
 {
   // First obtain short spec.
-  boost::regex e("([^_]+)_" + lib_type_ + dllExtPattern() + '$');
+  boost::regex const e {"([^_]+)_" + lib_type_ + dllExtPattern() + '$'};
   boost::match_results<std::string::const_iterator> match_results;
   if (boost::regex_search(entry.first, match_results, e)) {
     spec_trans_map_[match_results[1]].insert(entry.second);
@@ -170,21 +170,21 @@ spec_trans_map_inserter(lib_loc_map_t::value_type const & entry)
   }
   // Next, convert library filename to full libspec.
   std::ostringstream lib_name;
-  std::ostream_iterator<char, char> oi(lib_name);
+  std::ostream_iterator<char, char> oi {lib_name};
   boost::regex_replace(oi, entry.first.begin(),
                        entry.first.end(),
-                       boost::regex("(_+)"),
-                       std::string("(?1/)"),
+                       boost::regex{"(_+)"},
+                       std::string{"(?1/)"},
                        boost::match_default | boost::format_all);
-  boost::regex stripper("^lib(.*)/" + lib_type_ + "\\..*$");
-  std::string lib_name_str = lib_name.str();
+  boost::regex const stripper {"^lib(.*)/" + lib_type_ + "\\..*$"};
+  std::string const lib_name_str {lib_name.str()};
   if (boost::regex_search(lib_name_str, match_results, stripper)) {
     spec_trans_map_[match_results[1]].insert(entry.second);
   }
   else {
     throw exception("LogicError")
-        << "Internal error in spec_trans_map_inserter stripping "
-        << lib_name.str();
+      << "Internal error in spec_trans_map_inserter stripping "
+      << lib_name.str();
   }
 }
 
@@ -199,8 +199,8 @@ good_spec_trans_map_inserter(spec_trans_map_t::value_type const & entry)
 
 void * cet::LibraryManager::get_lib_ptr(std::string const & lib_loc) const
 {
-  lib_ptr_map_t::iterator it = lib_ptr_map_.find(lib_loc);
-  if (it == lib_ptr_map_.end() || it->second == nullptr) {
+  lib_ptr_map_t::const_iterator const it {lib_ptr_map_.find(lib_loc)};
+  if (it == lib_ptr_map_.cend() || it->second == nullptr) {
     dlerror();
     void * ptr = dlopen(lib_loc.c_str(), RTLD_LAZY | RTLD_GLOBAL);
     lib_ptr_map_[lib_loc] = ptr;
@@ -215,7 +215,6 @@ getSymbolByLibspec_(std::string const & libspec,
                     std::string const & sym_name,
                     bool should_throw_on_dlsym) const
 {
-  std::string lib_name_str;
   if (libspec.find("_") != std::string::npos) {
     // Plugin names (and hence the class name) cannot contain an underscore.
     throw exception("LogicError", "IllegalUnderscore.")
@@ -227,20 +226,18 @@ getSymbolByLibspec_(std::string const & libspec,
         << "enclosing package really do have an underscore this situation "
         << "must be rectified.\n";
   }
-  good_spec_trans_map_t::const_iterator trans =
-    good_spec_trans_map_.find(libspec);
-  if (trans == good_spec_trans_map_.end()) {
+  good_spec_trans_map_t::const_iterator const trans {good_spec_trans_map_.find(libspec)};
+  if (trans == good_spec_trans_map_.cend()) {
     // No good translation => zero or too many
     std::ostringstream error_msg;
     error_msg
         << "Library specification \""
         << libspec << "\":";
-    spec_trans_map_t::const_iterator bad_trans =
-      spec_trans_map_.find(libspec);
-    if (bad_trans != spec_trans_map_.end()) {
+    spec_trans_map_t::const_iterator const bad_trans {spec_trans_map_.find(libspec)};
+    if (bad_trans != spec_trans_map_.cend()) {
       error_msg << " corresponds to multiple libraries:\n";
-      std::copy(bad_trans->second.begin(),
-                bad_trans->second.end(),
+      std::copy(bad_trans->second.cbegin(),
+                bad_trans->second.cend(),
                 std::ostream_iterator<std::string>(error_msg, "\n"));
     }
     else {
