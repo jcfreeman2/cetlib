@@ -1,4 +1,0 @@
-#/bin/bash
-fulllib=${1}
-base=${fulllib%.md}
-pandoc ${fulllib} -f markdown -t html5 -s -o ${base}.html
