@@ -1,0 +1,27 @@
+% Multi-threading report for cetlib/ostream_handle.hpp
+% Chris Green.
+% 2016-10-13 (on commit 889f6a2).
+
+* `cet::ostream_handle`{.cpp} is a pure abstract base class which, along with subclasses `cet::ostream_owner`{.cpp} and `cet::ostream_observer`{.cpp} provide resource-managed, symmetric access to non-owned instances of `std::ostream`{.cpp} and those attached to a file.
+
+* Access to the underlying `std::ostream`{.cpp} is non-const, therefore all the threading issues associated with same apply here. No new such issues are introduced by `cet::ostream_handle`{.cpp} or its subclasses.
+
+* As a general issue: rather than delegating to the user the responsibility for creating the correct subclass and utilizing the polymorphism directly, one might consider providing a concrete `cet::ostream_handle`{.cpp}, owning an `std::unique_ptr`{.cpp} to (renamed) base, the exact subclass of which to be determined by the constructor used, such as:
+
+        ~~~~~cpp
+        template <typename T, typename ... ARGS,
+                 typename std::enable_if<std::is_base_of<std::ostream, T>::value>::type>
+        ostream_handle(ARGS && ... args);
+        ~~~~~
+
+    or
+
+        ~~~~~cpp
+        ostream_handle(std::ostream & os);
+        ~~~~~
+
+    The choice of subclass (and therefore resource management) would be automatic and correct, there is no ambiguity between ownership and non-ownership (specifying the template argument to the constructor implies ownership; ommiting it implies non-ownership), and the result is much more flexible than the original wherein ownership is restricted particularly to `std::ofstream`{.cpp}.
+
+<!-- Local Variables: -->
+<!-- mode: markdown -->
+<!-- End: -->
