@@ -152,3 +152,7 @@ Access to `insert()`{.cpp} will almost certainly need to be locked due to the mu
 * Various SQLite3 functions.
 
 * C++ SQLite3 helper functions defined elsewhere in `cetlib/Ntuple`.
+
+<!-- Local Variables: -->
+<!-- mode: markdown -->
+<!-- End: -->
