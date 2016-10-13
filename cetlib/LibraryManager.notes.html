@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title></title>
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+</head>
+<body>
+<h2 id="multi-threading-analysis-of-cetlibrarymanager">Multi-threading analysis of <code class="sourceCode cpp">cet::LibraryManager</code></h2>
+<h3 id="base-classes">Base classes</h3>
+<p>None</p>
+<h3 id="public-members">Public members</h3>
+<ul>
+<li><p><code class="sourceCode cpp"><span class="dt">static</span> <span class="kw">struct</span> nothrow_t {} nothrow</code></p>
+<p>Empty <code class="sourceCode cpp"><span class="kw">struct</span></code> type used as a tag for choosing no-throw overloads. No immediate concerns, but could arguably improve the design by just using the <code>nothrow_t</code> type as a template argument, and not worry about providing an instance as a function argument.</p></li>
+</ul>
+<h3 id="private-members">Private members</h3>
+<ul>
+<li><p><code class="sourceCode cpp">std::string <span class="dt">const</span> lib_type_</code></p>
+<p><code class="sourceCode cpp"><span class="dt">const</span></code> member used to specify plugin type (e.g. &quot;module&quot;). No issues.</p></li>
+<li><p><code class="sourceCode cpp">std::string <span class="dt">const</span> pattern_stem_</code></p>
+<p><code class="sourceCode cpp"><span class="dt">const</span></code> member used to specify file regex pattern. No issues.</p></li>
+</ul>
+<p>The following data members are never directly exposed to the user:</p>
+<ul>
+<li><p><code class="sourceCode cpp">std::map&lt;std::string, std::string&gt; lib_loc_map_</code></p></li>
+<li><p><code class="sourceCode cpp">std::map&lt;std::string, std::set&lt;std::string&gt; spec_trans_map_</code></p></li>
+<li><p><code class="sourceCode cpp">std::map&lt;std::string, std::string&gt; good_spec_trans_map_</code></p></li>
+<li><p><code class="sourceCode cpp"><span class="dt">mutable</span> std::map&lt;std::string, <span class="dt">void</span>*&gt; lib_ptr_map_</code></p>
+<p>This is the problematic data member (see notes on <code>LibraryManger::get_lib_ptr</code> below).</p></li>
+</ul>
+<h3 id="public-member-functions">Public member functions</h3>
+<p>The <code>getSymbolByLibspec</code>, <code>getSymbolByPath</code>, <code>getLoadableLibraries</code>, <code>getLoadedLibraries</code>, and <code>getValidLibspecs</code> receive at least one argument by non-<code>const</code> reference--threading considerations are thus placed on the user. Otherwise, no direct threading concerns (see information below, however, on the private member functions that are called by <code>getSymbol*</code>).</p>
+<p>The <code>loadAllLibraries</code> function calls <code>get_lit_ptr</code>, whose implementation is not thread safe.</p>
+<p>No issues with the remaining public member functions.</p>
+<h3 id="private-member-functions">Private member functions</h3>
+<p>The <code>lib_loc_map_inserter</code>, <code>spec_trans_map_inserter</code>, and <code>good_spec_trans_map_inserter</code> functions are non-<code>const</code> member functions called only during object construction. Those do not appear to create multithreading issues.</p>
+<p>The following functions are more problematic:</p>
+<ul>
+<li><p><code class="sourceCode cpp"><span class="dt">void</span>* get_lib_ptr(std::string <span class="dt">const</span>&amp; lib_loc) <span class="dt">const</span></code></p>
+<p>This function, though marked <code class="sourceCode cpp"><span class="dt">const</span></code>, modifies the <code>lib_ptr_map_</code> private data member. The behavior of calling this function is:</p>
+<ul>
+<li>If the library has already been loaded, return its cached <code class="sourceCode cpp"><span class="dt">void</span>*</code> pointer.<br />
+</li>
+<li>Otherwise, attempt to load the library via <code class="sourceCode cpp">dlopen</code>, cache its pointer in the <code>lib_ptr_map_</code>, and return same pointer.</li>
+</ul>
+<p>Regarding <code>dlerror()</code> from the POSIX programmer's manual (http://www.unix.com/man-page/posix/3p/dlerror/) :</p>
+<ul>
+<li><p>A call to <code>dlerror()</code> returns the last error that occurred during dynamic linking processing.</p></li>
+<li><p><em>It is implementation-defined whether or not the dlerror() function is thread-safe. A thread-safe implementation shall return only errors that occur on the current thread.</em> For Linux and OSX, the <code>dlerror()</code> function is thread safe. However, see next point.</p></li>
+<li><p><em>Depending on the application environment with respect to asynchronous execution events, such as signals or other asynchronous computation sharing the address space, conforming applications should use a critical section to retrieve the error pointer and buffer.</em></p></li>
+</ul>
+<p>The <code>dlopen()</code> call is not thread safe.</p></li>
+<li><p><code class="sourceCode cpp"><span class="dt">void</span>* getSymbolByPath_(std::string <span class="dt">const</span>&amp; lib_loc, std::string <span class="dt">const</span>&amp; sym_name, <span class="dt">bool</span> should_throw_on_dlsym) <span class="dt">const</span></code></p>
+<p>This function calls <code>get_lib_ptr</code>, and it also has calls to <code>dlerror()</code> and <code>dlsym()</code>, the latter of which is not thread safe.</p></li>
+<li><p><code class="sourceCode cpp"><span class="dt">void</span>* getSymbolByLibspec(std::string <span class="dt">const</span>&amp; lib_loc, std::string <span class="dt">const</span>&amp; sym_name, <span class="dt">bool</span> should_throw_on_dlsym) <span class="dt">const</span></code></p>
+<p>No threading issues other than those introduced by its call to <code>LibraryManager::getSymbolByPath_</code>.</p></li>
+</ul>
+<h3 id="general-observations">General observations:</h3>
+<ul>
+<li><p>The function(s) that call <code>dlerror()</code>, <code>dlopen()</code>, and <code>dlerror()</code> will need to have some locking mechanisms in place.</p></li>
+<li><p>The threading issues can be localized by loading all relevant libraries during construction. This is likely to be unfeasible in many cases.</p></li>
+</ul>
+<h3 id="non-thread-related-observations">Non-thread related observations:</h3>
+<ul>
+<li><p>The constructor of <code>cet::LibraryManager</code> receives two <code>std::string</code> arguments by value, which are then moved to the member data. These should arguably be changed to <code class="sourceCode cpp">std::string <span class="dt">const</span>&amp;</code> since the copy-then-move (current pattern) is more inefficient than just the copy, which you would get from passing the argument to the constructor by <code class="sourceCode cpp"><span class="dt">const</span></code> reference. This would be an interface change, potentially breaking user code.</p></li>
+<li><p>Can <code>boost::regex</code> be replaced with <code>std::regex</code>?</p></li>
+<li><p>Is our usage of <code>dlerror()</code> correct? It looks correct when used in a <code>dlsym()</code>-calling context, but I'm not sure about when we use <code>dlopen()</code>.</p></li>
+<li><p>Should consider changing the return type of <code>getValidLibspecs</code>, <code>getLoadedLibraries</code>, and <code>getLoadableLibraries</code> from <code class="sourceCode cpp">std::size_t</code> to <code>std::vector&lt;std::string&gt;</code> and get rid of passing a vector in by reference.</p></li>
+</ul>
+</body>
+</html>

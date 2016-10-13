@@ -1,0 +1,47 @@
+* LibraryManager
+MD5Digest
+* PluginTypeDeducer
+base_converter
+bit_manipulation
+canonical_number
+canonical_string
+column_width
+compiler_macros
+container_algorithms
+cpu_timer
+crc32
+demangle
+detail/metaprogramming
+* detail/wrapLibraryManagerException
+exempt_ptr
+filepath_maker
+filesystem
+getenv
+hard_cast
+hypot
+inc-expand
+include
+includer
+lpad
+make_unique
+map_vector
+maybe_ref
+name_of
+no_delete
+nybbler
+os_libpath
+ostream_handle
+pow
+replace_all
+rpad
+search_path
+sha1
+shlib_utils
+simple_stats
+split
+split_by_regex
+split_path
+trim
+value_ptr
+veto
+zero_init
