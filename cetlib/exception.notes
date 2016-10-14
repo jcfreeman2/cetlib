@@ -9,15 +9,16 @@ Suggestion: make 'append' non-const. This will have a ripple effect;
 the things that inherit from cet::exception all need similar
 treatment.
 
-It appears that 'append' is non-const so that
-operator<<(cet::excpetion const& e, ...) can have a 'const&' for the
-first argument, because of inability to bind a non-const lvalue
-reference to a temporary, in the usage pattern:
-  cet::exception("...") << thing;
-
-This should be fixable by using rvalue references appropriately.
+Solution is to make a non-const member function template for
+operator<<(). The non-const member function can be called on a
+temporary of class type.
 
 To remove the mutability of the what_ data member, it is probably
-necessary to make explain_self() non-const.
+necessary to make explain_self() non-const. This would be hard.
+
+We can just avoid sharing exceptions objects between threads. We need
+to be aware of exceptions stored in one thread and transferred to
+another, to make sure the handoff is OK.
+
 
 
