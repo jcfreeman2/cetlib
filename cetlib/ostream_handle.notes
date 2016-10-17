@@ -20,7 +20,7 @@
     ostream_handle(std::ostream & os);
     ~~~~~
 
-    The choice of subclass (and therefore resource management) would be automatic and correct, there is no ambiguity between ownership and non-ownership (specifying the template argument to the constructor implies ownership; ommiting it implies non-ownership), and the result is much more flexible than the original wherein ownership is restricted particularly to `std::ofstream`{.cpp}.
+    The choice of subclass (and therefore resource management) would be automatic and correct, there is no ambiguity between ownership and non-ownership (specifying the template argument to the constructor implies ownership; omitting it implies non-ownership), and the result is much more flexible than the original wherein ownership is restricted particularly to `std::ofstream`{.cpp}.
 
 <!-- Local Variables: -->
 <!-- mode: markdown -->
