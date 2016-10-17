@@ -17,7 +17,7 @@ namespace {
 
   struct buffer_sentry
   {
-    buffer_sentry() : buf(0) { }
+    buffer_sentry() : buf(nullptr) { }
     ~buffer_sentry() noexcept { free(buf); }
 
     char * buf;
@@ -33,8 +33,8 @@ std::string cet::demangle_symbol(std::string const &mangled) {
                                       unmangled.buf,
                                       &length,
                                       &status);
-  if (unmangled.buf == NULL)  return mangled; // Failure
-  else                        return unmangled.buf;
+  if (unmangled.buf == nullptr) return mangled; // Failure
+  else                          return unmangled.buf;
 }
 
 std::string cet::demangle_message(std::string const &message) {

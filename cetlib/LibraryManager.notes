@@ -31,7 +31,7 @@ The following data members are never directly exposed to the user:
 * `mutable std::map<std::string, void*> lib_ptr_map_`{.cpp}
 
 	This is the problematic data member (see notes on `LibraryManger::get_lib_ptr` below).
-	
+
 ### Public member functions
 
 The `getSymbolByLibspec`, `getSymbolByPath`, `getLoadableLibraries`, `getLoadedLibraries`, and `getValidLibspecs` receive at least one argument by non-`const` reference--threading considerations are thus placed on the user.  Otherwise, no direct threading concerns (see information below, however, on the private member functions that are called by `getSymbol*`).
@@ -76,7 +76,7 @@ The following functions are more problematic:
 
 ### General observations:
 
-* The function(s) that call `dlerror()`, `dlopen()`, and `dlerror()` will need to have some locking mechanisms in place.
+* The function(s) that call `dlerror()`, `dlopen()`, and `dlsym()` will need to have some locking mechanisms in place.
 
 * The threading issues can be localized by loading all relevant libraries during construction.  This is likely to be unfeasible in many cases.
 
@@ -89,3 +89,11 @@ The following functions are more problematic:
 * Is our usage of `dlerror()` correct?  It looks correct when used in a `dlsym()`-calling context, but I'm not sure about when we use `dlopen()`. 
 
 * Should consider changing the return type of `getValidLibspecs`, `getLoadedLibraries`, and `getLoadableLibraries` from `std::size_t`{.cpp} to `std::vector<std::string>` and get rid of passing a vector in by reference.
+
+THREADING
+
+Adding a lock around the `dl*` C-function calls can lead to deadlock
+if a `static`{.cpp} member is being initialized in the library to be
+loaded.  Since such a guarantee cannot be made, the guidance will be
+that `LibraryManager` should be used only in a single-threaded
+context.
