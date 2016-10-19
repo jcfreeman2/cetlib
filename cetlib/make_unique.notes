@@ -1,5 +1,0 @@
-## Multi-threading analysis of `cet::make_unique`{.cpp}
-
-Class going away as of art 2.05.
-
-No threading issues.
