@@ -97,3 +97,9 @@ if a `static`{.cpp} member is being initialized in the library to be
 loaded.  Since such a guarantee cannot be made, the guidance will be
 that `LibraryManager` should be used only in a single-threaded
 context.
+
+Note: A recursive mutex will solve nearly all the above issues, and will 
+permit multiple threads to use the library manager at the same time, which
+may be beneficial in the future.  The one case that is not handled is when
+code run at static initialization time starts threads that use the 
+library manager.  We do not want to support this sort of code anyway.
