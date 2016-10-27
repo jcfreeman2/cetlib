@@ -23,7 +23,7 @@
 //
 // Information can be appended to the exception via operator <<.  Example:
 //
-//   if( (rc=func()) < 0 ) {
+//   if((rc=func()) < 0) {
 //     throw cet::exception("DataCorrupt")
 //       << "I died with rc = " << rc
 //       << std::endl;
@@ -39,8 +39,8 @@
 //  class infinite_loop
 //    : public cet::exception
 //  {
-//    infinite_loop( std::string const & mesg )
-//      : exception( "infinite_loop", mesg )
+//    infinite_loop(std::string const& mesg)
+//      : exception("infinite_loop", mesg)
 //    { }
 //  };
 //
@@ -64,7 +64,7 @@ namespace cet {
   class exception;
 
   std::ostream &
-  operator << ( std::ostream & os, exception const & e );
+  operator << (std::ostream & os, exception const& e);
 }
 
 // ======================================================================
@@ -94,85 +94,80 @@ namespace cet {
 
     // --- c'tors, d'tor:
 
-    explicit exception( Category const & category );
+    explicit exception(Category const& category);
 
-    exception( Category    const & category,
-               std::string const & message );
+    exception(Category    const& category,
+              std::string const& message);
 
-    exception( Category    const & category,
-               std::string const & message,
-               exception   const & another );
+    exception(Category    const& category,
+              std::string const& message,
+              exception   const& another);
 
-    exception( exception const & other );
+    exception(exception const& other);
 
     virtual ~exception() noexcept = default;
 
     // --- inspectors:
 
-    char const *  what() const throw() override;
-    virtual  std::string   explain_self() const;
-    std::string            category() const;
-    CategoryList const &   history() const;
-    std::string            root_cause() const;
+    char const* what() const noexcept override;
+    virtual std::string explain_self() const;
+    std::string         category() const;
+    CategoryList const& history() const;
+    std::string         root_cause() const;
 
     // --- mutators:
 
-    void  append( exception const & another ) const;
+    void append(exception const& another) const;
 
-    void  append( std::string const & more_information   ) const;
-    void  append( char        const   more_information[] ) const;
+    void append(std::string const& more_information  ) const;
+    void append(char        const  more_information[]) const;
 
-    void  append( std::ostream & f(std::ostream &) ) const;
-    void  append( std::ios_base& f(std::ios_base&) ) const;
+    void append(std::ostream & f(std::ostream &)) const;
+    void append(std::ios_base& f(std::ios_base&)) const;
 
     template< class T >
-    void append( T const & more_information ) const
+    void append(T const& more_information) const
     {
       ost_ << more_information;
     }
 
   private:
-    mutable  std::ostringstream   ost_;
-    CategoryList                  category_;
-    mutable std::string           what_;
+    mutable  std::ostringstream ost_ {};
+    CategoryList                category_;
+    mutable std::string         what_ {};
 
   };  // exception
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << ( E const & e, std::string const & t )
+  operator << (E const& e, std::string const& t)
   { e.append(t); return e; }
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << ( E const & e, char const t[] )
+  operator << (E const& e, char const t[])
   { e.append(t); return e; }
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << ( E const & e, std::ostream& f(std::ostream&) )
+  operator << (E const& e, std::ostream& f(std::ostream&))
   { e.append(f); return e; }
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << ( E const & e, std::ios_base& f(std::ios_base&) )
+  operator << (E const& e, std::ios_base& f(std::ios_base&))
   { e.append(f); return e; }
 
   template< class E, class T >
   typename detail::enable_if_an_exception<E>::type
-  operator << ( E const & e, T const & t )
+  operator << (E const& e, T const& t)
   { e.append(t); return e; }
 
 }  // namespace cet
 
 // ======================================================================
 
-#endif /* cetlib_exception_h */
-
 // Local variables
 // mode: c++
 // End:
-
-// Local Variables:
-// mode: c++
-// End:
+#endif /* cetlib_exception_h */
