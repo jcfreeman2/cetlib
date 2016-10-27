@@ -1,17 +1,5 @@
-There are two mutable data members:
-      mutable std::ostringstream ost_;
-      mutable std::string        what_;
-
-The member function overload set 'append' writes data to ost_. They
-are const.
-
-Suggestion: make 'append' non-const. This will have a ripple effect;
-the things that inherit from cet::exception all need similar
-treatment.
-
-Solution is to make a non-const member function template for
-operator<<(). The non-const member function can be called on a
-temporary of class type.
+There is one mutable data members:
+      mutable std::string what_;
 
 To remove the mutability of the what_ data member, it is probably
 necessary to make explain_self() non-const. This would be hard.
@@ -21,4 +9,3 @@ THREADING
 We can just avoid sharing exceptions objects between threads. We need
 to be aware of exceptions stored in one thread and transferred to
 another, to make sure the handoff is OK.
-
