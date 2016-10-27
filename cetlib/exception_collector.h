@@ -33,26 +33,19 @@ namespace cet {
 
   class exception_collector {
   public:
-    // compiler generates copy c'tor, copy assignment
 
-    exception_collector( );
-
-#if defined __GXX_EXPERIMENTAL_CXX0X__ || ( defined __cplusplus && __cplusplus >= 201103L )
-    ~exception_collector ( ) noexcept(false);
-#else
-    ~exception_collector( );
-#endif  // __GXX_EXPERIMENTAL_CXX0X__
+    ~exception_collector () noexcept(false);
 
     // observer:
-    bool  has_thrown() const;
+    bool has_thrown() const;
 
     // mutators:
-    void  rethrow();
-    void  call( std::function<void(void)> );
+    void rethrow();
+    void call(std::function<void(void)>);
 
   private:
-    exception  exception_;
-    bool       has_thrown_;
+    exception exception_ {std::string{}};
+    bool      has_thrown_ {false};
   };
 
 }  // namespace cet

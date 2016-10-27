@@ -16,9 +16,9 @@ struct my_exception
   : public cet::exception
 {
 
-  my_exception( Category const & category )
-    : cet::exception( category )
-  { }
+  my_exception(Category const& category)
+    : cet::exception(category)
+  {}
 
 };  // my_exception
 
@@ -62,7 +62,7 @@ BOOST_AUTO_TEST_CASE(exception_subclass_03)
 {
   BOOST_CHECK_EXCEPTION(throw my_exception("Bye") << "Nice meeting you" << std::endl, \
                         my_exception,                                   \
-                        [](my_exception const & e) -> bool {            \
+                        [](my_exception const& e) -> bool {             \
                           return e.explain_self().find("Nice meeting you\n") != std::string::npos;
                         });
 }

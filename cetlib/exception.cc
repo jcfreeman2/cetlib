@@ -81,6 +81,14 @@ exception::exception(exception const& other)
   ost_ << other.ost_.str();
 }
 
+exception::exception(exception&& other)
+  : category_{std::move(other.category_)}
+  , what_{std::move(other.what_)}
+{
+  ost_ << other.ost_.str();
+  other.ost_.str(""); // Drop the other data.
+}
+
 // ======================================================================
 // inspectors:
 
@@ -100,7 +108,7 @@ exception::explain_self() const
 
   std::string part(indent_string(ost_.str()));
   ost << part;
-  if(! ends_with_newline(part))
+  if(!ends_with_newline(part))
     ost << '\n';
 
   ost << "---- " << category() << " END\n";
@@ -130,31 +138,31 @@ exception::root_cause() const
 // mutators:
 
 void
-exception::append(exception const& e) const
+exception::append(exception const& e)
 {
   ost_ << e.explain_self();
 }
 
 void
-exception::append(std::string const& more_information) const
+exception::append(std::string const& more_information)
 {
   ost_ << more_information;
 }
 
 void
-exception::append(char const more_information[]) const
+exception::append(char const more_information[])
 {
   ost_ << more_information;
 }
 
 void
-exception::append(std::ostream& f(std::ostream&)) const
+exception::append(std::ostream& f(std::ostream&))
 {
   f(ost_);
 }
 
 void
-exception::append(std::ios_base& f(std::ios_base&)) const
+exception::append(std::ios_base& f(std::ios_base&))
 {
   f(ost_);
 }

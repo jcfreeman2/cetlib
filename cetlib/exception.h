@@ -63,8 +63,8 @@
 namespace cet {
   class exception;
 
-  std::ostream &
-  operator << (std::ostream & os, exception const& e);
+  std::ostream&
+  operator << (std::ostream& os, exception const& e);
 }
 
 // ======================================================================
@@ -72,12 +72,12 @@ namespace cet {
 namespace cet {
   namespace detail {
 
-    template< class D, bool = std::is_base_of<cet::exception,D>::value >
+    template<class D, bool = std::is_base_of<cet::exception, std::remove_reference_t<D>>::value>
     struct enable_if_an_exception {
-      using type = D const&;
+      using type = D&&;
     };
 
-    template< class D >
+    template<class D>
     struct enable_if_an_exception<D,false> {};
 
   }  // detail
@@ -105,6 +105,15 @@ namespace cet {
 
     exception(exception const& other);
 
+    // Unfortunately, move-semantics aren't available for std::ostream
+    // objects in GCC 4.9.3.  We therefore have to define our own
+    // move-c'tor.  This should be removed once we migrate to a
+    // compiler that supports move-semantics on streams.
+    //
+    // It is possible for an exception to be thrown from this
+    // contructor, so cannot declare noexcept.
+    exception(exception&&);
+
     virtual ~exception() noexcept = default;
 
     // --- inspectors:
@@ -117,51 +126,51 @@ namespace cet {
 
     // --- mutators:
 
-    void append(exception const& another) const;
+    void append(exception const& another);
 
-    void append(std::string const& more_information  ) const;
-    void append(char        const  more_information[]) const;
+    void append(std::string const& more_information  );
+    void append(char        const  more_information[]);
 
-    void append(std::ostream & f(std::ostream &)) const;
-    void append(std::ios_base& f(std::ios_base&)) const;
+    void append(std::ostream & f(std::ostream &));
+    void append(std::ios_base& f(std::ios_base&));
 
     template< class T >
-    void append(T const& more_information) const
+    void append(T const& more_information)
     {
       ost_ << more_information;
     }
 
   private:
-    mutable  std::ostringstream ost_ {};
-    CategoryList                category_;
-    mutable std::string         what_ {};
+    std::ostringstream  ost_ {};
+    CategoryList        category_;
+    mutable std::string what_ {};
 
   };  // exception
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << (E const& e, std::string const& t)
-  { e.append(t); return e; }
+  operator << (E&& e, std::string const& t)
+  { e.append(t); return std::forward<E>(e); }
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << (E const& e, char const t[])
-  { e.append(t); return e; }
+  operator << (E&& e, char const t[])
+  { e.append(t); return std::forward<E>(e); }
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << (E const& e, std::ostream& f(std::ostream&))
-  { e.append(f); return e; }
+  operator << (E&& e, std::ostream& f(std::ostream&))
+  { e.append(f); return std::forward<E>(e); }
 
   template< class E >
   typename detail::enable_if_an_exception<E>::type
-  operator << (E const& e, std::ios_base& f(std::ios_base&))
-  { e.append(f); return e; }
+  operator << (E&& e, std::ios_base& f(std::ios_base&))
+  { e.append(f); return std::forward<E>(e); }
 
   template< class E, class T >
   typename detail::enable_if_an_exception<E>::type
-  operator << (E const& e, T const& t)
-  { e.append(t); return e; }
+  operator << (E&& e, T const& t)
+  { e.append(t); return std::forward<E>(e); }
 
 }  // namespace cet
 

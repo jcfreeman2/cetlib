@@ -12,47 +12,39 @@ using namespace cet;
 
 // ======================================================================
 
-  exception_collector::exception_collector( )
-: exception_( std::string() )
-, has_thrown_( false )
-{ }
-
-exception_collector::~exception_collector( )
-#if defined __GXX_EXPERIMENTAL_CXX0X__ || ( defined __cplusplus && __cplusplus >= 201103L )
-noexcept(false)
-#endif
+exception_collector::~exception_collector() noexcept(false)
 { rethrow(); }
 
 // ----------------------------------------------------------------------
 
 bool
-  exception_collector::has_thrown() const
+exception_collector::has_thrown() const
 { return has_thrown_; }
 
 void
-  exception_collector::rethrow()
+exception_collector::rethrow()
 {
-  if( has_thrown_ ) {
+  if(has_thrown_) {
     has_thrown_ = false;
     throw exception_;
   }
 }
 
 void
-  exception_collector::call( std::function<void(void)> f )
+exception_collector::call(std::function<void(void)> f)
 {
   try {
     f();
   }
-  catch( cet::exception e ) {
+  catch(cet::exception const& e) {
     has_thrown_ = true;
     exception_ << e;
   }
-  catch( std::exception e ) {
+  catch(std::exception const& e) {
     has_thrown_ = true;
     exception_ << e.what();
   }
-  catch( ... ) {
+  catch(...) {
     has_thrown_ = true;
     exception_ << "Unknown exception";
   }
