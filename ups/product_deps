@@ -8,27 +8,23 @@ perllib  product_dir
 # define product/version pairs
 product	version
 boost		v1_61_0
-gcc		v4_9_3		e9
 gcc		v4_9_3a		e10
+gcc		v6_2_0		e12
 sqlite		v3_12_02_00
+cetlib_except   v1_00_00
 cetbuildtools	v5_04_03	-	only_for_build
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
-qualifier	boost		gcc	compiler	notes
-e10:debug	e10:debug	-nq-	gcc
-e10:opt		e10:opt		-nq-	gcc
-e10:prof	e10:prof	-nq-	gcc
-e9:debug	e9:debug	-nq-	gcc
-e9:opt		e9:opt		-nq-	gcc
-e9:prof		e9:prof		-nq-	gcc
+qualifier	cetlib_except	boost		gcc	compiler	notes
+e12:debug	e12:debug	e12:debug	-nq-	gcc
+e12:opt		e12:opt		e12:opt		-nq-	gcc
+e12:prof	e12:prof	e12:prof	-nq-	gcc
+e10:debug	e10:debug	e10:debug	-nq-	gcc
+e10:opt		e10:opt		e10:opt		-nq-	gcc
+e10:prof	e10:prof	e10:prof	-nq-	gcc
 end_qualifier_list
-
-##table_fragment_begin
-##    # For cetskelgen modules.
-##    envPrepend(PERL5LIB, ${${UPS_PROD_NAME_UC}_DIR}/perllib)
-##table_fragment_end
 
 # Local Variables:
 # tab-width: 8
