@@ -6,7 +6,7 @@
 
 #include "cetlib/search_path.h"
 
-#include "cetlib/exception.h"
+#include "cetlib_except/exception.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/getenv.h"
 

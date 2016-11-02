@@ -1,7 +1,7 @@
 #include "cetlib/PluginFactory.h"
 
 #include "cetlib/detail/wrapLibraryManagerException.h"
-#include "cetlib/exception.h"
+#include "cetlib_except/exception.h"
 
 #include <string>
 
