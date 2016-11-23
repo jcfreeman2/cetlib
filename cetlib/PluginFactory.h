@@ -22,7 +22,7 @@
 
 #include "cetlib/LibraryManager.h"
 #include "cetlib/detail/wrapLibraryManagerException.h"
-#include "cetlib/exception.h"
+#include "cetlib_except/exception.h"
 
 #include <memory>
 #include <string>

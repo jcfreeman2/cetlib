@@ -1,6 +1,6 @@
 #include "cetlib/LibraryManager.h"
 
-#include "cetlib/exception.h"
+#include "cetlib_except/exception.h"
 #include "cetlib/os_libpath.h"
 #include "cetlib/shlib_utils.h"
 #include "boost/filesystem.hpp"

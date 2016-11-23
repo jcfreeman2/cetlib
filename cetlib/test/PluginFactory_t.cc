@@ -3,7 +3,7 @@
 
 #include "cetlib/BasicPluginFactory.h"
 #include "cetlib/PluginTypeDeducer.h"
-#include "cetlib/exception.h"
+#include "cetlib_except/exception.h"
 
 #include "TestPluginBase.h"
 
