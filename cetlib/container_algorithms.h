@@ -24,7 +24,7 @@
 // {
 //   using namespace std;
 //   using namespace cet::container_helpers;
-//   // Use cbegin(), cend(), without expliict qualification.
+//   // Use cbegin(), cend(), without explicit qualification.
 // }
 namespace cet {
   namespace container_helpers {
