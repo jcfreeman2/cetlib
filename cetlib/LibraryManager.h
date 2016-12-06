@@ -157,8 +157,7 @@ std::string
 cet::LibraryManager::
 dllExtPattern()
 {
-  static std::string const dllExtPatt =
-    std::string("\\") + shlib_suffix();
+  static std::string const dllExtPatt {"\\" + shlib_suffix()};
   return dllExtPatt;
 }
 

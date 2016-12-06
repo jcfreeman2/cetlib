@@ -8,7 +8,6 @@ perllib  product_dir
 # define product/version pairs
 product	version
 boost		v1_62_0a
-gcc		v4_9_3a		e10
 gcc		v6_2_0		e12
 sqlite		v3_14_02_00
 cetlib_except   v1_00_00
