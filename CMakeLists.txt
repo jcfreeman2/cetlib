@@ -48,6 +48,7 @@ find_ups_product(cetlib_except)
 
 # SQLite
 cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
+find_package(OpenSSL REQUIRED)
 
 # ----------------------------------------------------------------------
 # Describe source tree layout:

@@ -56,8 +56,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   ${Boost_SYSTEM_LIBRARY}
   ${CMAKE_DL_LIBS}
   ${SQLITE3}
-  -lcrypto
-  -lssl
+  ${OPENSSL_LIBRARIES}
   )
 
 
