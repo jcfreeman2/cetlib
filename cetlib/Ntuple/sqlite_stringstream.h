@@ -103,8 +103,24 @@ namespace sqlite {
 
     using data_container_t = std::deque<std::string>;
 
-    stringstream(stringstream&&) noexcept(std::is_nothrow_move_constructible<data_container_t>::value)= default;
-    stringstream& operator=(stringstream&&) noexcept(std::is_nothrow_move_assignable<data_container_t>::value)= default;
+    stringstream(stringstream&& s) noexcept(std::is_nothrow_move_constructible<data_container_t>::value)
+#ifdef __clang__
+    // See https://llvm.org/bugs/show_bug.cgi?id=23383
+    : data_(std::move(s.data_)) {}
+#else
+    = default;
+#endif
+
+    stringstream& operator=(stringstream&& rhs) noexcept(std::is_nothrow_move_assignable<data_container_t>::value)
+    // See https://llvm.org/bugs/show_bug.cgi?id=23383
+#ifdef __clang__
+      {
+        data_ = std::move(rhs.data_);
+        return *this;
+      }
+#else
+    = default;
+#endif
 
     // Disable copy c'tor/assignment
     stringstream(stringstream const&) = delete;
