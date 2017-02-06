@@ -7,52 +7,37 @@
 
 #include "cetlib/demangle.h"
 
-#include "cetlib/split.h"
 #include <cstdlib>
+#include <cstring>
 #include <cxxabi.h>
-#include <sstream>
-#include <vector>
+#include <iostream>
 
-namespace {
-
-  struct buffer_sentry
-  {
-    buffer_sentry() : buf(nullptr) { }
-    ~buffer_sentry() noexcept { free(buf); }
-
-    char * buf;
-  };  // buffer_sentry
-
-}
-
-std::string cet::demangle_symbol(std::string const &mangled) {
-  buffer_sentry unmangled; // Auto-free of buffer on exit from function
-  size_t length;
-  int status;
-  unmangled.buf = abi::__cxa_demangle(mangled.c_str(),
-                                      unmangled.buf,
-                                      &length,
-                                      &status);
-  if (unmangled.buf == nullptr) return mangled; // Failure
-  else                          return unmangled.buf;
-}
-
-std::string cet::demangle_message(std::string const &message) {
-  std::ostringstream result;
-  std::vector<std::string> words;
-  cet::split(message, ' ', std::back_inserter(words));
-  for (std::vector<std::string>::const_iterator
-         b = words.begin(),
-         i = b,
-         e = words.end();
-       i != e;
-       ++i) {
-    if (i != b) result << " ";
-    result << cet::demangle_symbol(*i);
+std::string cet::demangle_symbol(char const * symbol) {
+  std::string result;
+  char * const unmangled =
+    abi::__cxa_demangle(symbol, nullptr, nullptr, nullptr);
+  if (unmangled != nullptr) {
+    result = unmangled;
+    free(unmangled);
+  } else {
+    result = symbol;
   }
-  return result.str();
+  return result;
 }
 
-std::string cet::demangle(std::string const &mangled) {
-  return demangle_symbol(mangled);
+std::string cet::demangle_message(std::string message) {
+  std::string result;
+  result.reserve(message.size());
+  char * tok_state = nullptr;
+  char * tokptr = strtok_r(const_cast<char *>(message.c_str()), " ", &tok_state);
+  bool first = true;
+  for (; tokptr != nullptr; tokptr = strtok_r(nullptr, " ", &tok_state)) {
+    if (first) {
+      first = false;
+    } else {
+      result += ' ';
+    }
+    result += demangle_symbol(tokptr);
+  }
+  return result;
 }
