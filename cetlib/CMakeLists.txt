@@ -33,7 +33,6 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   column_width.cc
   cpu_timer.cc
   crc32.cc
-  demangle.cc
   detail/wrapLibraryManagerException.cc
   filepath_maker.cc
   filesystem.cc

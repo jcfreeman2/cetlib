@@ -5,7 +5,7 @@
 #include "cetlib/shlib_utils.h"
 #include "boost/filesystem.hpp"
 #include "boost/regex.hpp"
-#include "cetlib/demangle.h"
+#include "cetlib_except/demangle.h"
 #include "cetlib/search_path.h"
 
 extern "C" {

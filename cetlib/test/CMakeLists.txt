@@ -22,7 +22,6 @@ cet_test(cpu_timer_test USE_BOOST_UNIT
   OPTIONAL_GROUPS LOAD_SENSITIVE
   )
 cet_test(crc32_test SOURCES crc32_test.cc CRC32Calculator.cc)
-cet_test(demangle_t USE_BOOST_UNIT)
 cet_test(exempt_ptr_test)
 cet_test(filesystem_test)
 cet_test(getenv_test)
