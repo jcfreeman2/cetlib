@@ -56,9 +56,9 @@ BOOST_AUTO_TEST_CASE( copy_all ) {
 }
 
 BOOST_AUTO_TEST_CASE( transform_all ) {
-
   using namespace std;
-  using namespace cet::container_helpers;
+
+  CET_USE_FREE_CBEGIN_CEND();
 
   vector<int>  const v1 { 1, 2, 3, 4 };
   vector<char> const v2 { 'a', 'b', 'c', 'd' };
