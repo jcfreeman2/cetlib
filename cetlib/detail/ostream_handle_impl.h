@@ -39,7 +39,7 @@ namespace cet {
 
 }
 
-#endif /* cetlib_ostream_handle_h */
+#endif /* cetlib_detail_ostream_handle_impl_h */
 
 // Local variables:
 // mode: c++

@@ -34,7 +34,7 @@ namespace sqlite {
 
 // ======================================================================
 
-#endif /* canvas_Utilities_Exception_h */
+#endif /* cetlib_Ntuple_Exception_h */
 
 // Local Variables:
 // mode: c++
