@@ -1,6 +1,7 @@
 parent cetlib v2_01_00
 defaultqual e14
 #
+incdir fq_dir include
 libdir	fq_dir lib
 fcldir  -
 perllib  product_dir
