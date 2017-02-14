@@ -110,6 +110,11 @@ namespace cet {
   auto transform_all(Container1 &, Container2 &, OutputIt, BinaryOp);
   template <class Container1, class Container2, class OutputIt, class BinaryOp>
   auto transform_all(Container1 const &, Container2 const &, OutputIt, BinaryOp);
+
+  template <class FwdCont, class Func>
+  void for_all_with_index(FwdCont &, Func);
+  template <class FwdCont, class Func>
+  void for_all_with_index(FwdCont const &, Func);
 }
 
 // for_all().
@@ -128,6 +133,29 @@ cet::for_all( FwdCont const & s, Func f )
 {
   CET_USE_FREE_CBEGIN_CEND();
   return std::for_each(cbegin(s), cend(s), f);
+}
+
+// for_all_with_index().
+template <class FwdCont, class Func>
+inline void
+cet::for_all_with_index(FwdCont& s, Func f)
+{
+  std::size_t i{};
+  for (auto& e : s) {
+    f(i,e);
+    ++i;
+  }
+}
+
+template <class FwdCont, class Func>
+inline void
+cet::for_all_with_index(FwdCont const& s, Func f)
+{
+  std::size_t i{};
+  for (auto const& e : s) {
+    f(i,e);
+    ++i;
+  }
 }
 
 // copy_all().
