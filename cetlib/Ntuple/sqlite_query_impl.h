@@ -43,12 +43,11 @@ namespace sqlite {
 
     IncompleteQuery(std::string&& ddl) : ddl_{std::move(ddl)} {}
 
-    template <typename TUP>
-    auto from(TUP const& t) &&
+    auto from(sqlite3* const db, std::string const& name) &&
     {
       ddl_ += " from ";
-      ddl_ += t.name();
-      return CompleteQuery{std::move(ddl_), t.db()};
+      ddl_ += name;
+      return CompleteQuery{std::move(ddl_), db};
     }
     std::string ddl_;
 

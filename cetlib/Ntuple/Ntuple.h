@@ -47,15 +47,16 @@ namespace cet {
 
     void insert(ARGS const...);
     std::string const& name() const { return name_; }
-    sqlite3* db() const { return db_; }
-    int flush_no_throw();
     void flush();
     sqlite3_int64 lastRowid() const { return last_rowid_; }
 
   private:
-    sqlite3*           db_;
-    std::string        name_;
-    std::size_t        max_;
+
+    int flush_no_throw();
+
+    sqlite3* db_;
+    std::string name_;
+    std::size_t max_;
     std::vector<row_t> buffer_ {};
     sqlite3_stmt* insert_statement_ {nullptr};
     sqlite3_int64 last_rowid_ {};
