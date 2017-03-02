@@ -15,6 +15,7 @@
 
 #include "cetlib/Ntuple/Exception.h"
 #include "cetlib/sqlite/column.h"
+#include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/exec.h"
 #include "cetlib/sqlite/query_result.h"
 #include "cetlib/sqlite/select.h"
@@ -27,22 +28,6 @@ using namespace std::string_literals;
 namespace sqlite {
 
   namespace detail {
-
-    template <typename T>
-    std::string column_info(column<T> const& col)
-    {
-      return col.name() + col.sqlite_type();
-    }
-
-    inline std::string columns() { return ""; }
-
-    template <typename H, typename... T>
-    std::string columns(H const& h, T const&... t)
-    {
-      return (sizeof...(T) != 0u) ? column_info(h) + "," + columns(t...) : column_info(h);
-    }
-
-
 
     template <typename COL_PACK, std::size_t... I>
     std::string createTable_ddl(std::string const& tname,
