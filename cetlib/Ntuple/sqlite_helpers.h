@@ -14,7 +14,7 @@
 #include <vector>
 
 #include "sqlite3.h"
-#include "cetlib/Ntuple/sqlite_column.h"
+#include "cetlib/sqlite/column.h"
 #include "cetlib/Ntuple/sqlite_result.h"
 #include "cetlib/Ntuple/sqlite_stringstream.h"
 #include "cetlib/Ntuple/sqlite_query_impl.h"

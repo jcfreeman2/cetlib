@@ -3,8 +3,10 @@
 
 #include <array>
 #include "cetlib/Ntuple/sqlite_helpers.h"
-#include "cetlib/Ntuple/sqlite_insert_impl.h"
 #include "cetlib/Ntuple/Transaction.h"
+#include "cetlib/sqlite/bind_parameters.h"
+#include "cetlib/sqlite/column.h"
+#include "cetlib/sqlite/insert.h"
 
 #include "sqlite3.h"
 
@@ -13,13 +15,16 @@
 #include <tuple>
 #include <vector>
 
-namespace ntuple
-{
-  template <class ... ARGS> class Ntuple;
+namespace cet {
 
   template <class ... ARGS>
   class Ntuple {
   public:
+
+    // Disable copying
+    Ntuple(Ntuple const&) = delete;
+    Ntuple& operator=(Ntuple const&) = delete;
+
     using row_t = std::tuple<std::unique_ptr<ARGS>...>;
     static constexpr auto SIZE = std::tuple_size<row_t>::value;
 
@@ -29,13 +34,13 @@ namespace ntuple
     Ntuple(sqlite3* db,
            std::string const& name,
            name_array<SIZE> const& columns,
-           bool const overwriteContents = false,
+           bool overwriteContents = false,
            std::size_t bufsize = 1000ull);
 
     Ntuple(std::string const& filename,
            std::string const& tablename,
            name_array<SIZE> const& columns,
-           bool const overwriteContents = false,
+           bool overwriteContents = false,
            std::size_t bufsiz = 1000ull);
 
     ~Ntuple() noexcept;
@@ -52,26 +57,25 @@ namespace ntuple
     std::string        name_;
     std::size_t        max_;
     std::vector<row_t> buffer_ {};
-    sqlite3_stmt*      insert_statement_ {nullptr};
-    sqlite3_int64      last_rowid_ {};
+    sqlite3_stmt* insert_statement_ {nullptr};
+    sqlite3_int64 last_rowid_ {};
   };
 
 }
 
 template <class ...ARGS>
-ntuple::Ntuple<ARGS...>::Ntuple(sqlite3* db,
-                                std::string const& name,
-                                name_array<SIZE> const& cnames,
-                                bool const overwriteContents,
-                                std::size_t bufsize) :
+cet::Ntuple<ARGS...>::Ntuple(sqlite3* db,
+                             std::string const& name,
+                             name_array<SIZE> const& cnames,
+                             bool const overwriteContents,
+                             std::size_t bufsize) :
   db_{db},
   name_{name},
   max_{bufsize}
 {
-  if (!db)
+  if (!db) {
     throw sqlite::Exception{sqlite::errors::SQLExecutionError,"Attempt to create Ntuple with null database pointer"};
-
-  static_assert(sizeof...(ARGS) == SIZE, "Number of column names must equal the number of template arguments.");
+  }
 
   sqlite::createTableIfNeeded(db,
                               last_rowid_,
@@ -89,33 +93,38 @@ ntuple::Ntuple<ARGS...>::Ntuple(sqlite3* db,
                                     sql.size(),
                                     &insert_statement_,
                                     nullptr);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError,"Failed to prepare insertion statment"};
+  if (rc != SQLITE_OK) {
+    auto const ec = sqlite3_step(insert_statement_);
+    throw sqlite::Exception{sqlite::errors::SQLExecutionError}
+    << "Failed to prepare insertion statement.\n"
+    << "Return code: " << ec << '\n';
+  }
 
   buffer_.reserve(bufsize);
 }
 
 template <class ...ARGS>
-ntuple::Ntuple<ARGS...>::Ntuple(std::string const& filename,
-                                std::string const& name,
-                                name_array<SIZE> const& cnames,
-                                bool const overwriteContents,
-                                std::size_t bufsize) :
+cet::Ntuple<ARGS...>::Ntuple(std::string const& filename,
+                             std::string const& name,
+                             name_array<SIZE> const& cnames,
+                             bool const overwriteContents,
+                             std::size_t bufsize) :
   Ntuple{sqlite::openDatabaseFile(filename), name, cnames, overwriteContents, bufsize}
 {}
 
 template <class ... ARGS>
-ntuple::Ntuple<ARGS...>::~Ntuple() noexcept
+cet::Ntuple<ARGS...>::~Ntuple() noexcept
 {
   int const rc = flush_no_throw();
-  if (rc != SQLITE_OK)
+  if (rc != SQLITE_OK) {
     std::cerr << "SQLite step failure while flushing";
+  }
   sqlite3_finalize(insert_statement_);
 }
 
 template <class ...ARGS>
 void
-ntuple::Ntuple<ARGS...>::insert(ARGS const... args)
+cet::Ntuple<ARGS...>::insert(ARGS const... args)
 {
   if (buffer_.size() == max_) {
     flush();
@@ -124,89 +133,17 @@ ntuple::Ntuple<ARGS...>::insert(ARGS const... args)
   ++last_rowid_;
 }
 
-inline
-void bind_one_parameter(sqlite3_stmt* s, std::size_t const idx, double const v)
-{
-  int const rc = sqlite3_bind_double(s, idx, v);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError, "Failed to bind double " + std::to_string(rc)};
-}
-
-inline
-void bind_one_parameter(sqlite3_stmt* s, std::size_t const idx, int const v)
-{
-  int const rc = sqlite3_bind_int(s, idx, v);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError, "Failed to bind int " + std::to_string(rc)};
-}
-
-inline
-void bind_one_parameter(sqlite3_stmt* s, std::size_t const idx, std::uint32_t const v)
-{
-  int const rc = sqlite3_bind_int64(s, idx, v);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError, "Failed to bind int " + std::to_string(rc)};
-}
-
-inline
-void bind_one_parameter(sqlite3_stmt* s, std::size_t const idx, sqlite_int64 const v)
-{
-  int const rc = sqlite3_bind_int64(s, idx, v);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError, "Failed to bind int64 " + std::to_string(rc)};
-}
-
-inline
-void bind_one_parameter(sqlite3_stmt* s, std::size_t const idx, std::string const& v)
-{
-  int const rc = sqlite3_bind_text(s, idx, v.c_str(), v.size(), nullptr);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError, "Failed to bind text " + std::to_string(rc)};
-}
-
-inline
-void bind_one_null(sqlite3_stmt* s, std::size_t const idx)
-{
-  int const rc = sqlite3_bind_null(s, idx);
-  if (rc != SQLITE_OK)
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError, "Failed to bind text " + std::to_string(rc)};
-}
-
-template <class TUP, size_t N>
-struct bind_parameters
-{
-  static void bind(sqlite3_stmt* s, TUP const& t)
-  {
-    bind_parameters<TUP, N-1>::bind(s, t);
-    if (auto& param = std::get<N-1>(t))
-      bind_one_parameter(s, N, *param);
-    else
-      bind_one_null(s,N);
-  }
-};
-
-template <class TUP>
-struct bind_parameters<TUP, 1>
-{
-  static void bind(sqlite3_stmt* s, TUP const& t)
-  {
-    if (auto& param = std::get<0>(t))
-      bind_one_parameter(s, 1, *param);
-    else
-      bind_one_null(s,1);
-  }
-};
-
 template <class ...ARGS>
 int
-ntuple::Ntuple<ARGS...>::flush_no_throw()
+cet::Ntuple<ARGS...>::flush_no_throw()
 {
   sqlite::Transaction txn {db_};
   for (auto const& r : buffer_) {
-    bind_parameters<row_t, SIZE>::bind(insert_statement_, r);
+    sqlite::detail::bind_parameters<row_t, SIZE>::bind(insert_statement_, r);
     int const rc = sqlite3_step(insert_statement_);
-    if (rc != SQLITE_DONE)
+    if (rc != SQLITE_DONE) {
       return rc;
+    }
     last_rowid_ = sqlite3_last_insert_rowid(db_);
     sqlite3_reset(insert_statement_);
   }
@@ -217,10 +154,11 @@ ntuple::Ntuple<ARGS...>::flush_no_throw()
 
 template <class ...ARGS>
 void
-ntuple::Ntuple<ARGS...>::flush()
+cet::Ntuple<ARGS...>::flush()
 {
-  if (flush_no_throw() != SQLITE_OK)
+  if (flush_no_throw() != SQLITE_OK) {
     throw sqlite::Exception{sqlite::errors::SQLExecutionError, "SQLite step failure while flushing"};
+  }
 }
 
 #endif /* cetlib_Ntuple_Ntuple_h */

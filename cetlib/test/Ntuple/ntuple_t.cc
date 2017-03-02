@@ -10,7 +10,7 @@
 // We do not use Boost Unit Test here because we want the product into
 // which this moves to be independent of Boost.
 
-using namespace ntuple;
+using namespace cet;
 
 void nullptr_build_failure()
 {
