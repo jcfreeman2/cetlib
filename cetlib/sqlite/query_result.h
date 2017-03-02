@@ -1,21 +1,22 @@
-#ifndef cetlib_Ntuple_sqlite_result_h
-#define cetlib_Ntuple_sqlite_result_h
+#ifndef cetlib_Ntuple_sqlite_query_result_h
+#define cetlib_Ntuple_sqlite_query_result_h
 
 // =======================================================
 //
-// sqlite result
+// sqlite query_result
 //
 // =======================================================
 
+#include <sstream>
 #include <vector>
 
-#include "cetlib/Ntuple/sqlite_stringstream.h"
 #include "cetlib/Ntuple/Exception.h"
 #include "cetlib/container_algorithms.h"
+#include "cetlib/sqlite/stringstream.h"
 
 namespace sqlite {
 
-  struct result {
+  struct query_result {
     std::vector<std::string> columns;
     std::vector<sqlite::stringstream> data;
     bool empty() const { return data.empty(); }
@@ -26,36 +27,38 @@ namespace sqlite {
     explicit operator bool() const { return empty(); }
 
     template <typename T>
-    result& operator>>(T& t) {
-      if (!data.empty())
+    query_result& operator>>(T& t) {
+      if (!data.empty()) {
         data[0] >> t;
+      }
       return *this;
     }
 
     template <typename T>
-    result& operator>>(std::vector<T>& vt)
+    query_result& operator>>(std::vector<T>& vt)
     {
-      vt.clear();
-      cet::transform_all(data,
-                         std::back_inserter(vt),
-                         [](auto& ss){ T t; ss>>t; return t; });
+      std::vector<T> tmp;
+      cet::transform_all(data, std::back_inserter(tmp),
+                         [](auto& d){ T t; d >> t; return t; });
+      std::swap(vt, tmp);
+      data.clear();
       return *this;
     }
 
   };
 
-  inline result& throw_if_empty(result& r)
+  inline query_result& throw_if_empty(query_result& r)
   {
     if (r.empty())
       throw sqlite::Exception{sqlite::errors::SQLExecutionError} << "SQL query failed.";
     return r;
   }
 
-  std::ostream& operator<<(std::ostream&, result const&);
+  std::ostream& operator<<(std::ostream&, query_result const&);
 
 } //namespace sqlite
 
-#endif /* cetlib_Ntuple_sqlite_result_h */
+#endif /* cetlib_Ntuple_sqlite_query_result_h */
 
 // Local Variables:
 // mode: c++

@@ -1,4 +1,4 @@
-#include "cetlib/Ntuple/sqlite_query_impl.h"
+#include "cetlib/sqlite/select.h"
 
 #include <cassert>
 
@@ -6,7 +6,7 @@ namespace {
   int getResult(void* data, int ncols, char** results, char** cnames)
   {
     assert(ncols >= 1);
-    auto j = static_cast<sqlite::result*>(data);
+    auto j = static_cast<sqlite::query_result*>(data);
     if (j->columns.empty()) {
       for (int i{}; i < ncols ; ++i)
         j->columns.push_back(cnames[i]);
@@ -22,9 +22,9 @@ namespace {
 
 namespace sqlite {
 
-  result query(sqlite3* db, std::string const& ddl)
+  query_result query(sqlite3* db, std::string const& ddl)
   {
-    result res;
+    query_result res;
     char* errmsg {nullptr};
     if (sqlite3_exec(db, ddl.c_str(), getResult, &res, &errmsg) != SQLITE_OK) {
       std::string msg{errmsg};
@@ -34,7 +34,7 @@ namespace sqlite {
     return res;
   }
 
-  void operator<<(result& r, CompleteQuery const& cq)
+  void operator<<(query_result& r, CompleteQuery const& cq)
   {
     r = query(cq.db_, cq.ddl_+";");
   }

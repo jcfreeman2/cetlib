@@ -1,5 +1,5 @@
-#include "cetlib/Ntuple/sqlite_stringstream.h"
 #include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/stringstream.h"
 
 #include <string>
 

@@ -13,12 +13,14 @@
 #include <type_traits>
 #include <vector>
 
-#include "sqlite3.h"
-#include "cetlib/sqlite/column.h"
-#include "cetlib/Ntuple/sqlite_result.h"
-#include "cetlib/Ntuple/sqlite_stringstream.h"
-#include "cetlib/Ntuple/sqlite_query_impl.h"
 #include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/column.h"
+#include "cetlib/sqlite/exec.h"
+#include "cetlib/sqlite/query_result.h"
+#include "cetlib/sqlite/select.h"
+#include "cetlib/sqlite/stringstream.h"
+
+#include "sqlite3.h"
 
 using namespace std::string_literals;
 
@@ -63,7 +65,6 @@ namespace sqlite {
   sqlite3* openDatabaseFile(std::string const& filename);
   void     deleteTable(sqlite3* db, std::string const& tname);
   void     dropTable  (sqlite3* db, std::string const& tname);
-  void     exec       (sqlite3* db, std::string const& ddl);
 
   unsigned nrows (sqlite3* db, std::string const& tname);
 

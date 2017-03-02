@@ -1,14 +1,14 @@
 #ifndef cetlib_Ntuple_sqlite_query_impl_h
 #define cetlib_Ntuple_sqlite_query_impl_h
 
-#include "cetlib/Ntuple/sqlite_result.h"
+#include "cetlib/sqlite/query_result.h"
 #include <string>
 
 #include "sqlite3.h"
 
 namespace sqlite {
 
-  result query(sqlite3* db, std::string const& ddl);
+  query_result query(sqlite3* db, std::string const& ddl);
 
   struct CompleteQuery {
     CompleteQuery(std::string&& ddl, sqlite3* const db) : ddl_{std::move(ddl)}, db_{db} {}
@@ -36,17 +36,16 @@ namespace sqlite {
       ddl_ += std::to_string(num);
       return CompleteQuery{std::move(ddl_), db_};
     }
-
   };
 
   struct IncompleteQuery {
 
     IncompleteQuery(std::string&& ddl) : ddl_{std::move(ddl)} {}
 
-    auto from(sqlite3* const db, std::string const& name) &&
+    auto from(sqlite3* const db, std::string const& tablename) &&
     {
       ddl_ += " from ";
-      ddl_ += name;
+      ddl_ += tablename;
       return CompleteQuery{std::move(ddl_), db};
     }
     std::string ddl_;
@@ -77,8 +76,7 @@ namespace sqlite {
     return IncompleteQuery{std::move(result)};
   }
 
-  void operator<<(result& r, CompleteQuery const& cq);
-
+  void operator<<(query_result& r, CompleteQuery const& cq);
 }
 
 #endif /* cetlib_Ntuple_sqlite_query_impl_h */

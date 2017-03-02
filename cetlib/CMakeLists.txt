@@ -32,8 +32,9 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   Ntuple/Exception.cc
   Ntuple/Transaction.cc
   Ntuple/sqlite_helpers.cc
-  Ntuple/sqlite_query_impl.cc
-  Ntuple/sqlite_result.cc
+  sqlite/exec.cc
+  sqlite/query_result.cc
+  sqlite/select.cc
   PluginFactory.cc
   base_converter.cc
   canonical_number.cc
@@ -76,8 +77,8 @@ cet_make_exec(inc-expand
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:
 
-install_headers(SUBDIRS detail Ntuple)
-install_source(SUBDIRS detail Ntuple)
+install_headers(SUBDIRS detail Ntuple Ntuple/detail sqlite)
+install_source(SUBDIRS detail Ntuple Ntuple/detail sqlite)
 
 #
 # ======================================================================
