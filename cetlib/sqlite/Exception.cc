@@ -1,4 +1,4 @@
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 
 using namespace sqlite;
 

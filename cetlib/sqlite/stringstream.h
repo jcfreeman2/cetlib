@@ -36,7 +36,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 
 namespace sqlite {
 

@@ -8,7 +8,7 @@
 // =======================================================
 
 #include "sqlite3.h"
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/exec.h"
 

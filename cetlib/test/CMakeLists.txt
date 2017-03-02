@@ -11,6 +11,7 @@ cet_enable_asserts()
 link_libraries(cetlib)
 
 add_subdirectory(Ntuple)
+add_subdirectory(sqlite)
 cet_test(bit_test)
 cet_test(base_converter_test)
 cet_test(canonical_number_test)

@@ -1,4 +1,4 @@
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/exec.h"
 
 void sqlite::exec(sqlite3* db,std::string const& ddl)

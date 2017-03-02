@@ -1,4 +1,4 @@
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/stringstream.h"
 
 #include <string>

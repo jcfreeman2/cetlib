@@ -3,7 +3,7 @@
 #include <iostream>
 
 #include "cetlib/Ntuple/Ntuple.h"
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 
 #include "sqlite3.h"
 

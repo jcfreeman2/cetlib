@@ -18,9 +18,9 @@ namespace sqlite
 
     /// Transactions may not be copied or assigned.
     Transaction(Transaction const&) = delete;
-    Transaction(Transaction &&) = delete;
+    Transaction(Transaction&&) = delete;
     Transaction& operator=(Transaction const&) = delete;
-    Transaction& operator=(Transaction &&) = delete;
+    Transaction& operator=(Transaction&&) = delete;
 
     /// Destroying the Transaction will roll back the associated
     /// transaction, unless 'commit' has been called.

@@ -2,10 +2,10 @@
 #define cetlib_Ntuple_Ntuple_h
 
 #include <array>
-#include "cetlib/Ntuple/sqlite_helpers.h"
 #include "cetlib/Ntuple/Transaction.h"
 #include "cetlib/sqlite/bind_parameters.h"
 #include "cetlib/sqlite/column.h"
+#include "cetlib/sqlite/helpers.h"
 #include "cetlib/sqlite/insert.h"
 
 #include "sqlite3.h"

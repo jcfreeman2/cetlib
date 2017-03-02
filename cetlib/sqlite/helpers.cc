@@ -8,8 +8,8 @@
 #include <cmath>
 #include <regex>
 
-#include "cetlib/Ntuple/sqlite_helpers.h"
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
+#include "cetlib/sqlite/helpers.h"
 
 namespace {
   std::string normalize(std::string to_replace)
@@ -29,7 +29,6 @@ namespace {
 }
 
 namespace sqlite {
-
   namespace detail {
 
     //=================================================================
@@ -120,43 +119,6 @@ namespace sqlite {
   void dropTable(sqlite3* db, std::string const& tname)
   {
     exec(db, "drop table "s+ tname);
-  }
-
-  //=======================================================================
-  // Statistics helpers
-
-  double mean(sqlite3* db, std::string const& tname, std::string const& colname){
-    double result {};
-    auto r = query(db, "select avg("s+colname+") from " + tname);
-    throw_if_empty(r) >> result;
-    return result;
-  }
-
-  double median(sqlite3* db, std::string const& tname, std::string const& colname){
-    double result {};
-    auto r = query(db,
-                   "select avg("s+colname+")"+
-                   " from (select "+colname+
-                   " from "+tname+
-                   " order by "+colname+
-                   " limit 2 - (select count(*) from " + tname+") % 2"+
-                   " offset (select (count(*) - 1) / 2"+
-                   " from " + tname+"))");
-    throw_if_empty(r) >> result;
-    return result;
-  }
-
-  double rms(sqlite3* db, std::string const& tname, std::string const& colname){
-    double result {};
-    auto r = query(db,
-                   "select sum("s+
-                   "(" + colname + "-(select avg(" + colname + ") from " + tname +"))" +
-                   "*" +
-                   "(" + colname + "-(select avg(" + colname + ") from " + tname +"))" +
-                   " ) /" +
-                   "(count(" + colname +")) from " + tname);
-    throw_if_empty(r) >> result;
-    return std::sqrt(result);
   }
 
   unsigned nrows(sqlite3* db, std::string const& tname)

@@ -13,7 +13,7 @@
 #include <type_traits>
 #include <vector>
 
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/exec.h"
@@ -71,31 +71,6 @@ namespace sqlite {
       rowid = nrows(db, tname);
     }
   }
-
-  //=======================================================================
-  // Statistics helpers
-
-  template<typename T = double>
-  T min(sqlite3* db, std::string const& tname, std::string const& colname)
-  {
-    T t {};
-    auto r = query(db, "select min("s+colname+") from " + tname);
-    throw_if_empty(r) >> t;
-    return t;
-  }
-
-  template<typename T = double>
-  T max(sqlite3* db, std::string const& tname, std::string const& colname)
-  {
-    T t {};
-    auto r = query(db, "select max("s+colname+") from " + tname);
-    throw_if_empty(r) >> t;
-    return t;
-  }
-
-  double mean  (sqlite3* db, std::string const& tname, std::string const& colname);
-  double median(sqlite3* db, std::string const& tname, std::string const& colname);
-  double rms   (sqlite3* db, std::string const& tname, std::string const& colname);
 
 } //namespace sqlite
 

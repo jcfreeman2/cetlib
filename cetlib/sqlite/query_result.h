@@ -10,7 +10,7 @@
 #include <sstream>
 #include <vector>
 
-#include "cetlib/Ntuple/Exception.h"
+#include "cetlib/sqlite/Exception.h"
 #include "cetlib/container_algorithms.h"
 #include "cetlib/sqlite/stringstream.h"
 

@@ -1,6 +1,7 @@
 #ifndef cetlib_Ntuple_detail_sqlite_bind_parameter_h
 #define cetlib_Ntuple_detail_sqlite_bind_parameter_h
 
+#include "cetlib/sqlite/Exception.h"
 #include "sqlite3.h"
 
 #include <tuple>
