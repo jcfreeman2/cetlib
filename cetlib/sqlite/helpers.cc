@@ -103,11 +103,13 @@ namespace sqlite {
                                    SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_URI,
                                    nullptr);
     if (rc != SQLITE_OK) {
+      sqlite3_close(db);
       throw sqlite::Exception{sqlite::errors::SQLExecutionError}
-        << "Failed to open SQLite database\n"
-        << "Return code of: " << rc;
+      << "Failed to open SQLite database\n"
+           << "Return code: " << rc;
     }
 
+    assert(db);
     return db;
   }
 

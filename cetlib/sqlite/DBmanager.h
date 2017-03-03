@@ -14,9 +14,7 @@ namespace sqlite {
 
     ~DBmanager() noexcept
     {
-      if (db_ != nullptr) {
-        sqlite3_close(db_);
-      }
+      sqlite3_close(db_);
     }
 
     sqlite3* get() const { return db_; }

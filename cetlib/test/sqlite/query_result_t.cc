@@ -4,6 +4,7 @@
 #include "cetlib/sqlite/insert.h"
 #include "cetlib/sqlite/query_result.h"
 
+#include <cassert>
 #include <iostream>
 
 using namespace std;
@@ -13,6 +14,7 @@ int main()
 {
   DBmanager db {":memory:"};
   std::string const name {"numbers"};
+
   create_table(db, name, column<string>("key"), column<int>("value"));
   insert_into(db, name).values("one", 1);
   insert_into(db, name).values("five", 5);
