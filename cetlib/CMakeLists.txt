@@ -29,8 +29,9 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   MD5Digest.cc
   BasicPluginFactory.cc
   LibraryManager.cc
-  Ntuple/Transaction.cc
+  sqlite/Connection.cc
   sqlite/Exception.cc
+  sqlite/Transaction.cc
   sqlite/exec.cc
   sqlite/helpers.cc
   sqlite/query_result.cc

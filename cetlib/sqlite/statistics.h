@@ -13,31 +13,34 @@
 
 #include <string>
 
-namespace sqlite {
 
-  template <typename T = double>
-  T min(sqlite3* const db, std::string const& tname, std::string const& colname)
-  {
-    T t {};
-    auto r = query(db, "select min("+colname+") from " + tname);
-    throw_if_empty(r) >> t;
-    return t;
-  }
+namespace cet {
+  namespace sqlite {
 
-  template <typename T = double>
-  T max(sqlite3* const db, std::string const& tname, std::string const& colname)
-  {
-    T t {};
-    auto r = query(db, "select max("+colname+") from " + tname);
-    throw_if_empty(r) >> t;
-    return t;
-  }
+    template <typename T = double>
+    T min(sqlite3* const db, std::string const& tname, std::string const& colname)
+    {
+      T t {};
+      auto r = query(db, "select min("+colname+") from " + tname);
+      throw_if_empty(r) >> t;
+      return t;
+    }
 
-  double mean  (sqlite3* db, std::string const& tname, std::string const& colname);
-  double median(sqlite3* db, std::string const& tname, std::string const& colname);
-  double rms   (sqlite3* db, std::string const& tname, std::string const& colname);
+    template <typename T = double>
+    T max(sqlite3* const db, std::string const& tname, std::string const& colname)
+    {
+      T t {};
+      auto r = query(db, "select max("+colname+") from " + tname);
+      throw_if_empty(r) >> t;
+      return t;
+    }
 
-} //namespace sqlite
+    double mean  (sqlite3* db, std::string const& tname, std::string const& colname);
+    double median(sqlite3* db, std::string const& tname, std::string const& colname);
+    double rms   (sqlite3* db, std::string const& tname, std::string const& colname);
+
+  } // sqlite
+} // cet
 
 #endif /* cetlib_Ntuple_sqlite_helpers_h */
 

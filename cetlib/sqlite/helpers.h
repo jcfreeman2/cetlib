@@ -22,35 +22,37 @@
 
 using namespace std::string_literals;
 
-namespace sqlite {
+namespace cet {
+  namespace sqlite {
 
-  bool hasTable(sqlite3* db, std::string const& tablename);
-  bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string const& expectedSchema);
-  sqlite3* openDatabaseFile(std::string const& filename);
-  void     deleteTable(sqlite3* db, std::string const& tablename);
-  void     dropTable  (sqlite3* db, std::string const& tablename);
-  unsigned nrows      (sqlite3* db, std::string const& tablename);
+    bool hasTable(sqlite3* db, std::string const& tablename);
+    bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string const& expectedSchema);
+    sqlite3* openDatabaseFile(std::string const& filename);
+    void     deleteTable(sqlite3* db, std::string const& tablename);
+    void     dropTable  (sqlite3* db, std::string const& tablename);
+    unsigned nrows      (sqlite3* db, std::string const& tablename);
 
-  template <typename... ARGS>
-  void createTableIfNeeded(sqlite3* db,
-                           sqlite3_int64& rowid,
-                           bool const delete_contents,
-                           std::string const& tname,
-                           column<ARGS> const&... cols)
-  {
-    auto const& sqlddl = detail::create_table_ddl(tname, cols...);
-    if (!hasTableWithSchema(db, tname, sqlddl)) {
-      exec(db, sqlddl);
-    }
-    else {
-      if (delete_contents) {
-        deleteTable(db, tname);
+    template <typename... ARGS>
+    void createTableIfNeeded(sqlite3* db,
+                             sqlite3_int64& rowid,
+                             bool const delete_contents,
+                             std::string const& tname,
+                             column<ARGS> const&... cols)
+    {
+      auto const& sqlddl = detail::create_table_ddl(tname, cols...);
+      if (!hasTableWithSchema(db, tname, sqlddl)) {
+        exec(db, sqlddl);
       }
-      rowid = nrows(db, tname);
+      else {
+        if (delete_contents) {
+          deleteTable(db, tname);
+        }
+        rowid = nrows(db, tname);
+      }
     }
-  }
 
-} //namespace sqlite
+  } //namespace sqlite
+} //namespace cet
 
 #endif /* cetlib_Ntuple_sqlite_helpers_h */
 

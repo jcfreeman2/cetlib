@@ -1,10 +1,10 @@
-#include "cetlib/Ntuple/Transaction.h"
 #include "cetlib/sqlite/Exception.h"
+#include "cetlib/sqlite/Transaction.h"
 
 #include <cassert>
 #include "sqlite3.h"
 
-sqlite::Transaction::Transaction(sqlite3* db) :
+cet::sqlite::Transaction::Transaction(sqlite3* db) :
   db_{db}
 {
   assert(db_);
@@ -14,7 +14,7 @@ sqlite::Transaction::Transaction(sqlite3* db) :
   }
 }
 
-sqlite::Transaction::~Transaction()
+cet::sqlite::Transaction::~Transaction() noexcept
 {
   // We can't throw an exception from our destructor, so we just
   // swallow any error.
@@ -24,7 +24,7 @@ sqlite::Transaction::~Transaction()
 }
 
 void
-sqlite::Transaction::commit()
+cet::sqlite::Transaction::commit()
 {
   assert(db_);
   int const rc {sqlite3_exec(db_, "COMMIT;", nullptr, nullptr, nullptr)};

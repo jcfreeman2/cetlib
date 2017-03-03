@@ -28,108 +28,113 @@ namespace {
   }
 }
 
-namespace sqlite {
+//=================================================================
+// hasTableWithSchema(db, name, cnames) returns true if the db has
+// a table named 'name', with columns named 'cns' suitable for
+// carrying a tuple<ARGS...>. It returns false if there is no
+// table of that name, and throws an exception if there is a table
+// of the given name but it does not match both the given column
+// names and column types.
+bool
+cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::string const& sqlddl)
+{
+  std::string cmd {"select sql from sqlite_master where type=\"table\" and name=\""};
+  cmd += name;
+  cmd += '"';
 
-  //=================================================================
-  // hasTableWithSchema(db, name, cnames) returns true if the db has
-  // a table named 'name', with columns named 'cns' suitable for
-  // carrying a tuple<ARGS...>. It returns false if there is no
-  // table of that name, and throws an exception if there is a table
-  // of the given name but it does not match both the given column
-  // names and column types.
-  bool hasTableWithSchema(sqlite3* db, std::string const& name, std::string const& sqlddl)
-  {
-    std::string cmd {"select sql from sqlite_master where type=\"table\" and name=\""};
-    cmd += name;
-    cmd += '"';
+  auto const res = query(db, cmd);
 
-    auto const res = query(db, cmd);
+  if (res.empty())
+    return false;
 
-    if (res.empty())
-      return false;
-
-    if (res.data.size() != 1ull) {
-      throw sqlite::Exception(sqlite::errors::SQLExecutionError)
-        << "Problematic query: " << res.data.size() << " instead of 1.\n";
-    }
-
-    // This is a somewhat fragile way of validating schemas.  A
-    // better way would be to rely on sqlite3's insertion facilities
-    // to determine if an insert of in-memory data would be
-    // compatible with the on-disk schema.  This would require
-    // creating a temporary table (so as to avoid inserting then
-    // deleting a dummy row into the desired table)according to the
-    // on-disk schema, and inserting some default values according
-    // to the requested schema.
-    if (normalize(res.data[0][0]) == normalize(sqlddl))
-      return true;
-
+  if (res.data.size() != 1ull) {
     throw sqlite::Exception(sqlite::errors::SQLExecutionError)
-      << "Existing database table name does not match description:\n"
-      << "   DDL on disk: " << res.data[0][0] << '\n'
-      << "   Current DDL: " << sqlddl << '\n';
+      << "Problematic query: " << res.data.size() << " instead of 1.\n";
   }
 
-  namespace detail {
+  // This is a somewhat fragile way of validating schemas.  A
+  // better way would be to rely on sqlite3's insertion facilities
+  // to determine if an insert of in-memory data would be
+  // compatible with the on-disk schema.  This would require
+  // creating a temporary table (so as to avoid inserting then
+  // deleting a dummy row into the desired table)according to the
+  // on-disk schema, and inserting some default values according
+  // to the requested schema.
+  if (normalize(res.data[0][0]) == normalize(sqlddl))
+    return true;
 
-    //================================================================
-    // The locking mechanisms for nfs systems are deficient and can
-    // thus wreak havoc with sqlite, which depends upon them.  In
-    // order to support an sqlite database on nfs, we use a URI,
-    // explicitly including the query parameter: 'nolock=1'.  We will
-    // have to revisit this choice once we consider multiple
-    // processes/threads writing to the same database file.
-    inline std::string assembleURI(std::string const& filename)
-    {
-      // Arbitrary decision: don't allow users to specify a URI since
-      // they may (unintentionally) remove the 'nolock' parameter,
-      // thus potentially causing issues with nfs.
-      if (filename.substr(0,5) == "file:") {
-        throw sqlite::Exception{sqlite::errors::OtherError}
-        << "art does not allow an SQLite database filename that starts with 'file:'.\n"
-             << "Please contact artists@fnal.gov if you believe this is an error.";
+  throw sqlite::Exception(sqlite::errors::SQLExecutionError)
+    << "Existing database table name does not match description:\n"
+    << "   DDL on disk: " << res.data[0][0] << '\n'
+    << "   Current DDL: " << sqlddl << '\n';
+}
+
+namespace cet {
+  namespace sqlite {
+    namespace detail {
+
+      //================================================================
+      // The locking mechanisms for nfs systems are deficient and can
+      // thus wreak havoc with sqlite, which depends upon them.  In
+      // order to support an sqlite database on nfs, we use a URI,
+      // explicitly including the query parameter: 'nolock=1'.  We will
+      // have to revisit this choice once we consider multiple
+      // processes/threads writing to the same database file.
+      inline std::string assembleURI(std::string const& filename)
+      {
+        // Arbitrary decision: don't allow users to specify a URI since
+        // they may (unintentionally) remove the 'nolock' parameter,
+        // thus potentially causing issues with nfs.
+        if (filename.substr(0,5) == "file:") {
+          throw sqlite::Exception{sqlite::errors::OtherError}
+          << "art does not allow an SQLite database filename that starts with 'file:'.\n"
+               << "Please contact artists@fnal.gov if you believe this is an error.";
+        }
+        return "file:"+filename+"?nolock=1";
       }
-      return "file:"+filename+"?nolock=1";
-    }
 
-  } // namespace detail
+    } // detail
+  } // sqlite
+} // cet
 
-  sqlite3* openDatabaseFile(std::string const& filename)
-  {
-    sqlite3* db {nullptr};
-    std::string const uri = detail::assembleURI(filename);
-    int const rc = sqlite3_open_v2(uri.c_str(),
-                                   &db,
-                                   SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_URI,
-                                   nullptr);
-    if (rc != SQLITE_OK) {
-      sqlite3_close(db);
-      throw sqlite::Exception{sqlite::errors::SQLExecutionError}
-      << "Failed to open SQLite database\n"
-           << "Return code: " << rc;
-    }
-
-    assert(db);
-    return db;
+sqlite3*
+cet::sqlite::openDatabaseFile(std::string const& filename)
+{
+  sqlite3* db {nullptr};
+  std::string const uri = detail::assembleURI(filename);
+  int const rc = sqlite3_open_v2(uri.c_str(),
+                                 &db,
+                                 SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_URI,
+                                 nullptr);
+  if (rc != SQLITE_OK) {
+    sqlite3_close(db);
+    throw sqlite::Exception{sqlite::errors::SQLExecutionError}
+    << "Failed to open SQLite database\n"
+         << "Return code: " << rc;
   }
 
-  //=======================================================================
-  void deleteTable(sqlite3* db, std::string const& tname)
-  {
-    exec(db, "delete from "s + tname);
-  }
+  assert(db);
+  return db;
+}
 
-  void dropTable(sqlite3* db, std::string const& tname)
-  {
-    exec(db, "drop table "s+ tname);
-  }
+//=======================================================================
+void
+cet::sqlite::deleteTable(sqlite3* db, std::string const& tname)
+{
+  exec(db, "delete from "s + tname);
+}
 
-  unsigned nrows(sqlite3* db, std::string const& tname)
-  {
-    unsigned result {};
-    auto r = query(db,"select count(*) from "+tname+";");
-    throw_if_empty(r) >> result;
-    return result;
-  }
+void
+cet::sqlite::dropTable(sqlite3* db, std::string const& tname)
+{
+  exec(db, "drop table "s+ tname);
+}
 
-} // namespace sqlite
+unsigned
+cet::sqlite::nrows(sqlite3* db, std::string const& tname)
+{
+  unsigned result {};
+  auto r = query(db,"select count(*) from "+tname+";");
+  throw_if_empty(r) >> result;
+  return result;
+}

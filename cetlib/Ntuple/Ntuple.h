@@ -1,8 +1,7 @@
 #ifndef cetlib_Ntuple_Ntuple_h
 #define cetlib_Ntuple_Ntuple_h
 
-#include <array>
-#include "cetlib/Ntuple/Transaction.h"
+#include "cetlib/sqlite/Transaction.h"
 #include "cetlib/sqlite/bind_parameters.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/helpers.h"
@@ -10,6 +9,7 @@
 
 #include "sqlite3.h"
 
+#include <array>
 #include <memory>
 #include <string>
 #include <tuple>

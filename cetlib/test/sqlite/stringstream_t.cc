@@ -4,7 +4,7 @@
 #include <string>
 
 using namespace std::string_literals;
-using namespace sqlite;
+using namespace cet::sqlite;
 
 int main() {
 
@@ -23,7 +23,7 @@ int main() {
   double next;
   float last;
 
-  if ( !ss.empty() ) {
+  if (!ss.empty()) {
     ss >> first
        >> second
        >> one
@@ -34,11 +34,11 @@ int main() {
   try {
     int x;
     ss >> x;
-    throw sqlite::Exception( sqlite::errors::Unknown,"shouldn't get here");
+    throw Exception(errors::Unknown,"shouldn't get here");
   }
-  catch ( sqlite::Exception const & e ) {
-    if ( e.categoryCode() == sqlite::errors::Unknown ) {
-      throw sqlite::Exception( sqlite::errors::Unknown, "this is really bad" );
+  catch (Exception const& e) {
+    if (e.categoryCode() == errors::Unknown) {
+      throw Exception(errors::Unknown, "this is really bad");
     }
   }
   catch (...){}
