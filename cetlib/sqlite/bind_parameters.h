@@ -1,5 +1,5 @@
-#ifndef cetlib_Ntuple_detail_sqlite_bind_parameter_h
-#define cetlib_Ntuple_detail_sqlite_bind_parameter_h
+#ifndef cetlib_sqlite_bind_parameters_h
+#define cetlib_sqlite_bind_parameters_h
 
 #include "cetlib/sqlite/Exception.h"
 #include "sqlite3.h"
@@ -87,7 +87,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_bind_parameters_h */
+#endif /* cetlib_sqlite_bind_parameters_h */
 
 // Local Variables:
 // mode: c++

@@ -1,5 +1,5 @@
-#ifndef cetlib_Ntuple_sqlite_stringstream_h
-#define cetlib_Ntuple_sqlite_stringstream_h
+#ifndef cetlib_sqlite_stringstream_h
+#define cetlib_sqlite_stringstream_h
 
 // =================================================================
 //
@@ -154,7 +154,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_stringstream_h */
+#endif /* cetlib_sqlite_stringstream_h */
 
 // Local variables:
 // mode: c++

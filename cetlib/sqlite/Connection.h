@@ -27,7 +27,7 @@ namespace cet {
   } //namespace sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_Connection_h */
+#endif /* cetlib_sqlite_Connection_h */
 
 // Local Variables:
 // mode: c++

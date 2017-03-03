@@ -42,7 +42,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_helpers_h */
+#endif /* cetlib_sqlite_statistics_h */
 
 // Local Variables:
 // mode: c++

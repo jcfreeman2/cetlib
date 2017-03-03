@@ -99,7 +99,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_column_h */
+#endif /* cetlib_sqlite_column_h */
 
 // Local Variables:
 // mode: c++

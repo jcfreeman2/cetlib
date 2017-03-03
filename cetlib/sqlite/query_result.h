@@ -1,5 +1,5 @@
-#ifndef cetlib_Ntuple_sqlite_query_result_h
-#define cetlib_Ntuple_sqlite_query_result_h
+#ifndef cetlib_sqlite_query_result_h
+#define cetlib_sqlite_query_result_h
 
 // =======================================================
 //
@@ -60,7 +60,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_query_result_h */
+#endif /* cetlib_sqlite_query_result_h */
 
 // Local Variables:
 // mode: c++

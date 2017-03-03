@@ -71,7 +71,7 @@ namespace cet {
 
 }
 
-#endif
+#endif /* cetlib_SimultaneousFunctionSpawner_h */
 
 // Local variables:
 // mode: c++

@@ -1,5 +1,5 @@
-#ifndef cetlib_Ntuple_create_table_h
-#define cetlib_Ntuple_create_table_h
+#ifndef cetlib_sqlite_create_table_h
+#define cetlib_sqlite_create_table_h
 
 // =======================================================
 //
@@ -64,7 +64,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_Ntuple_sqlite_helpers_h */
+#endif /* cetlib_sqlite_create_table_h */
 
 // Local Variables:
 // mode: c++
