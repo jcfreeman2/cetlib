@@ -2,7 +2,7 @@
 #include <cstring>
 #include <iostream>
 
-#include "cetlib/Ntuple/Ntuple.h"
+#include "cetlib/Ntuple.h"
 #include "cetlib/sqlite/Exception.h"
 
 #include "sqlite3.h"
