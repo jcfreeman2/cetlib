@@ -1,5 +1,5 @@
-#ifndef cetlib_Ntuple_sqlite_column_h
-#define cetlib_Ntuple_sqlite_column_h
+#ifndef cetlib_sqlite_column_h
+#define cetlib_sqlite_column_h
 
 // =======================================================
 //
@@ -94,15 +94,6 @@ namespace sqlite {
     using type = std::string;
     std::string sqlite_type() const { return " text"; }
   };
-
-  template <typename... ARGS>
-  using column_pack = std::tuple<column<ARGS>...>;
-
-  template <typename... ARGS, std::size_t... I>
-  auto make_column_pack(name_array<sizeof...(ARGS)> const& cnames, std::index_sequence<I...>)
-  {
-    return column_pack<ARGS...>{cnames[I]...};
-  }
 
 } //namespace sqlite
 

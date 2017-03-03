@@ -1,67 +1,45 @@
 #ifndef cetlib_Ntuple_sqlite_helpers_h
 #define cetlib_Ntuple_sqlite_helpers_h
 
-// =======================================================
+// ====================================================================
 //
 // sqlite helpers
 //
-// =======================================================
-
-#include <array>
-#include <string>
-#include <tuple>
-#include <type_traits>
-#include <vector>
+// These are general utilities for interacting with a database and any
+// tables therein.
+//
+// ====================================================================
 
 #include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/exec.h"
-#include "cetlib/sqlite/query_result.h"
 #include "cetlib/sqlite/select.h"
-#include "cetlib/sqlite/stringstream.h"
 
 #include "sqlite3.h"
+
+#include <string>
 
 using namespace std::string_literals;
 
 namespace sqlite {
 
-  namespace detail {
-
-    template <typename COL_PACK, std::size_t... I>
-    std::string createTable_ddl(std::string const& tname,
-                                COL_PACK const& cols,
-                                std::index_sequence<I...>)
-    {
-      std::string ddl {"CREATE TABLE "s + tname + " ( "};
-      ddl += columns(std::get<I>(cols)...);
-      ddl += " )";
-      return ddl;
-    }
-
-    bool hasTable (sqlite3* db, std::string const& name, std::string const& sqlddl);
-
-  } // namespace detail
-
-  //=====================================================================
-  // General db functions
-
+  bool hasTable(sqlite3* db, std::string const& tablename);
+  bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string const& expectedSchema);
   sqlite3* openDatabaseFile(std::string const& filename);
-  void     deleteTable(sqlite3* db, std::string const& tname);
-  void     dropTable  (sqlite3* db, std::string const& tname);
-
-  unsigned nrows (sqlite3* db, std::string const& tname);
+  void     deleteTable(sqlite3* db, std::string const& tablename);
+  void     dropTable  (sqlite3* db, std::string const& tablename);
+  unsigned nrows      (sqlite3* db, std::string const& tablename);
 
   template <typename... ARGS>
   void createTableIfNeeded(sqlite3* db,
                            sqlite3_int64& rowid,
+                           bool const delete_contents,
                            std::string const& tname,
-                           column_pack<ARGS...> const& cols,
-                           bool const delete_contents)
+                           column<ARGS> const&... cols)
   {
-    std::string const& sqlddl = detail::createTable_ddl(tname, cols, std::index_sequence_for<ARGS...>());
-    if (!detail::hasTable(db, tname, sqlddl)) {
+    auto const& sqlddl = detail::create_table_ddl(tname, cols...);
+    if (!hasTableWithSchema(db, tname, sqlddl)) {
       exec(db, sqlddl);
     }
     else {

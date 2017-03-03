@@ -17,7 +17,7 @@
 
 namespace cet {
 
-  template <class ... ARGS>
+  template <typename... Args>
   class Ntuple {
   public:
 
@@ -25,32 +25,43 @@ namespace cet {
     Ntuple(Ntuple const&) = delete;
     Ntuple& operator=(Ntuple const&) = delete;
 
-    using row_t = std::tuple<std::unique_ptr<ARGS>...>;
-    static constexpr auto SIZE = std::tuple_size<row_t>::value;
+    using row_t = std::tuple<std::unique_ptr<Args>...>;
+    static constexpr auto nColumns = std::tuple_size<row_t>::value;
+    static constexpr auto iSequence = std::make_index_sequence<nColumns>();
 
-    template <size_t N>
+    template <std::size_t N>
     using name_array = sqlite::name_array<N>;
 
     Ntuple(sqlite3* db,
            std::string const& name,
-           name_array<SIZE> const& columns,
+           name_array<nColumns> const& columns,
            bool overwriteContents = false,
            std::size_t bufsize = 1000ull);
 
     Ntuple(std::string const& filename,
            std::string const& tablename,
-           name_array<SIZE> const& columns,
+           name_array<nColumns> const& columns,
            bool overwriteContents = false,
            std::size_t bufsiz = 1000ull);
 
     ~Ntuple() noexcept;
 
-    void insert(ARGS const...);
+    void insert(Args const...);
     std::string const& name() const { return name_; }
     void flush();
     sqlite3_int64 lastRowid() const { return last_rowid_; }
 
   private:
+
+    // This is the c'tor that does all of the work.  It exists so that
+    // the Args... and column-names array can be expanded in parallel.
+    template <size_t... I>
+    Ntuple(sqlite3* db,
+           std::string const& name,
+           name_array<nColumns> const& columns,
+           bool overwriteContents = false,
+           std::size_t bufsize = 1000ull,
+           std::index_sequence<I...> = iSequence);
 
     int flush_no_throw();
 
@@ -64,12 +75,14 @@ namespace cet {
 
 }
 
-template <class ...ARGS>
-cet::Ntuple<ARGS...>::Ntuple(sqlite3* db,
+template <class... Args>
+template <std::size_t... I>
+cet::Ntuple<Args...>::Ntuple(sqlite3* db,
                              std::string const& name,
-                             name_array<SIZE> const& cnames,
+                             name_array<nColumns> const& cnames,
                              bool const overwriteContents,
-                             std::size_t bufsize) :
+                             std::size_t const bufsize,
+                             std::index_sequence<I...>) :
   db_{db},
   name_{name},
   max_{bufsize}
@@ -80,14 +93,14 @@ cet::Ntuple<ARGS...>::Ntuple(sqlite3* db,
 
   sqlite::createTableIfNeeded(db,
                               last_rowid_,
+                              overwriteContents,
                               name,
-                              sqlite::make_column_pack<ARGS...>(cnames, std::index_sequence_for<ARGS...>()),
-                              overwriteContents);
+                              sqlite::column<Args>{cnames[I]}...);
 
   std::string sql {"INSERT INTO "};
   sql += name;
   sql += " VALUES (?";
-  for (std::size_t i = 1; i < SIZE; ++i) { sql += ",?"; }
+  for (std::size_t i = 1; i < nColumns; ++i) { sql += ",?"; }
   sql += ")";
   int const rc = sqlite3_prepare_v2(db_,
                                     sql.c_str(),
@@ -104,17 +117,26 @@ cet::Ntuple<ARGS...>::Ntuple(sqlite3* db,
   buffer_.reserve(bufsize);
 }
 
-template <class ...ARGS>
-cet::Ntuple<ARGS...>::Ntuple(std::string const& filename,
+template <typename... Args>
+cet::Ntuple<Args...>::Ntuple(sqlite3* db,
                              std::string const& name,
-                             name_array<SIZE> const& cnames,
+                             name_array<nColumns> const& cnames,
                              bool const overwriteContents,
-                             std::size_t bufsize) :
-  Ntuple{sqlite::openDatabaseFile(filename), name, cnames, overwriteContents, bufsize}
+                             std::size_t const bufsize) :
+  Ntuple{db, name, cnames, overwriteContents, bufsize, iSequence}
 {}
 
-template <class ... ARGS>
-cet::Ntuple<ARGS...>::~Ntuple() noexcept
+template <typename... Args>
+cet::Ntuple<Args...>::Ntuple(std::string const& filename,
+                             std::string const& name,
+                             name_array<nColumns> const& cnames,
+                             bool const overwriteContents,
+                             std::size_t const bufsize) :
+  Ntuple{sqlite::openDatabaseFile(filename), name, cnames, overwriteContents, bufsize, iSequence}
+{}
+
+template <typename... Args>
+cet::Ntuple<Args...>::~Ntuple() noexcept
 {
   int const rc = flush_no_throw();
   if (rc != SQLITE_OK) {
@@ -123,24 +145,24 @@ cet::Ntuple<ARGS...>::~Ntuple() noexcept
   sqlite3_finalize(insert_statement_);
 }
 
-template <class ...ARGS>
+template <typename... Args>
 void
-cet::Ntuple<ARGS...>::insert(ARGS const... args)
+cet::Ntuple<Args...>::insert(Args const... args)
 {
   if (buffer_.size() == max_) {
     flush();
   }
-  buffer_.emplace_back(std::make_unique<ARGS>(args)...);
+  buffer_.emplace_back(std::make_unique<Args>(args)...);
   ++last_rowid_;
 }
 
-template <class ...ARGS>
+template <typename... Args>
 int
-cet::Ntuple<ARGS...>::flush_no_throw()
+cet::Ntuple<Args...>::flush_no_throw()
 {
   sqlite::Transaction txn {db_};
   for (auto const& r : buffer_) {
-    sqlite::detail::bind_parameters<row_t, SIZE>::bind(insert_statement_, r);
+    sqlite::detail::bind_parameters<row_t, nColumns>::bind(insert_statement_, r);
     int const rc = sqlite3_step(insert_statement_);
     if (rc != SQLITE_DONE) {
       return rc;
@@ -153,9 +175,9 @@ cet::Ntuple<ARGS...>::flush_no_throw()
   return SQLITE_OK;
 }
 
-template <class ...ARGS>
+template <typename... Args>
 void
-cet::Ntuple<ARGS...>::flush()
+cet::Ntuple<Args...>::flush()
 {
   if (flush_no_throw() != SQLITE_OK) {
     throw sqlite::Exception{sqlite::errors::SQLExecutionError, "SQLite step failure while flushing"};

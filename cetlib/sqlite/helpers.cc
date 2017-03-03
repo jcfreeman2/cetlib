@@ -29,47 +29,48 @@ namespace {
 }
 
 namespace sqlite {
-  namespace detail {
 
-    //=================================================================
-    // hasTable(db, name, cnames) returns true if the db has a table
-    // named 'name', with columns named 'cns' suitable for carrying a
-    // tuple<ARGS...>. It returns false if there is no table of that
-    // name, and throws an exception if there is a table of the given
-    // name but it does not match both the given column names and
-    // column types.
-    bool hasTable(sqlite3* db, std::string const& name, std::string const& sqlddl)
-    {
-      std::string cmd {"select sql from sqlite_master where type=\"table\" and name=\""};
-      cmd += name;
-      cmd += '"';
+  //=================================================================
+  // hasTableWithSchema(db, name, cnames) returns true if the db has
+  // a table named 'name', with columns named 'cns' suitable for
+  // carrying a tuple<ARGS...>. It returns false if there is no
+  // table of that name, and throws an exception if there is a table
+  // of the given name but it does not match both the given column
+  // names and column types.
+  bool hasTableWithSchema(sqlite3* db, std::string const& name, std::string const& sqlddl)
+  {
+    std::string cmd {"select sql from sqlite_master where type=\"table\" and name=\""};
+    cmd += name;
+    cmd += '"';
 
-      auto const res = query(db, cmd);
+    auto const res = query(db, cmd);
 
-      if (res.empty())
-        return false;
+    if (res.empty())
+      return false;
 
-      if (res.data.size() != 1ull) {
-        throw sqlite::Exception(sqlite::errors::SQLExecutionError)
-          << "Problematic query: " << res.data.size() << " instead of 1.\n";
-      }
-
-      // This is a somewhat fragile way of validating schemas.  A
-      // better way would be to rely on sqlite3's insertion facilities
-      // to determine if an insert of in-memory data would be
-      // compatible with the on-disk schema.  This would require
-      // creating a temporary table (so as to avoid inserting then
-      // deleting a dummy row into the desired table)according to the
-      // on-disk schema, and inserting some default values according
-      // to the requested schema.
-      if (normalize(res.data[0][0]) == normalize(sqlddl))
-        return true;
-
+    if (res.data.size() != 1ull) {
       throw sqlite::Exception(sqlite::errors::SQLExecutionError)
-        << "Existing database table name does not match description:\n"
-        << "   DDL on disk: " << res.data[0][0] << '\n'
-        << "   Current DDL: " << sqlddl << '\n';
+        << "Problematic query: " << res.data.size() << " instead of 1.\n";
     }
+
+    // This is a somewhat fragile way of validating schemas.  A
+    // better way would be to rely on sqlite3's insertion facilities
+    // to determine if an insert of in-memory data would be
+    // compatible with the on-disk schema.  This would require
+    // creating a temporary table (so as to avoid inserting then
+    // deleting a dummy row into the desired table)according to the
+    // on-disk schema, and inserting some default values according
+    // to the requested schema.
+    if (normalize(res.data[0][0]) == normalize(sqlddl))
+      return true;
+
+    throw sqlite::Exception(sqlite::errors::SQLExecutionError)
+      << "Existing database table name does not match description:\n"
+      << "   DDL on disk: " << res.data[0][0] << '\n'
+      << "   Current DDL: " << sqlddl << '\n';
+  }
+
+  namespace detail {
 
     //================================================================
     // The locking mechanisms for nfs systems are deficient and can
@@ -85,8 +86,8 @@ namespace sqlite {
       // thus potentially causing issues with nfs.
       if (filename.substr(0,5) == "file:") {
         throw sqlite::Exception{sqlite::errors::OtherError}
-          << "art does not allow an SQLite database filename that starts with 'file:'.\n"
-          << "Please contact artists@fnal.gov if you believe this is an error.";
+        << "art does not allow an SQLite database filename that starts with 'file:'.\n"
+             << "Please contact artists@fnal.gov if you believe this is an error.";
       }
       return "file:"+filename+"?nolock=1";
     }
