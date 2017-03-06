@@ -1,7 +1,9 @@
 #ifndef cetlib_sqlite_select_h
 #define cetlib_sqlite_select_h
 
+#include "cetlib/sqlite/detail/get_result.h"
 #include "cetlib/sqlite/query_result.h"
+
 #include <string>
 
 #include "sqlite3.h"
@@ -9,7 +11,18 @@
 namespace cet {
   namespace sqlite {
 
-    query_result query(sqlite3* db, std::string const& ddl);
+    template <typename... Args>
+    query_result<Args...> query(sqlite3* db, std::string const& ddl)
+    {
+      query_result<Args...> res;
+      char* errmsg {nullptr};
+      if (sqlite3_exec(db, ddl.c_str(), detail::get_result<Args...>, &res, &errmsg) != SQLITE_OK) {
+        std::string msg{errmsg};
+        sqlite3_free(errmsg);
+        throw sqlite::Exception(sqlite::errors::SQLExecutionError, msg);
+      }
+      return res;
+    }
 
     struct CompleteQuery {
       CompleteQuery(std::string&& ddl, sqlite3* const db) : ddl_{std::move(ddl)}, db_{db} {}
@@ -77,7 +90,11 @@ namespace cet {
       return IncompleteQuery{std::move(result)};
     }
 
-    void operator<<(query_result& r, CompleteQuery const& cq);
+    template <typename... Args>
+    void operator<<(query_result<Args...>& r, CompleteQuery const& cq)
+    {
+      r = query<Args...>(cq.db_, cq.ddl_+";");
+    }
 
   } // sqlite
 } // cet

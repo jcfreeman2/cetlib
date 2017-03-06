@@ -26,14 +26,14 @@ int main()
     insert_into(c, name).values(pr.first, pr.second);
   }
 
-  query_result allEntries;
+  query_result<std::string,int> allEntries;
   allEntries << select("*").from(c, name);
 
   cet::for_all_with_index(allEntries,
-                          [&pairs](std::size_t const i, auto& row){
+                          [&pairs](std::size_t const i, auto const& row){
                             std::string key;
                             int value;
-                            row >> key >> value;
+                            std::tie(key,value) = row;
                             assert(key == pairs[i].first);
                             assert(value == pairs[i].second);
                           });

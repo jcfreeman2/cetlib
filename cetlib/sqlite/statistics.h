@@ -20,19 +20,15 @@ namespace cet {
     template <typename T = double>
     T min(sqlite3* const db, std::string const& tname, std::string const& colname)
     {
-      T t {};
-      auto r = query(db, "select min("+colname+") from " + tname);
-      throw_if_empty(r) >> t;
-      return t;
+      auto r = query<T>(db, "select min("+colname+") from " + tname);
+      return unique_value(r);
     }
 
     template <typename T = double>
     T max(sqlite3* const db, std::string const& tname, std::string const& colname)
     {
-      T t {};
-      auto r = query(db, "select max("+colname+") from " + tname);
-      throw_if_empty(r) >> t;
-      return t;
+      auto r = query<T>(db, "select max("+colname+") from " + tname);
+      return unique_value(r);
     }
 
     double mean  (sqlite3* db, std::string const& tname, std::string const& colname);

@@ -8,54 +8,59 @@
 // =======================================================
 
 #include <sstream>
+#include <tuple>
 #include <vector>
 
 #include "cetlib/sqlite/Exception.h"
 #include "cetlib/container_algorithms.h"
-#include "cetlib/sqlite/stringstream.h"
 
 namespace cet {
   namespace sqlite {
 
+    template <typename... Args>
     struct query_result {
       std::vector<std::string> columns;
-      std::vector<sqlite::stringstream> data;
+      std::vector<std::tuple<Args...>> data;
       bool empty() const { return data.empty(); }
 
       auto begin() { return data.begin(); }
       auto end() { return data.end(); }
 
-      explicit operator bool() const { return empty(); }
-
-      template <typename T>
-      query_result& operator>>(T& t) {
-        if (!data.empty()) {
-          data[0] >> t;
-        }
-        return *this;
-      }
-
-      template <typename T>
-      query_result& operator>>(std::vector<T>& vt)
-      {
-        std::vector<T> tmp;
-        cet::transform_all(data, std::back_inserter(tmp),
-                           [](auto& d){ T t; d >> t; return t; });
-        std::swap(vt, tmp);
-        data.clear();
-        return *this;
-      }
-
+      explicit operator bool() const { return !empty(); }
     };
 
-    inline query_result& throw_if_empty(query_result& r)
+    template <typename... Args>
+    inline void throw_if_empty(query_result<Args...>& r)
     {
-      if (r.empty())
+      if (r.empty()) {
         throw sqlite::Exception{sqlite::errors::SQLExecutionError} << "SQL query failed.";
-      return r;
+      }
     }
 
-    std::ostream& operator<<(std::ostream&, query_result const&);
+    template <typename T>
+    inline T unique_value(query_result<T> const& r)
+    {
+      if (r.data.size() != 1ull) {
+        throw sqlite::Exception{sqlite::errors::SQLExecutionError}
+        << "unique_value expected of non-unique query.";
+      }
+      return std::get<T>(r.data[0]);
+    }
+
+    template <typename... Args>
+    std::ostream& operator<<(std::ostream& os, query_result<Args...> const& res)
+    {
+      using size_t = decltype(res.columns.size());
+      auto const ncolumns = res.columns.size();
+      for (size_t i{}; i!= ncolumns ; ++i) {
+        os << res.columns[i] << ' ';
+      }
+      os << "\n--------------------------------\n";
+      for (auto const& row : res.data) {
+        //        os << row.str() << '\n';
+      }
+      return os;
+    }
 
   } // sqlite
 } // cet

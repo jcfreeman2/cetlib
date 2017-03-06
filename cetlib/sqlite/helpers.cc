@@ -36,13 +36,13 @@ namespace {
 // of the given name but it does not match both the given column
 // names and column types.
 bool
-cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::string const& sqlddl)
+cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::string const& expectedSchema)
 {
   std::string cmd {"select sql from sqlite_master where type=\"table\" and name=\""};
   cmd += name;
   cmd += '"';
 
-  auto const res = query(db, cmd);
+  auto const res = query<std::string>(db, cmd);
 
   if (res.empty())
     return false;
@@ -60,13 +60,15 @@ cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::strin
   // deleting a dummy row into the desired table)according to the
   // on-disk schema, and inserting some default values according
   // to the requested schema.
-  if (normalize(res.data[0][0]) == normalize(sqlddl))
+  std::string retrievedSchema;
+  std::tie(retrievedSchema) = res.data[0];
+  if (normalize(retrievedSchema) == normalize(expectedSchema))
     return true;
 
   throw sqlite::Exception(sqlite::errors::SQLExecutionError)
     << "Existing database table name does not match description:\n"
-    << "   DDL on disk: " << res.data[0][0] << '\n'
-    << "   Current DDL: " << sqlddl << '\n';
+    << "   DDL on disk: " << normalize(retrievedSchema) << '\n'
+    << "   Current DDL: " << normalize(expectedSchema) << '\n';
 }
 
 namespace cet {
@@ -133,8 +135,6 @@ cet::sqlite::dropTable(sqlite3* db, std::string const& tname)
 unsigned
 cet::sqlite::nrows(sqlite3* db, std::string const& tname)
 {
-  unsigned result {};
-  auto r = query(db,"select count(*) from "+tname+";");
-  throw_if_empty(r) >> result;
-  return result;
+  auto r = query<unsigned>(db,"select count(*) from "+tname+";");
+  return unique_value(r);
 }
