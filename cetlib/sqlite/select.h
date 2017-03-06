@@ -24,8 +24,8 @@ namespace cet {
       return res;
     }
 
-    struct CompleteQuery {
-      CompleteQuery(std::string&& ddl, sqlite3* const db) : ddl_{std::move(ddl)}, db_{db} {}
+    struct SelectStmt {
+      SelectStmt(std::string&& ddl, sqlite3* const db) : ddl_{std::move(ddl)}, db_{db} {}
       std::string ddl_;
       sqlite3* db_;
 
@@ -33,7 +33,7 @@ namespace cet {
       {
         ddl_ += " where ";
         ddl_ += cond;
-        return CompleteQuery{std::move(ddl_), db_};
+        return SelectStmt{std::move(ddl_), db_};
       }
 
       auto order_by(std::string const& column, std::string const& clause = {}) &&
@@ -41,26 +41,26 @@ namespace cet {
         ddl_ += " order by ";
         ddl_ += column;
         ddl_ += " "+clause;
-        return CompleteQuery{std::move(ddl_), db_};
+        return SelectStmt{std::move(ddl_), db_};
       }
 
       auto limit(int const num) &&
       {
         ddl_ += " limit ";
         ddl_ += std::to_string(num);
-        return CompleteQuery{std::move(ddl_), db_};
+        return SelectStmt{std::move(ddl_), db_};
       }
     };
 
-    struct IncompleteQuery {
+    struct IncompleteSelectStmt {
 
-      IncompleteQuery(std::string&& ddl) : ddl_{std::move(ddl)} {}
+      IncompleteSelectStmt(std::string&& ddl) : ddl_{std::move(ddl)} {}
 
       auto from(sqlite3* const db, std::string const& tablename) &&
       {
         ddl_ += " from ";
         ddl_ += tablename;
-        return CompleteQuery{std::move(ddl_), db};
+        return SelectStmt{std::move(ddl_), db};
       }
       std::string ddl_;
 
@@ -80,18 +80,18 @@ namespace cet {
     auto select(T const&... t)
     {
       std::string result {"select "+detail::concatenate(t...)};
-      return IncompleteQuery{std::move(result)};
+      return IncompleteSelectStmt{std::move(result)};
     }
 
     template <typename... T>
     auto select_distinct(T const&... t)
     {
       std::string result {"select distinct "+detail::concatenate(t...)};
-      return IncompleteQuery{std::move(result)};
+      return IncompleteSelectStmt{std::move(result)};
     }
 
     template <typename... Args>
-    void operator<<(query_result<Args...>& r, CompleteQuery const& cq)
+    void operator<<(query_result<Args...>& r, SelectStmt const& cq)
     {
       r = query<Args...>(cq.db_, cq.ddl_+";");
     }

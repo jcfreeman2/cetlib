@@ -79,8 +79,8 @@ cet_make_exec(inc-expand
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:
 
-install_headers(SUBDIRS detail sqlite)
-install_source(SUBDIRS detail sqlite)
+install_headers(SUBDIRS detail sqlite sqlite/detail)
+install_source(SUBDIRS detail sqlite sqlite/detail)
 
 # ======================================================================
 # Testing

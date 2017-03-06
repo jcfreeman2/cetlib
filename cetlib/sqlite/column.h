@@ -14,7 +14,8 @@
 namespace cet {
   namespace sqlite {
 
-    template <size_t N> using name_array = std::array<std::string, N>;
+    template <size_t N>
+    using name_array = std::array<std::string, N>;
 
     class column_base {
     public:
@@ -24,9 +25,9 @@ namespace cet {
       std::string name_;
     };
 
-    // column<T> is a containing struct that knows its c++ type (T) and
-    // the sqlite translation (sqlite_type()).  There is no
-    // implementation of the general case; the template must be
+    // column<T> is a containing struct that knows its C++ type (T)
+    // and the sqlite translation (sqlite_type()).  There is no
+    // implementation for the general case; the template must be
     // specialized for each supported type.
     template <typename T>
     struct column : column_base {

@@ -37,4 +37,12 @@ int main()
                             assert(key == pairs[i].first);
                             assert(value == pairs[i].second);
                           });
+
+  query_result<int> values;
+  create_table_as("onlyValues", select("value").from(c, name));
+  cet::for_all_with_index(values,
+                          [&pairs](std::size_t const i, auto const& row) {
+                            auto const& v = std::get<0>(row);
+                            assert(v == pairs[i].second);
+                          });
 }

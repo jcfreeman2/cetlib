@@ -100,7 +100,7 @@ namespace cet {
 } // cet
 
 sqlite3*
-cet::sqlite::openDatabaseFile(std::string const& filename)
+cet::sqlite::openDatabaseConnection(std::string const& filename)
 {
   sqlite3* db {nullptr};
   std::string const uri = detail::assembleURI(filename);
@@ -121,20 +121,21 @@ cet::sqlite::openDatabaseFile(std::string const& filename)
 
 //=======================================================================
 void
-cet::sqlite::deleteTable(sqlite3* db, std::string const& tname)
+cet::sqlite::delete_from(sqlite3* const db, std::string const& tablename)
 {
-  exec(db, "delete from "s + tname);
+  exec(db, "delete from "s + tablename);
 }
 
 void
-cet::sqlite::dropTable(sqlite3* db, std::string const& tname)
+cet::sqlite::drop_table(sqlite3* const db, std::string const& tablename)
 {
-  exec(db, "drop table "s+ tname);
+  exec(db, "drop table "s+ tablename);
 }
 
 unsigned
-cet::sqlite::nrows(sqlite3* db, std::string const& tname)
+cet::sqlite::nrows(sqlite3* db, std::string const& tablename)
 {
-  auto r = query<unsigned>(db,"select count(*) from "+tname+";");
+  query_result<unsigned> r;
+  r << select("count(*)").from(db, tablename);
   return unique_value(r);
 }

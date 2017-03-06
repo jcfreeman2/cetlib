@@ -18,7 +18,7 @@ namespace cet {
 
       // Non-copyable
       Connection(Connection const&) = delete;
-      Connection operator=(Connection&&) = delete;
+      Connection& operator=(Connection const&) = delete;
 
     private:
       sqlite3* db_;

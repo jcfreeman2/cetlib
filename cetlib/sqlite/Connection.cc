@@ -4,7 +4,7 @@
 using namespace cet::sqlite;
 
 Connection::Connection(std::string const& filename)
-  : db_{openDatabaseFile(filename)}
+  : db_{openDatabaseConnection(filename)}
 {}
 
 Connection::~Connection() noexcept

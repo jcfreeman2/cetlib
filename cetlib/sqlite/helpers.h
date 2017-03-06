@@ -25,29 +25,29 @@ using namespace std::string_literals;
 namespace cet {
   namespace sqlite {
 
+    sqlite3* openDatabaseConnection(std::string const& filename);
+
     bool hasTable(sqlite3* db, std::string const& tablename);
     bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string const& expectedSchema);
-    sqlite3* openDatabaseFile(std::string const& filename);
-    void     deleteTable(sqlite3* db, std::string const& tablename);
-    void     dropTable  (sqlite3* db, std::string const& tablename);
-    unsigned nrows      (sqlite3* db, std::string const& tablename);
+    unsigned nrows(sqlite3* db, std::string const& tablename);
+
+    void delete_from(sqlite3* db, std::string const& tablename);
+    void drop_table(sqlite3* db, std::string const& tablename);
 
     template <typename... ARGS>
     void createTableIfNeeded(sqlite3* db,
-                             sqlite3_int64& rowid,
                              bool const delete_contents,
-                             std::string const& tname,
+                             std::string const& tablename,
                              column<ARGS> const&... cols)
     {
-      auto const& sqlddl = detail::create_table_ddl(tname, cols...);
-      if (!hasTableWithSchema(db, tname, sqlddl)) {
-        exec(db, sqlddl);
+      auto const& sqlddl = detail::create_table_ddl(tablename, cols...);
+      if (hasTableWithSchema(db, tablename, sqlddl)) {
+        if (delete_contents) {
+          drop_table(db, tablename);
+        }
       }
       else {
-        if (delete_contents) {
-          deleteTable(db, tname);
-        }
-        rowid = nrows(db, tname);
+        exec(db, sqlddl);
       }
     }
 
