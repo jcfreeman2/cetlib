@@ -11,6 +11,7 @@
 
 #include <array>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <tuple>
 #include <vector>
@@ -46,10 +47,10 @@ namespace cet {
 
     ~Ntuple() noexcept;
 
-    void insert(Args const...);
     std::string const& name() const { return name_; }
+
+    void insert(Args const...);
     void flush();
-    sqlite3_int64 lastRowid() const { return last_rowid_; }
 
   private:
 
@@ -70,7 +71,7 @@ namespace cet {
     std::size_t max_;
     std::vector<row_t> buffer_ {};
     sqlite3_stmt* insert_statement_ {nullptr};
-    sqlite3_int64 last_rowid_ {};
+    std::recursive_mutex mutex_ {};
   };
 
 }
@@ -92,7 +93,6 @@ cet::Ntuple<Args...>::Ntuple(sqlite3* db,
   }
 
   sqlite::createTableIfNeeded(db,
-                              last_rowid_,
                               overwriteContents,
                               name,
                               sqlite::column<Args>{cnames[I]}...);
@@ -132,14 +132,13 @@ cet::Ntuple<Args...>::Ntuple(std::string const& filename,
                              name_array<nColumns> const& cnames,
                              bool const overwriteContents,
                              std::size_t const bufsize) :
-  Ntuple{sqlite::openDatabaseFile(filename), name, cnames, overwriteContents, bufsize, iSequence}
+  Ntuple{sqlite::openDatabaseConnection(filename), name, cnames, overwriteContents, bufsize, iSequence}
 {}
 
 template <typename... Args>
 cet::Ntuple<Args...>::~Ntuple() noexcept
 {
-  int const rc = flush_no_throw();
-  if (rc != SQLITE_OK) {
+  if (flush_no_throw() != SQLITE_OK) {
     std::cerr << "SQLite step failure while flushing";
   }
   sqlite3_finalize(insert_statement_);
@@ -149,17 +148,18 @@ template <typename... Args>
 void
 cet::Ntuple<Args...>::insert(Args const... args)
 {
+  std::lock_guard<decltype(mutex_)> lock {mutex_};
   if (buffer_.size() == max_) {
     flush();
   }
   buffer_.emplace_back(std::make_unique<Args>(args)...);
-  ++last_rowid_;
 }
 
 template <typename... Args>
 int
 cet::Ntuple<Args...>::flush_no_throw()
 {
+  std::lock_guard<decltype(mutex_)> lock {mutex_};
   sqlite::Transaction txn {db_};
   for (auto const& r : buffer_) {
     sqlite::detail::bind_parameters<row_t, nColumns>::bind(insert_statement_, r);
@@ -167,7 +167,6 @@ cet::Ntuple<Args...>::flush_no_throw()
     if (rc != SQLITE_DONE) {
       return rc;
     }
-    last_rowid_ = sqlite3_last_insert_rowid(db_);
     sqlite3_reset(insert_statement_);
   }
   txn.commit();
@@ -179,6 +178,7 @@ template <typename... Args>
 void
 cet::Ntuple<Args...>::flush()
 {
+  // No lock here -- lock held by flush_no_throw;
   if (flush_no_throw() != SQLITE_OK) {
     throw sqlite::Exception{sqlite::errors::SQLExecutionError, "SQLite step failure while flushing"};
   }
