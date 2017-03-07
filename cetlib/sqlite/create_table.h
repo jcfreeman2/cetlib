@@ -3,34 +3,101 @@
 
 // =======================================================
 //
-// sqlite helpers
+// create_table
+//
+// The create_table(_as) interface allows users to create tables for a
+// given SQLite database.  Two free functions exist:
+//
+//   (1) 'create_table' which takes a database handle object (of type
+//        sqlite3*) or a cet::sqlite::Connection object, a string
+//        corresponding to the desired table name, and a pack of
+//        column<> arguments that correspond to the desired SQLite
+//        columns.
+//
+//   (2) 'create_table_as' which takes a string corresponding to the
+//       desired table name, and a const reference to a SelectStmt
+//       object.  This signature does not receive a database handle
+//       object, since the handle was already supplied when
+//       constructing the SelectStmt object.
+//
+// See below for examples of usage.  Note that calling
+// 'create_table(_as)' does NOT create an explicit SQLite transaction.
+// If a transaction is desired, the create_table* calls should be
+// surrounded by the appropriate transaction calls.
+//
+// Example of usage:
+//
+//    using namespace cet::sqlite;
+//
+//    Connection c {"a.db"};
+//    create_table(c, "workers", column<string>{"name"}, column<int>{"id"});
+//
+//    // insert entries into table...
+//
+//    Transaction txn {c}; // Can work with transactions.
+//    create_table_as("workersNamedDavid",
+//                    select("*").from(c,"workers").where("name='David'"));
+//    txn.commit();
 //
 // =======================================================
 
-#include "sqlite3.h"
-#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/exec.h"
 #include "cetlib/sqlite/select.h"
 
-#include <array>
-#include <iostream>
+#include "sqlite3.h"
+
+#include <sstream>
 #include <string>
 #include <tuple>
 #include <type_traits>
-#include <vector>
 
 using namespace std::string_literals;
 
 namespace cet {
   namespace sqlite {
+    template <typename... Cols>
+    void create_table(sqlite3* const db,  std::string const& tablename, Cols const&... cols);
 
+    void create_table_as(std::string const& tablename, SelectStmt const& stmt);
+  }
+}
+
+// ========================================================
+// Implementation below
+
+namespace cet {
+  namespace sqlite {
     namespace detail {
 
-      template <typename T>
-      std::string column_info(column<T> const& col)
+      template <typename... T>
+      struct constraints_info_impl;
+
+      template <typename H, typename... T>
+      struct constraints_info_impl<H,T...> {
+        static std::string generate_snippet()
+        {
+          return H::snippet() + constraints_info_impl<T...>::generate_snippet();
+        }
+      };
+
+      template <>
+      struct constraints_info_impl<> {
+        static std::string generate_snippet() { return {}; }
+      };
+
+      template <typename... T>
+      std::string constraints_info()
       {
-        return col.name() + col.sqlite_type();
+        return constraints_info_impl<T...>::generate_snippet();
+      }
+
+      template <typename T, typename... Constraints>
+      std::string column_info(column<T, Constraints...> const& col)
+      {
+        std::string info {col.name() + col.sqlite_type()};
+        info += constraints_info<Constraints...>();
+        return info;
       }
 
       inline std::string columns() { return ""; }

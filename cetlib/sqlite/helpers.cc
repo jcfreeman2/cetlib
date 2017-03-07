@@ -9,66 +9,43 @@
 #include <regex>
 
 #include "cetlib/sqlite/Exception.h"
+#include "cetlib/sqlite/detail/normalize_statement.h"
 #include "cetlib/sqlite/helpers.h"
 
-namespace {
-  std::string normalize(std::string to_replace)
-  {
-    // Replace multiple spaces with 1 space.
-    {
-      std::regex const r {"\\s+"};
-      to_replace = std::regex_replace(to_replace, r, " ");
-    }
-    // Ensure no spaces after commas
-    {
-      std::regex const r {", "};
-      to_replace = std::regex_replace(to_replace, r, ",");
-    }
-    return to_replace;
-  }
-}
-
 //=================================================================
-// hasTableWithSchema(db, name, cnames) returns true if the db has
-// a table named 'name', with columns named 'cns' suitable for
-// carrying a tuple<ARGS...>. It returns false if there is no
-// table of that name, and throws an exception if there is a table
-// of the given name but it does not match both the given column
-// names and column types.
+// hasTableWithSchema(db, name, cnames) returns true if the db has a
+// table named 'name', with columns named 'cns' suitable for carrying
+// a tuple<ARGS...>. It returns false if there is no table of that
+// name, and throws an exception if there is a table of the given name
+// but it does not match both the given column names and column types.
 bool
-cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::string const& expectedSchema)
+cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::string expectedSchema)
 {
-  std::string cmd {"select sql from sqlite_master where type=\"table\" and name=\""};
-  cmd += name;
-  cmd += '"';
+  query_result<std::string> res;
+  res << select("sql").from(db, "sqlite_master").where("type=\"table\" and name=\""s+name+'"');
 
-  auto const res = query<std::string>(db, cmd);
-
-  if (res.empty())
+  if (res.empty()) {
     return false;
-
-  if (res.data.size() != 1ull) {
-    throw sqlite::Exception(sqlite::errors::SQLExecutionError)
-      << "Problematic query: " << res.data.size() << " instead of 1.\n";
   }
 
-  // This is a somewhat fragile way of validating schemas.  A
-  // better way would be to rely on sqlite3's insertion facilities
-  // to determine if an insert of in-memory data would be
-  // compatible with the on-disk schema.  This would require
-  // creating a temporary table (so as to avoid inserting then
-  // deleting a dummy row into the desired table)according to the
-  // on-disk schema, and inserting some default values according
-  // to the requested schema.
-  std::string retrievedSchema;
-  std::tie(retrievedSchema) = res.data[0];
-  if (normalize(retrievedSchema) == normalize(expectedSchema))
+  // This is a somewhat fragile way of validating schemas.  A better
+  // way would be to rely on sqlite3's insertion facilities to
+  // determine if an insert of in-memory data would be compatible with
+  // the on-disk schema.  This would require creating a temporary
+  // table (so as to avoid inserting then deleting a dummy row into
+  // the desired table)according to the on-disk schema, and inserting
+  // some default values according to the requested schema.
+  std::string retrievedSchema {unique_value(res)};
+  detail::normalize_statement(retrievedSchema);
+  detail::normalize_statement(expectedSchema);
+  if (retrievedSchema == expectedSchema) {
     return true;
+  }
 
   throw sqlite::Exception(sqlite::errors::SQLExecutionError)
     << "Existing database table name does not match description:\n"
-    << "   DDL on disk: " << normalize(retrievedSchema) << '\n'
-    << "   Current DDL: " << normalize(expectedSchema) << '\n';
+    << "   DDL on disk: " << retrievedSchema << '\n'
+    << "   Current DDL: " << expectedSchema << '\n';
 }
 
 namespace cet {
@@ -103,11 +80,11 @@ sqlite3*
 cet::sqlite::openDatabaseConnection(std::string const& filename)
 {
   sqlite3* db {nullptr};
-  std::string const uri = detail::assembleURI(filename);
-  int const rc = sqlite3_open_v2(uri.c_str(),
-                                 &db,
-                                 SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_URI,
-                                 nullptr);
+  auto const& uri = detail::assembleURI(filename);
+  int const rc {sqlite3_open_v2(uri.c_str(),
+                                &db,
+                                SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_URI,
+                                nullptr)};
   if (rc != SQLITE_OK) {
     sqlite3_close(db);
     throw sqlite::Exception{sqlite::errors::SQLExecutionError}
@@ -123,13 +100,19 @@ cet::sqlite::openDatabaseConnection(std::string const& filename)
 void
 cet::sqlite::delete_from(sqlite3* const db, std::string const& tablename)
 {
-  exec(db, "delete from "s + tablename);
+  exec(db, "delete from "s+tablename+';');
 }
 
 void
 cet::sqlite::drop_table(sqlite3* const db, std::string const& tablename)
 {
-  exec(db, "drop table "s+ tablename);
+  exec(db, "drop table "s+tablename+';');
+}
+
+void
+cet::sqlite::drop_table_if_exists(sqlite3* const db, std::string const& tablename)
+{
+  exec(db, "drop table if exists "s+tablename+';');
 }
 
 unsigned

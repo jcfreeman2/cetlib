@@ -28,22 +28,23 @@ namespace cet {
     sqlite3* openDatabaseConnection(std::string const& filename);
 
     bool hasTable(sqlite3* db, std::string const& tablename);
-    bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string const& expectedSchema);
+    bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string expectedSchema);
     unsigned nrows(sqlite3* db, std::string const& tablename);
 
     void delete_from(sqlite3* db, std::string const& tablename);
     void drop_table(sqlite3* db, std::string const& tablename);
+    void drop_table_if_exists(sqlite3* db, std::string const& tablename);
 
-    template <typename... ARGS>
+    template <typename... Args>
     void createTableIfNeeded(sqlite3* db,
                              bool const delete_contents,
                              std::string const& tablename,
-                             column<ARGS> const&... cols)
+                             permissive_column<Args> const&... cols)
     {
       auto const& sqlddl = detail::create_table_ddl(tablename, cols...);
       if (hasTableWithSchema(db, tablename, sqlddl)) {
         if (delete_contents) {
-          drop_table(db, tablename);
+          delete_from(db, tablename); // Prefer drop_table, but failure-to-prepare exception ends up being thrown.
         }
       }
       else {

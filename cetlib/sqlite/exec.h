@@ -6,7 +6,7 @@
 
 namespace cet {
   namespace sqlite {
-    void exec(sqlite3* db,std::string const& ddl);
+    void exec(sqlite3* db, std::string const& ddl);
   }
 }
 
