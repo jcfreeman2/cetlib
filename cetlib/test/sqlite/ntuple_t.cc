@@ -1,7 +1,7 @@
-#include "cetlib/Ntuple.h"
 #include "cetlib/SimultaneousFunctionSpawner.h"
 #include "cetlib/sqlite/Connection.h"
 #include "cetlib/sqlite/Exception.h"
+#include "cetlib/sqlite/Ntuple.h"
 #include "cetlib/sqlite/helpers.h"
 #include "cetlib/sqlite/select.h"
 
@@ -16,7 +16,7 @@
 // We do not use Boost Unit Test here because we want the product into
 // which this moves to be independent of Boost.
 
-using namespace cet;
+using namespace cet::sqlite;
 
 void nullptr_build_failure()
 {
@@ -26,7 +26,7 @@ void nullptr_build_failure()
     Ntuple<int, column<double>> t2 {db, "table1", {"i", "x"}};
     assert("Ntuple creation failed to throw required exception" == 0);
   }
-  catch (sqlite::Exception const& x) { }
+  catch (Exception const& x) { }
   catch (...) { assert("Ntuple creation throw the wrong type of exception" == 0); }
   std::cout << "end nullptr_build_failure\n";
 }
@@ -57,7 +57,7 @@ void test_with_colliding_table(sqlite3* db,
     Ntuple<ARGS...> xx {db, "xx", names};
     assert("Failed throw for mismatched table" == nullptr);
   }
-  catch (sqlite::Exception const& x) { }
+  catch (Exception const& x) { }
   catch (...) { assert("Threw wrong exception for mismatched table" == nullptr); }
   std::cout << "end test_with_colliding_table\n";
 }
@@ -82,8 +82,8 @@ void test_filling_table(sqlite3* db)
       nt.insert(i, 1.5 * i);
     }
   }
-  sqlite::query_result<int> nmatches;
-  nmatches << sqlite::select("count(*)").from(db, "zz");
+  query_result<int> nmatches;
+  nmatches << select("count(*)").from(db, "zz");
   // Check that there are 'nrows' rows in the database.
   assert(unique_value(nmatches) == nrows);
   std::cout << "end test_filling_table\n";
@@ -109,8 +109,8 @@ void test_parallel_filling_table(sqlite3* db)
     }
     cet::SimultaneousFunctionSpawner sfs {tasks};
   }
-  sqlite::query_result<int> nmatches;
-  nmatches << sqlite::select("count(*)").from(db, tablename);
+  query_result<int> nmatches;
+  nmatches << select("count(*)").from(db, tablename);
   assert(unique_value(nmatches) == nrows_per_thread*nthreads);
   std::cout << "end test_parallel_filling_table\n";
 }
@@ -119,9 +119,9 @@ void test_column_constraint(sqlite3* db)
 {
   std::cout << "start test_column_constraint\n";
   assert(db);
-  Ntuple<column<int, sqlite::primary_key>, double> nt {db, "u", {"i", "x"}};
-  auto const& ref = sqlite::detail::create_table_ddl("u", column<int, sqlite::primary_key>{"i"}, column<double>{"x"});
-  assert(sqlite::hasTableWithSchema(db, "u", ref));
+  Ntuple<column<int, primary_key>, double> nt {db, "u", {"i", "x"}};
+  auto const& ref = detail::create_table_ddl("u", column<int, primary_key>{"i"}, column<double>{"x"});
+  assert(hasTableWithSchema(db, "u", ref));
   std::cout << "end test_column_constraint\n";
 }
 
@@ -135,9 +135,9 @@ void test_file_create()
       table.insert(i, 0.5*i, i*i);
     }
   }
-  sqlite::Connection c {filename};
-  sqlite::query_result<int> cnt;
-  cnt << sqlite::select("count(*)").from(c, "tab1");
+  Connection c {filename};
+  query_result<int> cnt;
+  cnt << select("count(*)").from(c, "tab1");
   assert(unique_value(cnt) == 103);
 }
 
