@@ -9,5 +9,6 @@ Connection::Connection(std::string const& filename)
 
 Connection::~Connection() noexcept
 {
+  // It is safe to call sqlite3_close on a null db_.
   sqlite3_close(db_);
 }

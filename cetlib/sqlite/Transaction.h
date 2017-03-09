@@ -5,10 +5,17 @@
 // Transaction
 //
 // A Transaction object encapsulates a single SQLite transaction. Such
-// transactions can not be nested. Look into using SAVEPOINT if you
+// transactions cannot be nested. Look into using SAVEPOINT if you
 // need nesting.
 //
-// ===================================================================
+// Creating a Transaction begins a transaction in the given db, which
+// is to have been already be opened.
+//
+// A transaction is committed by specifying 'commit()', which can be
+// called ONLY ONCE per transaction object.  If 'commit' is not called
+// before the Transaction object is destroyed, then the transaction is
+// rolled back.
+// ====================================================================
 
 struct sqlite3;
 
@@ -18,25 +25,16 @@ namespace cet {
     class Transaction {
     public:
 
-      // Creating a Transaction begins a transaction in the given
-      // db. It is expected that the database has already be opened.
       explicit Transaction(sqlite3* db);
+      ~Transaction() noexcept;
+
+      void commit();
 
       // Transactions may not be copied or moved.
       Transaction(Transaction const&) = delete;
       Transaction(Transaction&&) = delete;
       Transaction& operator=(Transaction const&) = delete;
       Transaction& operator=(Transaction&&) = delete;
-
-      // Destroying the Transaction will roll back the associated
-      // transaction, unless 'commit' has been called.
-      ~Transaction() noexcept;
-
-      // Commit the associated SQLite transaction. Unless committed,
-      // the transaction will be rolled back upon
-      // destruction. 'commit' may only be called once per
-      // Transaction.
-      void commit();
 
     private:
       sqlite3* db_;

@@ -1,10 +1,40 @@
 #ifndef cetlib_sqlite_insert_h
 #define cetlib_sqlite_insert_h
 
+// ====================================================================
+//
+// The insert_into facility provides a means of ensuring, in a
+// type-safe manner, the insertion of values into an already-existing
+// database table.
+//
+// The encouraged usage pattern is:
+//
+//   using namespace cet::sqlite;
+//   create_table(db, "workers", column<int>{"id"}, column<string>{"name"});
+//   insert_into(db, "workers").values(24, "Billy");
+//   insert_into(db, "workers").values(17, "Jenny");
+//
+// Extensive usage of insert_into(...) may be inefficient as each call
+// prepares a statement, executes it, and then finalizes it.  To
+// support more efficient insertion, consider using the Ntuple
+// facility.
+//
+// --------------------------------------------------------------------
+//
+// Technical considerations:
+//
+//  - It is not difficult to expand the functionality of insert_into
+//    to support inserting into specific columns (as is supported with
+//    a bare SQLite insert statement), should it be requested.
+//  - It should be determined whether a simple-enough syntax can be
+//    developed to support insert statements with placeholders.
+//
+// ====================================================================
+
 #include <iostream>
-#include <string>
 #include <ostream>
 #include <sstream>
+#include <string>
 #include <vector>
 
 #include "cetlib/sqlite/exec.h"

@@ -1,6 +1,13 @@
 #ifndef cetlib_sqlite_exec_h
 #define cetlib_sqlite_exec_h
 
+// ======================================================================
+// 'exec' is the utility used to encapsulate sqlite3_exec calls when
+// no results are expected to be retrieved from the call.  If results
+// from an SQLite query are desired, then the cet::sqlite::select(...)
+// functionality should be used.
+// ======================================================================
+
 #include "sqlite3.h"
 #include <string>
 

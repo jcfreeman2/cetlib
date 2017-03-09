@@ -1,12 +1,32 @@
 #ifndef cetlib_sqlite_column_h
 #define cetlib_sqlite_column_h
 
-// =======================================================
+// ===================================================================
+// column<T, Constraints...>
 //
-// columns
+// SQLite tables are composed of columns that are specified in SQLite
+// as (e.g):
 //
-// FIXME: EXPLANATION
-// =======================================================
+//  CREATE TABLE workers(FirstName TEXT, LastName TEXT);
+//
+// where the fields in parentheses denote two columns with the names
+// 'FirstName' and 'LastName', both of which are of the type 'TEXT'.
+//
+// The column template allows a user to specify a column using native
+// C++ types.  For example, the above SQLite statement can be achieved
+// and executed in C++ using the create_table command:
+//
+//   cet::sqlite::create_table(db,
+//                             "workers",
+//                             column<string>{"FirstName"},
+//                             column<string>{"LastName"});
+//
+// Column constraints are also allowed (e.g.):
+//
+//   column<int, primary_key, autoincrement>{"id"}
+//
+// See the notes in cetlib/sqlite/detail/column_constraint.h.
+// ===================================================================
 
 #include "cetlib/sqlite/detail/column_constraint.h"
 
@@ -36,6 +56,9 @@ namespace cet {
     template <typename T, typename... Constraints>
     struct column;
 
+    // IMPROVEMENT: The specializations can be improved by some
+    // template metaprogramming and using the std::is_arithmetic and
+    // std::is_floating_point type traits.
     template <typename... Constraints>
     struct column<double, Constraints...> : column_base {
       using column_base::column_base;
@@ -99,7 +122,21 @@ namespace cet {
       std::string sqlite_type() const { return " text"; }
     };
 
-    //====================================================================
+    //=============================================================================
+    // A permissive_column type is used in the context of an Ntuple so
+    // that the following constructs are allowed:
+    //
+    //   Ntuple<int, double, string>   // has identical semantics to...
+    //   Ntuple<column<int>, column<double>, column<string>>
+    //
+    // The benefit is that if a user wants to specify a constraint for
+    // a given column, the way to do that in the context of the Ntuple
+    // is for the user to specify (e.g.) column<int, primary_key> for
+    // the relevant column, but not be required to use column<...> for
+    // all others (e.g.):
+    //
+    //   Ntuple<column<int, primary_key>, double, string>;
+
     template <typename T, typename... Constraints>
     struct permissive_column : column<T, Constraints...> {
       using column<T, Constraints...>::column;

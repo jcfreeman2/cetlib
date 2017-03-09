@@ -6,10 +6,16 @@
 // Ntuple
 //
 // The Ntuple class template is an interface for inserting into an
-// SQLite database in a type-safe and threadsafe manner.  It is not
+// SQLite database in a type-safe and thread-safe manner.  It is not
 // intended for this facility to provide facilities for making SQLite
 // database queries.  For querying, consider using the
 // 'cet::sqlite::select' utilities.
+//
+// WARNING: At the moment, two Ntuple instances that access the same
+//   database will NOT be thread-safe because locking is disabled to
+//   accommodate NFS.  This will be adjusted in a future commit so
+//   that access to a database is appropriately serialized across
+//   Ntuple instances.
 //
 // Construction
 // ------------
@@ -102,18 +108,18 @@
 //   A lock is therefore inevitable.  We could probably optimize by
 //   using an atomic variable to protect against modification only
 //   when a flush is being done.  This is a potential optimization to
-//   keep in mind..
-//
+//   keep in mind.
+
 // ===========================================================
 
 #include "cetlib/sqlite/Transaction.h"
-#include "cetlib/sqlite/bind_parameters.h"
 #include "cetlib/sqlite/column.h"
+#include "cetlib/sqlite/detail/bind_parameters.h"
 #include "cetlib/sqlite/helpers.h"
-#include "cetlib/sqlite/insert.h"
 
 #include "sqlite3.h"
 
+#include <iostream>
 #include <memory>
 #include <mutex>
 #include <string>
