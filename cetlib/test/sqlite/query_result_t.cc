@@ -1,5 +1,5 @@
 #include "cetlib/container_algorithms.h"
-#include "cetlib/sqlite/Connection.h"
+#include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/insert.h"
@@ -16,7 +16,9 @@ using namespace cet::sqlite;
 
 int main()
 {
-  Connection c {":memory:"};
+  ConnectionFactory cf;
+  auto c = cf.make(":memory:");
+
   std::string const name {"numbers"};
 
   vector<pair<string,int>> const pairs {{"one", 1}, {"five", 5}, {"ten", 10}};

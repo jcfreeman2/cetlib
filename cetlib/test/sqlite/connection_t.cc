@@ -1,5 +1,7 @@
 #include "boost/filesystem.hpp"
-#include "cetlib/sqlite/Connection.h"
+#include "cetlib/SimultaneousFunctionSpawner.h"
+#include "cetlib/sqlite/ConnectionFactory.h"
+#include "cetlib/sqlite/Ntuple.h"
 #include "cetlib/sqlite/create_table.h"
 
 #include <cassert>
@@ -11,10 +13,13 @@ namespace bfs = boost::filesystem;
 
 int main()
   try {
+
+    ConnectionFactory cf;
+
     // Simple connection to "a.db"
     {
       std::string const f {"a.db"};
-      Connection c {f};
+      auto c = cf.make(f);
       create_table(c, "onlyOne", column<int>{"numbers"});
       bfs::path const p {f};
       assert(bfs::exists(p));
@@ -22,7 +27,7 @@ int main()
 
     // Simple connection to in-memory database
     {
-      Connection c {":memory:"};
+      auto c = cf.make(":memory:");
       create_table(c, "onlyOne", column<int>{"numbers"});
       query_result<int> r;
       r << select("*").from(c, "onlyOne");
@@ -33,8 +38,8 @@ int main()
     {
       std::string const f1 {"b.db"};
       std::string const f2 {"c.db"};
-      Connection c1 {f1};
-      Connection c2 {f2};
+      auto c1 = cf.make(f1);
+      auto c2 = cf.make(f2);
       create_table(c1, "separate", column<int>{"numbers"});
       create_table(c2, "separate", column<int>{"numbers"});
       bfs::path const p1 {f1};
@@ -43,9 +48,9 @@ int main()
       assert(bfs::exists(p2));
     }
 
-    auto test_colliding_tables = [](std::string const& dbname) {
-      Connection c1 {dbname};
-      Connection c2 {dbname};
+    auto test_colliding_tables = [&cf](std::string const& dbname) {
+      auto c1 = cf.make(dbname);
+      auto c2 = cf.make(dbname);
       create_table(c1, "colliding", column<int>{"numbers"});
       try {
         create_table(c2, "colliding", column<int>{"numbers"});
@@ -66,6 +71,16 @@ int main()
 
     // Separate connections to same database in-memory database
     test_colliding_tables(":memory:");
+
+    // Test concurrent creation of connections to the same database.
+    {
+      ConnectionFactory sharedFactory;
+      std::string const f {"e.db"};
+      std::vector<std::function<void()>> const tasks (10, [&sharedFactory,&f]{ auto c = sharedFactory.make(f); });
+      cet::SimultaneousFunctionSpawner launch {tasks};
+      bfs::path const p {f};
+      assert(bfs::exists(p));
+    }
   }
   catch(exception const& e) {
     cerr << e.what() << '\n';

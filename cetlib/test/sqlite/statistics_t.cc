@@ -1,4 +1,4 @@
-#include "cetlib/sqlite/Connection.h"
+#include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/Ntuple.h"
 #include "cetlib/sqlite/statistics.h"
 
@@ -31,7 +31,8 @@ using namespace cet::sqlite;
 
 int main()
 {
-  Connection c {":memory:"};
+  ConnectionFactory cf;
+  auto c = cf.make(":memory:");
   std::string const table_name {"workers"};
   {
     Ntuple<string,int,int> workers {c, table_name, {"Name", "Age", "Experience"}};

@@ -11,31 +11,25 @@
 // database queries.  For querying, consider using the
 // 'cet::sqlite::select' utilities.
 //
-// WARNING: At the moment, two Ntuple instances that access the same
-//   database will NOT be thread-safe because locking is disabled to
-//   accommodate NFS.  This will be adjusted in a future commit so
-//   that access to a database is appropriately serialized across
-//   Ntuple instances.
 //
 // Construction
 // ------------
 //
-// There are two Ntuple c'tor signatures with opposite semantics:
+// The c'tor receives a reference to a cet::sqlite::Connection object,
+// that must outlive the life of the Ntuple.  It is the responsibility
+// of the user to manage the Connection's lifetime.  A Connection is
+// created by a call to ConnectionFactory::make.  Please see the
+// documentation in cetlib/sqlite/Connection(Factory).h.
 //
-//   (1) The c'tor that accepts a database handle object of type
-//        (convertible to) sqlite3* implies a non-owning Ntuple object
-//        that does not close the SQLite database whenever the Ntuple
-//        d'tor is called.
-//
-//   (2) The c'tor that accepts a filename implies an owning object,
-//       for which sqlite3_close IS called whenever the Ntuple object
-//       is destroyed.
-//
-// In addition to the SQLite table name that the constructed Ntuple
-// object will refer, a set of column names is also required in the
-// form of an std::array object.
+// In addition to the Connection object, the Ntuple c'tor receives an
+// SQLite table name and a set of column names in the form of an
+// std::array object.
 //
 // See the Ntuple definition below for the full c'tor signatures.
+//
+// N.B. Constructing an Ntuple in a multi-threaded context is NOT
+//      thread-safe if done in parallel with any operations being
+//      performed on the same database elsewhere.
 //
 // Template arguments
 // ------------------
@@ -78,13 +72,7 @@
 //
 //    using namespace cet::sqlite;
 //
-//    // Owning use case
-//    Ntuple<string, int, int, int> bdays {"bdays.db", "birthdays", {"Name", "Day", "Month", "Year"}};
-//    bdays.insert("Betty", 9, 24, 1947);
-//    bdays.insert("David", 3, 12, 2015);
-//
-//    // Non-owning use case
-//    Connection c {"languages.db"};
+//    auto c = existing_connection_factory.make("languages.db");
 //    Ntuple<string, string> langs {c, "europe", {"Country","Language"}};
 //    langs.insert("Germany", "German");
 //    langs.insert("Switzerland", "German");
@@ -109,9 +97,9 @@
 //   using an atomic variable to protect against modification only
 //   when a flush is being done.  This is a potential optimization to
 //   keep in mind.
-
 // ===========================================================
 
+#include "cetlib/sqlite/Connection.h"
 #include "cetlib/sqlite/Transaction.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/detail/bind_parameters.h"
@@ -145,21 +133,11 @@ namespace cet {
       static constexpr auto nColumns = std::tuple_size<row_t>::value;
       using name_array = sqlite::name_array<nColumns>;
 
-      // Non-owning version--does not call sqlite3_close on 'db' when
-      // the d'tor is called.
-      Ntuple(sqlite3* db,
+      Ntuple(Connection& connection,
              std::string const& name,
              name_array const& columns,
              bool overwriteContents = false,
              std::size_t bufsize = 1000ull);
-
-      // Owning version--sqlite3_close is called on the internally owned
-      // database connection handle.
-      Ntuple(std::string const& filename,
-             std::string const& tablename,
-             name_array const& columns,
-             bool overwriteContents = false,
-             std::size_t bufsiz = 1000ull);
 
       ~Ntuple() noexcept;
 
@@ -179,20 +157,18 @@ namespace cet {
       // This is the c'tor that does all of the work.  It exists so that
       // the Args... and column-names array can be expanded in parallel.
       template <std::size_t... I>
-      Ntuple(sqlite3* db,
+      Ntuple(Connection& db,
              std::string const& name,
              name_array const& columns,
              bool overwriteContents,
              std::size_t bufsize,
-             bool ownsConnection,
              std::index_sequence<I...>);
 
       int flush_no_throw();
 
-      sqlite3* db_;
+      Connection& connection_;
       std::string name_;
       std::size_t max_;
-      bool ownsConnection_;
       std::vector<row_t> buffer_ {};
       sqlite3_stmt* insert_statement_ {nullptr};
       std::recursive_mutex mutex_ {};
@@ -203,24 +179,19 @@ namespace cet {
 
 template <typename... Args>
 template <std::size_t... I>
-cet::sqlite::Ntuple<Args...>::Ntuple(sqlite3* const db,
+cet::sqlite::Ntuple<Args...>::Ntuple(Connection& connection,
                                      std::string const& name,
                                      name_array const& cnames,
                                      bool const overwriteContents,
                                      std::size_t const bufsize,
-                                     bool const ownsConnection,
                                      std::index_sequence<I...>) :
-  db_{db},
+  connection_{connection},
   name_{name},
-  max_{bufsize},
-  ownsConnection_{ownsConnection}
+  max_{bufsize}
 {
-  if (!db) {
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError}
-    << "Attempt to create Ntuple with null database pointer.";
-  }
+  assert(connection);
 
-  sqlite::createTableIfNeeded(db,
+  sqlite::createTableIfNeeded(connection,
                               overwriteContents,
                               name,
                               sqlite::permissive_column<Args>{cnames[I]}...);
@@ -230,7 +201,7 @@ cet::sqlite::Ntuple<Args...>::Ntuple(sqlite3* const db,
   sql += " VALUES (?";
   for (std::size_t i = 1; i < nColumns; ++i) { sql += ",?"; }
   sql += ")";
-  int const rc {sqlite3_prepare_v2(db_,
+  int const rc {sqlite3_prepare_v2(connection_,
                                    sql.c_str(),
                                    sql.size(),
                                    &insert_statement_,
@@ -246,21 +217,12 @@ cet::sqlite::Ntuple<Args...>::Ntuple(sqlite3* const db,
 }
 
 template <typename... Args>
-cet::sqlite::Ntuple<Args...>::Ntuple(sqlite3* db,
+cet::sqlite::Ntuple<Args...>::Ntuple(Connection& connection,
                                      std::string const& name,
                                      name_array const& cnames,
                                      bool const overwriteContents,
                                      std::size_t const bufsize) :
-  Ntuple{db, name, cnames, overwriteContents, bufsize, false, iSequence}
-{}
-
-template <typename... Args>
-cet::sqlite::Ntuple<Args...>::Ntuple(std::string const& filename,
-                                     std::string const& name,
-                                     name_array const& cnames,
-                                     bool const overwriteContents,
-                                     std::size_t const bufsize) :
-  Ntuple{sqlite::openDatabaseConnection(filename), name, cnames, overwriteContents, bufsize, true, iSequence}
+  Ntuple{connection, name, cnames, overwriteContents, bufsize, iSequence}
 {}
 
 template <typename... Args>
@@ -270,9 +232,6 @@ cet::sqlite::Ntuple<Args...>::~Ntuple() noexcept
     std::cerr << "SQLite step failure while flushing.\n";
   }
   sqlite3_finalize(insert_statement_);
-  if (ownsConnection_) {
-    sqlite3_close(db_);
-  }
 }
 
 template <typename... Args>
@@ -290,17 +249,13 @@ template <typename... Args>
 int
 cet::sqlite::Ntuple<Args...>::flush_no_throw()
 {
+  // Guard against any modifications to the buffer, which is about to
+  // be flushed to the database.
   std::lock_guard<decltype(mutex_)> lock {mutex_};
-  sqlite::Transaction txn {db_};
-  for (auto const& r : buffer_) {
-    sqlite::detail::bind_parameters<row_t, nColumns>::bind(insert_statement_, r);
-    int const rc {sqlite3_step(insert_statement_)};
-    if (rc != SQLITE_DONE) {
-      return rc;
-    }
-    sqlite3_reset(insert_statement_);
+  int const rc {connection_.flush_no_throw<nColumns>(buffer_, insert_statement_)};
+  if (rc != SQLITE_DONE) {
+    return rc;
   }
-  txn.commit();
   buffer_.clear();
   return SQLITE_OK;
 }
