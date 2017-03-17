@@ -76,10 +76,37 @@ int main()
     {
       ConnectionFactory sharedFactory;
       std::string const f {"e.db"};
-      std::vector<std::function<void()>> const tasks (10, [&sharedFactory,&f]{ auto c = sharedFactory.make(f); });
-      cet::SimultaneousFunctionSpawner launch {tasks};
+      auto makeConnection = [&sharedFactory,&f]{ auto c = sharedFactory.make(f); };
+      cet::SimultaneousFunctionSpawner launch {cet::repeated_task(10u, makeConnection)};
       bfs::path const p {f};
       assert(bfs::exists(p));
+    }
+
+    // Test concurrent insertion into different tables, using
+    // different connections that refer to the same database.
+    // - Force flush after each insertion to test thread-safety of
+    //   concurrent writes to the same database.
+    {
+      std::string const f {"f.db"};
+      auto c1 = cf.make(f);
+      auto c2 = cf.make(f);
+      Ntuple<int> n1 {c1, "Odds", {"Number"}};
+      Ntuple<int> n2 {c2, "Evens", {"Number"}};
+      std::vector<std::function<void()>> tasks;
+      for (unsigned i{1}; i < 6u; ++i) {
+        tasks.push_back([&n1,i]{ n1.insert(2*i-1); n1.flush(); });
+        tasks.push_back([&n2,i]{ n2.insert(2*i); n2.flush(); });
+      }
+      cet::SimultaneousFunctionSpawner launch {tasks};
+
+      query_result<int> sum_odds;
+      sum_odds << select("sum(Number)").from(c1, "Odds");
+
+      query_result<int> sum_evens;
+      sum_evens << select("sum(Number)").from(c2, "Evens");
+
+      assert(unique_value(sum_odds) == 25);
+      assert(unique_value(sum_evens) == 30);
     }
   }
   catch(exception const& e) {
