@@ -23,4 +23,4 @@ namespace cet {
   }
 }
 
-#endif
+#endif /* cetlib_sqlite_detail_normalize_statement_h */

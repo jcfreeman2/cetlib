@@ -24,7 +24,7 @@ namespace cet {
   }
 }
 
-#endif
+#endif /* cetlib_sqlite_detail_DefaultDatabaseOpenPolicy_h */
 
 // Local variables:
 // mode: c++

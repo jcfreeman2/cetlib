@@ -42,4 +42,4 @@ namespace cet {
   }
 }
 
-#endif
+#endif /* cetlib_sqlite_detail_column_constraint_h */

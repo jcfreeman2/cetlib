@@ -1,5 +1,5 @@
-#ifndef cetlib_sqlite_bind_parameters_h
-#define cetlib_sqlite_bind_parameters_h
+#ifndef cetlib_sqlite_detail_bind_parameters_h
+#define cetlib_sqlite_detail_bind_parameters_h
 
 //=======================================================================
 // The bind_one_* functions are intended to be for internal use only.
@@ -49,7 +49,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif /* cetlib_sqlite_bind_parameters_h */
+#endif /* cetlib_sqlite_detail_bind_parameters_h */
 
 // Local Variables:
 // mode: c++

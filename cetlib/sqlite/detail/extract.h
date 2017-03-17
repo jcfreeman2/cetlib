@@ -1,5 +1,5 @@
-#ifndef cetlib_sqlite_stringstream_h
-#define cetlib_sqlite_stringstream_h
+#ifndef cetlib_sqlite_detail_extract_h
+#define cetlib_sqlite_detail_extract_h
 
 // =================================================================
 //
@@ -43,4 +43,4 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif
+#endif /* cetlib_sqlite_detail_extract_h */

@@ -1,5 +1,5 @@
-#ifndef cetlib_Ntuple_h
-#define cetlib_Ntuple_h
+#ifndef cetlib_sqlite_Ntuple_h
+#define cetlib_sqlite_Ntuple_h
 
 // =====================================================================
 //
@@ -271,7 +271,7 @@ cet::sqlite::Ntuple<Args...>::flush()
   }
 }
 
-#endif /* cetlib_Ntuple_h */
+#endif /* cetlib_sqlite_Ntuple_h */
 
 // Local Variables:
 // mode: c++

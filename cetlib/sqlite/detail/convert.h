@@ -43,4 +43,4 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif
+#endif /* cetlib_sqlite_detail_convert_h */

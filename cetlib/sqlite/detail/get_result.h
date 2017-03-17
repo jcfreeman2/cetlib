@@ -50,7 +50,7 @@ namespace cet {
   } // sqlite
 } // cet
 
-#endif
+#endif /* cetlib_sqlite_detail_get_result_h */
 
 // Local variables:
 // mode: c++
