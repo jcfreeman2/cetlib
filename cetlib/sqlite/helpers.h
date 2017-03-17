@@ -3,9 +3,7 @@
 
 // ====================================================================
 // These are general utilities for interacting with a database and any
-// tables therein.  Any calls to 'openDatabaseConnection' or
-// 'createTableIfNeeded' implicitly disable database and table
-// locking.  See comments for Connection class.
+// tables therein.
 // ====================================================================
 
 #include "cetlib/sqlite/Exception.h"
@@ -23,8 +21,7 @@ using namespace std::string_literals;
 namespace cet {
   namespace sqlite {
 
-    sqlite3* openDatabaseConnection(std::string const& filename);
-
+    std::string assembleNoLockURI(std::string const& filename);
     bool hasTableWithSchema(sqlite3* db, std::string const& tablename, std::string expectedSchema);
     unsigned nrows(sqlite3* db, std::string const& tablename);
 

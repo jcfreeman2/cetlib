@@ -32,6 +32,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   sqlite/Connection.cc
   sqlite/Exception.cc
   sqlite/Transaction.cc
+  sqlite/detail/DefaultDatabaseOpenPolicy.cc
   sqlite/detail/bind_parameters.cc
   sqlite/detail/column_constraint.cc
   sqlite/detail/normalize_statement.cc

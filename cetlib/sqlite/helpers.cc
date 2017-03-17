@@ -6,27 +6,18 @@
 #include <cmath>
 #include <regex>
 
-namespace {
-  //================================================================
-  // The locking mechanisms for nfs systems are deficient and can thus
-  // wreak havoc with sqlite, which depends upon them.  In order to
-  // support an sqlite database on nfs, we use a URI, explicitly
-  // including the query parameter: 'nolock=1'.  We will have to
-  // revisit this choice once we consider multiple processes/threads
-  // writing to the same database file.
-  inline std::string assembleURI(std::string const& filename)
-  {
-    using namespace cet::sqlite;
-    // Arbitrary decision: don't allow users to specify a URI since
-    // they may (unintentionally) remove the 'nolock' parameter, thus
-    // potentially causing issues with nfs.
-    if (filename.substr(0,5) == "file:") {
-      throw Exception{errors::OtherError}
-      << "art does not allow an SQLite database filename that starts with 'file:'.\n"
-           << "Please contact artists@fnal.gov if you believe this is an error.";
-    }
-    return "file:"+filename+"?nolock=1";
+std::string
+cet::sqlite::assembleNoLockURI(std::string const& filename)
+{
+  // Arbitrary decision: don't allow users to specify a URI since
+  // they may (unintentionally) remove the 'nolock' parameter, thus
+  // potentially causing issues with NFS.
+  if (filename.substr(0,5) == "file:") {
+    throw Exception{errors::OtherError}
+    << "art does not allow an SQLite database filename that starts with 'file:'.\n"
+         << "Please contact artists@fnal.gov if you believe this is an error.";
   }
+  return "file:"+filename+"?nolock=1";
 }
 
 //=================================================================
@@ -65,25 +56,6 @@ cet::sqlite::hasTableWithSchema(sqlite3* db, std::string const& name, std::strin
     << "   Expected schema: " << expectedSchema << '\n';
 }
 
-sqlite3*
-cet::sqlite::openDatabaseConnection(std::string const& filename)
-{
-  sqlite3* db {nullptr};
-  auto const& uri = assembleURI(filename);
-  int const rc {sqlite3_open_v2(uri.c_str(),
-                                &db,
-                                SQLITE_OPEN_READWRITE|SQLITE_OPEN_CREATE|SQLITE_OPEN_URI,
-                                nullptr)};
-  if (rc != SQLITE_OK) {
-    sqlite3_close(db);
-    throw sqlite::Exception{sqlite::errors::SQLExecutionError}
-    << "Failed to open SQLite database\n"
-         << "Return code: " << rc;
-  }
-
-  assert(db);
-  return db;
-}
 
 void
 cet::sqlite::delete_from(sqlite3* const db, std::string const& tablename)

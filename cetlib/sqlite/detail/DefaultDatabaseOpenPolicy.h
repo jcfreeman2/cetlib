@@ -1,19 +1,24 @@
 #ifndef cetlib_sqlite_detail_DefaultDatabaseOpenPolicy_h
 #define cetlib_sqlite_detail_DefaultDatabaseOpenPolicy_h
 
-#include "cetlib/sqlite/helpers.h"
+//=====================================================================
+// The locking mechanisms for NFS systems are deficient and can thus
+// wreak havoc with SQLite, which depends upon them.  In order to
+// support an SQLite database on NFS, we use a URI, explicitly
+// including the query parameter: 'nolock=1'.  The
+// DefaultDatabaseOpenPolicy achieves this.
+//=====================================================================
 
 #include <string>
+
+class sqlite3;
 
 namespace cet {
   namespace sqlite {
     namespace detail {
       class DefaultDatabaseOpenPolicy {
       public:
-        sqlite3* open(std::string const& file_name)
-        {
-          return openDatabaseConnection(file_name);
-        }
+        sqlite3* open(std::string const& file_name);
       };
     }
   }
