@@ -11,6 +11,9 @@ cet_enable_asserts()
 link_libraries(cetlib)
 
 add_subdirectory(sqlite)
+cet_test(assert_only_one_thread_test
+  LIBRARIES pthread
+  TEST_PROPERTIES PASS_REGULAR_EXPRESSION "Failed assert--more than one thread accessing location")
 cet_test(bit_test)
 cet_test(base_converter_test)
 cet_test(canonical_number_test)
