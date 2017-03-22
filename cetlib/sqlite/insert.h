@@ -67,7 +67,7 @@ namespace cet {
           values_str_impl(os, t...);
         }
         else
-          os << h;
+          os << maybe_quote(h);
       }
 
       template <typename... Args>
