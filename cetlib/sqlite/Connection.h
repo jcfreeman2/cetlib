@@ -31,6 +31,11 @@ namespace cet {
     class Connection {
     public:
 
+      // It is permitted to create an invalid Connection object
+      // through default construction.  However, any connections to an
+      // SQLite database must be retrieved through the
+      // ConnectionFactory.
+      explicit Connection() = default;
       ~Connection() noexcept;
 
       sqlite3* get() const { return db_; }
@@ -52,8 +57,8 @@ namespace cet {
       explicit Connection(std::string const& file_name, std::shared_ptr<std::mutex> m, DatabaseOpenPolicy);
       friend class ConnectionFactory;
 
-      sqlite3* db_ {nullptr};
-      std::shared_ptr<std::mutex> m_; // Shared with other connections to the same database
+      sqlite3* db_{nullptr};
+      std::shared_ptr<std::mutex> m_{nullptr}; // Shared with other connections to the same database
     };
 
   } //namespace sqlite
