@@ -8,13 +8,13 @@ perllib  product_dir
 
 # define product/version pairs
 product	version
-boost		v1_63_0a
+boost		v1_63_0b
 gcc		v4_9_3a		e10
 gcc		v6_2_0		e12
 gcc		v6_3_0		e14
 sqlite		v3_16_02_00a
 cetlib_except   v1_01_01
-cetbuildtools	v5_08_00	-	only_for_build
+cetbuildtools	v5_08_01	-	only_for_build
 end_product_list
 
 
