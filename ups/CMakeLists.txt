@@ -4,6 +4,7 @@
 #
 # ======================================================================
 
-process_ups_files()
+include(CetCMakeConfig)
+#process_ups_files()
 
 cet_cmake_config()

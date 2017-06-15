@@ -1,5 +1,5 @@
 install(FILES PluginVersionInfo.pm.in
-  DESTINATION ${${product}_perllib})
+  DESTINATION perllib )
 
 cet_script(cetskelgen)
 

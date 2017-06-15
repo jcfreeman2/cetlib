@@ -16,15 +16,18 @@
 # ----------------------------------------------------------------------
 # Describe build tool requirements:
 
-cmake_minimum_required(VERSION 2.8)  # use cmake 2.8 or later
+cmake_minimum_required(VERSION 3.0)  
 
 # ----------------------------------------------------------------------
 # Describe product:
 
-project(cetlib)
+project(cetlib VERSION 3.00.01 )
 
-# cetbuildtools contains our cmake modules
-find_package(cetbuildtools REQUIRED)
+# cetmodules contains our cmake modules
+find_package(cetmodules REQUIRED)
+
+# module path
+list(APPEND CMAKE_MODULE_PATH ${cetmodules_MODULE_PATH})
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -41,10 +44,10 @@ cet_report_compiler_flags()
 # Describe build prerequisites:
 
 
-find_ups_product (cetbuildtools v4_14_01)
-find_ups_boost(v1_50_0)
-find_ups_product(sqlite)
-find_ups_product(cetlib_except v1_01_00)
+find_ups_product (cetmodules)
+find_ups_boost()
+#find_ups_product(sqlite)
+find_ups_product(cetlib_except)
 
 # SQLite
 cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
@@ -64,7 +67,7 @@ add_subdirectory( ups )              # ups files
 # ----------------------------------------------------------------------
 # Packaging utility
 
-include(UseCPack)
+#include(UseCPack)
 
 #
 # ======================================================================

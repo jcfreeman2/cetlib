@@ -64,7 +64,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   split_path.cc
   split_by_regex.cc
   LIBRARIES
-  cetlib_except
+  ${CETLIB_EXCEPT}
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}
@@ -88,4 +88,4 @@ install_source(SUBDIRS detail sqlite sqlite/detail)
 
 # ======================================================================
 # Testing
-add_subdirectory(test)
+##add_subdirectory(test)
