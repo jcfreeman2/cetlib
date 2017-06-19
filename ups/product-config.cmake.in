@@ -3,8 +3,8 @@
 
 set_and_check(@PROJECT_NAME@_LIBDIR "${PACKAGE_PREFIX_DIR}/lib")
 set_and_check(@PROJECT_NAME@_INCDIR "${PACKAGE_PREFIX_DIR}/include")
-find_library(CETLIB NAMES cetlib PATHS @PROJECT_NAME@_LIBDIR NO_DEFAULT_PATH)
-include_directories( ${@PROJECT_NAME@_INCDIR} )
+find_library(CETLIB NAMES cetlib PATHS "${@PROJECT_NAME@_LIBDIR}" NO_DEFAULT_PATH)
+include_directories( "${@PROJECT_NAME@_INCDIR}" )
 
 check_required_components(@product@)
 
