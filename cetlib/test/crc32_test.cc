@@ -42,64 +42,64 @@
 
 using cet::crc32;
 
-
 void
-  ensure( int which, bool claim )
+ensure(int which, bool claim)
 {
-  if( not claim )
+  if(not claim)
     std::exit(which);
 }
 
 
 int
-  main( )
+main()
 {
-  typedef  crc32::digest_t  digest_t;
+  using digest_t = crc32::digest_t;
 
   {
     crc32 c1;
     c1 << TESTA;
-    digest_t  d1 = c1.digest();
+    digest_t const d1 = c1.digest();
 
-    cet::CRC32Calculator s1(TESTA);
+    cet::CRC32Calculator const s1{TESTA};
     unsigned r1 = s1.checksum();
 
-    ensure( 1, r1 == d1 );
+    ensure(1, r1 == d1);
   }
 
   {
     crc32 c2;
     c2 << TESTB;
-    digest_t  d2 = c2.digest();
+    digest_t d2 = c2.digest();
 
-    cet::CRC32Calculator s2(TESTB);
-    unsigned r2 = s2.checksum();
+    cet::CRC32Calculator s2{TESTB};
+    unsigned const r2 = s2.checksum();
 
-    ensure( 2, r2 == d2 );
+    ensure(2, r2 == d2);
   }
 
   {
     crc32 c3;
     c3 << TESTC;
-    digest_t  d3 = c3.digest();
+    digest_t const d3 = c3.digest();
 
-    cet::CRC32Calculator s3(TESTC);
-    unsigned r3 = s3.checksum();
+    cet::CRC32Calculator const s3{TESTC};
+    unsigned const r3 = s3.checksum();
 
-    ensure( 3, r3 == d3 );
+    ensure(3, r3 == d3);
   }
 
   {
-    crc32 c4("type_label_instance_process");
+    crc32 c4{"type_label_instance_process"};
 
     // This known result was calculated using python as a cross check
-    unsigned int  knownResult = 1215348599;
-    ensure( 4, c4.digest() == knownResult);
+    unsigned int const knownResult = 1215348599;
+    ensure(4, c4.digest() == knownResult);
   }
 
   {
-    crc32 emptyString_crc32("");
-    ensure( 5, emptyString_crc32.digest() == 0);
+    constexpr crc32 emptyString_crc32{""};
+    static_assert(emptyString_crc32.digest() == 0, "CRC32 digest of empty string is not 0!");
+    ensure(5, emptyString_crc32.digest() == 0);
   }
 
   return 0;
