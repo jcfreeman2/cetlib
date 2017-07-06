@@ -1,5 +1,6 @@
 #include "cetlib/crc32.h"
 #include <cstdlib>
+#include <iostream>
 #include <string>
 
 #include "CRC32Calculator.h"
@@ -89,11 +90,19 @@ main()
   }
 
   {
-    crc32 c4{"type_label_instance_process"};
+    std::string const proto_msg{"type_label_instance"};
+    std::string const process_suffix{"_process"};
+    crc32 c4{proto_msg + process_suffix};
 
     // This known result was calculated using python as a cross check
-    unsigned int const knownResult = 1215348599;
+    constexpr unsigned int knownResult{1215348599u};
     ensure(4, c4.digest() == knownResult);
+
+    // Test concatenation of crc32.
+    crc32 c4_proto{proto_msg};
+    c4_proto << process_suffix;
+    ensure(6, c4_proto.digest() == knownResult);
+
   }
 
   {
@@ -101,7 +110,4 @@ main()
     static_assert(emptyString_crc32.digest() == 0, "CRC32 digest of empty string is not 0!");
     ensure(5, emptyString_crc32.digest() == 0);
   }
-
-  return 0;
-
-}  // main()
+}
