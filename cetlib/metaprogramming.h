@@ -1,5 +1,5 @@
-#ifndef cetlib_detail_metaprogramming_h
-#define cetlib_detail_metaprogramming_h
+#ifndef cetlib_metaprogramming_h
+#define cetlib_metaprogramming_h
 
 // Common metaprogramming utilities.
 
@@ -45,7 +45,7 @@ namespace cet {
   using enable_if_function_exists_t = enable_if_same_t<FT,decltype(f), R>;
 
 }
-#endif /* cetlib_detail_metaprogramming_h */
+#endif /* cetlib_metaprogramming_h */
 
 // Local Variables:
 // mode: c++
