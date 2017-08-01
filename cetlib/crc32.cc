@@ -40,6 +40,8 @@
 
 using cet::crc32;
 
+static_assert(crc32{""}.digest() == 0, "Digest for CRC32 of empty string is not 0!");
+
 // ----------------------------------------------------------------------
 
 constexpr std::uint32_t cet::crc32::crctable[];
