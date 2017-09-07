@@ -15,7 +15,7 @@ int main()
     // expand to so that we can avoid an std::abort() for testing.
     static cet::detail::ThreadCounter s {__FILE__, __LINE__, __func__};
     cet::detail::ThreadCounter::Sentry hold {s, false};
-    std::this_thread::sleep_for(1ms);
+    std::this_thread::sleep_for(2000ms);
   };
   SimultaneousFunctionSpawner launch {repeated_task(2u, will_fail)};
 }
