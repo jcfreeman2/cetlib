@@ -10,6 +10,7 @@ perllib  product_dir
 product	version
 boost		v1_65_1
 gcc		v6_3_0		e14
+gcc		v6_4_0		e15
 sqlite		v3_20_01_00
 cetlib_except   v1_01_03
 cetbuildtools	v5_14_03	-	only_for_build
@@ -22,6 +23,9 @@ qualifier	cetlib_except	boost		sqlite	gcc	compiler	notes
 e14:debug	e14:debug	e14:debug	-nq-	-nq-	gcc
 e14:opt		e14:opt		e14:opt		-nq-	-nq-	gcc
 e14:prof	e14:prof	e14:prof	-nq-	-nq-	gcc
+e15:debug	e15:debug	e15:debug	-nq-	-nq-	gcc
+e15:opt		e15:opt		e15:opt		-nq-	-nq-	gcc
+e15:prof	e15:prof	e15:prof	-nq-	-nq-	gcc
 end_qualifier_list
 
 # Local Variables:
