@@ -20,70 +20,57 @@ namespace cet {
 
 // ----------------------------------------------------------------------
 
-class cet::filepath_maker
-{
+class cet::filepath_maker {
 public:
-  filepath_maker( )
-  { }
+  filepath_maker() {}
 
-  virtual std::string
-    operator () ( std::string const & filename );
+  virtual std::string operator()(std::string const& filename);
 
-  virtual ~filepath_maker( ) noexcept = default;
+  virtual ~filepath_maker() noexcept = default;
 
-};  // filepath_maker
+}; // filepath_maker
 
 // ----------------------------------------------------------------------
 
-class cet::filepath_lookup
-  : public cet::filepath_maker
-{
+class cet::filepath_lookup : public cet::filepath_maker {
 public:
-  filepath_lookup( std::string paths );
+  filepath_lookup(std::string paths);
 
-  std::string
-    operator () ( std::string const & filename ) override;
+  std::string operator()(std::string const& filename) override;
 
 private:
   cet::search_path paths;
 
-};  // filepath_lookup
+}; // filepath_lookup
 
 // ----------------------------------------------------------------------
 
-class cet::filepath_lookup_nonabsolute
-  : public cet::filepath_maker
-{
+class cet::filepath_lookup_nonabsolute : public cet::filepath_maker {
 public:
-  filepath_lookup_nonabsolute( std::string paths );
+  filepath_lookup_nonabsolute(std::string paths);
 
-  std::string
-    operator () ( std::string const & filename ) override;
+  std::string operator()(std::string const& filename) override;
 
 private:
   cet::search_path paths;
 
-};  // filepath_lookup_nonabsolute
+}; // filepath_lookup_nonabsolute
 
 // ----------------------------------------------------------------------
 
-class cet::filepath_lookup_after1
-  : public cet::filepath_maker
-{
+class cet::filepath_lookup_after1 : public cet::filepath_maker {
 public:
-  filepath_lookup_after1( std::string paths );
+  filepath_lookup_after1(std::string paths);
 
-  std::string
-    operator () ( std::string const & filename ) override;
+  std::string operator()(std::string const& filename) override;
 
-  void
-    reset( );
+  void reset();
 
 private:
-  bool             after1;
+  bool after1;
   cet::search_path paths;
 
-};  // filepath_lookup_after1
+}; // filepath_lookup_after1
 
 // ======================================================================
 

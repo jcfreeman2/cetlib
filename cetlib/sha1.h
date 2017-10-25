@@ -25,9 +25,9 @@ namespace cet {
 
 class cet::sha1 {
 public:
-  static std::size_t constexpr digest_sz {20};
+  static std::size_t constexpr digest_sz{20};
   using uchar = unsigned char;
-  using digest_t = boost::array<uchar,digest_sz>;
+  using digest_t = boost::array<uchar, digest_sz>;
 
   sha1();
   explicit sha1(std::string const& mesg);
@@ -42,7 +42,7 @@ public:
 private:
   SHA_CTX context;
 
-};  // sha1
+}; // sha1
 
 // ======================================================================
 

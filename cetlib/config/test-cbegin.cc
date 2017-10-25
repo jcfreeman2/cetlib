@@ -1,6 +1,8 @@
 #include <iterator>
 
-int main() {
+int
+main()
+{
   using std::cbegin;
   using std::cend;
 }
