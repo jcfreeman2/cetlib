@@ -26,24 +26,24 @@
 namespace cet {
   // PluginTypeDeducer.
   template <typename T>
-    struct PluginTypeDeducer;
+  struct PluginTypeDeducer;
 }
 
-#define DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL(base) \
-  extern "C" {                                    \
-    std::string                                   \
-    pluginType()                                  \
-    {                                             \
-      return cet::PluginTypeDeducer<base>::value; \
-    }                                             \
+#define DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL(base)                              \
+  extern "C" {                                                                 \
+  std::string                                                                  \
+  pluginType()                                                                 \
+  {                                                                            \
+    return cet::PluginTypeDeducer<base>::value;                                \
+  }                                                                            \
   }
 
 #ifdef __clang__
-#define DEFINE_BASIC_PLUGINTYPE_FUNC(base)                         \
-  _Pragma("clang diagnostic push")                                 \
-  _Pragma("clang diagnostic ignored \"-Wreturn-type-c-linkage\"")  \
-  DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL(base)                        \
-  _Pragma("clang diagnostic pop")
+#define DEFINE_BASIC_PLUGINTYPE_FUNC(base)                                     \
+  _Pragma("clang diagnostic push")                                             \
+    _Pragma("clang diagnostic ignored \"-Wreturn-type-c-linkage\"")            \
+      DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL(base)                                \
+        _Pragma("clang diagnostic pop")
 #else
 #define DEFINE_BASIC_PLUGINTYPE_FUNC DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL
 #endif
@@ -54,9 +54,7 @@ struct cet::PluginTypeDeducer {
 };
 
 template <typename T>
-std::string const
-cet::PluginTypeDeducer<T>::
-value = "Unknown";
+std::string const cet::PluginTypeDeducer<T>::value = "Unknown";
 
 #endif /* cetlib_PluginTypeDeducer_h */
 

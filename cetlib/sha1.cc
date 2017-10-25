@@ -3,7 +3,8 @@
 
 using cet::sha1;
 
-sha1::sha1() {
+sha1::sha1()
+{
   reset();
 }
 
