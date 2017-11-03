@@ -7,7 +7,6 @@
 //
 // ======================================================================
 
-#include "boost/array.hpp"
 #ifdef __APPLE__
 #define COMMON_DIGEST_FOR_OPENSSL
 #include <CommonCrypto/CommonDigest.h>
@@ -15,6 +14,7 @@
 #else
 #include <openssl/sha.h>
 #endif
+#include <array>
 #include <string>
 
 namespace cet {
@@ -27,7 +27,7 @@ class cet::sha1 {
 public:
   static std::size_t constexpr digest_sz{20};
   using uchar = unsigned char;
-  using digest_t = boost::array<uchar, digest_sz>;
+  using digest_t = std::array<uchar, digest_sz>;
 
   sha1();
   explicit sha1(std::string const& mesg);
