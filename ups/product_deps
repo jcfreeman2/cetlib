@@ -13,7 +13,7 @@ gcc		v6_3_0		e14
 gcc		v6_4_0		e15
 sqlite		v3_20_01_00
 cetlib_except   v1_01_04
-cetbuildtools	v5_14_03	-	only_for_build
+cetbuildtools	v6_00_00	-	only_for_build
 catch		v1_11_0		-nq-	only_for_build
 end_product_list
 
