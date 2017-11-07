@@ -45,7 +45,7 @@ sha1::operator<<(char const mesg)
 sha1::digest_t
 sha1::digest()
 {
-  digest_t result;
+  digest_t result{{}};
   SHA1_Final(&result[0], &context);
   return result;
 }
