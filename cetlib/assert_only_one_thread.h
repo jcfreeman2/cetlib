@@ -63,7 +63,7 @@ namespace cet {
         }
       }
 
-      ~Sentry() noexcept { tc_.counter_ = 0u; }
+      ~Sentry() noexcept { --tc_.counter_; }
 
     private:
       ThreadCounter& tc_;
