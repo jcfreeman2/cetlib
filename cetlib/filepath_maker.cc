@@ -24,7 +24,7 @@ filepath_maker::operator()(std::string const& filename)
 // ----------------------------------------------------------------------
 
 filepath_lookup::filepath_lookup(std::string paths)
-  : filepath_maker(), paths(paths)
+  : paths{move(paths)}
 {}
 
 std::string
@@ -36,7 +36,7 @@ filepath_lookup::operator()(std::string const& filename)
 // ----------------------------------------------------------------------
 
 filepath_lookup_nonabsolute::filepath_lookup_nonabsolute(std::string paths)
-  : filepath_maker(), paths(paths)
+  : paths{move(paths)}
 {}
 
 std::string
@@ -49,7 +49,7 @@ filepath_lookup_nonabsolute::operator()(std::string const& filename)
 // ----------------------------------------------------------------------
 
 filepath_lookup_after1::filepath_lookup_after1(std::string paths)
-  : filepath_maker(), after1(false), paths(paths)
+  : paths{move(paths)}
 {}
 
 std::string

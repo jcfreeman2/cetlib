@@ -22,8 +22,6 @@ namespace cet {
 
 class cet::filepath_maker {
 public:
-  filepath_maker() {}
-
   virtual std::string operator()(std::string const& filename);
 
   virtual ~filepath_maker() noexcept = default;
@@ -67,7 +65,7 @@ public:
   void reset();
 
 private:
-  bool after1;
+  bool after1{false};
   cet::search_path paths;
 
 }; // filepath_lookup_after1

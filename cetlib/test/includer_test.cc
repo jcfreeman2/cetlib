@@ -7,15 +7,14 @@
 #define BOOST_TEST_MODULE (includer test)
 #include "cetlib/quiet_unit_test.hpp"
 
-#include "boost/filesystem.hpp"
 #include "cetlib/filepath_maker.h"
 #include "cetlib/includer.h"
 #include "cetlib_except/exception.h"
+
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <sstream>
-
 #include <system_error>
 #include <unistd.h>
 

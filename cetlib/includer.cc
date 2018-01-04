@@ -75,7 +75,7 @@ namespace {
 
   std::string
   canonicalizePath(std::string const& path_str) try {
-    bfs::path path(path_str);
+    bfs::path path{path_str};
     // If specified path does not exist, complain later.
     if (bfs::exists(path)) {
       path = bfs::canonical(path);
@@ -97,7 +97,7 @@ using namespace ::detail;
 
 includer::includer(std::string const& filename,
                    cet::filepath_maker& policy_filename)
-  : text(), frames{frame(0, begin_string(), 0, text.size())}, recursion_stack()
+  : frames{frame(0, begin_string(), 0, text.size())}
 {
   include(0, filename, policy_filename);
   frames.emplace_back(0, end_string(), 0, text.size());
@@ -106,7 +106,7 @@ includer::includer(std::string const& filename,
 // ----------------------------------------------------------------------
 
 includer::includer(std::istream& is, cet::filepath_maker& policy_filename)
-  : text(), frames{frame(0, begin_string(), 0, text.size())}, recursion_stack()
+  : frames{frame(0, begin_string(), 0, text.size())}
 {
   include(is, policy_filename);
   frames.emplace_back(0, end_string(), 0, text.size());

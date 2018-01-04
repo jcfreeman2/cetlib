@@ -21,10 +21,10 @@ namespace cet {
 // ----------------------------------------------------------------------
 
 class cet::includer {
-  typedef std::string::size_type uint;
+  using uint = std::string::size_type;
 
 public:
-  typedef std::string::const_iterator const_iterator;
+  using const_iterator = std::string::const_iterator;
 
   explicit includer(std::string const& filename,
                     cet::filepath_maker& abs_filename);
@@ -77,9 +77,9 @@ private:
     uint framenum; // Inclusion level.
   };
 
-  std::string text;
+  std::string text{};
   std::vector<frame> frames;
-  std::vector<std::string> recursion_stack;
+  std::vector<std::string> recursion_stack{};
 
   void include(int including_framenum,
                std::string const& filename,
