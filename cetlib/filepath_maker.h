@@ -91,12 +91,14 @@ private:
 
 class cet::filepath_first_absolute_or_lookup_with_dot : public cet::filepath_maker {
 public:
+  // The provided string must be the *value* of the environment
+  // variable, *not* its name.
   filepath_first_absolute_or_lookup_with_dot(std::string const& paths);
   std::string operator()(std::string const& filename) override;
   void reset();
 
 private:
-  bool first;
+  bool first{true};
   cet::search_path first_paths;
   cet::search_path after_paths;
 }; // filepath_first_absolute_or_lookup_with_dot

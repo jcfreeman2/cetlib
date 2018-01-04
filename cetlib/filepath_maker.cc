@@ -71,7 +71,7 @@ filepath_lookup_after1::reset()
 
 filepath_first_absolute_or_lookup_with_dot::filepath_first_absolute_or_lookup_with_dot(
   std::string const& paths)
-  : first(true), first_paths(std::string("./:") + paths), after_paths{paths}
+  : first_paths{std::string("./:") + paths}, after_paths{paths + ':'}
 {
   if (after_paths.empty()) {
     std::cerr
