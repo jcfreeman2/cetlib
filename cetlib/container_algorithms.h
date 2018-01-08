@@ -9,8 +9,6 @@
 //
 // ======================================================================
 
-#include "cetlib/cetconfig.h"
-
 #include <algorithm>
 #include <iterator>
 
