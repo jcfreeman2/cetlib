@@ -9,48 +9,10 @@
 //
 // ======================================================================
 
-#include "cetlib/cetconfig.h"
-
 #include <algorithm>
 #include <iterator>
 
-// ----------------------------------------------------------------------
-// C++ 2011 has std::begin() and std::end(), but not the obvious const
-// versions.  C++14 does have them, but only gcc 5.1 and above have
-// them. In order to avoid client code failures when moving to a
-// compiler which supports std::cbegin() and std::cend() properly, one
-// should use the following idiom:
-//
-// {
-//   CET_USE_FREE_CBEGIN_CEND();
-//   // Use cbegin(), cend(), without explicit qualification.
-// }
-#ifdef CET_HAVE_STD_CBEGIN_CEND
-#define CET_USE_FREE_CBEGIN_CEND()                                             \
-  using std::cbegin;                                                           \
-  using std::cend
-#else
-#define CET_USE_FREE_CBEGIN_CEND() using namespace cet::container_helpers
-#endif
-
 namespace cet {
-  namespace container_helpers {
-#ifndef CET_HAVE_STD_CBEGIN_CEND
-    template <class Container>
-    auto
-    cbegin(Container const& c)
-    {
-      return c.cbegin();
-    }
-
-    template <class Container>
-    auto
-    cend(Container const& c)
-    {
-      return c.cend();
-    }
-#endif
-  }
 
   // Wrappers for std::for_each().
   template <class FwdCont, class Func>
@@ -136,7 +98,8 @@ template <class FwdCont, class Func>
 inline auto
 cet::for_all(FwdCont const& s, Func f)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::for_each(cbegin(s), cend(s), f);
 }
 
@@ -177,7 +140,8 @@ template <class FwdCont, class FwdIter>
 inline auto
 cet::copy_all(FwdCont const& s, FwdIter it)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::copy(cbegin(s), cend(s), it);
 }
 
@@ -186,7 +150,8 @@ template <class FwdCont, class FwdIter, class Pred>
 inline auto
 cet::copy_if_all(FwdCont& s, FwdIter it, Pred p)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::copy_if(begin(s), end(s), it, p);
 }
 
@@ -194,7 +159,8 @@ template <class FwdCont, class FwdIter, class Pred>
 inline auto
 cet::copy_if_all(FwdCont const& s, FwdIter it, Pred p)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::copy_if(cbegin(s), cend(s), it, p);
 }
 
@@ -212,7 +178,8 @@ template <class FwdCont, class Datum>
 inline auto
 cet::find_in_all(FwdCont const& s, Datum const& d)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::find(cbegin(s), cend(s), d);
 }
 
@@ -221,7 +188,8 @@ template <class FwdCont, class Datum>
 inline bool
 cet::search_all(FwdCont const& s, Datum const& d)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::find(cbegin(s), cend(s), d) != s.end();
 }
 
@@ -230,7 +198,8 @@ template <class FwdCont, class Datum>
 inline bool
 cet::binary_search_all(FwdCont const& s, Datum const& d)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::binary_search(cbegin(s), cend(s), d);
 }
 
@@ -248,7 +217,8 @@ template <class FwdCont, class Datum>
 inline auto
 cet::lower_bound_all(FwdCont const& s, Datum const& d)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::lower_bound(cbegin(s), cend(s), d);
 }
 
@@ -265,7 +235,8 @@ template <class FwdCont, class Datum, class Pred>
 inline auto
 cet::lower_bound_all(FwdCont const& s, Datum const& d, Pred p)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::lower_bound(cbegin(s), cend(s), d, p);
 }
 
@@ -321,7 +292,8 @@ template <class Container, class OutputIt, class UnaryOp>
 inline auto
 cet::transform_all(Container const& in, OutputIt out, UnaryOp unary_op)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::transform(cbegin(in), cend(in), out, unary_op);
 }
 
@@ -344,7 +316,8 @@ cet::transform_all(Container1 const& in1,
                    OutputIt out,
                    BinaryOp binary_op)
 {
-  CET_USE_FREE_CBEGIN_CEND();
+  using std::cbegin;
+  using std::cend;
   return std::transform(cbegin(in1), cend(in1), cbegin(in2), out, binary_op);
 }
 

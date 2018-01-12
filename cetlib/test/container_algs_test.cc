@@ -1,6 +1,7 @@
 #define BOOST_TEST_MODULE (container_algorithms test)
-#include "cetlib/container_algorithms.h"
 #include "cetlib/quiet_unit_test.hpp"
+
+#include "cetlib/container_algorithms.h"
 #include "cetlib/test_macros.h"
 #include <map>
 #include <utility>
@@ -70,8 +71,6 @@ BOOST_AUTO_TEST_CASE(copy_all)
 BOOST_AUTO_TEST_CASE(transform_all)
 {
   using namespace std;
-
-  CET_USE_FREE_CBEGIN_CEND();
 
   vector<int> const v1{1, 2, 3, 4};
   vector<char> const v2{'a', 'b', 'c', 'd'};
