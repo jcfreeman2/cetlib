@@ -44,7 +44,7 @@ main()
   std::string const table_name{"workers"};
   {
     Ntuple<string, int, int> workers{
-      c, table_name, {"Name", "Age", "Experience"}};
+      c, table_name, {{"Name", "Age", "Experience"}}};
     workers.insert("Abby", 27, 5);
     workers.insert("Benny", 48, 10);
     workers.insert("Cassie", 52, 27);
@@ -52,7 +52,7 @@ main()
     workers.insert("Emily", 38, 19);
   }
   test_statistics_quantities(
-    c, table_name, "Age", {27, 65, 46, 48, 12 /*.649...*/});
+    c, table_name, "Age", {{27, 65, 46, 48, 12 /*.649...*/}});
   test_statistics_quantities(
-    c, table_name, "Experience", {5, 27, 15, 14, 7 /*.563...*/});
+    c, table_name, "Experience", {{5, 27, 15, 14, 7 /*.563...*/}});
 }

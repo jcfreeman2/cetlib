@@ -23,7 +23,7 @@ test_with_new_database(Connection& c)
 {
   std::cout << "start test_with_new_database\n";
   assert(c);
-  Ntuple<double, std::string> xx{c, "xx", {"x", "txt"}};
+  Ntuple<double, std::string> xx{c, "xx", {{"x", "txt"}}};
   std::cout << "end test_with_new_database\n";
 }
 
@@ -32,7 +32,7 @@ test_with_matching_table(Connection& c)
 {
   std::cout << "start test_with_matching_table\n";
   assert(c);
-  Ntuple<double, std::string> xx{c, "xx", {"x", "txt"}};
+  Ntuple<double, std::string> xx{c, "xx", {{"x", "txt"}}};
   std::cout << "end test_with_matching_table\n";
 }
 
@@ -72,7 +72,7 @@ test_filling_table(Connection& c)
   assert(c);
   constexpr int nrows{903};
   {
-    Ntuple<int, double> nt{c, "zz", {"i", "x"}, false, 100};
+    Ntuple<int, double> nt{c, "zz", {{"i", "x"}}, false, 100};
     for (int i = 0; i < nrows; ++i) {
       nt.insert(i, 1.5 * i);
     }
@@ -95,7 +95,7 @@ test_parallel_filling_table(Connection& c)
   {
     Ntuple<int, double> nt{c,
                            tablename,
-                           {"i", "x"},
+                           {{"i", "x"}},
                            true,
                            60}; // Force flushing after 60 insertions.
     std::vector<std::function<void()>> tasks;
@@ -120,7 +120,7 @@ test_column_constraint(Connection& c)
 {
   std::cout << "start test_column_constraint\n";
   assert(c);
-  Ntuple<column<int, primary_key>, double> nt{c, "u", {"i", "x"}};
+  Ntuple<column<int, primary_key>, double> nt{c, "u", {{"i", "x"}}};
   auto const& ref = detail::create_table_ddl(
     "u", column<int, primary_key>{"i"}, column<double>{"x"});
   assert(hasTableWithSchema(c, "u", ref));
@@ -134,7 +134,7 @@ test_file_create(ConnectionFactory& cf)
   remove(filename.c_str());
   auto c = cf.make(filename);
   {
-    Ntuple<int, double, int> table{c, "tab1", {"i", "x", "k"}, false, 5};
+    Ntuple<int, double, int> table{c, "tab1", {{"i", "x", "k"}}, false, 5};
     for (std::size_t i = 0; i < 103; ++i) {
       table.insert(i, 0.5 * i, i * i);
     }
@@ -156,11 +156,11 @@ main() try {
 
   test_with_new_database(c);
   test_with_matching_table(c);
-  test_with_colliding_table<int, double>(c, {"y", "txt"});
-  test_with_colliding_table<int, double>(c, {"x", "text"});
-  test_with_colliding_table<int, int>(c, {"x", "txt"});
-  test_with_colliding_table<int, double, int>(c, {"x", "txt", "z"});
-  test_with_colliding_table<int>(c, {"x"});
+  test_with_colliding_table<int, double>(c, {{"y", "txt"}});
+  test_with_colliding_table<int, double>(c, {{"x", "text"}});
+  test_with_colliding_table<int, int>(c, {{"x", "txt"}});
+  test_with_colliding_table<int, double, int>(c, {{"x", "txt", "z"}});
+  test_with_colliding_table<int>(c, {{"x"}});
   test_filling_table(c);
   test_parallel_filling_table(c);
   test_column_constraint(c);

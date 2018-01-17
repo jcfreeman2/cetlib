@@ -94,8 +94,8 @@ main() try {
     std::string const f{"f.db"};
     auto c1 = cf.make(f);
     auto c2 = cf.make(f);
-    Ntuple<int> n1{c1, "Odds", {"Number"}};
-    Ntuple<int> n2{c2, "Evens", {"Number"}};
+    Ntuple<int> n1{c1, "Odds", {{"Number"}}};
+    Ntuple<int> n2{c2, "Evens", {{"Number"}}};
     std::vector<std::function<void()>> tasks;
     for (unsigned i{1}; i < 6u; ++i) {
       tasks.push_back([&n1, i] {

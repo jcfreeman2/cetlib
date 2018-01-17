@@ -41,6 +41,19 @@
 #define CLANG_IS_AT_LEAST(major, minor, patch)                                 \
   (CLANG_VERSION >= ((100000 * (major)) + (1000 * (minor)) + (patch)))
 
+#define EXTERN_C_FUNC_DECLARE_START_DETAIL extern "C" {
+
+#ifdef __clang__
+#define EXTERN_C_FUNC_DECLARE_START                               \
+  _Pragma("clang diagnostic push")                                \
+  _Pragma("clang diagnostic ignored \"-Wreturn-type-c-linkage\"") \
+  EXTERN_C_FUNC_DECLARE_START_DETAIL
+#define EXTERN_C_FUNC_DECLARE_END } _Pragma("clang diagnostic pop")
+#else
+#define EXTERN_C_FUNC_DECLARE_START EXTERN_C_FUNC_DECLARE_START_DETAIL
+#define EXTERN_C_FUNC_DECLARE_END }
+#endif
+
 #endif /* cetlib_compiler_macros_h */
 
 // Local Variables:
