@@ -1,6 +1,7 @@
 #include "TestPluginBase.h"
 
-#include "cetlib/PluginTypeDeducer.h"
+#include "cetlib/ProvideMakePluginMacros.h"
+#include "cetlib/compiler_macros.h"
 
 #include <memory>
 
@@ -17,12 +18,9 @@ cettest::TestPlugin::TestPlugin(std::string message)
   : TestPluginBase(std::move(message))
 {}
 
-extern "C" {
-std::unique_ptr<cettest::TestPluginBase>
-makePlugin(std::string message)
+MAKE_PLUGIN_START(std::unique_ptr<cettest::TestPluginBase>, std::string message)
 {
   return std::make_unique<cettest::TestPlugin>(std::move(message));
-}
-}
+} MAKE_PLUGIN_END
 
 DEFINE_BASIC_PLUGINTYPE_FUNC(cettest::TestPluginBase)

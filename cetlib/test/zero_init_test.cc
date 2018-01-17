@@ -56,8 +56,15 @@ BOOST_AUTO_TEST_CASE(copy_behavior)
     zero_init<T> y(x);
     BOOST_CHECK_EQUAL(y, T(7));
     BOOST_CHECK_EQUAL(y, x);
+#ifdef __clang__
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wliteral-conversion"
+#endif
     BOOST_CHECK_EQUAL((x = 2.5), T(2.5));
     BOOST_CHECK_EQUAL((x = zero_init<double>(2.5)), T(2.5));
+#ifdef __clang__
+#pragma clang diagnostic pop
+#endif
   }
 }
 

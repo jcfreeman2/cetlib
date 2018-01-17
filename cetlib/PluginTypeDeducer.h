@@ -21,6 +21,8 @@
 // answer with a known value to verify the type of the plugin found.
 ////////////////////////////////////////////////////////////////////////
 
+#include "cetlib/compiler_macros.h"
+
 #include <string>
 
 namespace cet {
@@ -29,24 +31,13 @@ namespace cet {
   struct PluginTypeDeducer;
 }
 
-#define DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL(base)                              \
-  extern "C" {                                                                 \
-  std::string                                                                  \
-  pluginType()                                                                 \
-  {                                                                            \
-    return cet::PluginTypeDeducer<base>::value;                                \
-  }                                                                            \
-  }
-
-#ifdef __clang__
-#define DEFINE_BASIC_PLUGINTYPE_FUNC(base)                                     \
-  _Pragma("clang diagnostic push")                                             \
-    _Pragma("clang diagnostic ignored \"-Wreturn-type-c-linkage\"")            \
-      DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL(base)                                \
-        _Pragma("clang diagnostic pop")
-#else
-#define DEFINE_BASIC_PLUGINTYPE_FUNC DEFINE_BASIC_PLUGINTYPE_FUNC_DETAIL
-#endif
+#define DEFINE_BASIC_PLUGINTYPE_FUNC(base)        \
+  EXTERN_C_FUNC_DECLARE_START                     \
+  std::string pluginType()                        \
+  {                                               \
+    return cet::PluginTypeDeducer<base>::value;   \
+  }                                               \
+  EXTERN_C_FUNC_DECLARE_END
 
 template <typename T>
 struct cet::PluginTypeDeducer {
