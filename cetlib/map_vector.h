@@ -158,6 +158,7 @@ public:
 
   iterator find(key_type key);
   const_iterator find(key_type key) const;
+  const_iterator findOrThrow(key_type key) const;
 
   mapped_type* getOrNull(key_type key);
   mapped_type const* getOrNull(key_type key) const;
@@ -356,7 +357,7 @@ cet::map_vector<Value>::back() const
 
 template <class Value>
 bool
-cet::map_vector<Value>::has(key_type key) const
+cet::map_vector<Value>::has(key_type const key) const
 {
   value_type v{key, mapped_type()};
   return std::binary_search(v_.begin(), v_.end(), v, lt);
@@ -364,7 +365,7 @@ cet::map_vector<Value>::has(key_type key) const
 
 template <class Value>
 typename cet::map_vector<Value>::iterator
-cet::map_vector<Value>::find(key_type key)
+cet::map_vector<Value>::find(key_type const key)
 {
   value_type v{key, mapped_type()};
 
@@ -379,13 +380,13 @@ cet::map_vector<Value>::find(key_type key)
 
 template <class Value>
 typename cet::map_vector<Value>::const_iterator
-cet::map_vector<Value>::find(key_type key) const
+cet::map_vector<Value>::find(key_type const key) const
 {
   value_type v{key, mapped_type()};
 
-  const_iterator const begin = v_.begin(), end = v_.end();
+  auto const begin = v_.cbegin(), end = v_.cend();
 
-  const_iterator it = std::lower_bound(begin, end, v, lt);
+  auto it = std::lower_bound(begin, end, v, lt);
   if (it != end && it->first != key)
     it = end;
 
@@ -393,8 +394,20 @@ cet::map_vector<Value>::find(key_type key) const
 }
 
 template <class Value>
+typename cet::map_vector<Value>::const_iterator
+cet::map_vector<Value>::findOrThrow(key_type const key) const
+{
+  auto p = find(key);
+  if (p == v_.cend())
+    throw cet::exception("map_vector::getOrThrow")
+      << "out of range (no such key): " << key.asInt() << std::endl;
+
+  return p;
+}
+
+template <class Value>
 Value*
-cet::map_vector<Value>::getOrNull(key_type key)
+cet::map_vector<Value>::getOrNull(key_type const key)
 {
   iterator it = find(key);
   return it == v_.end() ? nullptr : &it->second;
@@ -402,7 +415,7 @@ cet::map_vector<Value>::getOrNull(key_type key)
 
 template <class Value>
 Value const*
-cet::map_vector<Value>::getOrNull(key_type key) const
+cet::map_vector<Value>::getOrNull(key_type const key) const
 {
   const_iterator it = find(key);
   return it == v_.end() ? nullptr : &it->second;
@@ -410,7 +423,7 @@ cet::map_vector<Value>::getOrNull(key_type key) const
 
 template <class Value>
 Value&
-cet::map_vector<Value>::getOrThrow(key_type key)
+cet::map_vector<Value>::getOrThrow(key_type const key)
 {
   Value* p = getOrNull(key);
   if (p == nullptr)
@@ -422,7 +435,7 @@ cet::map_vector<Value>::getOrThrow(key_type key)
 
 template <class Value>
 Value const&
-cet::map_vector<Value>::getOrThrow(key_type key) const
+cet::map_vector<Value>::getOrThrow(key_type const key) const
 {
   Value const* p = getOrNull(key);
   if (p == nullptr)
@@ -433,7 +446,7 @@ cet::map_vector<Value>::getOrThrow(key_type key) const
 }
 
 template <class Value>
-Value& cet::map_vector<Value>::operator[](key_type key)
+Value& cet::map_vector<Value>::operator[](key_type const key)
 {
   value_type v{key, mapped_type()};
 
