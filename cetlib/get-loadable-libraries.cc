@@ -25,14 +25,15 @@ namespace {
   }
 }
 
-int main(int argc, char** argv)
+int
+main(int argc, char** argv)
 {
   if (argc < 2 || argc > 3) {
     return 1;
   }
   std::string const suffix{argv[1]};
   std::string const spec{argc == 2 ? "" : argv[2]};
-  cet::LibraryManager const lm{suffix, pattern(spec+".*")};
+  cet::LibraryManager const lm{suffix, pattern(spec + ".*")};
   auto const& libs = getLibraries(lm);
 
   std::string str{};

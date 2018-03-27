@@ -50,11 +50,13 @@
 #define EXTERN_C_FUNC_DECLARE_START_DETAIL extern "C" {
 
 #ifdef __clang__
-#define EXTERN_C_FUNC_DECLARE_START                               \
-  _Pragma("clang diagnostic push")                                \
-  _Pragma("clang diagnostic ignored \"-Wreturn-type-c-linkage\"") \
-  EXTERN_C_FUNC_DECLARE_START_DETAIL
-#define EXTERN_C_FUNC_DECLARE_END } _Pragma("clang diagnostic pop")
+#define EXTERN_C_FUNC_DECLARE_START                                            \
+  _Pragma("clang diagnostic push")                                             \
+    _Pragma("clang diagnostic ignored \"-Wreturn-type-c-linkage\"")            \
+      EXTERN_C_FUNC_DECLARE_START_DETAIL
+#define EXTERN_C_FUNC_DECLARE_END                                              \
+  }                                                                            \
+  _Pragma("clang diagnostic pop")
 #else
 #define EXTERN_C_FUNC_DECLARE_START EXTERN_C_FUNC_DECLARE_START_DETAIL
 #define EXTERN_C_FUNC_DECLARE_END }
@@ -78,12 +80,11 @@
 // implicit fallthrough warnings (e.g.) in included headers.
 ////////////////////////////////////////////////////////////////////////
 
-#if GCC_IS_AT_LEAST(7,1,0) || defined(__clang__)
-#define IGNORE_FALLTHROUGH_START                                \
-  _Pragma("GCC diagnostic push")                                \
-  _Pragma("GCC diagnostic ignored \"-Wimplicit-fallthrough\"")
-#define IGNORE_FALLTHROUGH_END                  \
-  _Pragma("GCC diagnostic pop")
+#if GCC_IS_AT_LEAST(7, 1, 0) || defined(__clang__)
+#define IGNORE_FALLTHROUGH_START                                               \
+  _Pragma("GCC diagnostic push")                                               \
+    _Pragma("GCC diagnostic ignored \"-Wimplicit-fallthrough\"")
+#define IGNORE_FALLTHROUGH_END _Pragma("GCC diagnostic pop")
 #else
 #define IGNORE_FALLTHROUGH_START
 #define IGNORE_FALLTHROUGH_END
