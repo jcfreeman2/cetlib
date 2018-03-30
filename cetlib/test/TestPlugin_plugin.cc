@@ -1,4 +1,4 @@
-#include "TestPluginBase.h"
+#include "cetlib/test/TestPluginBase.h"
 
 #include "cetlib/ProvideMakePluginMacros.h"
 #include "cetlib/compiler_macros.h"

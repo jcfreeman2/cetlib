@@ -1,5 +1,5 @@
-#ifndef SKSKKJAD_SDADS_ASD
-#define SKSKKJAD_SDADS_ASD
+#ifndef cetlib_ProvideMakePluginMacros_h
+#define cetlib_ProvideMakePluginMacros_h
 
 #include "cetlib/compiler_macros.h"
 
@@ -7,4 +7,4 @@
   EXTERN_C_FUNC_DECLARE_START result_type makePlugin(__VA_ARGS__)
 #define MAKE_PLUGIN_END EXTERN_C_FUNC_DECLARE_END
 
-#endif
+#endif /* cetlib_ProvideMakePluginMacros_h */
