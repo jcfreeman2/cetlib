@@ -46,6 +46,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   getenv.cc
   include.cc
   includer.cc
+  loadable_libraries.cc
   lpad.cc
   nybbler.cc
   replace_all.cc
@@ -71,7 +72,6 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
 # Build and install this project's executables:
 
 cet_make_exec(inc-expand LIBRARIES ${LIB_NAME})
-cet_make_exec(get-loadable-libraries LIBRARIES ${LIB_NAME})
 cet_make_exec(get-accessible-paths LIBRARIES ${LIB_NAME})
 
 # ----------------------------------------------------------------------

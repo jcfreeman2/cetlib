@@ -1,8 +1,8 @@
 #include "cetlib/LibraryManager.h"
+#include "cetlib/loadable_libraries.h"
 
 #include <iostream>
 #include <regex>
-#include <string>
 #include <vector>
 
 namespace {
@@ -25,14 +25,11 @@ namespace {
   }
 }
 
-int
-main(int argc, char** argv)
+void
+cet::loadable_libraries(std::ostream& os,
+                        std::string const& spec,
+                        std::string const& suffix)
 {
-  if (argc < 2 || argc > 3) {
-    return 1;
-  }
-  std::string const suffix{argv[1]};
-  std::string const spec{argc == 2 ? "" : argv[2]};
   cet::LibraryManager const lm{suffix, pattern(spec + ".*")};
   auto const& libs = getLibraries(lm);
 
@@ -49,5 +46,5 @@ main(int argc, char** argv)
       str += '\n';
     }
   }
-  std::cout << str;
+  os << str;
 }
