@@ -57,6 +57,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   split_by_regex.cc
   LIBRARIES
   cetlib_except
+  hep_concurrency
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}
   ${Boost_SYSTEM_LIBRARY}

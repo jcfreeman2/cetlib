@@ -1,5 +1,6 @@
 #ifndef cetlib_assert_only_one_thread_h
 #define cetlib_assert_only_one_thread_h
+// vim: set sw=2 expandtab :
 
 // ===================================================================
 // CET_ASSERT_ONLY_ONE_THREAD()
@@ -20,8 +21,9 @@
 // ===================================================================
 
 #include <atomic>
+#include <cstdlib>
 #include <iostream>
-#include <mutex>
+#include <string>
 
 namespace cet {
   namespace detail {
@@ -34,59 +36,44 @@ namespace cet {
         : filename_{filename}, linenum_{linenum}, funcname_{funcname}
       {}
 
-      class Sentry; // Only the sentry can access the members
-
-    private:
-      std::atomic<unsigned> counter_{0u};
-      std::string const filename_;
-      unsigned const linenum_;
-      std::string const funcname_;
-    };
-
-    class ThreadCounter::Sentry {
-    public:
-      Sentry(ThreadCounter& tc, bool const terminate = true)
-        : tc_{tc}, terminate_{terminate}
-      {
-        if (++tc_.counter_ != 1u) {
-          // Do not guard the abort!
-          {
-            std::lock_guard<decltype(m_)> hold{m_};
-            std::cerr
-              << "Failed assert--more than one thread accessing location:\n"
-              << "  " << tc_.filename_ << ':' << tc_.linenum_ << '\n'
-              << "  function: " << tc_.funcname_ << '\n';
+      class Sentry {
+      public:
+        ~Sentry() noexcept { --tc_.counter_; }
+        Sentry(ThreadCounter& tc, bool const terminate = true) : tc_{tc}
+        {
+          if (++tc_.counter_ == 1u) {
+            return;
           }
-          if (terminate_) {
+          std::cerr
+            << "Failed assert--more than one thread accessing location:\n"
+            << "  " << tc_.filename_ << ':' << tc_.linenum_ << '\n'
+            << "  function: " << tc_.funcname_ << '\n';
+          if (terminate) {
             std::abort();
           }
         }
-      }
 
-      ~Sentry() noexcept { --tc_.counter_; }
+      private:
+        ThreadCounter& tc_;
+      };
 
     private:
-      ThreadCounter& tc_;
-      bool const terminate_;
-      std::mutex m_{};
+      std::string const filename_;
+      unsigned const linenum_;
+      std::string const funcname_;
+      std::atomic<unsigned> counter_{0u};
     };
-  }
-}
 
-#define CONCATENATE_HIDDEN(a, b) a##b
-#define CONCATENATE(a, b) CONCATENATE_HIDDEN(a, b)
+  } // namespace detail
+} // namespace cet
 
-#ifndef NDEBUG
+#ifdef NDEBUG
+#define CET_ASSERT_ONLY_ONE_THREAD()
+#else // NDEBUG
 #define CET_ASSERT_ONLY_ONE_THREAD()                                           \
-  static cet::detail::ThreadCounter CONCATENATE(s, __LINE__){                  \
-    __FILE__, __LINE__, __func__};                                             \
-  cet::detail::ThreadCounter::Sentry CONCATENATE(hold, __LINE__)               \
-  {                                                                            \
-    CONCATENATE(s, __LINE__)                                                   \
-  }
-#else
-#define CET_ASSERT_ONLY_ONE_THREAD() ((void)0)
-#endif
+  static cet::detail::ThreadCounter s_tc_{__FILE__, __LINE__, __func__};       \
+  cet::detail::ThreadCounter::Sentry sentry_tc_ { s_tc_ }
+#endif // NDEBUG
 
 #endif /* cetlib_assert_only_one_thread_h */
 

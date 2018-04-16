@@ -11,9 +11,10 @@ namespace bfs = boost::filesystem;
 
 namespace {
 
-  void print_paths(std::string const& path_name,
-                   std::string pattern_to_match,
-                   bool const match_full_path)
+  void
+  print_paths(std::string const& path_name,
+              std::string pattern_to_match,
+              bool const match_full_path)
   {
     bfs::path path{path_name};
     if (exists(path) && is_directory(path)) {
@@ -25,8 +26,7 @@ namespace {
             continue;
           }
           std::cout << str << ' ';
-        }
-        else {
+        } else {
           auto const str = canonical(x.path()).filename().string();
           if (str.find(pattern_to_match) != 0) {
             continue;
@@ -36,7 +36,6 @@ namespace {
       }
     }
   }
-
 }
 
 int
@@ -53,15 +52,15 @@ main(int argc, char** argv)
   bool const slash_found{last_slash != std::string::npos};
   std::string const prefix = slash_found ? to_match.substr(0, last_slash) : ""s;
   if (slash_found) {
-    to_match.erase(0, last_slash+1);
+    to_match.erase(0, last_slash + 1);
   }
 
   if (spec.empty() || spec[0] == '/') {
-    print_paths("/"s+prefix, "/"s + to_match, true);
+    print_paths("/"s + prefix, "/"s + to_match, true);
   }
 
   if (spec[0] != '/') {
-    print_paths("./"s+prefix, to_match, false);
+    print_paths("./"s + prefix, to_match, false);
   }
 
   if (spec[0] != '/' && spec.find("./") != 0) {
@@ -70,8 +69,9 @@ main(int argc, char** argv)
     std::vector<std::string> paths;
     cet::split(env, ':', back_inserter(paths));
     for (auto const& path : paths) {
-      if (path == "."s) continue;
-      print_paths(path+prefix, to_match, false);
+      if (path == "."s)
+        continue;
+      print_paths(path + prefix, to_match, false);
     }
   }
 }
