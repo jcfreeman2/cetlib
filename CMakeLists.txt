@@ -45,6 +45,7 @@ find_ups_product (cetmodules)
 find_ups_boost()
 #find_ups_product(sqlite)
 find_ups_product(cetlib_except)
+find_ups_product(catch v1_11_0)
 
 # SQLite
 cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)

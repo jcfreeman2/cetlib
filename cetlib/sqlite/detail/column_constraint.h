@@ -36,10 +36,17 @@ namespace cet {
   namespace sqlite {
 
     struct primary_key {
-      static std::string snippet() { return " PRIMARY KEY"; }
+      static std::string
+      snippet()
+      {
+        return " PRIMARY KEY";
+      }
     };
-
   }
 }
 
 #endif /* cetlib_sqlite_detail_column_constraint_h */
+
+// Local Variables:
+// mode: c++
+// End:
