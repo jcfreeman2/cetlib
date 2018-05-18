@@ -12,16 +12,13 @@
 #  make package (builds distribution tarfile)
 # ======================================================================
 
+# Required to keep CMake happy.
+cmake_minimum_required(VERSION ${CMAKE_VERSION} FATAL_ERROR)
+# Actual version requirement.
+cmake_policy(VERSION 3.4)
 
-# ----------------------------------------------------------------------
-# Describe build tool requirements:
-
-cmake_minimum_required(VERSION 3.0)  
-
-# ----------------------------------------------------------------------
-# Describe product:
-
-project(cetlib VERSION 3.00.01 )
+# Project information.
+project(cetlib VERSION 3.03.01 LANGUAGES CXX)
 
 # cetmodules contains our cmake modules
 find_package(cetmodules REQUIRED)
@@ -37,18 +34,11 @@ cet_set_compiler_flags(DIAGS VIGILANT
   )
 cet_report_compiler_flags()
 
-# ----------------------------------------------------------------------
-# Describe build prerequisites:
+find_package(Boost 1.50.0 COMPONENTS )
+find_package(sqlite)
+find_package(cetlib_except 1.01.00)
+find_package(Catch 1.11.0)
 
-
-find_ups_product (cetmodules)
-find_ups_boost()
-#find_ups_product(sqlite)
-find_ups_product(cetlib_except)
-find_ups_product(catch v1_11_0)
-
-# SQLite
-cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
 # find openSSL 
 # when building on macOS, use CommonCrypto
 if(NOT APPLE)
@@ -61,11 +51,3 @@ endif()
 add_subdirectory( ${PROJECT_NAME} )  # source code
 add_subdirectory( perllib )          # Modular plugin skeleton generator
 add_subdirectory( ups )              # ups files
-
-# ----------------------------------------------------------------------
-# Packaging utility
-
-#include(UseCPack)
-
-#
-# ======================================================================
