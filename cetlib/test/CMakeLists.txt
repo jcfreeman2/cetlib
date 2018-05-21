@@ -33,7 +33,7 @@ cet_test(filepath_maker_test USE_BOOST_UNIT
   DATAFILES
   filepath_maker_test.txt)
 cet_test(filesystem_test)
-cet_test(getenv_test)
+cet_test(getenv_test USE_CATCH_MAIN)
 cet_test(inc-expand_test.sh PREBUILT DEPENDENCIES inc-expand)
 cet_test(include_test)
 cet_test(includer_test USE_BOOST_UNIT LIBRARIES)
