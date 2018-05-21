@@ -80,4 +80,4 @@ install_source(SUBDIRS detail sqlite sqlite/detail)
 
 # ======================================================================
 # Testing
-##add_subdirectory(test)
+add_subdirectory(test)
