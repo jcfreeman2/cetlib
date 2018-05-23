@@ -11,8 +11,8 @@ product	version
 boost		v1_66_0a
 sqlite		v3_20_01_00
 cetlib_except   v1_02_01
-cetbuildtools	v7_03_03	-	only_for_build
-catch		v1_11_0		-nq-	only_for_build
+cetbuildtools	v7_04_00	-	only_for_build
+catch		v2_2_2		-nq-	only_for_build
 end_product_list
 
 
