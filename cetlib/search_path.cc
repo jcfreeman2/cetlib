@@ -22,7 +22,7 @@ namespace {
   string const exception_category{"search_path"};
 
   string
-  get_env_if_present(string const& arg)
+  get_env_if_colon_present(string const& arg)
   {
     // If no colon is present, assume the user is specifying an
     // environment variable.
@@ -30,10 +30,8 @@ namespace {
   }
 
   vector<string>
-  get_dirs(std::string const& env, std::string const& paths)
+  get_dirs(std::string const & path_to_split)
   {
-    string const& path_to_split = env.empty() ? paths : cet::getenv(env);
-
     vector<string> dirs;
     cet::split(path_to_split, ':', back_inserter(dirs));
 
@@ -42,10 +40,38 @@ namespace {
     }
     return dirs;
   }
+
+  vector<string>
+  get_dirs(std::string const& env, std::string const& paths)
+  {
+    return get_dirs(env.empty() ? paths : cet::getenv(env));
+  }
+
+  vector<string>
+  get_dirs(std::string const& env, std::nothrow_t)
+  {
+    return get_dirs(cet::getenv(env, std::nothrow));
+  }
 }
 
-search_path::search_path(string const& arg)
-  : env_{get_env_if_present(arg)}, dirs_{get_dirs(env_, arg)}
+cet::path_tag_t const cet::path_tag;
+
+search_path::search_path(string const & env_name_or_path)
+  :
+  env_{get_env_if_colon_present(env_name_or_path)},
+  dirs_{get_dirs(env_, env_name_or_path)}
+{}
+
+search_path::search_path(string const & env_name, std::nothrow_t)
+  :
+  env_{env_name},
+  dirs_{get_dirs(env_, std::nothrow)}
+{}
+
+search_path::search_path(string const & path, cet::path_tag_t)
+  :
+  env_{},
+  dirs_{get_dirs(path)}
 {}
 
 bool

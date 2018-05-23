@@ -53,7 +53,7 @@ cet_test(registry_test)
 cet_test(registry_via_id_test)
 cet_test(registry_via_id_test_2 NO_AUTO) # for now -- see test's source
 cet_test(rpad_test USE_BOOST_UNIT)
-cet_test(search_path_test TEST_PROPERTIES ENVIRONMENT xyzzy="")
+cet_test(search_path_test USE_CATCH_MAIN TEST_PROPERTIES ENVIRONMENT xyzzy="")
 cet_test(search_path_test_2 NO_AUTO)
 cet_test(search_path_test_2.sh PREBUILT DEPENDENCIES search_path_test_2)
 cet_test(search_path_test_3 USE_BOOST_UNIT)
