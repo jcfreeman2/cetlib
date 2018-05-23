@@ -24,6 +24,8 @@ cet_test(cpu_timer_test USE_BOOST_UNIT
   TEST_PROPERTIES RUN_SERIAL true
   OPTIONAL_GROUPS LOAD_SENSITIVE
   )
+cet_test(exception_category_matcher_t USE_CATCH_MAIN)
+cet_test(exception_message_matcher_t USE_CATCH_MAIN)
 cet_test(exempt_ptr_test)
 cet_test(filepath_maker_test USE_BOOST_UNIT
   TEST_PROPERTIES
