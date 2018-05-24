@@ -3,7 +3,6 @@
 #include "boost/filesystem.hpp"
 #include "boost/regex.hpp"
 #include "cetlib/container_algorithms.h"
-#include "cetlib/os_libpath.h"
 #include "cetlib/plugin_libpath.h"
 #include "cetlib/detail/plugin_search_path.h"
 #include "cetlib/search_path.h"
