@@ -24,6 +24,8 @@ cet_test(cpu_timer_test USE_BOOST_UNIT
   TEST_PROPERTIES RUN_SERIAL true
   OPTIONAL_GROUPS LOAD_SENSITIVE
   )
+cet_test(exception_category_matcher_t USE_CATCH_MAIN)
+cet_test(exception_message_matcher_t USE_CATCH_MAIN)
 cet_test(exempt_ptr_test)
 cet_test(filepath_maker_test USE_BOOST_UNIT
   TEST_PROPERTIES
@@ -31,7 +33,7 @@ cet_test(filepath_maker_test USE_BOOST_UNIT
   DATAFILES
   filepath_maker_test.txt)
 cet_test(filesystem_test)
-cet_test(getenv_test)
+cet_test(getenv_test USE_CATCH_MAIN)
 cet_test(inc-expand_test.sh PREBUILT DEPENDENCIES inc-expand)
 cet_test(include_test)
 cet_test(includer_test USE_BOOST_UNIT LIBRARIES)
@@ -43,7 +45,7 @@ cet_test(MD5Digest_test)
 cet_test(name_of_test USE_BOOST_UNIT)
 cet_test(no_delete_t USE_BOOST_UNIT)
 cet_test(nybbler_test)
-cet_test(os_libpath_t)
+cet_test(os_libpath_t USE_CATCH_MAIN)
 cet_test(ostream_handle_test USE_BOOST_UNIT)
 cet_test(pow_test USE_BOOST_UNIT)
 cet_test(pow_constexpr_test)
@@ -51,7 +53,7 @@ cet_test(registry_test)
 cet_test(registry_via_id_test)
 cet_test(registry_via_id_test_2 NO_AUTO) # for now -- see test's source
 cet_test(rpad_test USE_BOOST_UNIT)
-cet_test(search_path_test TEST_PROPERTIES ENVIRONMENT xyzzy="")
+cet_test(search_path_test USE_CATCH_MAIN TEST_PROPERTIES ENVIRONMENT xyzzy="")
 cet_test(search_path_test_2 NO_AUTO)
 cet_test(search_path_test_2.sh PREBUILT DEPENDENCIES search_path_test_2)
 cet_test(search_path_test_3 USE_BOOST_UNIT)
@@ -65,6 +67,7 @@ cet_test(split_by_regex_test USE_BOOST_UNIT)
 cet_test(split_path_test)
 cet_test(split_test USE_BOOST_UNIT)
 cet_test(trim_test USE_BOOST_UNIT)
+cet_test(plugin_search_path_t USE_CATCH_MAIN)
 cet_test(value_ptr_test USE_BOOST_UNIT)
 cet_test(value_ptr_test_2)
 cet_test(value_ptr_test_3)
