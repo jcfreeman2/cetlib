@@ -22,7 +22,7 @@ namespace {
       new_os_libpath.append(sp[i]);
       paths.insert(sp[i]);
     }
-    cet::search_path oslp(cet::os_libpath());
+    cet::search_path oslp{cet::os_libpath(), std::nothrow};
     auto const oslp_sz = oslp.size();
     for (auto i = 0ull; i != oslp_sz; ++i) {
       if (paths.find(oslp[i]) == paths.end()) {
