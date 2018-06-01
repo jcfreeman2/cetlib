@@ -734,10 +734,10 @@ EOF
   if (not plugin_canMoveOrCopy($plugin, 0)) {
     print $fh <<EOF;
 ${indent}// Plugins should not be copied or assigned.
-${indent}${class_name}(${class_name} const &) = delete;
-${indent}${class_name}(${class_name} &&) = delete;
-${indent}${class_name} & operator = (${class_name} const &) = delete;
-${indent}${class_name} & operator = (${class_name} &&) = delete;
+${indent}${class_name}(${class_name} const&) = delete;
+${indent}${class_name}(${class_name}&&) = delete;
+${indent}${class_name}& operator=(${class_name} const&) = delete;
+${indent}${class_name}& operator=(${class_name}&&) = delete;
 
 EOF
   }
@@ -921,7 +921,7 @@ B<cetskelgen> B<--help-types>
 
 B<cetskelgen> B<--help-type> I<plugin-type>
 
-B<cetskelgen> [I<optons>] [--] [I<plugin-type>[:I<plugin-option>[,I<plugin-option>]+]] I<qualified-name>
+B<cetskelgen> [I<options>] [--] [I<plugin-type>[:I<plugin-option>[,I<plugin-option>]+]] I<qualified-name>
 
 I<Options>: B<--all-entries|-A> |
          B<--boilerplate|-b> I<file> |
@@ -1037,7 +1037,7 @@ member function or member data depending on the presence of
 parentheses. For example,
 
 -e beginJob -e endJob -e reconfigure
--e "bool doPrivateStuff(T1 const &t1, T2 const &t2)"
+-e "bool doPrivateStuff(T1 const& t1, T2 const& t2)"
 -e "std::vector<int> privateData_"
 
 =item B<--force>
