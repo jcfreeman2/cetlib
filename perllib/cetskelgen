@@ -848,9 +848,9 @@ sub class_impl($$\@\@) {
       join(", ", @{$constructor->{args}}),
         ")\n";
     if (exists $constructor->{initializers}) {
-      print $fh "  :\n",
-        join(",\n", map { "  $_" } @{$constructor->{initializers}}),
-          "  // ,\n // More initializers here.\n{";
+      print $fh "  : ",
+        join("\n  ,", map { "$_" } @{$constructor->{initializers}}),
+          "  // ,\n  // More initializers here.\n{";
     } else {
       print $fh <<EOF;
 // :
@@ -862,9 +862,11 @@ EOF
       my $comment;
       my $ctype = ref($constructor->{comment});
       if (not $ctype) {
-        $comment = $constructor->{comment}
+        $comment = $constructor->{comment};
       } elsif ($ctype eq "ARRAY") {
-        $comment = join("\n", chomp @{$constructor->{comment}});;
+        my @comments = @{$constructor->{comment}};
+        chomp(@comments);
+        $comment = join("\n", @comments);
       } else {
         printf STDERR <<EOF, $plugin;
 LOGIC ERROR: A member of %s's constructor() hash has an unexpected
@@ -872,7 +874,7 @@ LOGIC ERROR: A member of %s's constructor() hash has an unexpected
 EOF
         exit(1);
       }
-      print $fh map({ s&^\s*//\s?&// &; "${indent}// $_\n"; } split(/\n/, $comment));
+      print $fh map({ s&^\s*//\s?&// &; "\n${indent}// $_"; } split(/\n/, $comment)), "\n";
     }
     print $fh <<EOF;
 }
