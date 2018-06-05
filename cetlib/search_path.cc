@@ -30,7 +30,7 @@ namespace {
   }
 
   vector<string>
-  get_dirs(std::string const & path_to_split)
+  get_dirs(std::string const& path_to_split)
   {
     vector<string> dirs;
     cet::split(path_to_split, ':', back_inserter(dirs));
@@ -56,22 +56,17 @@ namespace {
 
 cet::path_tag_t const cet::path_tag;
 
-search_path::search_path(string const & env_name_or_path)
-  :
-  env_{get_env_if_colon_present(env_name_or_path)},
-  dirs_{get_dirs(env_, env_name_or_path)}
+search_path::search_path(string const& env_name_or_path)
+  : env_{get_env_if_colon_present(env_name_or_path)}
+  , dirs_{get_dirs(env_, env_name_or_path)}
 {}
 
-search_path::search_path(string const & env_name, std::nothrow_t)
-  :
-  env_{env_name},
-  dirs_{get_dirs(env_, std::nothrow)}
+search_path::search_path(string const& env_name, std::nothrow_t)
+  : env_{env_name}, dirs_{get_dirs(env_, std::nothrow)}
 {}
 
-search_path::search_path(string const & path, cet::path_tag_t)
-  :
-  env_{},
-  dirs_{get_dirs(path)}
+search_path::search_path(string const& path, cet::path_tag_t)
+  : env_{}, dirs_{get_dirs(path)}
 {}
 
 bool

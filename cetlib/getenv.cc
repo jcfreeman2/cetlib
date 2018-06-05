@@ -14,10 +14,10 @@
 std::string
 cet::getenv(std::string const& name)
 {
-  char const * p = std::getenv(name.c_str());
+  char const* p = std::getenv(name.c_str());
   if (p == nullptr) {
     throw cet::exception{"getenv"}
-    << "Can't find an environment variable named \"" << name << '\"';
+      << "Can't find an environment variable named \"" << name << '\"';
   }
   return p;
 }
@@ -25,7 +25,7 @@ cet::getenv(std::string const& name)
 std::string
 cet::getenv(std::string const& name, std::nothrow_t)
 {
-  char const * p = std::getenv(name.c_str());
+  char const* p = std::getenv(name.c_str());
   if (p == nullptr) {
     p = "";
   }

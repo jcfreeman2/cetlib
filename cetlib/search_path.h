@@ -25,7 +25,8 @@ namespace cet {
   // directories.
   class search_path;
 
-  struct path_tag_t { }; // Distinguish calling signatures.
+  struct path_tag_t {
+  }; // Distinguish calling signatures.
 
   extern path_tag_t const path_tag;
 
@@ -40,10 +41,10 @@ public:
   explicit search_path(std::string const& env_name_or_path);
 
   // Specify environent variable (no throw on missing).
-  search_path(std::string const & env_name, std::nothrow_t);
+  search_path(std::string const& env_name, std::nothrow_t);
 
   // Specify path.
-  search_path(std::string const & path, cet::path_tag_t);
+  search_path(std::string const& path, cet::path_tag_t);
 
   // If an environment variable was used to create the search_path
   // object, return it.  Otherwise, it will be empty.
