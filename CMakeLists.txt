@@ -85,10 +85,11 @@ find_ups_boost(v1_50_0)
 find_ups_product(sqlite)
 find_ups_product(cetlib_except v1_01_00)
 find_ups_product(catch v1_11_0)
+find_ups_product(hep_concurrency)
 
 # SQLite
 cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
-# find openSSL 
+# find openSSL
 # when building on macOS, use CommonCrypto
 if(NOT APPLE)
   find_package(OpenSSL REQUIRED )
