@@ -72,6 +72,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
 
 cet_make_exec(inc-expand LIBRARIES ${LIB_NAME})
 cet_make_exec(get-loadable-libraries LIBRARIES ${LIB_NAME})
+cet_make_exec(cet-bootstrap LIBRARIES ${LIB_NAME})
 
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:
