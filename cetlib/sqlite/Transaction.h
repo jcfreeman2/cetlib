@@ -24,10 +24,10 @@ namespace cet {
 
     class Transaction {
     public:
-      explicit Transaction(sqlite3* db);
+      explicit Transaction(sqlite3* db) noexcept(false);
       ~Transaction() noexcept;
 
-      void commit();
+      void commit() noexcept(false);
 
       // Transactions may not be copied or moved.
       Transaction(Transaction const&) = delete;
