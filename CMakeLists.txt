@@ -37,7 +37,7 @@ cet_report_compiler_flags()
 find_package(Boost 1.50.0 COMPONENTS filesystem regex)
 find_library(SQLITE3 NAMES sqlite3 REQUIRED)
 find_package(cetlib_except 1.01.00)
-find_package(Catch 2.0.0)
+find_package(Catch2 2.0.0 REQUIRED)
 
 # find openSSL 
 # when building on macOS, use CommonCrypto
