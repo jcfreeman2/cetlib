@@ -88,9 +88,14 @@ endif()
 # ----------------------------------------------------------------------
 # Describe source tree layout:
 
-add_subdirectory( ${PROJECT_NAME} )  # source code
-add_subdirectory( perllib )          # Modular plugin skeleton generator
-add_subdirectory( ups )              # ups files
+add_subdirectory(${PROJECT_NAME})  # source code
+add_subdirectory(perllib)          # Modular plugin skeleton generator
+add_subdirectory(ups)              # ups files
+
+# ----------------------------------------------------------------------
+# Documentation generation:
+find_package(Sphinx REQUIRED)
+add_subdirectory(docs)
 
 # ----------------------------------------------------------------------
 # Packaging utility
