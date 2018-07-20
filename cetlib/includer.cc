@@ -25,8 +25,9 @@ namespace bfs = boost::filesystem;
 // ----------------------------------------------------------------------
 
 namespace {
-  namespace detail {
+  std::regex const reCarriageReturn{"\r"};
 
+  namespace detail {
     enum error { cant_open, cant_read, malformed, recursive };
 
     std::string
@@ -64,7 +65,8 @@ namespace {
     {
       std::vector<std::string> result;
       for (std::string readline; std::getline(is, readline);) {
-        for (auto const& line : cet::split_by_regex(readline, "\r")) {
+        for (auto const& line :
+             cet::split_by_regex(readline, reCarriageReturn)) {
           result.emplace_back(line);
         }
       }

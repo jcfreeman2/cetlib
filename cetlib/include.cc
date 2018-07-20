@@ -5,15 +5,22 @@
 // ======================================================================
 
 #include "cetlib/include.h"
-#include "cetlib/split_by_regex.h"
-
 #include "cetlib/filesystem.h"
 #include "cetlib/search_path.h"
+#include "cetlib/split_by_regex.h"
 #include "cetlib/trim.h"
 #include "cetlib_except/coded_exception.h"
+
 #include <fstream>
+#include <regex>
 
 // ----------------------------------------------------------------------
+
+namespace {
+  std::regex const reCarriageReturn{"\r"};
+  std::string const include_lit{"#include \""};
+  std::size_t const include_sz{include_lit.size()};
+}
 
 namespace cet {
   namespace detail {
@@ -37,15 +44,13 @@ namespace cet {
 
     using include_exception = cet::coded_exception<error, translate>;
 
-    std::string const include_lit{"#include \""};
-    std::size_t const include_sz{include_lit.size()};
-
     std::vector<std::string>
     getlines(std::istream& is)
     {
       std::vector<std::string> result;
       for (std::string readline; std::getline(is, readline);) {
-        for (auto const& line : cet::split_by_regex(readline, "\r")) {
+        for (auto const& line :
+             cet::split_by_regex(readline, reCarriageReturn)) {
           result.emplace_back(line);
         }
       }
