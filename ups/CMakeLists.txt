@@ -1,9 +1,2 @@
-# ======================================================================
-#
-# Build/install script for ups files
-#
-# ======================================================================
-
-process_ups_files()
-
-cet_cmake_config()
+# Create package configuration and version files.
+cet_cmake_config(CONFIG_FRAGMENTS cetlib-fragment.cmake.in)
