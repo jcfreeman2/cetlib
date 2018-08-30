@@ -122,10 +122,16 @@ includer::get_posinfo(const_iterator const& it) const
   frame const& this_frame = frames_[--framenum];
 
   // determine the line number within the corresponding file:
-  uint linenum = this_frame.starting_linenum +
-                 std::count(text_.begin() + this_frame.starting_textpos,
-                            text_.begin() + textpos,
-                            '\n');
+  uint delta_line_num{};
+  if (this_frame.starting_textpos != textpos) {
+    auto const this_frame_begin = this_frame.nl_positions.cbegin();
+    auto const this_frame_end = this_frame.nl_positions.cend();
+    auto const lower = std::upper_bound(this_frame_begin,
+                                        this_frame_end,
+                                        textpos);
+    delta_line_num = std::distance(this_frame_begin, lower);
+  }
+  uint const linenum = this_frame.starting_linenum + delta_line_num;
 
   // determine the character position within the corresponding line:
   uint const newlinepos =
@@ -222,6 +228,7 @@ includer::include(int including_framenum,
     ++linenum;
     if (line.find(inc_lit) != 0) { // ordinary line (not an #include)
       text_.append(line).append(1, '\n');
+      new_frame.nl_positions.push_back(text_.size()); // Record newline
       continue;
     }
 
@@ -281,6 +288,7 @@ includer::include(std::istream& f, cet::filepath_maker& policy_filename)
     ++linenum;
     if (line.find(inc_lit) != 0) { // ordinary line (not an #include)
       text_.append(line).append(1, '\n');
+      new_frame.nl_positions.push_back(text_.size()); // Record newline
       continue;
     }
 

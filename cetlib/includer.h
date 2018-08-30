@@ -61,12 +61,18 @@ private:
     std::string filename;
     uint starting_linenum;
     size_t starting_textpos;
+    // The new-line positions are used to determine line numbers
+    // whenever includer::get_posinfo is called.
+    std::vector<size_t> nl_positions{};
 
-    frame(uint framenum, std::string filename, uint linenum, size_t textpos)
-      : including_framenum(framenum)
-      , filename(filename)
-      , starting_linenum(linenum)
-      , starting_textpos(textpos)
+    frame(uint const framenum,
+          std::string const& filename,
+          uint const linenum,
+          size_t const textpos)
+      : including_framenum{framenum}
+      , filename{filename}
+      , starting_linenum{linenum}
+      , starting_textpos{textpos}
     {}
   };
 
