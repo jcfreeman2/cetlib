@@ -13,7 +13,7 @@
 // such as cet::exception_category_matcher.
 ////////////////////////////////////////////////////////////////////////
 #include "cetlib_except/exception.h"
-#include <catch/catch.hpp>
+#include <catch2/catch.hpp>
 
 #include <memory>
 #include <string>

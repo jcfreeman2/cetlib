@@ -8,23 +8,25 @@ perllib  product_dir
 
 # define product/version pairs
 product	version
-boost		v1_66_0a
-sqlite		v3_20_01_00
+boost		v1_68_0
+sqlite		v3_24_00_00
 cetlib_except   v1_02_02
 hep_concurrency v1_01_00
-cetbuildtools	v7_05_01	-	only_for_build
-catch		v2_2_2		-nq-	only_for_build
+cetbuildtools	v7_06_02	-	only_for_build
+catch		v2_4_0		-nq-	only_for_build
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
 qualifier	cetlib_except	boost      hep_concurrency  sqlite	notes
-e15:debug	e15:debug	e15:debug  e15:debug        -nq-
-e15:prof        e15:prof        e15:prof   e15:prof         -nq-
 e17:debug       e17:debug       e17:debug  e17:debug        -nq-
 e17:prof        e17:prof        e17:prof   e17:prof         -nq-
+e19:debug	e19:debug	e19:debug  e19:debug        -nq-
+e19:prof        e19:prof        e19:prof   e19:prof         -nq-
 c2:debug        c2:debug        c2:debug   c2:debug         -nq-
 c2:prof         c2:prof         c2:prof    c2:prof          -nq-
+c5:debug        c5:debug        c5:debug   c5:debug         -nq-
+c5:prof         c5:prof         c5:prof    c5:prof          -nq-
 end_qualifier_list
 
 # Local Variables:

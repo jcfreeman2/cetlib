@@ -3,7 +3,7 @@
 #define _POSIX_C_SOURCE 200112L
 #endif
 
-#include "catch/catch.hpp"
+#include "catch2/catch.hpp"
 
 #include "cetlib/exception_category_matcher.h"
 #include "cetlib/exception_message_matcher.h"
