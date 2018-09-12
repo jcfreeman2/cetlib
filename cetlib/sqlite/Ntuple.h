@@ -117,66 +117,64 @@
 #include <tuple>
 #include <vector>
 
-namespace cet {
-  namespace sqlite {
+namespace cet::sqlite {
 
-    template <typename... Args>
-    class Ntuple {
-      // Types
-    public:
-      // Elements of row are unique_ptr's so that it is possible to bind to a
-      // null parameter.
-      template <typename T>
-      using element_t =
-        std::unique_ptr<typename sqlite::permissive_column<T>::element_type>;
-      using row_t = std::tuple<element_t<Args>...>;
-      static constexpr auto nColumns = std::tuple_size<row_t>::value;
-      using name_array = sqlite::name_array<nColumns>;
-      // Special Member Functions
-    public:
-      ~Ntuple() noexcept;
-      Ntuple(Connection& connection,
-             std::string const& name,
-             name_array const& columns,
-             bool overwriteContents = false,
-             std::size_t bufsize = 1000ull);
-      Ntuple(Ntuple const&) = delete;
-      Ntuple& operator=(Ntuple const&) = delete;
-      // API
-    public:
-      std::string const&
-      name() const
-      {
-        return name_;
-      }
-      void insert(Args const...);
-      void flush();
-      // Implementation details
-    private:
-      static constexpr auto iSequence = std::make_index_sequence<nColumns>();
-      // This is the ctor that does all of the work.  It exists so that
-      // the Args... and column-names array can be expanded in parallel.
-      template <std::size_t... I>
-      Ntuple(Connection& db,
-             std::string const& name,
-             name_array const& columns,
-             bool overwriteContents,
-             std::size_t bufsize,
-             std::index_sequence<I...>);
-      int flush_no_throw();
-      // Member data
-    private:
-      // Protects all of the data members.
-      hep::concurrency::RecursiveMutex mutex_{"Ntuple::mutex_"};
-      Connection& connection_;
-      std::string const name_;
-      std::size_t const max_;
-      std::vector<row_t> buffer_{};
-      sqlite3_stmt* insert_statement_{nullptr};
-    };
+  template <typename... Args>
+  class Ntuple {
+    // Types
+  public:
+    // Elements of row are unique_ptr's so that it is possible to bind to a
+    // null parameter.
+    template <typename T>
+    using element_t =
+      std::unique_ptr<typename sqlite::permissive_column<T>::element_type>;
+    using row_t = std::tuple<element_t<Args>...>;
+    static constexpr auto nColumns = std::tuple_size<row_t>::value;
+    using name_array = sqlite::name_array<nColumns>;
+    // Special Member Functions
+  public:
+    ~Ntuple() noexcept;
+    Ntuple(Connection& connection,
+           std::string const& name,
+           name_array const& columns,
+           bool overwriteContents = false,
+           std::size_t bufsize = 1000ull);
+    Ntuple(Ntuple const&) = delete;
+    Ntuple& operator=(Ntuple const&) = delete;
+    // API
+  public:
+    std::string const&
+    name() const
+    {
+      return name_;
+    }
+    void insert(Args const...);
+    void flush();
+    // Implementation details
+  private:
+    static constexpr auto iSequence = std::make_index_sequence<nColumns>();
+    // This is the ctor that does all of the work.  It exists so that
+    // the Args... and column-names array can be expanded in parallel.
+    template <std::size_t... I>
+    Ntuple(Connection& db,
+           std::string const& name,
+           name_array const& columns,
+           bool overwriteContents,
+           std::size_t bufsize,
+           std::index_sequence<I...>);
+    int flush_no_throw();
+    // Member data
+  private:
+    // Protects all of the data members.
+    hep::concurrency::RecursiveMutex mutex_{"Ntuple::mutex_"};
+    Connection& connection_;
+    std::string const name_;
+    std::size_t const max_;
+    std::vector<row_t> buffer_{};
+    sqlite3_stmt* insert_statement_{nullptr};
+  };
 
-  } // sqlite
-} // cet
+} // cet::sqlite
 
 template <typename... Args>
 template <std::size_t... I>

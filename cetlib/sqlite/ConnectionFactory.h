@@ -38,48 +38,45 @@
 #include <string>
 #include <utility>
 
-namespace cet {
-  namespace sqlite {
+namespace cet::sqlite {
 
-    class ConnectionFactory {
-    public:
-      template <typename DatabaseOpenPolicy = detail::DefaultDatabaseOpenPolicy,
-                typename... PolicyArgs>
-      auto make_connection(std::string const& file_name, PolicyArgs&&...)
-        -> Connection*;
+  class ConnectionFactory {
+  public:
+    template <typename DatabaseOpenPolicy = detail::DefaultDatabaseOpenPolicy,
+              typename... PolicyArgs>
+    auto make_connection(std::string const& file_name, PolicyArgs&&...)
+      -> Connection*;
 
-    private:
-      std::map<std::string, std::weak_ptr<hep::concurrency::RecursiveMutex>>
-        databaseLocks_;
-      hep::concurrency::RecursiveMutex mutex_{"ConnectionFactory::mutex_"};
-    };
+  private:
+    std::map<std::string, std::weak_ptr<hep::concurrency::RecursiveMutex>>
+      databaseLocks_;
+    hep::concurrency::RecursiveMutex mutex_{"ConnectionFactory::mutex_"};
+  };
 
-    template <typename DatabaseOpenPolicy, typename... PolicyArgs>
-    auto
-    ConnectionFactory::make_connection(std::string const& filename,
-                                       PolicyArgs&&... policyArgs)
-      -> Connection*
-    {
-      // Implementation a la Herb Sutter's favorite 10-liner
-      hep::concurrency::RecursiveMutexSentry sentry{mutex_, __func__};
-      // Note: Convert the weak_ptr to a shared_ptr using the member
-      // function lock(), this is not an operation on the mutex.
-      auto shared_ptr_to_mutex = databaseLocks_[filename].lock();
-      if (!shared_ptr_to_mutex) {
-        using namespace std::string_literals;
-        databaseLocks_[filename] = shared_ptr_to_mutex =
-          std::make_shared<hep::concurrency::RecursiveMutex>(
-            "ConnectionFactory::databaseLocks_["s + filename + "]"s);
-      }
-      auto ret = new Connection{
-        filename,
-        shared_ptr_to_mutex,
-        DatabaseOpenPolicy{std::forward<PolicyArgs>(policyArgs)...}};
-      return ret;
+  template <typename DatabaseOpenPolicy, typename... PolicyArgs>
+  auto
+  ConnectionFactory::make_connection(std::string const& filename,
+                                     PolicyArgs&&... policyArgs) -> Connection*
+  {
+    // Implementation a la Herb Sutter's favorite 10-liner
+    hep::concurrency::RecursiveMutexSentry sentry{mutex_, __func__};
+    // Note: Convert the weak_ptr to a shared_ptr using the member
+    // function lock(), this is not an operation on the mutex.
+    auto shared_ptr_to_mutex = databaseLocks_[filename].lock();
+    if (!shared_ptr_to_mutex) {
+      using namespace std::string_literals;
+      databaseLocks_[filename] = shared_ptr_to_mutex =
+        std::make_shared<hep::concurrency::RecursiveMutex>(
+          "ConnectionFactory::databaseLocks_["s + filename + "]"s);
     }
+    auto ret = new Connection{
+      filename,
+      shared_ptr_to_mutex,
+      DatabaseOpenPolicy{std::forward<PolicyArgs>(policyArgs)...}};
+    return ret;
+  }
 
-  } // namespace sqlite
-} // namespace cet
+} // namespace cet::sqlite
 
 #endif /* cetlib_sqlite_ConnectionFactory_h */
 

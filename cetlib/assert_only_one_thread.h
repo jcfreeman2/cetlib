@@ -25,47 +25,44 @@
 #include <iostream>
 #include <string>
 
-namespace cet {
-  namespace detail {
+namespace cet::detail {
 
-    class ThreadCounter {
+  class ThreadCounter {
+  public:
+    explicit ThreadCounter(char const* filename,
+                           unsigned const linenum,
+                           char const* funcname)
+      : filename_{filename}, linenum_{linenum}, funcname_{funcname}
+    {}
+
+    class Sentry {
     public:
-      explicit ThreadCounter(char const* filename,
-                             unsigned const linenum,
-                             char const* funcname)
-        : filename_{filename}, linenum_{linenum}, funcname_{funcname}
-      {}
-
-      class Sentry {
-      public:
-        ~Sentry() noexcept { --tc_.counter_; }
-        Sentry(ThreadCounter& tc, bool const terminate = true) : tc_{tc}
-        {
-          if (++tc_.counter_ == 1u) {
-            return;
-          }
-          std::cerr
-            << "Failed assert--more than one thread accessing location:\n"
-            << "  " << tc_.filename_ << ':' << tc_.linenum_ << '\n'
-            << "  function: " << tc_.funcname_ << '\n';
-          if (terminate) {
-            std::abort();
-          }
+      ~Sentry() noexcept { --tc_.counter_; }
+      Sentry(ThreadCounter& tc, bool const terminate = true) : tc_{tc}
+      {
+        if (++tc_.counter_ == 1u) {
+          return;
         }
-
-      private:
-        ThreadCounter& tc_;
-      };
+        std::cerr << "Failed assert--more than one thread accessing location:\n"
+                  << "  " << tc_.filename_ << ':' << tc_.linenum_ << '\n'
+                  << "  function: " << tc_.funcname_ << '\n';
+        if (terminate) {
+          std::abort();
+        }
+      }
 
     private:
-      std::string const filename_;
-      unsigned const linenum_;
-      std::string const funcname_;
-      std::atomic<unsigned> counter_{0u};
+      ThreadCounter& tc_;
     };
 
-  } // namespace detail
-} // namespace cet
+  private:
+    std::string const filename_;
+    unsigned const linenum_;
+    std::string const funcname_;
+    std::atomic<unsigned> counter_{0u};
+  };
+
+} // namespace cet::detail
 
 #ifdef NDEBUG
 #define CET_ASSERT_ONLY_ONE_THREAD()

@@ -19,31 +19,29 @@
 
 struct sqlite3;
 
-namespace cet {
-  namespace sqlite {
+namespace cet::sqlite {
 
-    class Transaction {
-    public:
-      explicit Transaction(sqlite3* db) noexcept(false);
-      ~Transaction() noexcept;
+  class Transaction {
+  public:
+    explicit Transaction(sqlite3* db) noexcept(false);
+    ~Transaction() noexcept;
 
-      void commit() noexcept(false);
+    void commit() noexcept(false);
 
-      // Transactions may not be copied or moved.
-      Transaction(Transaction const&) = delete;
-      Transaction(Transaction&&) = delete;
-      Transaction& operator=(Transaction const&) = delete;
-      Transaction& operator=(Transaction&&) = delete;
+    // Transactions may not be copied or moved.
+    Transaction(Transaction const&) = delete;
+    Transaction(Transaction&&) = delete;
+    Transaction& operator=(Transaction const&) = delete;
+    Transaction& operator=(Transaction&&) = delete;
 
-    private:
-      sqlite3* db_;
-    };
+  private:
+    sqlite3* db_;
+  };
 
-  } // sqlite
-} // cet
+} // cet::sqlite
 
 #endif /* cetlib_sqlite_Transaction_h */
 
-// Local Variables:
-// mode: c++
-// End:
+  // Local Variables:
+  // mode: c++
+  // End:
