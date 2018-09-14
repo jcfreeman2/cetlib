@@ -126,9 +126,8 @@ includer::get_posinfo(const_iterator const& it) const
   if (this_frame.starting_textpos != textpos) {
     auto const this_frame_begin = this_frame.nl_positions.cbegin();
     auto const this_frame_end = this_frame.nl_positions.cend();
-    auto const lower = std::upper_bound(this_frame_begin,
-                                        this_frame_end,
-                                        textpos);
+    auto const lower =
+      std::upper_bound(this_frame_begin, this_frame_end, textpos);
     delta_line_num = std::distance(this_frame_begin, lower);
   }
   uint const linenum = this_frame.starting_linenum + delta_line_num;
@@ -137,8 +136,8 @@ includer::get_posinfo(const_iterator const& it) const
   uint const newlinepos =
     textpos == 0u ? std::string::npos : text_.find_last_of('\n', textpos - 1u);
   uint const charpos = newlinepos == std::string::npos ?
-                   textpos + 1 :
-                   textpos - text_.find_last_of('\n', textpos - 1u);
+                         textpos + 1 :
+                         textpos - text_.find_last_of('\n', textpos - 1u);
   return {textpos, linenum, charpos, framenum};
 }
 

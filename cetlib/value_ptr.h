@@ -128,8 +128,7 @@ private:
   typedef char (&no_t)[2];
 
   template <class U, U* (U::*)() const = &U::clone>
-  struct cloneable {
-  };
+  struct cloneable {};
 
   template <class U>
   static yes_t test(cloneable<U>*);
@@ -415,7 +414,7 @@ cet::operator>=(value_ptr<E, C, D> const& x, value_ptr<E, C, D> const& y)
   return !(x < y);
 }
 
-  // ======================================================================
+// ======================================================================
 
 #endif /* cetlib_value_ptr_h */
 

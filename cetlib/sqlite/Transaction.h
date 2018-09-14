@@ -42,6 +42,6 @@ namespace cet::sqlite {
 
 #endif /* cetlib_sqlite_Transaction_h */
 
-  // Local Variables:
-  // mode: c++
-  // End:
+// Local Variables:
+// mode: c++
+// End:

@@ -27,7 +27,7 @@ namespace cet::sqlite {
     cet::coded_exception<errors::ErrorCodes, ExceptionDetail::translate>;
 } // cet::sqlite
 
-  // ======================================================================
+// ======================================================================
 
 #endif /* cetlib_sqlite_Exception_h */
 

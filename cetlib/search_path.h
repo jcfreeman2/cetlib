@@ -25,8 +25,7 @@ namespace cet {
   // directories.
   class search_path;
 
-  struct path_tag_t {
-  }; // Distinguish calling signatures.
+  struct path_tag_t {}; // Distinguish calling signatures.
 
   extern path_tag_t const path_tag;
 
