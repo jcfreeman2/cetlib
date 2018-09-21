@@ -106,7 +106,11 @@
 
 #ifndef UNUSED_PRIVATE_FIELD
 #ifdef __clang__
+#if __has_cpp_attribute(maybe_unused)
+#define UNUSED_PRIVATE_FIELD [[maybe_unused]]
+#else
 #define UNUSED_PRIVATE_FIELD [[gnu::unused]]
+#endif
 #else
 #define UNUSED_PRIVATE_FIELD
 #endif
