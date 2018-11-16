@@ -12,8 +12,8 @@ namespace cet::sqlite::detail {
   template <std::size_t I, typename Tuple>
   std::enable_if_t<(I == std::tuple_size_v<Tuple>)>
   fillData(Tuple&,
-           int const ncols[[maybe_unused]],
-           int const currentcol[[maybe_unused]],
+           int const ncols [[maybe_unused]],
+           int const currentcol [[maybe_unused]],
            char**)
   {
     assert(currentcol == ncols);

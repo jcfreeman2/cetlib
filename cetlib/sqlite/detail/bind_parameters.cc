@@ -5,7 +5,8 @@ using namespace cet::sqlite;
 
 namespace {
   [[noreturn]] void
-  throw_bind_failure(std::string const& column_type, int const rc) {
+  throw_bind_failure(std::string const& column_type, int const rc)
+  {
     throw Exception{errors::SQLExecutionError} << "Failed to bind "
                                                << column_type << ".\n"
                                                << "Return code: " << rc << '\n';
