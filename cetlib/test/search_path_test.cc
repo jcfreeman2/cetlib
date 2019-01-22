@@ -1,7 +1,7 @@
 #include <catch/catch.hpp>
 
-#include "cetlib/search_path.h"
 #include "cetlib/exception_category_matcher.h"
+#include "cetlib/search_path.h"
 #include "cetlib_except/exception.h"
 
 #include <string>

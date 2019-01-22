@@ -90,8 +90,7 @@ public:
 private:
   template <class P>
   struct is_compatible
-    : public std::is_convertible<std::add_pointer_t<P>, pointer> {
-  };
+    : public std::is_convertible<std::add_pointer_t<P>, pointer> {};
 
 public:
   // --- default c'tor:
@@ -280,7 +279,7 @@ cet::operator>=(cet::exempt_ptr<E> const& x, cet::exempt_ptr<E> const& y)
   return !(x < y);
 }
 
-  // ======================================================================
+// ======================================================================
 
 #endif /* cetlib_exempt_ptr_h */
 

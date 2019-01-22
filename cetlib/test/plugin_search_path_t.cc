@@ -5,10 +5,10 @@
 
 #include "catch/catch.hpp"
 
+#include "cetlib/detail/plugin_search_path.h"
 #include "cetlib/getenv.h"
 #include "cetlib/os_libpath.h"
 #include "cetlib/plugin_libpath.h"
-#include "cetlib/detail/plugin_search_path.h"
 #include "cetlib/search_path.h"
 #include "cetlib/split_path.h"
 
@@ -25,20 +25,23 @@ using std::string;
 namespace {
   string const test_path{"/dev/null/nopath:/dev/null/xpath"};
 
-  std::size_t path_entries(std::string const & path) {
+  std::size_t
+  path_entries(std::string const& path)
+  {
     return (path.empty() ? 0ull :
-            std::count(path.cbegin(), path.cend(), ':') + 1ull);
+                           std::count(path.cbegin(), path.cend(), ':') + 1ull);
   }
 
   std::size_t const tp_sz = path_entries(test_path);
 
-  string remove_dups_from_path(string const & path)
+  string
+  remove_dups_from_path(string const& path)
   {
     string result;
     std::vector<string> path_bits;
     std::set<string> paths_used;
     cet::split_path(path, path_bits);
-    for (auto const & bit : path_bits) {
+    for (auto const& bit : path_bits) {
       if (paths_used.find(bit) == paths_used.end()) {
         if (!result.empty()) {
           result.append(":");
@@ -67,11 +70,11 @@ TEST_CASE("Tests")
   ////////////////////////////////////
 
   // Test using non-empty plugin_libpath().
-  SECTION("Standard") {
+  SECTION("Standard")
+  {
     setenv(plugin_libpath(), test_path.c_str(), 1);
     string const expected{remove_dups_from_path(cet::getenv(plugin_libpath()) +
-                                                ":" +
-                                                libpath_before)};
+                                                ":" + libpath_before)};
     auto const sp{plugin_search_path(search_path{plugin_libpath()})};
     CHECK(tp_sz == sp.size());
     auto const libpath = cet::getenv(os_libpath());
@@ -82,8 +85,8 @@ TEST_CASE("Tests")
   // Test fallback for null plugin_libpath().
   SECTION("Standard Null")
   {
-    auto const sp{plugin_search_path(search_path{plugin_libpath(),
-            std::nothrow})};
+    auto const sp{
+      plugin_search_path(search_path{plugin_libpath(), std::nothrow})};
     auto const libpath = cet::getenv(os_libpath());
     CHECK(path_entries(libpath) == sp.size());
     CHECK(remove_dups_from_path(libpath_before) == libpath);
@@ -113,8 +116,7 @@ TEST_CASE("Tests")
   // Test null arbitrary environment variable.
   SECTION("Custom Null")
   {
-    auto const sp{plugin_search_path(search_path{"MISSING_VAR",
-            std::nothrow})};
+    auto const sp{plugin_search_path(search_path{"MISSING_VAR", std::nothrow})};
     CHECK(1ull == sp.size()); // "."
     CHECK(remove_dups_from_path(libpath_before) == cet::getenv(os_libpath()));
   }

@@ -16,5 +16,7 @@ cet::BasicPluginFactory::BasicPluginFactory(
   std::string const& makerName,
   std::string const& pluginTypeFuncName)
   : BasicPluginFactory(search_path{plugin_libpath(), std::nothrow},
-                       suffix, makerName, pluginTypeFuncName)
+                       suffix,
+                       makerName,
+                       pluginTypeFuncName)
 {}

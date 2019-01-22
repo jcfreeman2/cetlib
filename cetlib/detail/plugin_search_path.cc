@@ -9,13 +9,13 @@
 
 namespace {
   // Prepend specified path to os_libpath(), dropping duplicates.
-  void prepend_path_to_os_libpath(cet::search_path const & sp)
+  void
+  prepend_path_to_os_libpath(cet::search_path const& sp)
   {
     std::string new_os_libpath;
     std::set<std::string> paths;
     auto const np_sz = sp.size();
-    for (auto i = 0ull; i != np_sz; ++i)
-    {
+    for (auto i = 0ull; i != np_sz; ++i) {
       if (!new_os_libpath.empty()) {
         new_os_libpath.append(":");
       }
@@ -54,4 +54,3 @@ cet::detail::plugin_search_path(search_path sp)
   }
   return sp;
 }
-

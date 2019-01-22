@@ -14,8 +14,8 @@ namespace cet {
       template <std::size_t I, typename Tuple>
       std::enable_if_t<(I == std::tuple_size<Tuple>::value)>
       fillData(Tuple&,
-               int const ncols[[gnu::unused]],
-               int const currentcol[[gnu::unused]],
+               int const ncols [[gnu::unused]],
+               int const currentcol [[gnu::unused]],
                char**)
       {
         assert(currentcol == ncols);

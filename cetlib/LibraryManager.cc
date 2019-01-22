@@ -3,8 +3,8 @@
 #include "boost/filesystem.hpp"
 #include "boost/regex.hpp"
 #include "cetlib/container_algorithms.h"
-#include "cetlib/plugin_libpath.h"
 #include "cetlib/detail/plugin_search_path.h"
+#include "cetlib/plugin_libpath.h"
 #include "cetlib/search_path.h"
 #include "cetlib/shlib_utils.h"
 #include "cetlib_except/demangle.h"
@@ -48,9 +48,8 @@ cet::LibraryManager::LibraryManager(search_path search_path,
   , pattern_stem_{std::move(pattern)}
 {
   std::vector<std::string> matches;
-  search_path_.find_files(shlib_prefix() + pattern_stem_ +
-                          lib_type_ + dllExtPattern(),
-                          matches);
+  search_path_.find_files(
+    shlib_prefix() + pattern_stem_ + lib_type_ + dllExtPattern(), matches);
 
   // Note the use of reverse iterators here: files found earlier in
   // the vector will therefore overwrite those found later, which is
@@ -75,9 +74,9 @@ cet::LibraryManager::LibraryManager(std::string lib_type)
 {}
 
 cet::LibraryManager::LibraryManager(std::string lib_type, std::string pattern)
-  :
-  LibraryManager{search_path{plugin_libpath(), std::nothrow},
-    std::move(lib_type), std::move(pattern)}
+  : LibraryManager{search_path{plugin_libpath(), std::nothrow},
+                   std::move(lib_type),
+                   std::move(pattern)}
 {}
 
 size_t

@@ -12,8 +12,8 @@
 // Composable with other bases of Catch::MatcherBase<cet::exception>
 // such as cet::exception_message_matcher.
 ////////////////////////////////////////////////////////////////////////
-#include <catch/catch.hpp>
 #include "cetlib_except/exception.h"
+#include <catch/catch.hpp>
 
 #include <string>
 
@@ -21,25 +21,26 @@ namespace cet {
   class exception_category_matcher;
 }
 
-class cet::exception_category_matcher :
-  public Catch::MatcherBase<cet::exception> {
+class cet::exception_category_matcher
+  : public Catch::MatcherBase<cet::exception> {
 public:
-  explicit
-  exception_category_matcher(std::string category)
+  explicit exception_category_matcher(std::string category)
     : category_{std::move(category)}
-    { }
+  {}
 
-  bool match(cet::exception const & e) const override
-    {
-      return e.category() == category_;
-    }
+  bool
+  match(cet::exception const& e) const override
+  {
+    return e.category() == category_;
+  }
 
-  std::string describe() const override
-    {
-      using namespace std::string_literals;
-      std::string desc{"is of category \""s + category_ + '"'};
-      return desc;
-    }
+  std::string
+  describe() const override
+  {
+    using namespace std::string_literals;
+    std::string desc{"is of category \""s + category_ + '"'};
+    return desc;
+  }
 
 private:
   std::string category_;
