@@ -1,4 +1,4 @@
-parent cetlib v3_03_02
+parent cetlib v3_06_00
 defaultqual e15
 #
 incdir fq_dir include
