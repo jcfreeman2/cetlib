@@ -15,14 +15,6 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shlib_utils.cc.in
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc @ONLY
   )
 
-if (NOT DEFINED CET_HAVE_STD_CBEGIN_CEND)
-  try_compile(CET_HAVE_STD_CBEGIN_CEND ${CMAKE_CURRENT_BINARY_DIR}/config SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/config/test-cbegin.cc)
-endif()
-
-configure_file(${CMAKE_CURRENT_SOURCE_DIR}/cetconfig.h.in
-  ${CMAKE_CURRENT_BINARY_DIR}/cetconfig.h @ONLY
-  )
-
 cet_make_library(LIBRARY_NAME ${LIB_NAME}
   SOURCE
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
@@ -48,12 +40,14 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   column_width.cc
   cpu_timer.cc
   crc32.cc
+  detail/plugin_search_path.cc
   detail/wrapLibraryManagerException.cc
   filepath_maker.cc
   filesystem.cc
   getenv.cc
   include.cc
   includer.cc
+  loadable_libraries.cc
   lpad.cc
   nybbler.cc
   replace_all.cc
@@ -65,9 +59,9 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   split_by_regex.cc
   LIBRARIES
   cetlib_except
+  hep_concurrency
   ${Boost_FILESYSTEM_LIBRARY}
   ${Boost_REGEX_LIBRARY}
-  ${Boost_SYSTEM_LIBRARY}
   ${CMAKE_DL_LIBS}
   ${SQLITE3}
   ${OPENSSL_LIBRARIES}
@@ -77,8 +71,8 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
 # ----------------------------------------------------------------------
 # Build and install this project's executables:
 
-cet_make_exec(inc-expand
-              LIBRARIES ${LIB_NAME} ${Boost_FILESYSTEM_LIBRARY} ${Boost_REGEX_LIBRARY})
+cet_make_exec(inc-expand LIBRARIES ${LIB_NAME})
+cet_make_exec(get-accessible-paths LIBRARIES ${LIB_NAME})
 
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:

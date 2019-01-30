@@ -4,9 +4,9 @@
 //
 // ======================================================================
 
+#include "cetlib/search_path.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/getenv.h"
-#include "cetlib/search_path.h"
 #include "cetlib_except/exception.h"
 
 #include <dirent.h>
@@ -21,17 +21,17 @@ using cet::search_path;
 namespace {
   string const exception_category{"search_path"};
 
-  string get_env_if_present(string const& arg)
+  string
+  get_env_if_colon_present(string const& arg)
   {
     // If no colon is present, assume the user is specifying an
     // environment variable.
     return arg.find(':') == string::npos ? arg : string{};
   }
 
-  vector<string> get_dirs(std::string const& env, std::string const& paths)
+  vector<string>
+  get_dirs(std::string const& path_to_split)
   {
-    string const& path_to_split = env.empty() ? paths : cet::getenv(env);
-
     vector<string> dirs;
     cet::split(path_to_split, ':', back_inserter(dirs));
 
@@ -40,19 +40,43 @@ namespace {
     }
     return dirs;
   }
+
+  vector<string>
+  get_dirs(std::string const& env, std::string const& paths)
+  {
+    return get_dirs(env.empty() ? paths : cet::getenv(env));
+  }
+
+  vector<string>
+  get_dirs(std::string const& env, std::nothrow_t)
+  {
+    return get_dirs(cet::getenv(env, std::nothrow));
+  }
 }
 
-search_path::search_path(string const& arg) :
-  env_{get_env_if_present(arg)},
-  dirs_{get_dirs(env_, arg)}
+cet::path_tag_t const cet::path_tag;
+
+search_path::search_path(string const& env_name_or_path)
+  : env_{get_env_if_colon_present(env_name_or_path)}
+  , dirs_{get_dirs(env_, env_name_or_path)}
 {}
 
-bool search_path::empty() const
+search_path::search_path(string const& env_name, std::nothrow_t)
+  : env_{env_name}, dirs_{get_dirs(env_, std::nothrow)}
+{}
+
+search_path::search_path(string const& path, cet::path_tag_t)
+  : env_{}, dirs_{get_dirs(path)}
+{}
+
+bool
+search_path::empty() const
 {
   return dirs_.empty();
 }
 
-size_t search_path::size() const
+size_t
+search_path::size() const
 {
   return dirs_.size();
 }
@@ -69,16 +93,17 @@ string
 search_path::find_file(string const& filename) const
 {
   string result;
-  if (find_file(filename, result)) return result;
-  throw cet::exception(exception_category) << "Can't find file \""
-                                           << filename
-                                           << '"';
+  if (find_file(filename, result))
+    return result;
+  throw cet::exception(exception_category)
+    << "Can't find file \"" << filename << '"';
 }
 
 bool
 search_path::find_file(string const& filename, string& result) const
 {
-  if (filename.empty()) return false;
+  if (filename.empty())
+    return false;
 
   for (auto const& dir : dirs_) {
     string fullpath = dir + '/' + filename;
@@ -106,7 +131,8 @@ search_path::find_files(string const& pat, vector<string>& out) const
 
   for (auto const& dir : dirs_) {
     unique_ptr<DIR, function<int(DIR*)>> dd(opendir(dir.c_str()), closedir);
-    if (dd == nullptr) continue;
+    if (dd == nullptr)
+      continue;
     while (!(err = readdir_r(dd.get(), &entry, &result)) && result != nullptr) {
       if (regex_match(entry.d_name, re)) {
         out.push_back(dir + '/' + entry.d_name);
@@ -115,7 +141,7 @@ search_path::find_files(string const& pat, vector<string>& out) const
     }
     if (result != nullptr)
       throw cet::exception(exception_category)
-          << "Failed to read directory \"" << dir << "\"; error num = " << err;
+        << "Failed to read directory \"" << dir << "\"; error num = " << err;
   }
 
   return count;
@@ -135,7 +161,8 @@ ostream&
 cet::operator<<(ostream& os, search_path const& path)
 {
   auto const sz = path.size();
-  if (sz == 0) return os;
+  if (sz == 0)
+    return os;
   os << path[0];
   for (size_t k{1}; k != sz; ++k) {
     os << ":" << path[k];

@@ -7,10 +7,12 @@
 //
 // ======================================================================
 
+#include <new>
 #include <string>
 
 namespace cet {
   std::string getenv(std::string const& name);
+  std::string getenv(std::string const& name, std::nothrow_t);
 }
 
 // ======================================================================

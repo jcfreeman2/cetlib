@@ -23,40 +23,52 @@
 
 #include <string>
 
-namespace cet {
-  namespace sqlite {
+namespace cet::sqlite {
 
-    template <typename T = double>
-    T min(sqlite3* const db, std::string const& table_name, std::string const& column_name);
+  template <typename T = double>
+  T min(sqlite3* const db,
+        std::string const& table_name,
+        std::string const& column_name);
 
-    template <typename T = double>
-    T max(sqlite3* const db, std::string const& table_name, std::string const& column_name);
+  template <typename T = double>
+  T max(sqlite3* const db,
+        std::string const& table_name,
+        std::string const& column_name);
 
-    double mean  (sqlite3* db, std::string const& table_name, std::string const& column_name);
-    double median(sqlite3* db, std::string const& table_name, std::string const& column_name);
-    double rms   (sqlite3* db, std::string const& table_name, std::string const& column_name);
+  double mean(sqlite3* db,
+              std::string const& table_name,
+              std::string const& column_name);
+  double median(sqlite3* db,
+                std::string const& table_name,
+                std::string const& column_name);
+  double rms(sqlite3* db,
+             std::string const& table_name,
+             std::string const& column_name);
 
-  } // sqlite
-} // cet
+} // cet::sqlite
 
 //==================================================================
 // Implementation below
 
 template <typename T>
 T
-cet::sqlite::min(sqlite3* const db, std::string const& table_name, std::string const& column_name)
+cet::sqlite::min(sqlite3* const db,
+                 std::string const& table_name,
+                 std::string const& column_name)
 {
   query_result<T> r;
-  r << select("min("+column_name+")").from(db, table_name);
+  r << select("min(" + column_name + ")").from(db, table_name);
   return unique_value(r);
 }
 
 template <typename T>
 T
-cet::sqlite::max(sqlite3* const db, std::string const& table_name, std::string const& column_name)
+cet::sqlite::max(sqlite3* const db,
+                 std::string const& table_name,
+                 std::string const& column_name)
 {
   query_result<T> r;
-  r << select("max("+column_name+")").from(db, table_name);
+  r << select("max(" + column_name + ")").from(db, table_name);
   return unique_value(r);
 }
 

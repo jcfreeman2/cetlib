@@ -11,6 +11,7 @@
 #include "cetlib/split.h"
 #include <algorithm>
 #include <cstdlib>
+#include <new>
 #include <ostream>
 #include <string>
 #include <vector>
@@ -24,6 +25,10 @@ namespace cet {
   // directories.
   class search_path;
 
+  struct path_tag_t {}; // Distinguish calling signatures.
+
+  extern path_tag_t const path_tag;
+
   std::ostream& operator<<(std::ostream& os, search_path const& p);
 }
 
@@ -31,11 +36,22 @@ namespace cet {
 
 class cet::search_path {
 public:
-  explicit search_path(std::string const& name_or_path);
+  // Autodetect environment variables (no ':').
+  explicit search_path(std::string const& env_name_or_path);
+
+  // Specify environent variable (no throw on missing).
+  search_path(std::string const& env_name, std::nothrow_t);
+
+  // Specify path.
+  search_path(std::string const& path, cet::path_tag_t);
 
   // If an environment variable was used to create the search_path
   // object, return it.  Otherwise, it will be empty.
-  std::string const& showenv() const { return env_; }
+  std::string const&
+  showenv() const
+  {
+    return env_;
+  }
 
   // Return true if there are no directories in the path.
   bool empty() const;
@@ -77,21 +93,20 @@ public:
   // Return the string format (colon-delimited) of the search path.
   std::string to_string() const;
 
- private:
-  std::string const env_;
+private:
+  std::string env_;
   std::vector<std::string> dirs_{};
-};  // search_path
+}; // search_path
 
 template <class OutIter>
-std::size_t cet::search_path::find_files(std::string const& pattern,
-                                         OutIter dest) const
+std::size_t
+cet::search_path::find_files(std::string const& pattern, OutIter dest) const
 {
   std::vector<std::string> results;
   size_t const nfound{find_files(pattern, results)};
   cet::copy_all(results, dest);
   return nfound;
 }
-
 
 #endif /* cetlib_search_path_h */
 

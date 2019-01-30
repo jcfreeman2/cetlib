@@ -734,10 +734,10 @@ EOF
   if (not plugin_canMoveOrCopy($plugin, 0)) {
     print $fh <<EOF;
 ${indent}// Plugins should not be copied or assigned.
-${indent}${class_name}(${class_name} const &) = delete;
-${indent}${class_name}(${class_name} &&) = delete;
-${indent}${class_name} & operator = (${class_name} const &) = delete;
-${indent}${class_name} & operator = (${class_name} &&) = delete;
+${indent}${class_name}(${class_name} const&) = delete;
+${indent}${class_name}(${class_name}&&) = delete;
+${indent}${class_name}& operator=(${class_name} const&) = delete;
+${indent}${class_name}& operator=(${class_name}&&) = delete;
 
 EOF
   }
@@ -848,9 +848,9 @@ sub class_impl($$\@\@) {
       join(", ", @{$constructor->{args}}),
         ")\n";
     if (exists $constructor->{initializers}) {
-      print $fh "  :\n",
-        join(",\n", map { "  $_" } @{$constructor->{initializers}}),
-          "  // ,\n // More initializers here.\n{";
+      print $fh "  : ",
+        join("\n  ,", map { "$_" } @{$constructor->{initializers}}),
+          "  // ,\n  // More initializers here.\n{";
     } else {
       print $fh <<EOF;
 // :
@@ -862,9 +862,11 @@ EOF
       my $comment;
       my $ctype = ref($constructor->{comment});
       if (not $ctype) {
-        $comment = $constructor->{comment}
+        $comment = $constructor->{comment};
       } elsif ($ctype eq "ARRAY") {
-        $comment = join("\n", chomp @{$constructor->{comment}});;
+        my @comments = @{$constructor->{comment}};
+        chomp(@comments);
+        $comment = join("\n", @comments);
       } else {
         printf STDERR <<EOF, $plugin;
 LOGIC ERROR: A member of %s's constructor() hash has an unexpected
@@ -872,7 +874,7 @@ LOGIC ERROR: A member of %s's constructor() hash has an unexpected
 EOF
         exit(1);
       }
-      print $fh map({ s&^\s*//\s?&// &; "${indent}// $_\n"; } split(/\n/, $comment));
+      print $fh map({ s&^\s*//\s?&// &; "\n${indent}// $_"; } split(/\n/, $comment)), "\n";
     }
     print $fh <<EOF;
 }
@@ -921,7 +923,7 @@ B<cetskelgen> B<--help-types>
 
 B<cetskelgen> B<--help-type> I<plugin-type>
 
-B<cetskelgen> [I<optons>] [--] [I<plugin-type>[:I<plugin-option>[,I<plugin-option>]+]] I<qualified-name>
+B<cetskelgen> [I<options>] [--] [I<plugin-type>[:I<plugin-option>[,I<plugin-option>]+]] I<qualified-name>
 
 I<Options>: B<--all-entries|-A> |
          B<--boilerplate|-b> I<file> |
@@ -1037,7 +1039,7 @@ member function or member data depending on the presence of
 parentheses. For example,
 
 -e beginJob -e endJob -e reconfigure
--e "bool doPrivateStuff(T1 const &t1, T2 const &t2)"
+-e "bool doPrivateStuff(T1 const& t1, T2 const& t2)"
 -e "std::vector<int> privateData_"
 
 =item B<--force>

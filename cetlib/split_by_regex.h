@@ -20,20 +20,24 @@
 //
 // More complicated example splitting by "::" and "().":
 //
-//    split_by_regex( "namespace::class::static_function().value", "(::|\\(\\)\\.)" )
+//    split_by_regex("namespace::class::static_function().value",
+//    "(::|\\(\\)\\.)")
 //
 // returns ["namespace","class","static_function","value"]
 //
 // ======================================================================
 
-#include <vector>
+#include <regex>
 #include <string>
+#include <vector>
 
 namespace cet {
+  std::vector<std::string> split_by_regex(std::string const& str,
+                                          std::regex const& re);
 
-  std::vector<std::string> split_by_regex (std::string const& str,
-                                           std::string const& delimSet );
-
+  // Forms regular expression given pattern via a string.
+  std::vector<std::string> split_by_regex(std::string const& str,
+                                          std::string const& delimSet);
 }
 
 #endif /* cetlib_split_by_regex_h */

@@ -10,16 +10,9 @@
 #include <string>
 
 namespace cet {
-
-  bool
-    file_exists( std::string const & qualified_filename );
-
-  bool
-    is_absolute_filepath( std::string const & qualified_filename );
-
-  bool
-    is_relative_filepath( std::string const & qualified_filename );
-
+  bool file_exists(std::string const& qualified_filename);
+  bool is_absolute_filepath(std::string const& qualified_filename);
+  bool is_relative_filepath(std::string const& qualified_filename);
 }
 
 // ======================================================================
