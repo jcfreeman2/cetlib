@@ -1,0 +1,252 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>cetlib library &#8212; cetlib @version@ documentation</title>
+    <link rel="stylesheet" href="_static/sphinxdoc.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="_static/artdoc.css" />
+    <link rel="stylesheet" type="text/css" href="_static/artdoc.css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="cetlib @version@ release notes" href="releaseNotes.html" /> 
+  </head><body>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+
+<div class="related" role="navigation" aria-label="related navigation">
+  <h3>Navigation</h3>
+  <ul>
+    <li class="dropdown">
+      <a class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" href="#">Versions<span class="caret"></span></a> |
+      <ul class="dropdown-menu" role="menu">
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/cmake/index.html">cmake</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/.git/index.html">.git</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/doc/index.html">doc</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/docs/index.html">docs</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/perllib/index.html">perllib</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/cetlib/index.html">cetlib</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/ups/index.html">ups</a></li>
+        
+        <li class="dropdown-item"><a href="/Users/kyleknoepfel/work/art_suite_docs/cetlib/@version@/index.html">@version@</a></li>
+        
+      </ul>
+    </li>
+    <li class="nav-item nav-item-0"><a href="#"><em>cetlib</em> @version@</a> &#187;</li> 
+  </ul>
+</div>
+
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+<img class="logo" src="_static/art-logo.png" alt="Logo" width="80%"/>
+
+  <h3><a href="#">Table of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#"><em>cetlib</em> library</a><ul>
+<li><a class="reference internal" href="#containers">Containers</a></li>
+<li><a class="reference internal" href="#environment-and-files">Environment and files</a></li>
+<li><a class="reference internal" href="#hashing">Hashing</a></li>
+<li><a class="reference internal" href="#library-and-plugin-management">Library and plugin management</a></li>
+<li><a class="reference internal" href="#multithreading">Multithreading</a></li>
+<li><a class="reference internal" href="#numerics-and-values">Numerics and values</a></li>
+<li><a class="reference internal" href="#pointers-and-references">Pointers and references</a></li>
+<li><a class="reference internal" href="#sqlite-utilities">SQLite utilities</a></li>
+<li><a class="reference internal" href="#string-manipulation">String manipulation</a></li>
+<li><a class="reference internal" href="#uncategorized">Uncategorized</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Next topic</h4>
+  <p class="topless"><a href="releaseNotes.html"
+                        title="next chapter"><em>cetlib</em> &#64;version&#64; release notes</a></p>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/index.rst.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="cetlib-library">
+<h1><em>cetlib</em> library<a class="headerlink" href="#cetlib-library" title="Permalink to this headline">¶</a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="releaseNotes.html">Release notes</a></li>
+</ul>
+</div>
+<p>The <em>cetlib</em> C++ library serves as a home for numerous classes and
+functions of general applicability.  While these components are not
+tied to any specific project, many of them did originate as part of
+some other project, and were factored out of their original home when
+it was recognized they had broader utility than originally envisioned.</p>
+<p>Other than their broad applicability, there is no common theme
+unifying these tools.  However, it is envisioned that as <em>cetlib</em>
+evolves, one or more selected subsets of these components may in
+future be factored out of <em>cetlib</em> into their own libraries.</p>
+<p>test - ryan</p>
+<div class="admonition note">
+<p class="first admonition-title">Note</p>
+<p class="last">A subset of the <em>cetlib</em> library is the <em>cetlib_except</em>
+library, which includes exception utilities and a symbol demangler.</p>
+</div>
+<div class="section" id="containers">
+<h2>Containers<a class="headerlink" href="#containers" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/container_algorithms.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/container_algorithms.h</a>: Function templates wrapping standard algorithms.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/map_vector.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/map_vector.h</a>: A map-like data structure mimicking a sparse vector interface.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/registry.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/registry.h</a>: A singleton <code class="docutils literal notranslate"><span class="pre">std::map&lt;K,V&gt;</span></code>.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/registry_via_id.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/registry_via_id.h</a>: A singleton <code class="docutils literal notranslate"><span class="pre">std::map&lt;K,V&gt;</span></code> requiring that <code class="docutils literal notranslate"><span class="pre">V::id()</span></code> exists and yields values of type <code class="docutils literal notranslate"><span class="pre">K</span></code>.</li>
+</ul>
+</div>
+<div class="section" id="environment-and-files">
+<h2>Environment and files<a class="headerlink" href="#environment-and-files" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/filepath_maker.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/filepath_maker.h</a>: A family of related policies governing the translation of a filename into a fully-qualified filepath.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/filesystem.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/filesystem.h</a>: A family of file-level utilities.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/getenv.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/getenv.h</a>: Obtain value of environment variable; throw if none such.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/include.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/include.h</a>: File-&gt;string, interpolating <code class="docutils literal notranslate"><span class="pre">#include</span></code>’d files along the way.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/includer.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/includer.h</a>: A container-like data structure that (a) transparently handles #include’d files, and (b) can trace back its iterators.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/search_path.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/search_path.h</a>: Seek filename or pattern in a given list of pathnames.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/shlib_utils.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/shlib_utils.h</a>: Obtain the shared library prefix and suffix for the current system.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/split_path.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/split_path.h</a>: Split the string ‘path’ into components delimited by a single colon. Adjacent colons result in an empty string.</li>
+</ul>
+</div>
+<div class="section" id="hashing">
+<h2>Hashing<a class="headerlink" href="#hashing" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/crc32.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/crc32.h</a>: Calculate a CRC32 checksum.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/MD5Digest.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/MD5Digest.h</a>: Secure Hash Algorithm as defined in RFC 1321, 1992-04.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sha1.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sha1.h</a>: Secure Hash Algorithm as defined in FIPS PUB 180-1, 1993-05-11.</li>
+</ul>
+</div>
+<div class="section" id="library-and-plugin-management">
+<h2>Library and plugin management<a class="headerlink" href="#library-and-plugin-management" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/BasicPluginFactory.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/BasicPluginFactory.h</a>: Refinement of PluginFactory for a common class of plugins featuring a “pluginType” function and a “makePlugin” function.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/LibraryManager.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/LibraryManager.h</a>: Facilities for managing libraries matching a particular name convention, loading and obtaining symbols from  same.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/PluginFactory.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/PluginFactory.h</a>: General facility for managing the loading and creation of plugins.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/PluginTypeDeducer.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/PluginTypeDeducer.h</a>: Function template that is helpful with plugins following the BasicPluginFactory paradigm. Intended to be specialized as required.</li>
+</ul>
+</div>
+<div class="section" id="multithreading">
+<h2>Multithreading<a class="headerlink" href="#multithreading" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/assert_only_one_thread.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/assert_only_one_thread.h</a>: Macro used to assert that only one thread accesses the given code block at a time.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/SimultaneousFunctionSpawner.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/SimultaneousFunctionSpawner.h</a>: Utility to test the behavior of a function when it is spawned via multiple threads.</li>
+</ul>
+</div>
+<div class="section" id="numerics-and-values">
+<h2>Numerics and values<a class="headerlink" href="#numerics-and-values" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/bit_manipulation.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/bit_manipulation.h</a>: Compile-time bit manipulations.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/hypot.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/hypot.h</a>: Checked and unchecked Euclidean planar hypotenuse calculations.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/nybbler.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/nybbler.h</a>: Half-byte manipulations.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/pow.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/pow.h</a>: Minimal-multiply algorithm for integral non-negative powers.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/simple_stats.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/simple_stats.h</a>: Simple statistics.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/zero_init.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/zero_init.h</a>: Wrap a value of native arithmetic or pointer type T, ensuring a default-initialized value of T(0) (obsoleted by uniform initialization syntax in C++11).</li>
+</ul>
+</div>
+<div class="section" id="pointers-and-references">
+<h2>Pointers and references<a class="headerlink" href="#pointers-and-references" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/exempt_ptr.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/exempt_ptr.h</a>: A pointer taking no notice of its pointee’s lifetime (thus exempt from any role in managing same, and thus copyable with no impact on its pointee).</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/hard_cast.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/hard_cast.h</a>: Provide unchecked, unconditional casting of one pointer type to another. Only for use when a C++ <code class="docutils literal notranslate"><span class="pre">{dynamic,static,reinterpret}_cast</span></code> is not sufficient to the task. such as casting a <code class="docutils literal notranslate"><span class="pre">void*</span></code> to pointer-to-function.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/maybe_ref.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/maybe_ref.h</a>: Reference-like types that may refer to nothing.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/make_unique.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/make_unique.h</a>: Provide a function to make a std::unique_ptr (obsoleted by C++14).</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/ostream_handle.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/ostream_handle.h</a>: Properly handle ownership for std::ostream objects (e.g. std::cout vs. std::ofstream)</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/value_ptr.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/value_ptr.h</a>: A pointer treating its pointee as-if contained by value.</li>
+</ul>
+</div>
+<div class="section" id="sqlite-utilities">
+<h2>SQLite utilities<a class="headerlink" href="#sqlite-utilities" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/column.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/column.h</a>: Type-safe C++ interface used when creating a column of an SQLite table.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/ConnectionFactory.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/ConnectionFactory.h</a>: Thread-safe factory which is used to ensure consistent database-locking for a given SQLite database connection.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/Connection.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/Connection.h</a>: Thread-aware handle to an SQLite database.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/create_table.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/create_table.h</a>: Type-safe C++ interface for creating an SQLite table.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/exec.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/exec.h</a>: String-based C++ interface for executing SQLite statements.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/insert.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/insert.h</a>: Type-safe C++ interface for inserting values into the row of an SQLite table.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/Ntuple.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/Ntuple.h</a>: Class template that provides thread-safe insertion into an SQLite table.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/query_result.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/query_result.h</a>: The return type when using the cet::sqlite::select functionality.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/select.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/select.h</a>: Type-safe C++ interface for querying an SQLite table.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/statistics.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/statistics.h</a>: Basic functions that provide statistics information based on the values of a given column.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/sqlite/Transaction.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/sqlite/Transaction.h</a>: C++ wrapper that provides SQLite transaction facilities.</li>
+</ul>
+</div>
+<div class="section" id="string-manipulation">
+<h2>String manipulation<a class="headerlink" href="#string-manipulation" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/base_converter.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/base_converter.h</a>: Convert a number string to or from a particular radix.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/canonical_number.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/canonical_number.h</a>: Transform a number string into a canonical form.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/canonical_string.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/canonical_string.h</a>: Transform a string into a canonical form.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/column_width.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/column_width.h</a>: Obtain the length of the longest in a vector of strings.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/lpad.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/lpad.h</a>: Left-pad a string to the wanted size, unless already longer.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/ntos.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/ntos.h</a>: Produce a string from a number like std::to_string, but also supporting larger numeric types (if any).</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/rpad.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/rpad.h</a>: Right-pad a string to the wanted size, unless already longer.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/split.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/split.h</a>: Obtain substrings at a string’s specified boundaries.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/ston.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/ston.h</a>: Produce a number from a string like std::stod and friends, but also supporting larger numeric types (if any).</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/trim.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/trim.h</a>: Remove a string’s leading/trailing whitespace.</li>
+</ul>
+</div>
+<div class="section" id="uncategorized">
+<h2>Uncategorized<a class="headerlink" href="#uncategorized" title="Permalink to this headline">¶</a></h2>
+<ul class="simple">
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/cpu_timer.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/cpu_timer.h</a>: Measure the cpu and wallclock elapsed times.</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/name_of.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/name_of.h</a>: return a string representation of any type (may specialize).</li>
+<li><a class="reference external" href="https://cdcvs.fnal.gov/redmine/projects/cetlib/repository/entry/cetlib/no_delete.h?utf8=✓&amp;rev=v&#64;version&#64;">cetlib/no_delete.h</a>: do-nothing deleter policy that can be used with smart pointers.</li>
+</ul>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div> 
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>
