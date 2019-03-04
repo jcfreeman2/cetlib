@@ -1,5 +1,8 @@
-# ======================================================================
-#  cetlib main build file
+#
+#  cetlib/CMakeLists.txt
+#  -------------------------------------------------------------------
+#
+#  CMake build file for library cetlib 
 #
 #  cd .../path/to/build/directory
 #  source .../path/to/cetlib/ups/setup_for_development
@@ -12,16 +15,10 @@
 #  make package (builds distribution tarfile)
 # ======================================================================
 
-
-# ----------------------------------------------------------------------
-# Describe build tool requirements:
-
-cmake_minimum_required(VERSION 3.11)  # use cmake 3.11 or later
-
-# ----------------------------------------------------------------------
-# Describe product:
+cmake_minimum_required(VERSION 3.11) # use cmake 3.11 or later
 
 project(cetlib)
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # cetbuildtools contains our cmake modules
 find_package(cetbuildtools REQUIRED)
@@ -66,24 +63,33 @@ endif()
 
 cet_report_compiler_flags()
 
-# ----------------------------------------------------------------------
-# Describe build prerequisites:
-
-
-find_ups_product (cetbuildtools v4_14_01)
-find_ups_boost(v1_50_0)
-find_ups_product(sqlite)
+# these are minimum required versions, not the actual product versions
+find_ups_product(cetbuildtools v4_14_01)
 find_ups_product(cetlib_except v1_01_00)
+
+find_ups_product(python v3_7_2)
+find_ups_product(sqlite)
 find_ups_product(catch v1_11_0)
 find_ups_product(hep_concurrency)
+find_ups_boost(v1_50_0)
 
+# ----------------------------------------------------------------------
+# Python stuff
+
+#cet_find_library(PYTHON NAMES python2.7 PATHS ENV PYTHON_LIB NO_DEFAULT_PATH)
+cet_find_library(PYTHON NAMES python3.7 PATHS ENV PYTHON_LIB NO_DEFAULT_PATH)
+
+# ----------------------------------------------------------------------
 # SQLite
 cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
+
 # find openSSL
 # when building on macOS, use CommonCrypto
 if(NOT APPLE)
   find_package(OpenSSL REQUIRED )
 endif()
+
+
 
 # ----------------------------------------------------------------------
 # Describe source tree layout:
@@ -94,13 +100,9 @@ add_subdirectory(ups)              # ups files
 
 # ----------------------------------------------------------------------
 # Documentation generation:
-find_package(Sphinx REQUIRED)
+#find_package(Sphinx REQUIRED)
 add_subdirectory(docs)
 
 # ----------------------------------------------------------------------
 # Packaging utility
-
 include(UseCPack)
-
-#
-# ======================================================================

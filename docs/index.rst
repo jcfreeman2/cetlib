@@ -22,6 +22,8 @@ unifying these tools.  However, it is envisioned that as *cetlib*
 evolves, one or more selected subsets of these components may in
 future be factored out of *cetlib* into their own libraries.
 
+test - ryan
+
 .. note:: A subset of the *cetlib* library is the *cetlib_except*
    library, which includes exception utilities and a symbol demangler.
 

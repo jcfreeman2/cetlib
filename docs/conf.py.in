@@ -14,6 +14,7 @@
 #
 import os
 import sys
+
 sys.path.insert(0, os.path.abspath('_extensions'))
 
 
@@ -22,6 +23,11 @@ sys.path.insert(0, os.path.abspath('_extensions'))
 project = 'cetlib'
 copyright = '2018'
 author = 'artists'
+
+# more general stuff
+src=os.environ['MRB_SOURCE']
+top=os.environ['MRB_TOP']
+html = os.environ['HTML_DIR']#+'/'project
 
 def dotted_version(normal_version):
     return normal_version.lstrip('v').replace('_', '.')
@@ -33,11 +39,18 @@ release = dotted_version('@version@')
 
 # Assemble list of already-built documentation that will appear in the
 # versions drop-down menu.
-built_docs_path = '/Users/kyleknoepfel/work/art_suite_docs/' + project
+#built_docs_path = '/Users/kyleknoepfel/work/art_suite_docs/' + project
+#built_docs_path = '/home/ryan/Documents/fermilab/work/doc_devel/srcs/' + project
+#built_docs_path = src+'/'+project
+built_docs_path = top+'/all_docs/'+project
+
+print("\n\n\ninvestigating the version tab stuff..")
 files = os.listdir(built_docs_path)
+print(files)
 subdirs = [subdir for subdir in files
            if os.path.isdir(os.path.join(built_docs_path, subdir))]
 versions = { subdir: dotted_version(subdir) for subdir in subdirs }
+print(built_docs_path+subdirs[0])
 
 versions['@version@'] = release
 
@@ -111,6 +124,7 @@ html_static_path = ['_static']
 # 'searchbox.html']``.
 #
 # html_sidebars = {}
+#html_sidebars = {'**': ['localtoc.html', 'searchbox.html', 'dependencies.hmtl']}
 
 html_context = {'project': project, 'release': release, 'versions': versions}
 
@@ -184,3 +198,43 @@ intersphinx_mapping = {'https://docs.python.org/': None}
 rst_epilog = """
 .. |release| replace:: *{projname}* {versionnum}
 """.format(projname = project, versionnum = release)
+
+
+# Maybe more intersphinx stuff: but also just messing around w/ executable stuff
+print("+++++++++++++++++++++++\n\n\n\n\n")
+
+
+products = 0 
+depends_on = []
+
+with open(src+'/'+project+'/ups/product_deps') as deps_file:
+  for line in deps_file:
+    val = line.split()
+    if(not val): continue
+    if(val[0] == 'end_product_list'): products = 0 
+    # product list
+    if(products):
+      item = [val[0], val[1]]
+      depends_on.append(item)
+    if(val[0] == 'product'): products = 1
+
+
+with open(src+'/'+project+'/docs/depends.rst', 'w+') as deps_page:
+  deps_page.write('|depends| depends')
+  deps_page.write('\n=================\n')
+  for pkg in depends_on:
+    #deps_page.write(pkg[0]+pkg[1]+'\n')
+    #pkg_path = html+'/'+pkg[0]
+    pkg_path = html+'/'+pkg[0]+'/'+pkg[1]
+    #if(os.path.isdir(html+'/'+pkg[0])):
+    if(os.path.isdir(pkg_path)):
+      print("this is a directory: ", html+'/'+pkg[0])
+      print("\tthe version is: ", pkg[1])
+      #deps_page.write('\n| `(internal link): '+pkg[0]+' <'+pkg_path+'/index.html>`_')
+      #deps_page.write('\n| `(internal link): '+pkg[0]+' '+pkg[1]+' <../../'+pkg[0]+'/index.html>`_')
+      deps_page.write('\n| `(internal link): '+pkg[0]+' '+pkg[1]+' <../../'+pkg[0]+'/'+pkg[1]+'/index.html>`_')
+    else:
+      print("this is not a directory: ", html+'/'+pkg[0])
+      deps_page.write('\n| (external link): '+pkg[0]+' '+pkg[1])
+
+print("+++++++++++++++++++++++\n\n\n\n\n")
