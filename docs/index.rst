@@ -11,6 +11,8 @@
 
    Release notes<releaseNotes>
 
+   Depends on<depends>
+
 The *cetlib* C++ library serves as a home for numerous classes and
 functions of general applicability.  While these components are not
 tied to any specific project, many of them did originate as part of
@@ -22,7 +24,6 @@ unifying these tools.  However, it is envisioned that as *cetlib*
 evolves, one or more selected subsets of these components may in
 future be factored out of *cetlib* into their own libraries.
 
-test - ryan
 
 .. note:: A subset of the *cetlib* library is the *cetlib_except*
    library, which includes exception utilities and a symbol demangler.

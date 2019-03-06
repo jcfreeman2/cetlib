@@ -1,5 +1,5 @@
-|depends| depends
-=================
+|release| depends on
+====================
 
 | (external link): boost v1_69_0
 | `(internal link): cetlib_except v1_03_02 <../../cetlib_except/v1_03_02/index.html>`_
