@@ -9,9 +9,9 @@
 .. toctree::
    :maxdepth: 2
 
-   Release notes<releaseNotes>
+* `Release notes <releaseNotes.html>`_
 
-   Depends on<depends>
+* `Depends on <depends.html>`_
 
 The *cetlib* C++ library serves as a home for numerous classes and
 functions of general applicability.  While these components are not
