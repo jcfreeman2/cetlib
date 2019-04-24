@@ -24,7 +24,7 @@ cmake_minimum_required(VERSION 3.11)  # use cmake 3.11 or later
 project(cetlib)
 
 # cetbuildtools contains our cmake modules
-find_package(cetbuildtools REQUIRED)
+find_package(cetbuildtools 7.13.00 REQUIRED)
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -69,8 +69,6 @@ cet_report_compiler_flags()
 # ----------------------------------------------------------------------
 # Describe build prerequisites:
 
-
-find_ups_product (cetbuildtools v4_14_01)
 find_ups_boost(v1_50_0)
 find_ups_product(sqlite)
 find_ups_product(cetlib_except v1_01_00)
