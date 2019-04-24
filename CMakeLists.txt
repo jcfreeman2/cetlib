@@ -69,7 +69,7 @@ cet_report_compiler_flags()
 # ----------------------------------------------------------------------
 # Describe build prerequisites:
 
-find_ups_boost(v1_50_0)
+find_ups_boost(BOOST_TARGETS v1_50_0)
 find_ups_product(sqlite)
 find_ups_product(cetlib_except v1_01_00)
 find_ups_product(catch v1_11_0)

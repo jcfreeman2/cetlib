@@ -119,7 +119,7 @@ test_library(2_1_5)
 # Use default library search path
 cet_test(LibraryManager_t USE_BOOST_UNIT
   LIBRARIES
-  ${Boost_FILESYSTEM_LIBRARY}
+  Boost::filesystem
   ${CMAKE_DL_LIBS}
   )
 
@@ -127,7 +127,7 @@ cet_test(LibraryManager_t USE_BOOST_UNIT
 cet_test(LibraryManagerCustomSearchPath_t USE_BOOST_UNIT
   SOURCES LibraryManager_t.cc
   LIBRARIES
-  ${Boost_FILESYSTEM_LIBRARY}
+  Boost::filesystem
   ${CMAKE_DL_LIBS}
   TEST_PROPERTIES ENVIRONMENT LIBRARY_MANAGER_SEARCH_PATH=$<TARGET_FILE_DIR:1_1_1_cetlibtest>
   )
