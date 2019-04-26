@@ -24,7 +24,7 @@ cmake_minimum_required(VERSION 3.11...3.14 FATAL_ERROR)
 project(cetlib VERSION 3.07.02 LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
-find_package(cetmodules REQUIRED)
+find_package(cetmodules 1.01.01 REQUIRED)
 
 include(CetCMakeEnv)
 cet_cmake_env()
