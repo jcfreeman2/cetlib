@@ -21,7 +21,7 @@ project(cetlib)
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 # cetbuildtools contains our cmake modules
-find_package(cetbuildtools REQUIRED)
+find_package(cetbuildtools 7.13.01 REQUIRED)
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -64,10 +64,14 @@ endif()
 cet_report_compiler_flags()
 
 # these are minimum required versions, not the actual product versions
-find_ups_product(cetbuildtools v4_14_01)
 find_ups_product(cetlib_except v1_01_00)
-
 #find_ups_product(python v3_7_2)
+
+# ----------------------------------------------------------------------
+# Describe build prerequisites:
+
+find_ups_boost(BOOST_TARGETS v1_50_0)
+>>>>>>> develop
 find_ups_product(sqlite)
 find_ups_product(catch v1_11_0)
 find_ups_product(hep_concurrency)

@@ -60,8 +60,8 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   LIBRARIES
   cetlib_except
   hep_concurrency
-  ${Boost_FILESYSTEM_LIBRARY}
-  ${Boost_REGEX_LIBRARY}
+  Boost::filesystem
+  Boost::regex
   ${CMAKE_DL_LIBS}
   ${SQLITE3}
   ${OPENSSL_LIBRARIES}
