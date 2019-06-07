@@ -15,19 +15,20 @@ python  v3_7_2    e17  -  only_for_build
 cetbuildtools	v7_13_02	-	only_for_build
 catch		v2_5_0		-	only_for_build
 hep_concurrency v1_03_03
+sphinx          v2_0_1          py3     only_for_build
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
-qualifier	cetlib_except	boost      hep_concurrency  sqlite	   python   notes
-e17:debug       e17:debug       e17:debug  e17:debug        -nq-   -nq-
-e17:prof        e17:prof        e17:prof   e17:prof         -nq-   -nq- 
-e19:debug	e19:debug	e19:debug  e19:debug        -nq-           -nq-
-e19:prof        e19:prof        e19:prof   e19:prof         -nq-   -nq-
-c2:debug        c2:debug        c2:debug   c2:debug         -nq-   -nq- 
-c2:prof         c2:prof         c2:prof    c2:prof          -nq-   -nq-
-c7:debug        c7:debug        c7:debug   c7:debug         -nq-   -nq-
-c7:prof         c7:prof         c7:prof    c7:prof          -nq-   -nq-
+qualifier	cetlib_except	boost      hep_concurrency  sqlite	python	sphinx	notes
+e17:debug       e17:debug       e17:debug  e17:debug        -nq-   	-nq-	p372 
+e17:prof        e17:prof        e17:prof   e17:prof         -nq-   	-nq-	p372
+e19:debug	e19:debug	e19:debug  e19:debug        -nq-   	-nq-	p372
+e19:prof        e19:prof        e19:prof   e19:prof         -nq-   	-nq-	p372
+c2:debug        c2:debug        c2:debug   c2:debug         -nq-   	-nq-	p372
+c2:prof         c2:prof         c2:prof    c2:prof          -nq-   	-nq-    p372
+c7:debug        c7:debug        c7:debug   c7:debug         -nq-   	-nq-    p372
+c7:prof         c7:prof         c7:prof    c7:prof          -nq-   	-nq-    p372
 end_qualifier_list
 
 # Local Variables:

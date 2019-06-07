@@ -17,7 +17,7 @@
 .. 
     h3(#releases){background:darkorange}. %{color:white}&nbsp; _cetlib_ releases%
 
-cetlib 3.07.01 (2019/02/07)
+cetlib 3.07.02 (2019/03/05)
 ---------------------------
 * *art* suites: art
 * *critic* suites: critic

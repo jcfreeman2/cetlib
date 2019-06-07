@@ -71,7 +71,6 @@ find_ups_product(cetlib_except v1_01_00)
 # Describe build prerequisites:
 
 find_ups_boost(BOOST_TARGETS v1_50_0)
->>>>>>> develop
 find_ups_product(sqlite)
 find_ups_product(catch v1_11_0)
 find_ups_product(hep_concurrency)

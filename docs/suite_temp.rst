@@ -1,4 +1,4 @@
-cetlib 3.07.01 (2019/02/07)
+cetlib 3.07.02 (2019/03/05)
 ---------------------------
 * *art* suites: art
 * *critic* suites: critic
