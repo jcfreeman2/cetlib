@@ -10,7 +10,7 @@ perllib  product_dir
 product	version
 boost		v1_66_0a
 sqlite		v3_26_00_00
-cetlib_except   v1_02_01
+cetlib_except   v1_02_03
 cetbuildtools	v7_13_02	-	only_for_build
 catch		v2_2_2		-nq-	only_for_build
 end_product_list
