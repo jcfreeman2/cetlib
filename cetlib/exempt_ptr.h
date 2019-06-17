@@ -92,6 +92,9 @@ private:
   struct is_compatible
     : public std::is_convertible<std::add_pointer_t<P>, pointer> {};
 
+  template <class P>
+  static constexpr bool is_compatible_v = is_compatible<P>::value;
+
 public:
   // --- default c'tor:
   constexpr exempt_ptr() noexcept : p{nullptr} {}
@@ -102,7 +105,7 @@ public:
 
   template <class E2>
   exempt_ptr(E2* other,
-             std::enable_if_t<is_compatible<E2>::value>* = nullptr) noexcept
+             std::enable_if_t<is_compatible_v<E2>>* = nullptr) noexcept
     : p{other}
   {}
 
@@ -110,7 +113,7 @@ public:
   // use compiler-generated copy c'tor
   template <class E2>
   exempt_ptr(exempt_ptr<E2> const& other,
-             std::enable_if_t<is_compatible<E2>::value>* = nullptr) noexcept
+             std::enable_if_t<is_compatible_v<E2>>* = nullptr) noexcept
     : p{other.get()}
   {}
 
@@ -122,7 +125,7 @@ public:
   }
 
   template <class E2>
-  std::enable_if_t<is_compatible<E2>::value, exempt_ptr&>
+  std::enable_if_t<is_compatible_v<E2>, exempt_ptr&>
   operator=(E2* other) noexcept
   {
     reset(other);
@@ -132,7 +135,7 @@ public:
   // copying assignments:
   // use compiler-generated copy assignment
   template <class E2>
-  std::enable_if_t<is_compatible<E2>::value, exempt_ptr&>
+  std::enable_if_t<is_compatible_v<E2>, exempt_ptr&>
   operator=(exempt_ptr<E2> const& other) noexcept
   {
     reset(other.get());

@@ -139,7 +139,8 @@ search_path::find_files(string const& pat, vector<string>& out) const
       auto entry = readdir(dd.get());
       if (errno != 0) {
         throw cet::exception(exception_category)
-          << "Failed to read directory \"" << dir << "\"; error num = " << errno;
+          << "Failed to read directory \"" << dir
+          << "\"; error num = " << errno;
       }
       if (entry == nullptr) {
         // We have reached the end of this directory stream.

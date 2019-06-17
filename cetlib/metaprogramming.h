@@ -43,7 +43,7 @@ namespace cet {
   //   &T::my_function>> : std::true_type {}
   //
   template <typename T, typename U, typename R = void>
-  using enable_if_same_t = std::enable_if_t<std::is_same<T, U>::value, R>;
+  using enable_if_same_t = std::enable_if_t<std::is_same_v<T, U>, R>;
 
   template <typename FT, FT f, typename R = void>
   using enable_if_function_exists_t = enable_if_same_t<FT, decltype(f), R>;

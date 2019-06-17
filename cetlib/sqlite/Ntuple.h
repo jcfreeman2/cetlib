@@ -129,7 +129,7 @@ namespace cet::sqlite {
     using element_t =
       std::unique_ptr<typename sqlite::permissive_column<T>::element_type>;
     using row_t = std::tuple<element_t<Args>...>;
-    static constexpr auto nColumns = std::tuple_size<row_t>::value;
+    static constexpr auto nColumns = std::tuple_size_v<row_t>;
     using name_array = sqlite::name_array<nColumns>;
     // Special Member Functions
   public:
