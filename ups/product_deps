@@ -1,4 +1,4 @@
-parent cetlib v3_07_02
+parent cetlib v3_08_00
 defaultqual e17
 #
 incdir fq_dir include
@@ -8,12 +8,12 @@ perllib  product_dir
 
 # define product/version pairs
 product	version		<format=2>
-boost		v1_69_0
-cetlib_except   v1_03_03
+boost		v1_70_0
+cetlib_except   v1_03_04
 sqlite		v3_26_00_00
-cetbuildtools	v7_12_01	-	only_for_build
+cetbuildtools	v7_13_02	-	only_for_build
 catch		v2_5_0		-	only_for_build
-hep_concurrency v1_03_03
+hep_concurrency v1_03_04
 end_product_list
 
 

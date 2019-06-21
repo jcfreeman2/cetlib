@@ -10,6 +10,7 @@
 #include "cetlib_except/exception.h"
 
 #include <dirent.h>
+#include <errno.h>
 #include <iterator>
 #include <ostream>
 #include <regex>
@@ -123,27 +124,34 @@ size_t
 search_path::find_files(string const& pat, vector<string>& out) const
 {
   regex const re{pat};
-
   size_t count{};
-  size_t err{};
-  struct dirent entry;
-  struct dirent* result = nullptr;
-
   for (auto const& dir : dirs_) {
     unique_ptr<DIR, function<int(DIR*)>> dd(opendir(dir.c_str()), closedir);
-    if (dd == nullptr)
+    if (dd.get() == nullptr) {
+      // The opendir() failed, we do not care why, skip it.
       continue;
-    while (!(err = readdir_r(dd.get(), &entry, &result)) && result != nullptr) {
-      if (regex_match(entry.d_name, re)) {
-        out.push_back(dir + '/' + entry.d_name);
+    }
+    while (1) {
+      // Note: errno is a thread-local!
+      errno = 0;
+      // Note: This is thread-safe so long as each thread
+      // has their own dd, which is the case here.
+      auto entry = readdir(dd.get());
+      if (errno != 0) {
+        throw cet::exception(exception_category)
+          << "Failed to read directory \"" << dir
+          << "\"; error num = " << errno;
+      }
+      if (entry == nullptr) {
+        // We have reached the end of this directory stream.
+        break;
+      }
+      if (regex_match(entry->d_name, re)) {
+        out.push_back(dir + '/' + entry->d_name);
         ++count;
       }
     }
-    if (result != nullptr)
-      throw cet::exception(exception_category)
-        << "Failed to read directory \"" << dir << "\"; error num = " << err;
   }
-
   return count;
 }
 

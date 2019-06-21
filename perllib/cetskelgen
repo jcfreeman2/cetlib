@@ -47,6 +47,8 @@ use FileHandle;
 use Getopt::Long;
 use Pod::Usage;
 use Text::ParseWords;
+use Term::ANSIColor;
+use Term::ANSIColor qw(:constants);
 
 Getopt::Long::Configure(qw(no_ignore_case bundling require_order));
 
@@ -254,7 +256,7 @@ sub help_types {
     help_type($plugin_type);
   }
   print STDERR
-    "For information on required and optional functions for each type,\n",
+    "\nFor information on required and optional functions for each type,\n",
       "use --help-type <type>\n";
   exit(2);
 }
@@ -265,10 +267,13 @@ sub help_type {
   $plugin_type = lc $plugin_type;
   check_plugin_type($plugin_type);
   my $plugin = $plugin_types{$plugin_type};
-  print STDERR "* $plugin_type from ",
-    plugin_product($plugin, "Unknown"), " version ",
-      plugin_version($plugin, "Unknown"), " (",
-        plugin_source($plugin, "Unknown"), ")\n";
+  print STDERR "\n* ";
+  print STDERR BOLD "$plugin_type", RESET;
+  print " from ",
+      plugin_product($plugin, "Unknown"), " version ",
+      plugin_version($plugin, "Unknown"), "\n";
+  # Cut down on visual clutter and don't print source file
+  #, " (", plugin_source($plugin, "Unknown"), ")\n";
   print STDERR grep( { s&(^|\n)(?!$)&${1}${indent}&g if $_; }
                     plugin_usage($plugin) || ());
   if ($verbose) {
@@ -1048,7 +1053,7 @@ parentheses. For example,
 
 Force overwrite of existing files; the default is to not overwrite.
 
-=item B<guard> I<header-guard-spec>
+=item B<--guard> I<header-guard-spec>
 
 The specification for the header guard. '%' format specifiers are
 honored, as are the Perl-regex directives \U, \L and \E. Ignored unless
@@ -1106,7 +1111,7 @@ one-file philosophy in this case:
 
 The only communication with a plugin should be via the run, the subrun
 and/or the event. Having the class definition in the same file as its
-implmenetation helps enforce this.
+implementation helps enforce this.
 
 =item 2.
 

@@ -51,9 +51,9 @@ namespace cet {
     {}
 
     // Writes to provided arbitrary ostream (takes ownership).
-    template <typename OSTREAM,
-              typename =
-                std::enable_if_t<std::is_base_of<std::ostream, OSTREAM>::value>>
+    template <
+      typename OSTREAM,
+      typename = std::enable_if_t<std::is_base_of_v<std::ostream, OSTREAM>>>
     ostream_handle(OSTREAM&& os)
       : osh_{std::make_unique<detail::ostream_owner<OSTREAM>>(std::move(os))}
     {}
