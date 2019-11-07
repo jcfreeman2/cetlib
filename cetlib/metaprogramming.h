@@ -22,13 +22,10 @@ namespace cet {
   //   struct has_nested_type<T, enable_if_type_exists_t<typename
   //   T::NestedType>> : std::true_type {}
   //
-  template <class T, class R = void>
-  struct enable_if_type_exists {
-    using type = R;
-  };
-
   template <class T>
-  using enable_if_type_exists_t = typename enable_if_type_exists<T>::type;
+  using enable_if_type_exists_t [[deprecated(
+    "\n\ncetlib warning: Please use std::void_t<T> instead.\n\n")]] =
+    std::void_t<T>;
 
   //=====================================
   // Detect function
