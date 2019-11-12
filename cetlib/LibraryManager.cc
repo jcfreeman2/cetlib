@@ -233,7 +233,7 @@ cet::LibraryManager::getSymbolByLibspec_(std::string const& libspec,
   if (trans == good_spec_trans_map_.cend()) {
     // No good translation => zero or too many
     std::ostringstream error_msg;
-    error_msg << "Library specification \"" << libspec << "\":";
+    error_msg << "Library specification \"" << libspec << "\"";
     auto const bad_trans = spec_trans_map_.find(libspec);
     if (bad_trans != spec_trans_map_.cend()) {
       error_msg << " corresponds to multiple libraries:\n";
