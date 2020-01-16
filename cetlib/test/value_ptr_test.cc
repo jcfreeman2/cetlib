@@ -12,7 +12,8 @@
 #include "cetlib/value_ptr.h"
 
 namespace cet {
-  std::ostream& boost_test_print_type(std::ostream& os, value_ptr<int> const p)
+  std::ostream&
+  boost_test_print_type(std::ostream& os, value_ptr<int> const p)
   {
     return os << p.get();
   }
