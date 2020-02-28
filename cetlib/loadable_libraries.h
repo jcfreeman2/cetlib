@@ -10,4 +10,8 @@ namespace cet {
                           std::string const& suffix);
 }
 
-#endif
+#endif /* cetlib_loadable_libraries_h */
+
+// Local Variables:
+// mode: c++
+// End:

@@ -12,19 +12,11 @@
 #  make package (builds distribution tarfile)
 # ======================================================================
 
-
-# ----------------------------------------------------------------------
-# Describe build tool requirements:
-
-cmake_minimum_required(VERSION 3.11)  # use cmake 3.11 or later
-
-# ----------------------------------------------------------------------
-# Describe product:
-
-project(cetlib)
+cmake_minimum_required(VERSION 3.14..3.14 FATAL_ERROR)
+project(cetlib LANGUAGES CXX)
 
 # cetbuildtools contains our cmake modules
-find_package(cetbuildtools 7.13.01 REQUIRED)
+find_package(cetbuildtools REQUIRED)
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -33,7 +25,7 @@ cet_set_compiler_flags(DIAGS VIGILANT
   WERROR
   NO_UNDEFINED
   EXTRA_FLAGS -pedantic
-  EXTRA_CXX_FLAGS -Wnon-virtual-dtor -Wdelete-non-virtual-dtor
+  EXTRA_CXX_FLAGS -Wnon-virtual-dtor -Wdelete-non-virtual-dtor -DBOOST_TEST_NO_OLD_TOOLS
   )
 
 if($ENV{CET_SANITIZE_ADDRESS})
