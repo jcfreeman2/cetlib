@@ -7,18 +7,20 @@ fcldir  -
 perllib  product_dir
 
 # define product/version pairs
-product	version		<format=2>
-boost		v1_70_0
+product		version		<format=2>
+boost		v1_73_0
 cetlib_except   v1_04_01
-sqlite		v3_26_00_00
-cetbuildtools	v7_15_01	-	only_for_build
-catch		v2_5_0		-	only_for_build
+sqlite		v3_31_01_00a
+cetbuildtools	v7_17_00	-	only_for_build
+catch		v2_12_1		-	only_for_build
 hep_concurrency v1_04_01
 end_product_list
 
 
 # Matrix of qualifiers versus dependent products
 qualifier	cetlib_except	boost      hep_concurrency  sqlite	notes
+e20:debug	e20:debug	e20:debug  e20:debug        -nq-
+e20:prof        e20:prof        e20:prof   e20:prof         -nq-
 e19:debug	e19:debug	e19:debug  e19:debug        -nq-
 e19:prof        e19:prof        e19:prof   e19:prof         -nq-
 c7:debug        c7:debug        c7:debug   c7:debug         -nq-
