@@ -20,7 +20,7 @@
 namespace cet {
   boost::program_options::variables_map parsed_program_options(
     int argc,
-    char const* argv[],
+    char** argv,
     boost::program_options::options_description const& desc,
     boost::program_options::positional_options_description const& pos = {});
 }

@@ -84,6 +84,13 @@ namespace cet {
   private:
     std::unique_ptr<detail::ostream_handle_base> osh_;
   };
+
+  inline ostream_handle
+  select_stream(std::string const& filename, std::ostream& default_os)
+  {
+    return empty(filename) ? ostream_handle{default_os} :
+                             ostream_handle{filename};
+  }
 }
 
 #endif /* cetlib_ostream_handle_h */
