@@ -50,6 +50,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   loadable_libraries.cc
   lpad.cc
   nybbler.cc
+  parsed_program_options.cc
   replace_all.cc
   rpad.cc
   search_path.cc
@@ -61,6 +62,7 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   cetlib_except
   hep_concurrency
   Boost::filesystem
+  Boost::program_options
   Boost::regex
   ${CMAKE_DL_LIBS}
   ${SQLITE3}

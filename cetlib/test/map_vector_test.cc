@@ -3,7 +3,7 @@
 
 #include "cetlib/container_algorithms.h"
 #include "cetlib/map_vector.h"
-#include <boost/test/output_test_stream.hpp>
+#include <boost/test/tools/output_test_stream.hpp>
 #include <iostream>
 #include <string>
 
