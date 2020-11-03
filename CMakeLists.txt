@@ -12,11 +12,15 @@
 #  make package (builds distribution tarfile)
 # ======================================================================
 
-cmake_minimum_required(VERSION 3.12...3.14 FATAL_ERROR)
-project(cetlib LANGUAGES CXX C)
+cmake_minimum_required(VERSION 3.18.2 FATAL_ERROR)
+cmake_policy(VERSION 3.14)
+# Policy CMP0096 must be set to NEW to preserve leading zeros in the
+# VERSION set by project().
+cmake_policy(SET CMP0096 NEW)
+find_package(cetmodules 2.00.01)
+project(cetlib VERSION 3.11.01 LANGUAGES CXX C)
 
-# cetbuildtools contains our cmake modules
-find_package(cetbuildtools REQUIRED)
+# cetbuildtools contains our cmake modules ### MIGRATE-ACTION-REQUIRED: remove
 
 include(CetCMakeEnv)
 cet_cmake_env()
@@ -62,13 +66,13 @@ cet_report_compiler_flags()
 # Describe build prerequisites:
 
 find_ups_boost(BOOST_TARGETS v1_50_0)
-find_ups_product(sqlite)
-find_ups_product(cetlib_except v1_01_00)
-find_ups_product(catch v1_11_0)
-find_ups_product(hep_concurrency)
+find_ups_product(sqlite) ### MIGRATE-ACTION-RECOMMENDED: use cet_find_package() with target semantics for linking
+find_ups_product(cetlib_except v1_01_00) ### MIGRATE-ACTION-RECOMMENDED: use cet_find_package() with target semantics for linking
+find_ups_product(catch v1_11_0) ### MIGRATE-ACTION-RECOMMENDED: use cet_find_package() with target semantics for linking
+find_ups_product(hep_concurrency) ### MIGRATE-ACTION-RECOMMENDED: use cet_find_package() with target semantics for linking
 
 # SQLite
-cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH)
+cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH) ### MIGRATE-ACTION-RECOMMENDED: use of ENV ... may be UPS-dependent ### MIGRATE-ACTION-RECOMMENDED: use cet_find_package() with target semantics for linking
 # find openSSL
 # when building on macOS, use CommonCrypto
 if(NOT APPLE)
@@ -80,12 +84,11 @@ endif()
 
 add_subdirectory( ${PROJECT_NAME} )  # source code
 add_subdirectory( perllib )          # Modular plugin skeleton generator
-add_subdirectory( ups )              # ups files
 
 # ----------------------------------------------------------------------
 # Packaging utility
 
-include(UseCPack)
 
 #
 # ======================================================================
+cet_cmake_config(COMPATIBILITY SameMajorVersion)

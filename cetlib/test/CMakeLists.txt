@@ -9,7 +9,7 @@ cet_enable_asserts()
 cet_test_env(CURRENT_DIR=${CMAKE_CURRENT_SOURCE_DIR})
 
 # Identify libraries to be linked:
-link_libraries(cetlib)
+link_libraries(cetlib) ### MIGRATE-ACTION-RECOMMENDED: use target_link_libraries() with target semantics
 
 find_package(Threads REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
