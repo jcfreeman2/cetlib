@@ -15,9 +15,6 @@ cet_find_package(Threads REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 add_subdirectory(sqlite)
-cet_test(assert_only_one_thread_test
-  LIBRARIES Threads::Threads
-  TEST_PROPERTIES PASS_REGULAR_EXPRESSION "Failed assert--more than one thread accessing location")
 cet_test(bit_test)
 cet_test(base_converter_test)
 cet_test(canonical_string_test USE_BOOST_UNIT)
@@ -56,7 +53,6 @@ cet_test(search_path_test USE_CATCH_MAIN TEST_PROPERTIES ENVIRONMENT xyzzy="")
 cet_test(search_path_test_2 NO_AUTO)
 cet_test(search_path_test_2.sh PREBUILT DEPENDENCIES search_path_test_2)
 cet_test(search_path_test_3 USE_BOOST_UNIT)
-cet_test(simultaneous_function_spawner_t USE_BOOST_UNIT LIBRARIES Threads::Threads)
 cet_test(sha1_test)
 cet_test(sha1_test_2 SOURCES sha1_test_2.cc sha1.cpp)
 cet_test(sha1_test_performance NO_AUTO SOURCES sha1_test_performance.cc sha1.cpp)
