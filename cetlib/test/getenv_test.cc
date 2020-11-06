@@ -5,10 +5,10 @@
 
 #include "catch2/catch.hpp"
 
-#include "cetlib/exception_category_matcher.h"
-#include "cetlib/exception_message_matcher.h"
 #include "cetlib/getenv.h"
 #include "cetlib_except/exception.h"
+#include "cetlib_except/exception_category_matcher.h"
+#include "cetlib_except/exception_message_matcher.h"
 
 #include <cstdlib>
 #include <string>
