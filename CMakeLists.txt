@@ -17,7 +17,7 @@ cmake_policy(VERSION 3.14)
 # Policy CMP0096 must be set to NEW to preserve leading zeros in the
 # VERSION set by project().
 cmake_policy(SET CMP0096 NEW)
-find_package(cetmodules 2.02.01 REQUIRED)
+find_package(cetmodules 2.03.00 REQUIRED)
 project(cetlib VERSION 3.11.01 LANGUAGES CXX C)
 
 # cetbuildtools contains our cmake modules ### MIGRATE-ACTION-REQUIRED: remove
@@ -83,7 +83,8 @@ endif()
 # Describe source tree layout:
 
 add_subdirectory(${PROJECT_NAME})  # source code
-add_subdirectory(perllib)          # Modular plugin skeleton generator
+add_subdirectory(config) # Files for use by other packages at build time.
+add_subdirectory(perllib) # Modular plugin skeleton generator
 
 # ----------------------------------------------------------------------
 # Packaging utility
