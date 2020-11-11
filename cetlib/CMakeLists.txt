@@ -9,13 +9,11 @@ include(CetMake)
 # ----------------------------------------------------------------------
 # Build and install this project's library:
 
-set(LIB_NAME ${PROJECT_NAME})
-
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shlib_utils.cc.in
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc @ONLY
   )
 
-cet_make_library(LIBRARY_NAME ${LIB_NAME}
+cet_make_library(LIBRARY_NAME ${PROJECT_NAME}
   SOURCE
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
   MD5Digest.cc
@@ -57,13 +55,15 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
   split_path.cc
   split_by_regex.cc
   LIBRARIES
-  cetlib_except
-  hep_concurrency
+  PUBLIC
+  cetlib_except::cetlib_except
+  hep_concurrency::hep_concurrency
   Boost::filesystem
   Boost::program_options
-  Boost::regex
-  ${CMAKE_DL_LIBS}
   ${SQLITE3}
+  ${CMAKE_DL_LIBS}
+  PRIVATE
+  Boost::regex
   ${OPENSSL_LIBRARIES}
   )
 
@@ -71,8 +71,8 @@ cet_make_library(LIBRARY_NAME ${LIB_NAME}
 # ----------------------------------------------------------------------
 # Build and install this project's executables:
 
-cet_make_exec(inc-expand LIBRARIES ${LIB_NAME})
-cet_make_exec(get-accessible-paths LIBRARIES ${LIB_NAME})
+cet_make_exec(NAME inc-expand LIBRARIES PRIVATE cetlib::cetlib)
+cet_make_exec(NAME get-accessible-paths LIBRARIES PRIVATE cetlib::cetlib)
 
 # ----------------------------------------------------------------------
 # Install this project's headers and sources:
