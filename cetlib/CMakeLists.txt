@@ -60,7 +60,7 @@ cet_make_library(LIBRARY_NAME ${PROJECT_NAME}
   hep_concurrency::hep_concurrency
   Boost::filesystem
   Boost::program_options
-  ${SQLITE3}
+  SQLite::SQLite3
   ${CMAKE_DL_LIBS}
   PRIVATE
   Boost::regex

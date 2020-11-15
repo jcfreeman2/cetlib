@@ -65,13 +65,11 @@ cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 # Describe build prerequisites:
 
 cet_find_package(Boost REQUIRED COMPONENTS program_options filesystem regex)
-cet_find_package(sqlite)
+cet_find_package(SQLite3)
 cet_find_package(catch PRIVATE)
 cet_find_package(cetlib_except)
 cet_find_package(hep_concurrency)
 
-# SQLite
-cet_find_library(SQLITE3 NAMES sqlite3_ups PATHS ENV SQLITE_LIB NO_DEFAULT_PATH) ### MIGRATE-ACTION-RECOMMENDED: use of ENV ... may be UPS-dependent ### MIGRATE-ACTION-RECOMMENDED: use cet_find_package() with target semantics for linking
 # find openSSL
 # when building on macOS, use CommonCrypto
 if(NOT APPLE)
