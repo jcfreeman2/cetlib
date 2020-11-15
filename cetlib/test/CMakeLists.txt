@@ -6,7 +6,6 @@
 
 include(CetTest)
 cet_enable_asserts()
-cet_test_env(CURRENT_DIR=${CMAKE_CURRENT_SOURCE_DIR} OUT_VAR CET_TEST_ENV)  # FIXME: Probably not the right syntax
 
 cet_find_package(Threads REQUIRED)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
@@ -68,7 +67,8 @@ cet_test(cpu_timer_test USE_BOOST_UNIT
   LIBRARIES PRIVATE cetlib::cetlib)
 cet_test(filepath_maker_test USE_BOOST_UNIT
   TEST_PROPERTIES
-  ENVIRONMENT FILEPATH_MAKER_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/filepath_maker-files
+  ENVIRONMENT "CURRENT_DIR=${CMAKE_CURRENT_SOURCE_DIR};\
+FILEPATH_MAKER_TEST_FILES=${CMAKE_CURRENT_SOURCE_DIR}/filepath_maker-files"
   DATAFILES filepath_maker_test.txt
   LIBRARIES PRIVATE cetlib::cetlib)
 
