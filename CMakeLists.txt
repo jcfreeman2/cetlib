@@ -65,10 +65,10 @@ cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 # Describe build prerequisites:
 
 cet_find_package(Boost REQUIRED COMPONENTS program_options filesystem regex)
-cet_find_package(SQLite3)
-cet_find_package(catch PRIVATE)
-cet_find_package(cetlib_except)
-cet_find_package(hep_concurrency)
+cet_find_package(SQLite3 REQUIRED)
+cet_find_package(catch PRIVATE REQUIRED)
+cet_find_package(cetlib_except REQUIRED)
+cet_find_package(hep_concurrency REQUIRED)
 
 # find openSSL
 # when building on macOS, use CommonCrypto
