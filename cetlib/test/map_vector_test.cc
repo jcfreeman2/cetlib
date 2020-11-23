@@ -179,6 +179,17 @@ BOOST_AUTO_TEST_CASE(nonemptymap_test)
       BOOST_TEST(b->first.asInt() == b2->first.asInt());
     }
   }
+
+  {
+    // Test appending elements
+    decltype(m) new_m;
+    auto const offset = m.delta();
+    auto const old_size = m.size();
+    new_m[map_vector_key{offset}] = value_t{43};
+    new_m[map_vector_key{offset + 1}] = value_t{17};
+    m.append(new_m.cbegin(), new_m.cend());
+    BOOST_TEST(m.size() == old_size + new_m.size());
+  }
 }
 
 BOOST_AUTO_TEST_SUITE_END()
