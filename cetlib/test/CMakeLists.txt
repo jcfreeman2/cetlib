@@ -7,7 +7,7 @@
 include(CetTest)
 cet_enable_asserts()
 
-cet_find_package(Threads REQUIRED)
+cet_find_package(Threads REQUIRED PRIVATE)
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
 add_subdirectory(sqlite)
@@ -122,18 +122,20 @@ test_library(2_1_5)
 # Use default library search path
 cet_test(LibraryManager_t USE_BOOST_UNIT
   LIBRARIES PRIVATE
-  cetlib::cetlib
-  Boost::filesystem
-  ${CMAKE_DL_LIBS})
+    cetlib::cetlib
+    Boost::filesystem
+    ${CMAKE_DL_LIBS}
+)
 
 # Use custom library search path
 cet_test(LibraryManagerCustomSearchPath_t USE_BOOST_UNIT
   SOURCE LibraryManager_t.cc
-  LIBRARIES PRIVATE
-  cetlib::cetlib
-  Boost::filesystem
-  ${CMAKE_DL_LIBS}
-  TEST_PROPERTIES ENVIRONMENT LIBRARY_MANAGER_SEARCH_PATH=$<TARGET_FILE_DIR:1_1_1_cetlibtest>)
+    LIBRARIES PRIVATE
+    cetlib::cetlib
+    Boost::filesystem
+    ${CMAKE_DL_LIBS}
+  TEST_PROPERTIES ENVIRONMENT LIBRARY_MANAGER_SEARCH_PATH=$<TARGET_FILE_DIR:1_1_1_cetlibtest>
+)
 target_compile_definitions(LibraryManagerCustomSearchPath_t PRIVATE LIBRARY_MANAGER_SEARCH_PATH=1)
 
 cet_test(replace_all_test USE_BOOST_UNIT LIBRARIES PRIVATE cetlib::cetlib)
