@@ -1,11 +1,11 @@
 // vim: set sw=2 expandtab :
 
-#include "cetlib/SimultaneousFunctionSpawner.h"
 #include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/Ntuple.h"
 #include "cetlib/sqlite/helpers.h"
 #include "cetlib/sqlite/select.h"
+#include "hep_concurrency/simultaneous_function_spawner.h"
 
 #include "sqlite3.h"
 
@@ -110,7 +110,7 @@ test_parallel_filling_table(Connection& c)
         }
       });
     }
-    cet::SimultaneousFunctionSpawner sfs{tasks};
+    hep::concurrency::simultaneous_function_spawner sfs{tasks};
   }
   query_result<int> nmatches;
   nmatches << select("count(*)").from(c, tablename);

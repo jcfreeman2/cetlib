@@ -40,12 +40,12 @@ public:
   constexpr explicit map_vector_key(unsigned long key) noexcept;
 
   // observers:
-  unsigned long
+  constexpr unsigned long
   asInt() const noexcept
   {
     return key_;
   }
-  unsigned long
+  constexpr unsigned long
   asUint() const noexcept
   {
     return key_;
@@ -261,8 +261,20 @@ public:
 
   std::pair<iterator, bool> insert(value_type const& x);
 
+  // The insert function template merges the incoming entries with the
+  // current collection.  It is the responsibility of the user to
+  // ensure that the incoming entries are sorted.  Duplicate entries
+  // will be removed.
   template <class InIter>
   void insert(InIter b, InIter e);
+
+  // The append function template simply inserts the incoming entries
+  // at the end of the current collection.  It is the responsibility
+  // of the user to ensure that the incoming entries are sorted and
+  // that the keys are disjoint and greater than those in the current
+  // collection.
+  template <class InIter>
+  void append(InIter b, InIter e);
 
   // MUST UPDATE WHEN CLASS IS CHANGED!
   static short
@@ -473,10 +485,22 @@ cet::map_vector<Value>::insert(InIter const b, InIter const e)
 {
   std::for_each(b, e, [](auto const& pr) { return pr.first.ensure_valid(); });
   impl_type result;
+  result.reserve(size() + std::distance(b, e));
   std::merge(v_.cbegin(), v_.cend(), b, e, back_inserter(result), lt);
   auto new_end = std::unique(result.begin(), result.end(), eq);
   result.erase(new_end, result.end());
+  result.shrink_to_fit();
   v_.swap(result);
+}
+
+template <class Value>
+template <class InIter>
+void
+cet::map_vector<Value>::append(InIter const b, InIter const e)
+{
+  std::for_each(b, e, [](auto const& pr) { return pr.first.ensure_valid(); });
+  v_.insert(v_.cend(), b, e);
+  assert(class_invariant());
 }
 
 // ----------------------------------------------------------------------

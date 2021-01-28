@@ -1,10 +1,10 @@
 // vim: set sw=2 expandtab :
 
 #include "boost/filesystem.hpp"
-#include "cetlib/SimultaneousFunctionSpawner.h"
 #include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/Ntuple.h"
 #include "cetlib/sqlite/create_table.h"
+#include "hep_concurrency/simultaneous_function_spawner.h"
 
 #include <cassert>
 #include <iostream>
@@ -14,6 +14,7 @@
 
 using namespace std;
 using namespace cet::sqlite;
+using namespace hep::concurrency;
 namespace bfs = boost::filesystem;
 
 int
@@ -79,8 +80,7 @@ main()
       auto makeConnection = [&sharedFactory, &f] {
         sharedFactory.make_connection(f);
       };
-      cet::SimultaneousFunctionSpawner launch{
-        cet::repeated_task(10u, makeConnection)};
+      simultaneous_function_spawner launch{repeated_task(10u, makeConnection)};
       bfs::path const p{f};
       assert(bfs::exists(p));
     }
@@ -105,7 +105,7 @@ main()
           n2.flush();
         });
       }
-      cet::SimultaneousFunctionSpawner launch{tasks};
+      simultaneous_function_spawner launch{tasks};
       query_result<int> sum_odds;
       sum_odds << select("sum(Number)").from(*c1, "Odds");
       query_result<int> sum_evens;
