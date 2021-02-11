@@ -106,8 +106,6 @@
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/detail/bind_parameters.h"
 #include "cetlib/sqlite/helpers.h"
-#include "hep_concurrency/RecursiveMutex.h"
-#include "hep_concurrency/tsan.h"
 
 #include "sqlite3.h"
 
@@ -166,7 +164,7 @@ namespace cet::sqlite {
     // Member data
   private:
     // Protects all of the data members.
-    hep::concurrency::RecursiveMutex mutex_{"Ntuple::mutex_"};
+    std::recursive_mutex mutex_{};
     Connection& connection_;
     std::string const name_;
     std::size_t const max_;
@@ -186,7 +184,7 @@ cet::sqlite::Ntuple<Args...>::Ntuple(Connection& connection,
                                      std::index_sequence<I...>)
   : connection_{connection}, name_{name}, max_{bufsize}
 {
-  hep::concurrency::RecursiveMutexSentry sentry{mutex_, __func__};
+  std::lock_guard sentry{mutex_};
   assert(connection);
   sqlite::createTableIfNeeded(connection,
                               overwriteContents,
@@ -232,7 +230,7 @@ template <typename... Args>
 void
 cet::sqlite::Ntuple<Args...>::insert(Args const... args)
 {
-  hep::concurrency::RecursiveMutexSentry sentry{mutex_, __func__};
+  std::lock_guard sentry{mutex_};
   if (buffer_.size() == max_) {
     flush();
   }
@@ -245,7 +243,7 @@ cet::sqlite::Ntuple<Args...>::flush_no_throw()
 {
   // Guard against any modifications to the buffer, which is about to
   // be flushed to the database.
-  hep::concurrency::RecursiveMutexSentry sentry{mutex_, __func__};
+  std::lock_guard sentry{mutex_};
   int const rc{
     connection_.flush_no_throw<nColumns>(buffer_, insert_statement_)};
   if (rc != SQLITE_DONE) {

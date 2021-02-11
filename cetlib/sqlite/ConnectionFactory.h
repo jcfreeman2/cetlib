@@ -31,10 +31,10 @@
 
 #include "cetlib/sqlite/Connection.h"
 #include "cetlib/sqlite/detail/DefaultDatabaseOpenPolicy.h"
-#include "hep_concurrency/RecursiveMutex.h"
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 #include <utility>
 
@@ -48,9 +48,8 @@ namespace cet::sqlite {
       -> Connection*;
 
   private:
-    std::map<std::string, std::weak_ptr<hep::concurrency::RecursiveMutex>>
-      databaseLocks_;
-    hep::concurrency::RecursiveMutex mutex_{"ConnectionFactory::mutex_"};
+    std::map<std::string, std::weak_ptr<std::recursive_mutex>> databaseLocks_;
+    std::recursive_mutex mutex_;
   };
 
   template <typename DatabaseOpenPolicy, typename... PolicyArgs>
@@ -59,15 +58,14 @@ namespace cet::sqlite {
                                      PolicyArgs&&... policyArgs) -> Connection*
   {
     // Implementation a la Herb Sutter's favorite 10-liner
-    hep::concurrency::RecursiveMutexSentry sentry{mutex_, __func__};
+    std::lock_guard sentry{mutex_};
     // Note: Convert the weak_ptr to a shared_ptr using the member
     // function lock(), this is not an operation on the mutex.
     auto shared_ptr_to_mutex = databaseLocks_[filename].lock();
     if (!shared_ptr_to_mutex) {
       using namespace std::string_literals;
       databaseLocks_[filename] = shared_ptr_to_mutex =
-        std::make_shared<hep::concurrency::RecursiveMutex>(
-          "ConnectionFactory::databaseLocks_["s + filename + "]"s);
+        std::make_shared<std::recursive_mutex>();
     }
     auto ret = new Connection{
       filename,
