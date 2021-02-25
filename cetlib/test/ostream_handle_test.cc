@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE (ostream_handle test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/exempt_ptr.h"
 #include "cetlib/ostream_handle.h"

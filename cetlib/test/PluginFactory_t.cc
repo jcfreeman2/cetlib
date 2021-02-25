@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE (PluginFactory_t)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/BasicPluginFactory.h"
 #include "cetlib/PluginTypeDeducer.h"

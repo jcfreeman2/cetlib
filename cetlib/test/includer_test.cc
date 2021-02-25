@@ -5,7 +5,7 @@
 // ======================================================================
 
 #define BOOST_TEST_MODULE (includer test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/filepath_maker.h"
 #include "cetlib/includer.h"

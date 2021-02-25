@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE(canonical_string_t)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/canonical_string.h"
 

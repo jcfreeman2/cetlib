@@ -1,7 +1,7 @@
 #ifndef cetlib_test_macros_h
 #define cetlib_test_macros_h
 
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #pragma GCC warning                                                            \
   "The CET_CHECK_EQUAL_COLLECTIONS macro has been deprecated.  Please use BOOST_TEST instead."

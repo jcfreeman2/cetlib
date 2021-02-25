@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE (name_of test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/name_of.h"
 

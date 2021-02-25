@@ -5,7 +5,7 @@
 // ======================================================================
 
 #define BOOST_TEST_MODULE (filepath_maker test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "boost/filesystem.hpp"
 #include "cetlib/filepath_maker.h"

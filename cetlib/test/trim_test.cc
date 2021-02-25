@@ -1,6 +1,6 @@
 #define BOOST_TEST_MODULE (trim test)
 
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 #include "cetlib/trim.h"
 
 using cet::trim;

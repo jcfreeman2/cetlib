@@ -1,6 +1,6 @@
 #define _GLIBCXX_USE_NANOSLEEP 1
 #define BOOST_TEST_MODULE (cpu_timer_test 2)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/cpu_timer.h"
 
