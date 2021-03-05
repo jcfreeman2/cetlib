@@ -255,7 +255,7 @@ cetlib_except	v1_06_00	-
 hep_concurrency	v1_06_00	-
 sqlite		v3_32_03_00	-
 catch		v2_12_2		-	only_for_build
-cetmodules	v2_09_00	-	only_for_build
+cetmodules	v2_13_00	-	only_for_build
 end_product_list
 ####################################
 
