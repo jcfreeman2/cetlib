@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.18.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
 find_package(cetmodules 2.13.00 REQUIRED)
 project(cetlib VERSION 3.12.00 LANGUAGES CXX C)
