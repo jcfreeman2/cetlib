@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE (map_vector test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/container_algorithms.h"
 #include "cetlib/map_vector.h"

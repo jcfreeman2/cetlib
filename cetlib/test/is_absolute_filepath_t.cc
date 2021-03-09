@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE (is_absolute_filepath_t test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include <string>
 

@@ -19,11 +19,10 @@
 
 #include "cetlib/sqlite/Transaction.h"
 #include "cetlib/sqlite/detail/bind_parameters.h"
-#include "hep_concurrency/RecursiveMutex.h"
-#include "hep_concurrency/tsan.h"
 #include "sqlite3.h"
 
 #include <memory>
+#include <mutex>
 #include <string>
 #include <vector>
 
@@ -58,20 +57,19 @@ namespace cet::sqlite {
   private:
     template <typename DatabaseOpenPolicy>
     explicit Connection(std::string const& filename,
-                        std::shared_ptr<hep::concurrency::RecursiveMutex>,
+                        std::shared_ptr<std::recursive_mutex>,
                         DatabaseOpenPolicy);
 
   private:
     sqlite3* db_{nullptr};
     // Shared with other connections to the same database
-    std::shared_ptr<hep::concurrency::RecursiveMutex> mutex_{nullptr};
+    std::shared_ptr<std::recursive_mutex> mutex_{nullptr};
   };
 
   template <typename DatabaseOpenPolicy>
-  Connection::Connection(
-    std::string const& filename,
-    std::shared_ptr<hep::concurrency::RecursiveMutex> spmutex,
-    DatabaseOpenPolicy policy)
+  Connection::Connection(std::string const& filename,
+                         std::shared_ptr<std::recursive_mutex> spmutex,
+                         DatabaseOpenPolicy policy)
     : mutex_{spmutex}
   {
     // No lock necessary since the c'tor is called in a protected
@@ -85,7 +83,7 @@ namespace cet::sqlite {
                              sqlite3_stmt*& insertStmt)
   {
     // Guard against concurrent updates to the same database.
-    hep::concurrency::RecursiveMutexSentry sentry{*mutex_, __func__};
+    std::lock_guard sentry{*mutex_};
     sqlite::Transaction txn{db_};
     for (auto const& r : buffer) {
       sqlite::detail::bind_parameters<Row, NColumns>::bind(insertStmt, r);

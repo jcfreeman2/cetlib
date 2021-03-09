@@ -1,7 +1,7 @@
 #include "cetlib/LibraryManager.h"
 
 #define BOOST_TEST_MODULE (LibraryManager Test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/container_algorithms.h"
 #include "cetlib/test/LibraryManagerTestFunc.h"

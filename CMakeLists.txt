@@ -1,20 +1,7 @@
-# ======================================================================
-#  cetlib main build file
-#
-#  cd .../path/to/build/directory
-#  source .../path/to/cetlib/ups/setup_for_development
-#  cmake [-DCMAKE_INSTALL_PREFIX=/install/path]
-#        -DCMAKE_BUILD_TYPE=$CETPKG_TYPE
-#        $CETPKG_SOURCE
-#  make
-#  make test
-#  make install
-#  make package (builds distribution tarfile)
-# ======================================================================
-cmake_minimum_required(VERSION 3.18.2 FATAL_ERROR)
+cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
-find_package(cetmodules 2.04.00 REQUIRED)
-project(cetlib VERSION 3.12.00 LANGUAGES CXX C)
+find_package(cetmodules 2.13.00 REQUIRED)
+project(cetlib VERSION 3.13.00 LANGUAGES CXX C)
 
 # cetbuildtools contains our cmake modules ### MIGRATE-ACTION-REQUIRED: remove
 
@@ -25,7 +12,7 @@ cet_set_compiler_flags(DIAGS VIGILANT
   WERROR
   NO_UNDEFINED
   EXTRA_FLAGS -pedantic
-  )
+)
 
 if(DEFINED ENV{CET_SANITIZE_ADDRESS} AND DEFINED ENV{GCC_FQ_DIR})
   find_file(ASAN_LIB libasan.so NO_DEFAULT_PATH PATHS $ENV{GCC_FQ_DIR}/lib64)
@@ -47,32 +34,8 @@ endif()
 
 cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 
-# ----------------------------------------------------------------------
-# Describe build prerequisites:
-
-cet_find_package(Boost REQUIRED COMPONENTS program_options filesystem regex)
-cet_find_package(SQLite3 REQUIRED)
-cet_find_package(catch PRIVATE REQUIRED)
-cet_find_package(cetlib_except REQUIRED)
-cet_find_package(hep_concurrency REQUIRED)
-
-# find openSSL
-# when building on macOS, use CommonCrypto
-if(NOT APPLE)
-  cet_find_package(OpenSSL REQUIRED)
-endif()
-
-# ----------------------------------------------------------------------
-# Describe source tree layout:
-
 add_subdirectory(${PROJECT_NAME})  # source code
 add_subdirectory(config) # Files for use by other packages at build time.
 add_subdirectory(perllib) # Modular plugin skeleton generator
 
-# ----------------------------------------------------------------------
-# Packaging utility
-
-
-#
-# ======================================================================
-cet_cmake_config(COMPATIBILITY SameMajorVersion)
+cet_cmake_config(CONFIG_POST_TARGET_VARS config/cetlib-augment-CETLIB.cmake)

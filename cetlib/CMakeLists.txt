@@ -6,29 +6,33 @@
 
 include(CetMake)
 
-# ----------------------------------------------------------------------
-# Build and install this project's library:
+cet_find_package(Boost PRIVATE COMPONENTS regex REQUIRED)
+cet_find_package(Boost COMPONENTS program_options filesystem REQUIRED)
+cet_find_package(cetlib_except REQUIRED)
+cet_find_package(SQLite3 REQUIRED)
+cet_find_package(hep_concurrency REQUIRED)
+
+# find openSSL
+# when building on macOS, use CommonCrypto
+if(NOT APPLE)
+  cet_find_package(OpenSSL REQUIRED)
+endif()
+
+####################################
+# Libraries.
+cet_make_library(LIBRARY_NAME container_algorithms INTERFACE
+  SOURCE container_algorithms.h)
 
 configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shlib_utils.cc.in
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc @ONLY
 )
 
-cet_make_library(LIBRARY_NAME ${PROJECT_NAME}
+cet_make_library(HEADERS_TARGET
   SOURCE
     ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
     MD5Digest.cc
     BasicPluginFactory.cc
     LibraryManager.cc
-    sqlite/Connection.cc
-    sqlite/Exception.cc
-    sqlite/Transaction.cc
-    sqlite/detail/DefaultDatabaseOpenPolicy.cc
-    sqlite/detail/bind_parameters.cc
-    sqlite/detail/column_constraint.cc
-    sqlite/detail/normalize_statement.cc
-    sqlite/exec.cc
-    sqlite/helpers.cc
-    sqlite/statistics.cc
     PluginFactory.cc
     base_converter.cc
     canonical_number.cc
@@ -46,7 +50,6 @@ cet_make_library(LIBRARY_NAME ${PROJECT_NAME}
     loadable_libraries.cc
     lpad.cc
     nybbler.cc
-    parsed_program_options.cc
     replace_all.cc
     rpad.cc
     search_path.cc
@@ -57,29 +60,48 @@ cet_make_library(LIBRARY_NAME ${PROJECT_NAME}
   LIBRARIES
     PUBLIC
       cetlib_except::cetlib_except
-      hep_concurrency::hep_concurrency
-      Boost::filesystem
-      Boost::program_options
-      SQLite::SQLite3
-      ${CMAKE_DL_LIBS}
-    PRIVATE
-      Boost::regex
+      cetlib::container_algorithms
       ${OPENSSL_LIBRARIES}
+    PRIVATE
+      Boost::filesystem
+      Boost::regex
+      ${CMAKE_DL_LIBS}
 )
 
+cet_make_library(LIBRARY_NAME compiler_macros INTERFACE
+  SOURCE compiler_macros.h)
 
-# ----------------------------------------------------------------------
-# Build and install this project's executables:
+cet_register_export_set(SET_NAME PluginSupport NAMESPACE art_plugin_support)
 
+cet_make_library(LIBRARY_NAME support_macros INTERFACE
+  EXPORT_SET PluginSupport
+  SOURCE
+    ProvideFilePathMacro.h
+    ProvideMakePluginMacros.h
+    PluginTypeDeducer.h
+  LIBRARIES INTERFACE
+    cetlib::compiler_macros
+    Boost::filesystem
+)
+
+cet_make_library(LIBRARY_NAME cetlib_parsed_program_options
+  SOURCE parsed_program_options.cc
+  LIBRARIES
+    PUBLIC Boost::program_options
+    PRIVATE cetlib_except::cetlib_except
+)
+####################################
+
+# Executables.
 cet_make_exec(NAME inc-expand LIBRARIES PRIVATE cetlib::cetlib)
-cet_make_exec(NAME get-accessible-paths LIBRARIES PRIVATE cetlib::cetlib)
+cet_make_exec(NAME get-accessible-paths LIBRARIES PRIVATE cetlib::cetlib Boost::filesystem)
 
-# ----------------------------------------------------------------------
-# Install this project's headers and sources:
+# Headers and source.
+install_headers(SUBDIRS detail)
+install_source(SUBDIRS detail)
 
-install_headers(SUBDIRS detail sqlite sqlite/detail)
-install_source(SUBDIRS detail sqlite sqlite/detail)
+# SQLite functionality.
+add_subdirectory(sqlite)
 
-# ======================================================================
-# Testing
+# Tests
 add_subdirectory(test)

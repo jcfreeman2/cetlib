@@ -1,5 +1,5 @@
 #define BOOST_TEST_MODULE (column width test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/column_width.h"
 using column = std::vector<std::string>;

@@ -1,0 +1,22 @@
+cet_make_library(
+  SOURCE
+    Connection.cc
+    Exception.cc
+    Transaction.cc
+    detail/DefaultDatabaseOpenPolicy.cc
+    detail/bind_parameters.cc
+    detail/column_constraint.cc
+    detail/normalize_statement.cc
+    exec.cc
+    helpers.cc
+    statistics.cc
+  LIBRARIES
+    PUBLIC
+      cetlib::container_algorithms
+      cetlib_except::cetlib_except
+      hep_concurrency::hep_concurrency
+      SQLite::SQLite3
+)
+
+install_headers(SUBDIRS detail)
+install_source(SUBDIRS detail)

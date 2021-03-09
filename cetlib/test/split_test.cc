@@ -5,7 +5,7 @@
 // ======================================================================
 
 #define BOOST_TEST_MODULE (split test)
-#include "cetlib/quiet_unit_test.hpp"
+#include "boost/test/unit_test.hpp"
 
 #include "cetlib/split.h"
 #include <iterator>
