@@ -29,14 +29,14 @@ namespace {
   translate(error const code)
   {
     switch (code) {
-      case cant_open:
-        return "Can't locate or can't open specified file:";
-      case cant_read:
-        return "Can't read from supplied input stream:";
-      case malformed:
-        return "Malformed #include directive:";
-      default:
-        return "Unknown code";
+    case cant_open:
+      return "Can't locate or can't open specified file:";
+    case cant_read:
+      return "Can't read from supplied input stream:";
+    case malformed:
+      return "Malformed #include directive:";
+    default:
+      return "Unknown code";
     }
   }
 
