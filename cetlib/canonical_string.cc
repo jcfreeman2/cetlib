@@ -19,26 +19,26 @@ cet::escape(std::string const& str)
   for (std::string::const_iterator it = str.begin(), e = str.end(); it != e;
        ++it) {
     switch (*it) {
-      case '\"':
-        result.append("\\\"");
-        break;
-      case '\'':
-        result.append("\\\'");
-        break;
-      case '\\':
-        result.append("\\\\");
-        break;
-      case '\n':
-        result.append("\\n");
-        break;
-      case '\t':
-        result.append("\\t");
-        break;
-      default:
-        if (std::isprint(*it))
-          result.append(1, *it);
-        else
-          throw cet::exception("unprintable character");
+    case '\"':
+      result.append("\\\"");
+      break;
+    case '\'':
+      result.append("\\\'");
+      break;
+    case '\\':
+      result.append("\\\\");
+      break;
+    case '\n':
+      result.append("\\n");
+      break;
+    case '\t':
+      result.append("\\t");
+      break;
+    default:
+      if (std::isprint(*it))
+        result.append(1, *it);
+      else
+        throw cet::exception("unprintable character");
     }
   }
   return result;
@@ -55,23 +55,23 @@ cet::unescape(std::string const& str)
     char ch = *it;
     if (ch == '\\' && it != e - 1) {
       switch (*++it) {
-        case '\"':
-          ch = '\"';
-          break;
-        case '\'':
-          ch = '\'';
-          break;
-        case '\\':
-          ch = '\\';
-          break;
-        case 'n':
-          ch = '\n';
-          break;
-        case 't':
-          ch = '\t';
-          break;
-        default:
-          throw cet::exception("unknown escape: \\") << *it;
+      case '\"':
+        ch = '\"';
+        break;
+      case '\'':
+        ch = '\'';
+        break;
+      case '\\':
+        ch = '\\';
+        break;
+      case 'n':
+        ch = '\n';
+        break;
+      case 't':
+        ch = '\t';
+        break;
+      default:
+        throw cet::exception("unknown escape: \\") << *it;
       }
     }
     result.append(1, ch);

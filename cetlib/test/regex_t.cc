@@ -4,8 +4,8 @@
 #define BOOST_TEST assert
 #else
 #define BOOST_TEST_MODULE (regex test)
-#include "cetlib/LibraryManager.h"
 #include "boost/test/unit_test.hpp"
+#include "cetlib/LibraryManager.h"
 #endif
 
 #include <fstream>

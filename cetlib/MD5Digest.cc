@@ -81,18 +81,18 @@ namespace cet {
   MD5Result::fromHexifiedString(std::string const& hexy)
   {
     switch (hexy.size()) {
-      case 0: {
-        set_to_default(*this);
-      } break;
-      case 32: {
-        std::string const chars = cet::nybbler(hexy).as_char();
-        std::string::const_iterator it = chars.begin();
-        for (size_t i = 0; i != 16; ++i)
-          bytes[i] = *it++;
-      } break;
-      default: {
-        throw "String of illegal length given to MD5Result::fromHexifiedString";
-      }
+    case 0: {
+      set_to_default(*this);
+    } break;
+    case 32: {
+      std::string const chars = cet::nybbler(hexy).as_char();
+      std::string::const_iterator it = chars.begin();
+      for (size_t i = 0; i != 16; ++i)
+        bytes[i] = *it++;
+    } break;
+    default: {
+      throw "String of illegal length given to MD5Result::fromHexifiedString";
+    }
     }
   }
 

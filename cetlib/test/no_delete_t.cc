@@ -5,8 +5,8 @@
 // ======================================================================
 
 #define BOOST_TEST_MODULE (no_delete test)
-#include "cetlib/no_delete.h"
 #include "boost/test/unit_test.hpp"
+#include "cetlib/no_delete.h"
 
 #include <iostream>
 #include <memory>
