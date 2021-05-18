@@ -3,13 +3,12 @@
 #define BOOST_TEST_MODULE (LibraryManager Test)
 #include "boost/test/unit_test.hpp"
 
-#include "cetlib/container_algorithms.h"
 #include "cetlib/test/LibraryManagerTestFunc.h"
 #include "cetlib_except/exception.h"
 
-#include <algorithm>
-#include <iostream>
 #include <iterator>
+#include <string>
+#include <vector>
 
 using namespace cet;
 

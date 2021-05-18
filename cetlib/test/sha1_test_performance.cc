@@ -1,6 +1,4 @@
 #include "cetlib/sha1.h"
-#include <cstdlib>
-#include <string>
 
 #include "sha1.h"
 

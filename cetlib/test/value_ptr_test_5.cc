@@ -1,9 +1,6 @@
 #include "cetlib/value_ptr.h"
 
 #include <cassert>
-#include <memory>
-
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 
 // ----------------------------------------------------------------------
 

@@ -24,8 +24,9 @@
 #include "cetlib/detail/wrapLibraryManagerException.h"
 #include "cetlib_except/exception.h"
 
-#include <memory>
+#include <functional>
 #include <string>
+#include <type_traits>
 
 namespace cet {
   class PluginFactory;

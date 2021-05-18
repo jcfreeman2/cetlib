@@ -5,7 +5,6 @@
 #include "cetlib/map_vector.h"
 #include <boost/test/tools/output_test_stream.hpp>
 #include <iostream>
-#include <string>
 
 using cet::map_vector;
 using cet::map_vector_key;

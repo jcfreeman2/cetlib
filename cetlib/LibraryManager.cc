@@ -15,9 +15,7 @@ extern "C" {
 }
 
 #include <algorithm>
-#include <functional>
 #include <iterator>
-#include <ostream>
 #include <sstream>
 #include <vector>
 

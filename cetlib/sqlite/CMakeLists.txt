@@ -5,7 +5,6 @@ cet_make_library(
     Transaction.cc
     detail/DefaultDatabaseOpenPolicy.cc
     detail/bind_parameters.cc
-    detail/column_constraint.cc
     detail/normalize_statement.cc
     exec.cc
     helpers.cc

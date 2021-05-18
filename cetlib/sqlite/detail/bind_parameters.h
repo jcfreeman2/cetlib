@@ -10,7 +10,6 @@
 #include "sqlite3.h"
 
 #include <string>
-#include <tuple>
 
 namespace cet::sqlite::detail {
 

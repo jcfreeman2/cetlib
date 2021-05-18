@@ -4,8 +4,8 @@
 #include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/detail/normalize_statement.h"
 
-#include <cassert>
 #include <iostream>
+#include <string>
 
 using namespace cet::sqlite;
 using namespace std;

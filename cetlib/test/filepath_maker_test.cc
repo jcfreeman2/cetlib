@@ -13,7 +13,6 @@
 #include "cetlib/getenv.h"
 #include "cetlib_except/exception.h"
 
-#include <iostream>
 #include <string>
 
 namespace bfs = boost::filesystem;

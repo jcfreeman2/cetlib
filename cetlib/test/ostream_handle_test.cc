@@ -1,11 +1,9 @@
 #define BOOST_TEST_MODULE (ostream_handle test)
 #include "boost/test/unit_test.hpp"
 
-#include "cetlib/exempt_ptr.h"
 #include "cetlib/ostream_handle.h"
 
 #include <fstream>
-#include <iostream>
 #include <string>
 
 using cet::ostream_handle;

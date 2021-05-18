@@ -9,12 +9,12 @@
 //
 // ======================================================================
 
-#include "cetlib/filepath_maker.h"
-
+#include <iosfwd>
 #include <string>
 #include <vector>
 
 namespace cet {
+  class filepath_maker;
   class includer;
 }
 

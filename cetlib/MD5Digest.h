@@ -2,6 +2,7 @@
 #define cetlib_MD5Digest_h
 
 #include <iosfwd>
+#include <ostream>
 #include <string>
 #ifdef __APPLE__
 #define COMMON_DIGEST_FOR_OPENSSL

@@ -1,3 +1,4 @@
+
 // ======================================================================
 //
 // canonical_number: Transform a number string into a canonical form
@@ -11,7 +12,6 @@
 #include "cetlib/base_converter.h"
 
 #include <cctype>
-#include <cstddef>
 #include <cstdlib>
 
 using std::abs;

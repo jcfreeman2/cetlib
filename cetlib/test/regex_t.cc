@@ -11,6 +11,8 @@
 #include <fstream>
 #include <iostream>
 #include <regex>
+#include <string>
+#include <vector>
 
 #ifdef STANDALONE_TEST
 int

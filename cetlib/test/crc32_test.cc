@@ -2,8 +2,6 @@
 
 #include "cetlib/crc32.h"
 
-#include <cstdlib>
-#include <iostream>
 #include <string>
 
 #include "CRC32Calculator.h"

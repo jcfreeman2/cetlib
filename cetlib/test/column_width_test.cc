@@ -2,6 +2,10 @@
 #include "boost/test/unit_test.hpp"
 
 #include "cetlib/column_width.h"
+
+#include <string>
+#include <vector>
+
 using column = std::vector<std::string>;
 
 BOOST_AUTO_TEST_SUITE(column_width)

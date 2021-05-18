@@ -1,6 +1,8 @@
 #include "cetlib/sqlite/detail/bind_parameters.h"
 #include "cetlib/sqlite/Exception.h"
 
+#include "sqlite3.h"
+
 using namespace cet::sqlite;
 
 namespace {

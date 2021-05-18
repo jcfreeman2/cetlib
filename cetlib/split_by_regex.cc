@@ -1,5 +1,7 @@
 #include <algorithm>
 #include <regex>
+#include <string>
+#include <vector>
 
 namespace cet {
   std::vector<std::string>
