@@ -11,11 +11,9 @@
 ////////////////////////////////////////////////////////////////////////
 #include "cetlib/search_path.h"
 
-namespace cet {
-  namespace detail {
-    search_path plugin_search_path();
-    search_path plugin_search_path(search_path sp);
-  }
+namespace cet::detail {
+  search_path plugin_search_path();
+  search_path plugin_search_path(search_path sp);
 }
 #endif /* cetlib_detail_plugin_search_path_h */
 
