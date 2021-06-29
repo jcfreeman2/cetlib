@@ -1,8 +1,5 @@
 #include "cetlib/PluginFactory.h"
 
-#include "cetlib/detail/wrapLibraryManagerException.h"
-#include "cetlib_except/exception.h"
-
 #include <string>
 
 cet::PluginFactory::PluginFactory(cet::search_path const& search_path,

@@ -30,10 +30,7 @@
 // ======================================================================
 
 #include <cstddef>
-#include <exception>
 #include <functional>
-#include <type_traits>
-#include <utility>
 
 namespace cet {
 

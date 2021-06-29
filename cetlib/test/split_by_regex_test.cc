@@ -8,9 +8,6 @@
 #include "boost/test/unit_test.hpp"
 
 #include "cetlib/split_by_regex.h"
-#include <iostream>
-#include <iterator>
-#include <ostream>
 #include <string>
 #include <vector>
 

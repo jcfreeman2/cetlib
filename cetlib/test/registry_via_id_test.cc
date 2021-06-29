@@ -5,7 +5,10 @@
 // ======================================================================
 
 #include "cetlib/registry_via_id.h"
+#include "cetlib_except/exception.h"
+
 #include <cstdlib>
+#include <string>
 #include <vector>
 
 using cet::registry_via_id;

@@ -2,11 +2,12 @@
 // tests DO NOT actually create the table.
 
 #include "cetlib/sqlite/Exception.h"
+#include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/detail/normalize_statement.h"
 
-#include <cassert>
 #include <iostream>
+#include <string>
 
 using namespace cet::sqlite;
 using namespace std;

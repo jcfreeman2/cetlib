@@ -1,5 +1,6 @@
 // vim: set sw=2 expandtab :
 #include "cetlib/container_algorithms.h"
+#include "cetlib/sqlite/Connection.h"
 #include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
@@ -8,7 +9,7 @@
 #include "cetlib/sqlite/select.h"
 
 #include <cassert>
-#include <iostream>
+#include <memory>
 #include <string>
 #include <utility>
 #include <vector>
@@ -31,9 +32,7 @@ main()
   allEntries << select("*").from(*c, name);
   cet::for_all_with_index(allEntries,
                           [&pairs](size_t const i, auto const& row) {
-                            string key;
-                            int value{0};
-                            tie(key, value) = row;
+                            auto const [key, value] = row;
                             assert(key == pairs[i].first);
                             assert(value == pairs[i].second);
                           });

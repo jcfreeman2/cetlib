@@ -15,6 +15,7 @@
 #include <iostream>
 #include <regex>
 #include <sstream>
+#include <string>
 #include <system_error>
 #include <unistd.h>
 

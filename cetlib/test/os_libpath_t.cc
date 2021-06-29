@@ -2,6 +2,8 @@
 
 #include "cetlib/os_libpath.h"
 
+#include <string>
+
 TEST_CASE("Basic test")
 {
   std::string const expected =

@@ -2,9 +2,7 @@
 #include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/detail/normalize_statement.h"
 
-#include <cassert>
-#include <cmath>
-#include <regex>
+#include "sqlite3.h"
 
 std::string
 cet::sqlite::assembleNoLockURI(std::string const& filename)

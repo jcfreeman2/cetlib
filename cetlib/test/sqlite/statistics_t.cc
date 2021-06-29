@@ -1,12 +1,12 @@
 // vim: set sw=2 expandtab :
 
+#include "cetlib/sqlite/Connection.h"
 #include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/Ntuple.h"
 #include "cetlib/sqlite/statistics.h"
 
 #include <array>
 #include <cassert>
-#include <iostream>
 #include <memory>
 #include <string>
 

@@ -19,8 +19,12 @@
 
 #include "cetlib/PluginFactory.h"
 
+#include <string>
+#include <type_traits>
+
 namespace cet {
   class BasicPluginFactory;
+  class search_path;
 }
 
 class cet::BasicPluginFactory : public PluginFactory {

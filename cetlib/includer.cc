@@ -8,15 +8,13 @@
 #include "cetlib/includer.h"
 
 #include "boost/filesystem.hpp"
+#include "cetlib/filepath_maker.h"
 #include "cetlib/split_by_regex.h"
 #include "cetlib/trim.h"
 #include "cetlib_except/coded_exception.h"
 
 #include <algorithm>
-#include <cctype>
-#include <fstream>
 #include <iostream>
-#include <sstream>
 
 using cet::includer;
 

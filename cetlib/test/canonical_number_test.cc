@@ -2,8 +2,6 @@
 
 #include "cetlib/canonical_number.h"
 
-#include <cstdlib>
-#include <iostream>
 #include <string>
 
 using cet::canonical_number;

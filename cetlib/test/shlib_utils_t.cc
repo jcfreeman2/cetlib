@@ -3,8 +3,6 @@
 
 #include "cetlib/shlib_utils.h"
 
-#include <cassert>
-
 BOOST_AUTO_TEST_SUITE(shlib_utils_t)
 
 BOOST_AUTO_TEST_CASE(prefix)

@@ -6,11 +6,9 @@
 // tables therein.
 // ====================================================================
 
-#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/exec.h"
-#include "cetlib/sqlite/select.h"
 
 #include "sqlite3.h"
 

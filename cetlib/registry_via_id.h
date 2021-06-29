@@ -12,9 +12,7 @@
 
 #include <iterator>
 #include <map>
-#include <stdexcept>
 #include <type_traits>
-#include <utility>
 
 namespace cet {
   template <class K, class V>

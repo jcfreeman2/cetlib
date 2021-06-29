@@ -1,4 +1,5 @@
 #include "cetlib/detail/wrapLibraryManagerException.h"
+#include "cetlib_except/exception.h"
 
 void
 cet::detail::wrapLibraryManagerException(cet::exception const& e,

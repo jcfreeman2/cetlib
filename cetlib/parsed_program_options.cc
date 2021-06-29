@@ -1,8 +1,6 @@
 #include "cetlib/parsed_program_options.h"
 #include "cetlib_except/exception.h"
 
-#include <ostream>
-
 namespace bpo = boost::program_options;
 
 bpo::variables_map

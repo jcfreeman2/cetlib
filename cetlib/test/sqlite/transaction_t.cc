@@ -1,8 +1,12 @@
 // vim: set sw=2 expandtab :
+#include "cetlib/container_algorithms.h"
+#include "cetlib/sqlite/Connection.h"
 #include "cetlib/sqlite/ConnectionFactory.h"
 #include "cetlib/sqlite/Transaction.h"
+#include "cetlib/sqlite/column.h"
 #include "cetlib/sqlite/create_table.h"
 #include "cetlib/sqlite/insert.h"
+#include "cetlib/sqlite/query_result.h"
 #include "cetlib/sqlite/select.h"
 #include "cetlib_except/exception.h"
 
@@ -25,9 +29,7 @@ namespace {
   check_table_contents(Connection& c, string const& table_name)
   {
     auto test_results = [](size_t const i, auto const& worker) {
-      string first_name;
-      string last_name;
-      tie(first_name, last_name) = worker;
+      auto const& [first_name, last_name] = worker;
       assert(first_name == names[i][0]);
       assert(last_name == names[i][1]);
     };

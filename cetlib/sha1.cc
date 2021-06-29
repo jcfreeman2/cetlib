@@ -1,5 +1,4 @@
 #include "cetlib/sha1.h"
-#include <cstring>
 
 using cet::sha1;
 

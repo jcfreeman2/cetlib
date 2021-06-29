@@ -4,10 +4,11 @@
 //
 // =======================================================
 
-#include <cmath>
-
-#include "cetlib/sqlite/Exception.h"
 #include "cetlib/sqlite/statistics.h"
+
+#include "sqlite3.h"
+
+#include <cmath>
 
 using namespace std::string_literals;
 

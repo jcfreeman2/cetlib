@@ -1,9 +1,7 @@
-// change
-#include <iomanip>
-#include <sstream>
-
 #include "cetlib/MD5Digest.h"
 #include "cetlib/nybbler.h"
+
+#include <algorithm>
 
 namespace cet {
   namespace {
@@ -51,12 +49,11 @@ namespace cet {
     // std::ostringstream os;
     // os << std::hex << std::setfill('0');
     // for (size_t i = 0; i < sizeof(bytes); ++i)
-    //  os << std::setw(2) << static_cast<int>(bytes[i]);
+    //   os << std::setw(2) << static_cast<int>(bytes[i]);
     // return os.str();
     //
-    // However profiling shows that this causes a measurable
-    // slowdown.  The following code does the same thing, but
-    // is much faster.
+    // However profiling shows that this causes a measurable slowdown.
+    // The following code does the same thing, but is much faster.
     constexpr char hex_bytes[] = "0123456789abcdef";
     std::string ret;
     ret.resize(sizeof(bytes) << 1);

@@ -5,7 +5,10 @@
 // ======================================================================
 
 #include "cetlib/registry.h"
+#include "cetlib_except/exception.h"
+
 #include <cstdlib>
+#include <string>
 
 using cet::registry;
 

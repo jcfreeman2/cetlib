@@ -7,14 +7,16 @@
 #include "cetlib/search_path.h"
 #include "cetlib/filesystem.h"
 #include "cetlib/getenv.h"
+#include "cetlib/split.h"
 #include "cetlib_except/exception.h"
 
 #include <dirent.h>
 #include <errno.h>
+#include <functional>
 #include <iterator>
+#include <memory>
 #include <ostream>
 #include <regex>
-#include <sys/stat.h>
 
 using namespace std;
 using cet::search_path;

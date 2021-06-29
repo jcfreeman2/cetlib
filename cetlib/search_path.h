@@ -8,8 +8,7 @@
 // ======================================================================
 
 #include "cetlib/container_algorithms.h"
-#include "cetlib/split.h"
-#include <algorithm>
+
 #include <cstdlib>
 #include <new>
 #include <ostream>
