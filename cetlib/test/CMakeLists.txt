@@ -3,10 +3,10 @@ cet_enable_asserts()
 
 set(THREADS_PREFER_PTHREAD_FLAG TRUE)
 
-cet_find_package(Catch2 PRIVATE REQUIRED)
-cet_find_package(SQLite3 PRIVATE REQUIRED)
-cet_find_package(Threads PRIVATE REQUIRED)
-cet_find_package(hep_concurrency PRIVATE REQUIRED)
+find_package(Catch2 PRIVATE REQUIRED)
+find_package(SQLite3 PRIVATE REQUIRED)
+find_package(Threads PRIVATE REQUIRED)
+find_package(hep_concurrency PRIVATE REQUIRED)
 
 # Put everything in a different export set.
 cet_register_export_set(SET_NAME Testing NAMESPACE cetlib_test SET_DEFAULT)
