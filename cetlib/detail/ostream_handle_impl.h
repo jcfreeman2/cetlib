@@ -10,12 +10,8 @@ namespace cet::detail {
   // Interface
   class ostream_handle_base {
   public:
-    virtual ~ostream_handle_base() = default;
-    std::ostream&
-    stream()
-    {
-      return get_stream();
-    }
+    virtual ~ostream_handle_base();
+    std::ostream& stream();
 
   private:
     virtual std::ostream& get_stream() = 0;
@@ -24,15 +20,11 @@ namespace cet::detail {
   // Concrete types below
   class ostream_observer : public ostream_handle_base {
   public:
-    ostream_observer(std::ostream& os) : os_{os} {}
+    ostream_observer(std::ostream& os);
 
   private:
     std::ostream& os_;
-    std::ostream&
-    get_stream() override
-    {
-      return os_;
-    }
+    std::ostream& get_stream() override;
   };
 
   template <typename OSTREAM,

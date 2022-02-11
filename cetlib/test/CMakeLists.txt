@@ -41,7 +41,7 @@ foreach (test IN ITEMS
     trim_test
     value_ptr_test
 )
-  cet_test(${test} USE_BOOST_UNIT)
+  cet_test(${test} USE_BOOST_UNIT LIBRARIES PRIVATE cetlib::cetlib)
 endforeach()
 
 # Other tests.

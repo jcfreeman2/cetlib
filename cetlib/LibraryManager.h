@@ -36,8 +36,8 @@ public:
   explicit LibraryManager(std::string lib_type, std::string pattern);
 
   // The d'tor does NOT unload libraries, because that is dangerous to
-  // do in C++. Use the compiler-generated destructor.
-  // ~LibraryManager();
+  // do in C++. Use the compiler-generated default destructor.
+  ~LibraryManager();
 
   // Find and return a symbol named 'sym_name' in the library
   // identified by 'libspec'. The library is dynamically loaded if

@@ -40,6 +40,8 @@ public:
     std::string const& makerName = "makePlugin",
     std::string const& pluginTypeFuncName = "pluginType");
 
+  ~BasicPluginFactory();
+
   // Find and call the makePlugin() function in the plugin library.
   template <typename RESULT_TYPE, typename... ARGS>
   std::enable_if_t<!std::is_function_v<RESULT_TYPE>, RESULT_TYPE> makePlugin(
