@@ -17,8 +17,8 @@ ensure(int which, bool claim)
 int
 main()
 {
-  typedef unsigned int uint;
-  typedef unsigned long ulong;
+  using uint = unsigned int;
+  using ulong = unsigned long;
 
   ensure(1, bit_size<uint>::value == sizeof(uint) * 8);
   ensure(2, bit_size<ulong>::value == sizeof(ulong) * 8);

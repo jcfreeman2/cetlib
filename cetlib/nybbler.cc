@@ -7,9 +7,9 @@
 #include "cetlib/nybbler.h"
 
 using cet::nybbler;
+using std::string;
 
-typedef unsigned char uchar;
-typedef std::string string;
+using uchar = unsigned char;
 
 // ======================================================================
 
@@ -19,9 +19,9 @@ nybbler::as_hex() const
   string r(s_.size() * 2, 'x');
 
   string::iterator t = r.begin();
-  for (string::const_iterator b = s_.begin(), e = s_.end(); b != e; ++b) {
-    *t++ = to_hex(msn(*b));
-    *t++ = to_hex(lsn(*b));
+  for (auto const c : s_) {
+    *t++ = to_hex(msn(c));
+    *t++ = to_hex(lsn(c));
   }
 
   return r;

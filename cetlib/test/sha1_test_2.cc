@@ -80,7 +80,7 @@ compare(unsigned* r, sha1::digest_t const& d)
 int
 main()
 {
-  typedef sha1::digest_t digest_t;
+  using digest_t = sha1::digest_t;
 
   {
     sha1 c1;

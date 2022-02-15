@@ -9,8 +9,8 @@
 
 #include "cetlib/registry_via_id.h"
 
-typedef int success_t;
-typedef char* fail_t; // anything other than success_t
+using success_t = int;
+using fail_t = char*; // anything other than success_t
 
 struct val {
   success_t
@@ -21,7 +21,7 @@ struct val {
   }
 };
 
-typedef cet::registry_via_id<success_t, val> reg;
+using reg = cet::registry_via_id<success_t, val>;
 
 int
 main()

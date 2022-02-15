@@ -40,7 +40,7 @@ main()
 {
   Int i;
 
-  typedef registry_via_id<float, Int> reg;
+  using reg = registry_via_id<float, Int>;
   ensure(1, reg::empty());
   ensure(2, reg::size() == 0);
 

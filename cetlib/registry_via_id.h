@@ -21,7 +21,7 @@ namespace cet {
   namespace detail {
     template <class K, class V, K (V::*)() const = &V::id>
     struct must_have_id {
-      typedef K type;
+      using type = K;
     };
   }
 }

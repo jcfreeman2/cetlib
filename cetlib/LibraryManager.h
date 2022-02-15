@@ -135,7 +135,7 @@ public:
   }
 
 private:
-  // Internally-useful typedefs.
+  // Internally-useful type aliases.
   using lib_loc_map_t = std::map<std::string, std::string>;
   using spec_trans_map_t = std::map<std::string, std::set<std::string>>;
   using lib_ptr_map_t = std::map<std::string, void*>;
