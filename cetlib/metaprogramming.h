@@ -7,26 +7,6 @@
 
 namespace cet {
 
-  using no_tag = char (&)[1];  // type indicating FALSE
-  using yes_tag = char (&)[2]; // type indicating TRUE
-
-  //=====================================
-  // Detect type
-  //
-  //   Use idiom:
-  //
-  //   template <typename T, typename = void>
-  //   struct has_nested_type : std::false_type {};
-  //
-  //   template <typename T>
-  //   struct has_nested_type<T, enable_if_type_exists_t<typename
-  //   T::NestedType>> : std::true_type {}
-  //
-  template <class T>
-  using enable_if_type_exists_t [[deprecated(
-    "\n\ncetlib warning: Please use std::void_t<T> instead.\n\n")]] =
-    std::void_t<T>;
-
   //=====================================
   // Detect function
   //
