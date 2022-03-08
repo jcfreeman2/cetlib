@@ -10,7 +10,7 @@
 //   - ref() : produce a C++ reference to its referent (iff it is valid)
 //
 // When valid, a maybe_ref<> object mimics a C++ reference in that it
-// takes no ownership of its referent, thus is unaware of the referent's
+// takes no ownership of its referent and is unaware of the referent's
 // lifetime.  Therefore it is the user's responsibility to keep the
 // referent alive so long as there is a valid maybe_ref<> to it.
 //
@@ -21,9 +21,9 @@
 // reference.
 //
 // One typical usage pattern:
-//   cet::maybe_ref<T const> m( call some accessor );
-//   if ( !m ) return;  // or continue
-//   T const & r( m.ref() );
+//   cet::maybe_ref<T const> m{call some accessor};
+//   if (!m) return;  // or continue
+//   T const& r{m.ref()};
 //
 // ======================================================================
 
@@ -35,7 +35,7 @@ namespace cet {
   class maybe_ref;
 
   template <class T>
-  void swap(maybe_ref<T>&, maybe_ref<T>&);
+  void swap(maybe_ref<T>&, maybe_ref<T>&) noexcept;
 
   template <class T>
   bool operator==(maybe_ref<T> const& left, maybe_ref<T> const& right);
@@ -49,27 +49,25 @@ namespace cet {
 template <class T>
 class cet::maybe_ref {
 public:
-  typedef T value_type;
+  using value_type = T;
 
-  maybe_ref() : ptr_(0) {}
+  maybe_ref() = default;
   explicit maybe_ref(T& t) : ptr_(&t) {}
 
-  // use compiler-generated copy c'tor, copy assignment, and d'tor
-
   bool
-  isValid() const
+  isValid() const noexcept
   {
     return ptr_;
   }
-  explicit operator bool() const { return isValid(); }
+  explicit operator bool() const noexcept { return isValid(); }
 
   void
-  reseat()
+  reseat() noexcept
   {
-    ptr_ = 0;
+    ptr_ = nullptr;
   }
   void
-  reseat(T& p)
+  reseat(T& p) noexcept
   {
     ptr_ = &p;
   }
@@ -79,6 +77,7 @@ public:
   {
     return ref_iff_valid();
   }
+
   T const&
   ref() const
   {
@@ -86,13 +85,13 @@ public:
   }
 
   void
-  swap(maybe_ref& other)
+  swap(maybe_ref& other) noexcept
   {
     std::swap(ptr_, other.ptr_);
   }
 
 private:
-  T* ptr_;
+  T* ptr_{nullptr};
 
   T&
   ref_iff_valid() const
@@ -110,7 +109,7 @@ private:
 
 template <class T>
 inline void
-cet::swap(maybe_ref<T>& r1, maybe_ref<T>& r2)
+cet::swap(maybe_ref<T>& r1, maybe_ref<T>& r2) noexcept
 {
   r1.swap(r2);
 }

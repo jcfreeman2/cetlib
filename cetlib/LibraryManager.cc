@@ -77,6 +77,8 @@ cet::LibraryManager::LibraryManager(std::string lib_type, std::string pattern)
                    std::move(pattern)}
 {}
 
+cet::LibraryManager::~LibraryManager() = default;
+
 size_t
 cet::LibraryManager::getLoadableLibraries(std::vector<std::string>& list) const
 {

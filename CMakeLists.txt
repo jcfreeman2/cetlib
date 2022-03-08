@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.19 FATAL_ERROR)
 
 find_package(cetmodules 2.13.00 REQUIRED)
-project(cetlib VERSION 3.14.00 LANGUAGES CXX C)
+project(cetlib VERSION 3.15.00 LANGUAGES CXX C)
 
 # cetbuildtools contains our cmake modules ### MIGRATE-ACTION-REQUIRED: remove
 

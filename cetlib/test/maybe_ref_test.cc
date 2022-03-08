@@ -8,7 +8,7 @@ BOOST_AUTO_TEST_SUITE(maybe_ref)
 BOOST_AUTO_TEST_CASE(default_behavior)
 {
   {
-    typedef int T;
+    using T = int;
     T x = 16;
     cet::maybe_ref<T> m(x);
     BOOST_TEST(m.isValid());
@@ -22,7 +22,7 @@ BOOST_AUTO_TEST_CASE(default_behavior)
     BOOST_TEST(&r2 == &x);
   }
   {
-    typedef double T;
+    using T = double;
     cet::maybe_ref<T> m;
     BOOST_TEST(!m.isValid());
     BOOST_CHECK_THROW(m.ref(), std::logic_error);
@@ -32,7 +32,7 @@ BOOST_AUTO_TEST_CASE(default_behavior)
 BOOST_AUTO_TEST_CASE(copy_behavior)
 {
   {
-    typedef unsigned T;
+    using T = unsigned;
     T x = 16u;
     cet::maybe_ref<T> m(x);
     BOOST_TEST(m.isValid());
@@ -42,7 +42,7 @@ BOOST_AUTO_TEST_CASE(copy_behavior)
     BOOST_TEST(m2.ref() == 16u);
   }
   {
-    typedef long T;
+    using T = long;
     T x = 16;
     cet::maybe_ref<T> m(x);
     BOOST_TEST(m.isValid());
@@ -58,7 +58,7 @@ BOOST_AUTO_TEST_CASE(copy_behavior)
 BOOST_AUTO_TEST_CASE(const_behavior)
 {
   {
-    typedef int const T;
+    using T = int const;
     T x = 16;
     cet::maybe_ref<T> m(x);
     BOOST_TEST(m.isValid());
@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(const_behavior)
 BOOST_AUTO_TEST_CASE(reseat_behavior)
 {
   {
-    typedef int const T;
+    using T = int const;
     T x = 16;
     T y = 48;
     cet::maybe_ref<T> m(x);

@@ -20,3 +20,5 @@ cet::BasicPluginFactory::BasicPluginFactory(
                        makerName,
                        pluginTypeFuncName)
 {}
+
+cet::BasicPluginFactory::~BasicPluginFactory() = default;

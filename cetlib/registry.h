@@ -27,11 +27,11 @@ class cet::registry {
   void operator=(registry const&) = delete;
 
   // shorthand:
-  typedef std::map<K const, V> reg_t;
-  typedef typename reg_t::const_iterator iter_t;
+  using reg_t = std::map<K const, V>;
+  using iter_t = typename reg_t::const_iterator;
 
 public:
-  typedef iter_t const_iterator;
+  using const_iterator = iter_t;
 
   static bool
   empty()
@@ -58,7 +58,7 @@ public:
   static void put(K const& key, V const& value);
 
   static V const& get(K const& key);
-  static bool get(K const& key, V& value) throw();
+  static bool get(K const& key, V& value) noexcept;
 
 private:
   // encapsulated singleton:
@@ -93,7 +93,7 @@ cet::registry<K, V>::get(K const& key)
 
 template <class K, class V>
 bool
-cet::registry<K, V>::get(K const& key, V& value) throw() try {
+cet::registry<K, V>::get(K const& key, V& value) noexcept try {
   value = get(key);
   return true;
 }

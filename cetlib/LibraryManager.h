@@ -36,8 +36,8 @@ public:
   explicit LibraryManager(std::string lib_type, std::string pattern);
 
   // The d'tor does NOT unload libraries, because that is dangerous to
-  // do in C++. Use the compiler-generated destructor.
-  // ~LibraryManager();
+  // do in C++. Use the compiler-generated default destructor.
+  ~LibraryManager();
 
   // Find and return a symbol named 'sym_name' in the library
   // identified by 'libspec'. The library is dynamically loaded if
@@ -135,7 +135,7 @@ public:
   }
 
 private:
-  // Internally-useful typedefs.
+  // Internally-useful type aliases.
   using lib_loc_map_t = std::map<std::string, std::string>;
   using spec_trans_map_t = std::map<std::string, std::set<std::string>>;
   using lib_ptr_map_t = std::map<std::string, void*>;

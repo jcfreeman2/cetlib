@@ -14,7 +14,7 @@
 
 using cet::search_path;
 
-typedef std::vector<std::string> strings_t;
+using strings_t = std::vector<std::string>;
 
 /*
   example regular expression = "^lib([A-Za-z0-9_]+)_plugin.so$"

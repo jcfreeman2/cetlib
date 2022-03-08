@@ -3,23 +3,20 @@
 
 // =====================================================================
 //
-// HelperMacros
+// Macro that creates file-path provider.
 //
 // =====================================================================
 
-#include "boost/filesystem.hpp"
 #include "cetlib/compiler_macros.h"
+#include "cetlib/detail/provide_file_path.h"
 
 #include <string>
-
-namespace bfs = boost::filesystem;
 
 #define CET_PROVIDE_FILE_PATH()                                                \
   EXTERN_C_FUNC_DECLARE_START                                                  \
   std::string get_source_location()                                            \
   {                                                                            \
-    bfs::path const p{__FILE__};                                               \
-    return bfs::complete(p).native();                                          \
+    return cet::detail::provide_file_path(__FILE__);                           \
   }                                                                            \
   EXTERN_C_FUNC_DECLARE_END
 

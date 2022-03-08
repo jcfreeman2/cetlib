@@ -24,7 +24,7 @@ main()
 {
   int i;
 
-  typedef registry<char const*, int> reg;
+  using reg = registry<char const*, int>;
   ensure(1, reg::empty());
   ensure(2, reg::size() == 0);
 
