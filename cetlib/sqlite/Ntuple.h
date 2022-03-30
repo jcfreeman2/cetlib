@@ -131,7 +131,13 @@ namespace cet::sqlite {
     using name_array = sqlite::name_array<nColumns>;
     // Special Member Functions
   public:
-    ~Ntuple() noexcept;
+    ~Ntuple() noexcept {
+      if (flush_no_throw() != SQLITE_OK) {
+	std::cerr << "SQLite step failure while flushing.\n";
+      }
+      sqlite3_finalize(insert_statement_);
+    }
+
     Ntuple(Connection& connection,
            std::string const& name,
            name_array const& columns,
@@ -216,15 +222,6 @@ cet::sqlite::Ntuple<Args...>::Ntuple(Connection& connection,
                                      std::size_t const bufsize)
   : Ntuple{connection, name, cnames, overwriteContents, bufsize, iSequence}
 {}
-
-template <typename... Args>
-cet::sqlite::Ntuple<Args...>::~Ntuple() noexcept
-{
-  if (flush_no_throw() != SQLITE_OK) {
-    std::cerr << "SQLite step failure while flushing.\n";
-  }
-  sqlite3_finalize(insert_statement_);
-}
 
 template <typename... Args>
 void
