@@ -131,7 +131,7 @@ namespace cet::sqlite {
     using name_array = sqlite::name_array<nColumns>;
     // Special Member Functions
   public:
-    ~Ntuple() noexcept;
+    //~Ntuple() noexcept;
     Ntuple(Connection& connection,
            std::string const& name,
            name_array const& columns,
