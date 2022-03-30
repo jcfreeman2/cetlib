@@ -217,14 +217,14 @@ cet::sqlite::Ntuple<Args...>::Ntuple(Connection& connection,
   : Ntuple{connection, name, cnames, overwriteContents, bufsize, iSequence}
 {}
 
-template <typename... Args>
-cet::sqlite::Ntuple<Args...>::~Ntuple() noexcept
-{
-  if (flush_no_throw() != SQLITE_OK) {
-    std::cerr << "SQLite step failure while flushing.\n";
-  }
-  sqlite3_finalize(insert_statement_);
-}
+// template <typename... Args>
+// cet::sqlite::Ntuple<Args...>::~Ntuple() noexcept
+// {
+//   if (flush_no_throw() != SQLITE_OK) {
+//     std::cerr << "SQLite step failure while flushing.\n";
+//   }
+//   sqlite3_finalize(insert_statement_);
+// }
 
 template <typename... Args>
 void
