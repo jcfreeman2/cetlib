@@ -6,6 +6,8 @@ project(cetlib VERSION 3.18.01 LANGUAGES CXX C)
 include(CetCMakeEnv)
 cet_cmake_env()
 
+#message(FATAL_ERROR "Sabotage")
+
 cet_set_compiler_flags(DIAGS VIGILANT DWARF_VER 4
   WERROR
   NO_UNDEFINED
@@ -34,6 +36,13 @@ cet_report_compiler_flags(REPORT_THRESHOLD VERBOSE)
 
 add_subdirectory(${PROJECT_NAME})  # source code
 add_subdirectory(config) # Files for use by other packages at build time.
+
+
+if (NOT ${PROJECT_NAME})
+message(WARNING "Adding perllib")
 add_subdirectory(perllib) # Modular plugin skeleton generator
+else()
+message(WARNING "Not adding perllib")
+endif()
 
 cet_cmake_config(CONFIG_POST_TARGET_VARS config/cetlib-augment-CETLIB.cmake)
