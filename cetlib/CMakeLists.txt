@@ -22,10 +22,13 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/shlib_utils.cc.in
   ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc @ONLY
 )
 
+if (NOT DEFINED CETLIB_LITE)
+  set(OSSL_SOURCES MD5Digest.cc sha1.cc)
+endif()
+
 cet_make_library(HEADERS_TARGET
   SOURCE
     ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
-    MD5Digest.cc
     BasicPluginFactory.cc
     LibraryManager.cc
     PluginFactory.cc
@@ -50,10 +53,10 @@ cet_make_library(HEADERS_TARGET
     replace_all.cc
     rpad.cc
     search_path.cc
-    sha1.cc
     simple_stats.cc
     split_path.cc
     split_by_regex.cc
+    ${OSSL_SOURCES}
   LIBRARIES
     PUBLIC
       cetlib_except::cetlib_except
@@ -62,6 +65,7 @@ cet_make_library(HEADERS_TARGET
       ${CMAKE_DL_LIBS}
 )
 
+if (NOT DEFINED CETLIB_LITE)
 # find openSSL
 # when building on macOS, use CommonCrypto
 if(NOT APPLE)
@@ -70,6 +74,7 @@ if(NOT APPLE)
   if(OPENSSL_VERSION VERSION_GREATER_EQUAL 3.0)
     target_compile_definitions(cetlib PUBLIC OPENSSL_API_COMPAT=0x10100000L)
   endif()
+endif()
 endif()
 
 cet_make_library(LIBRARY_NAME compiler_macros INTERFACE
@@ -87,6 +92,7 @@ cet_make_library(LIBRARY_NAME support_macros INTERFACE
     cetlib::compiler_macros
 )
 
+if (NOT DEFINED CETLIB_LITE)
 find_package(Boost COMPONENTS program_options REQUIRED EXPORT)
 cet_make_library(LIBRARY_NAME cetlib_parsed_program_options
   SOURCE parsed_program_options.cc
@@ -94,6 +100,7 @@ cet_make_library(LIBRARY_NAME cetlib_parsed_program_options
     PUBLIC Boost::program_options
     PRIVATE cetlib_except::cetlib_except
 )
+endif()
 ####################################
 
 # Executables.
@@ -104,10 +111,14 @@ cet_make_exec(NAME get-accessible-paths LIBRARIES PRIVATE cetlib::cetlib)
 install_headers(SUBDIRS detail)
 install_source(SUBDIRS detail)
 
+if (NOT DEFINED CETLIB_LITE)
 # SQLite functionality.
 add_subdirectory(sqlite)
+endif()
 
+if (NOT DEFINED CETLIB_LITE)
 # Tests
 if (BUILD_TESTING)
   add_subdirectory(test)
+endif()
 endif()
