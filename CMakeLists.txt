@@ -6,7 +6,7 @@ project(cetlib VERSION 3.18.01 LANGUAGES CXX C)
 include(CetCMakeEnv)
 cet_cmake_env()
 
-#message(FATAL_ERROR "Sabotage")
+message(FATAL_ERROR "Sabotage")
 
 cet_set_compiler_flags(DIAGS VIGILANT DWARF_VER 4
   WERROR
