@@ -37,7 +37,6 @@ add_subdirectory(config) # Files for use by other packages at build time.
 
 
 if (NOT DEFINED CETLIB_LITE)
-message(FATAL_ERROR "Why isn't CETLIB_LITE defined for ./CMakeLists.txt?")
 add_subdirectory(perllib) # Modular plugin skeleton generator
 endif()
 
