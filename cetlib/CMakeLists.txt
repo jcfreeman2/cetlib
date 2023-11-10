@@ -26,6 +26,10 @@ if (NOT DEFINED CETLIB_LITE)
   set(OSSL_SOURCES MD5Digest.cc sha1.cc)
 endif()
 
+if (NOT DEFINED CETLIB_LITE)
+  set(SPLIT_PATH split_path.cc)
+endif()
+
 cet_make_library(HEADERS_TARGET
   SOURCE
     ${CMAKE_CURRENT_BINARY_DIR}/shlib_utils.cc
@@ -54,7 +58,7 @@ cet_make_library(HEADERS_TARGET
     rpad.cc
     search_path.cc
     simple_stats.cc
-    split_path.cc
+    ${SPLIT_PATH}
     split_by_regex.cc
     ${OSSL_SOURCES}
   LIBRARIES
